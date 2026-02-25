@@ -148,12 +148,34 @@ function Connect-AzureDeviceCode {
 
 # ===== KEYVAULT OPERATIONS =====
 function Get-VaultName {
-    if ($VaultName) {
-        return $VaultName
+    if ($VaultName) { return $VaultName }
+
+    Write-Header "Selecionar Key Vault"
+
+    $vaults = Get-AccessibleKeyVaultsList
+    if (-not $vaults -or $vaults.Count -eq 0) {
+        Write-ColorOutput "[!] Nenhum Key Vault listável encontrado. Informe o nome manualmente." -Color "Yellow"
+        $manual = Read-Host "Nome do Key Vault"
+        return $manual
     }
-    Write-Host ""
-    $vault = Read-Host "Informe o nome do Key Vault"
-    return $vault
+
+    Write-ColorOutput "Selecione o Key Vault pelo número ou digite o nome:" -Color "Cyan"
+    $i = 1
+    foreach ($v in $vaults) {
+        Write-Host "[$i] $($v.VaultName)  (Subscription: $($v.Subscription) - RG: $($v.ResourceGroup) - Location: $($v.Location))"
+        $i++
+    }
+
+    $choice = Read-Host "Número ou nome (enter para cancelar)"
+    if ([string]::IsNullOrWhiteSpace($choice)) { return "" }
+
+    $vaultCount = @($vaults).Count
+    if ($choice -as [int] -and [int]$choice -ge 1 -and [int]$choice -le $vaultCount) {
+        return $vaults[[int]$choice - 1].VaultName
+    }
+    else {
+        return $choice
+    }
 }
 
 function Show-OperationsMenu {
@@ -174,6 +196,11 @@ function Show-OperationsMenu {
     Write-ColorOutput "--- CERTIFICATES ---" -Color "Magenta"
     Write-ColorOutput "9. Listar Certificados" -Color "Yellow"
     Write-ColorOutput "10. Ler Certificado" -Color "Yellow"
+    Write-Host ""
+    Write-ColorOutput "--- ACCESS / INFO ---" -Color "Magenta"
+    Write-ColorOutput "11. Mostrar minhas roles e identidades" -Color "Yellow"
+    Write-ColorOutput "12. Listar Key Vaults que eu posso ver" -Color "Yellow"
+    Write-ColorOutput "13. Instalar módulos Az faltantes (Az.KeyVault / Az.Resources)" -Color "Yellow"
     Write-Host ""
     Write-ColorOutput "0. Sair" -Color "Red"
     Write-Host ""
@@ -218,15 +245,21 @@ function Get-KeyVaultSecrets {
     
     Write-ColorOutput "[*] Recuperando Secrets..." -Color "Green"
     try {
-        $secrets = Get-AzKeyVaultSecret -VaultName $VaultName -ErrorAction Stop
-        
-        if ($secrets.Count -eq 0) {
-            Write-ColorOutput "[!] Nenhum Secret encontrado." -Color "Yellow"
+        if (Get-Command -Name Get-AzKeyVaultSecret -ErrorAction SilentlyContinue) {
+            $secrets = Get-AzKeyVaultSecret -VaultName $VaultName -ErrorAction Stop
+
+            if ((@($secrets).Count) -eq 0) {
+                Write-ColorOutput "[!] Nenhum Secret encontrado." -Color "Yellow"
+            }
+            else {
+                Write-Separator
+                $secrets | Format-Table -Property Name, Created, Updated -AutoSize
+                Write-Separator
+            }
         }
         else {
-            Write-Separator
-            $secrets | Format-Table -Property Name, Created, Updated -AutoSize
-            Write-Separator
+            Write-ColorOutput "[!] Cmdlet 'Get-AzKeyVaultSecret' não disponível neste ambiente." -Color "Yellow"
+            Write-ColorOutput "    Instale o módulo Az.KeyVault: Install-Module -Name Az.KeyVault -Scope CurrentUser" -Color "Cyan"
         }
     }
     catch {
@@ -246,22 +279,28 @@ function Get-KeyVaultSecret {
     
     Write-ColorOutput "`n[*] Recuperando Secret '$secretName'..." -Color "Green"
     try {
-        $secret = Get-AzKeyVaultSecret -VaultName $VaultName -Name $secretName -ErrorAction Stop
-        
-        Write-Separator
-        Write-ColorOutput "[✓] Secret encontrado!" -Color "Green"
-        Write-Host "Nome: $($secret.Name)"
-        Write-Host "ID: $($secret.Id)"
-        Write-Host "Versão: $($secret.Version)"
-        Write-Host "Criado em: $($secret.Created)"
-        Write-Host "Atualizado em: $($secret.Updated)"
-        
-        $showValue = Read-Host "`nExibir valor do Secret? (s/n)"
-        if ($showValue -eq "s") {
-            $secretValue = Get-AzKeyVaultSecret -VaultName $VaultName -Name $secretName -AsPlainText -ErrorAction Stop
-            Write-ColorOutput "`nValor: $secretValue" -Color "Cyan"
+        if (Get-Command -Name Get-AzKeyVaultSecret -ErrorAction SilentlyContinue) {
+            $secret = Get-AzKeyVaultSecret -VaultName $VaultName -Name $secretName -ErrorAction Stop
+
+            Write-Separator
+            Write-ColorOutput "[✓] Secret encontrado!" -Color "Green"
+            Write-Host "Nome: $($secret.Name)"
+            Write-Host "ID: $($secret.Id)"
+            Write-Host "Versão: $($secret.Version)"
+            Write-Host "Criado em: $($secret.Created)"
+            Write-Host "Atualizado em: $($secret.Updated)"
+
+            $showValue = Read-Host "`nExibir valor do Secret? (s/n)"
+            if ($showValue -eq "s") {
+                $secretValue = Get-AzKeyVaultSecret -VaultName $VaultName -Name $secretName -AsPlainText -ErrorAction Stop
+                Write-ColorOutput "`nValor: $secretValue" -Color "Cyan"
+            }
+            Write-Separator
         }
-        Write-Separator
+        else {
+            Write-ColorOutput "[!] Cmdlet 'Get-AzKeyVaultSecret' não disponível neste ambiente." -Color "Yellow"
+            Write-ColorOutput "    Instale o módulo Az.KeyVault: Install-Module -Name Az.KeyVault -Scope CurrentUser" -Color "Cyan"
+        }
     }
     catch {
         Write-ColorOutput "[✗] Erro ao recuperar Secret: $_" -Color "Red"
@@ -336,15 +375,21 @@ function Get-KeyVaultKeys {
     
     Write-ColorOutput "[*] Recuperando Keys..." -Color "Green"
     try {
-        $keys = Get-AzKeyVaultKey -VaultName $VaultName -ErrorAction Stop
-        
-        if ($keys.Count -eq 0) {
-            Write-ColorOutput "[!] Nenhuma Key encontrada." -Color "Yellow"
+        if (Get-Command -Name Get-AzKeyVaultKey -ErrorAction SilentlyContinue) {
+            $keys = Get-AzKeyVaultKey -VaultName $VaultName -ErrorAction Stop
+            if ((@($keys).Count) -eq 0) {
+                Write-ColorOutput "[!] Nenhuma Key encontrada." -Color "Yellow"
+            }
+            else {
+                Write-Separator
+                $keys | Format-Table -Property Name, KeyType, Created, Updated -AutoSize
+                Write-Separator
+            }
         }
         else {
-            Write-Separator
-            $keys | Format-Table -Property Name, KeyType, Created, Updated -AutoSize
-            Write-Separator
+            Write-ColorOutput "[!] Cmdlet 'Get-AzKeyVaultKey' não disponível neste ambiente." -Color "Yellow"
+            Write-ColorOutput "    Instale o módulo Az.KeyVault: Install-Module -Name Az.KeyVault -Scope CurrentUser" -Color "Cyan"
+            Write-ColorOutput "    Ou habilite o acesso via REST/Data Plane." -Color "Cyan"
         }
     }
     catch {
@@ -364,17 +409,23 @@ function Get-KeyVaultKey {
     
     Write-ColorOutput "`n[*] Recuperando Key '$keyName'..." -Color "Green"
     try {
-        $key = Get-AzKeyVaultKey -VaultName $VaultName -Name $keyName -ErrorAction Stop
-        
-        Write-Separator
-        Write-ColorOutput "[✓] Key encontrada!" -Color "Green"
-        Write-Host "Nome: $($key.Name)"
-        Write-Host "ID: $($key.Id)"
-        Write-Host "Tipo: $($key.KeyType)"
-        Write-Host "Tamanho: $($key.Key.KeySize) bits"
-        Write-Host "Criada em: $($key.Created)"
-        Write-Host "Atualizada em: $($key.Updated)"
-        Write-Separator
+        if (Get-Command -Name Get-AzKeyVaultKey -ErrorAction SilentlyContinue) {
+            $key = Get-AzKeyVaultKey -VaultName $VaultName -Name $keyName -ErrorAction Stop
+
+            Write-Separator
+            Write-ColorOutput "[✓] Key encontrada!" -Color "Green"
+            Write-Host "Nome: $($key.Name)"
+            Write-Host "ID: $($key.Id)"
+            Write-Host "Tipo: $($key.KeyType)"
+            Write-Host "Tamanho: $($key.Key.KeySize) bits"
+            Write-Host "Criada em: $($key.Created)"
+            Write-Host "Atualizada em: $($key.Updated)"
+            Write-Separator
+        }
+        else {
+            Write-ColorOutput "[!] Cmdlet 'Get-AzKeyVaultKey' não disponível neste ambiente." -Color "Yellow"
+            Write-ColorOutput "    Instale o módulo Az.KeyVault: Install-Module -Name Az.KeyVault -Scope CurrentUser" -Color "Cyan"
+        }
     }
     catch {
         Write-ColorOutput "[✗] Erro ao recuperar Key: $_" -Color "Red"
@@ -419,15 +470,21 @@ function Get-KeyVaultCertificates {
     
     Write-ColorOutput "[*] Recuperando Certificados..." -Color "Green"
     try {
-        $certs = Get-AzKeyVaultCertificate -VaultName $VaultName -ErrorAction Stop
-        
-        if ($certs.Count -eq 0) {
-            Write-ColorOutput "[!] Nenhum Certificado encontrado." -Color "Yellow"
+        if (Get-Command -Name Get-AzKeyVaultCertificate -ErrorAction SilentlyContinue) {
+            $certs = Get-AzKeyVaultCertificate -VaultName $VaultName -ErrorAction Stop
+
+            if ((@($certs).Count) -eq 0) {
+                Write-ColorOutput "[!] Nenhum Certificado encontrado." -Color "Yellow"
+            }
+            else {
+                Write-Separator
+                $certs | Format-Table -Property Name, Enabled, Created, Updated -AutoSize
+                Write-Separator
+            }
         }
         else {
-            Write-Separator
-            $certs | Format-Table -Property Name, Enabled, Created, Updated -AutoSize
-            Write-Separator
+            Write-ColorOutput "[!] Cmdlet 'Get-AzKeyVaultCertificate' não disponível neste ambiente." -Color "Yellow"
+            Write-ColorOutput "    Instale o módulo Az.KeyVault: Install-Module -Name Az.KeyVault -Scope CurrentUser" -Color "Cyan"
         }
     }
     catch {
@@ -447,25 +504,252 @@ function Get-KeyVaultCertificate {
     
     Write-ColorOutput "`n[*] Recuperando Certificado '$certName'..." -Color "Green"
     try {
-        $cert = Get-AzKeyVaultCertificate -VaultName $VaultName -Name $certName -ErrorAction Stop
-        
-        Write-Separator
-        Write-ColorOutput "[✓] Certificado encontrado!" -Color "Green"
-        Write-Host "Nome: $($cert.Name)"
-        Write-Host "ID: $($cert.Id)"
-        Write-Host "Ativado: $($cert.Enabled)"
-        Write-Host "Criado em: $($cert.Created)"
-        Write-Host "Atualizado em: $($cert.Updated)"
-        Write-Host "Subject: $($cert.Certificate.Subject)"
-        Write-Host "Thumbprint: $($cert.Certificate.Thumbprint)"
-        Write-Host "Válido de: $($cert.Certificate.NotBefore)"
-        Write-Host "Válido até: $($cert.Certificate.NotAfter)"
-        Write-Separator
+        if (Get-Command -Name Get-AzKeyVaultCertificate -ErrorAction SilentlyContinue) {
+            $cert = Get-AzKeyVaultCertificate -VaultName $VaultName -Name $certName -ErrorAction Stop
+
+            Write-Separator
+            Write-ColorOutput "[✓] Certificado encontrado!" -Color "Green"
+            Write-Host "Nome: $($cert.Name)"
+            Write-Host "ID: $($cert.Id)"
+            Write-Host "Ativado: $($cert.Enabled)"
+            Write-Host "Criado em: $($cert.Created)"
+            Write-Host "Atualizado em: $($cert.Updated)"
+            Write-Host "Subject: $($cert.Certificate.Subject)"
+            Write-Host "Thumbprint: $($cert.Certificate.Thumbprint)"
+            Write-Host "Válido de: $($cert.Certificate.NotBefore)"
+            Write-Host "Válido até: $($cert.Certificate.NotAfter)"
+            Write-Separator
+        }
+        else {
+            Write-ColorOutput "[!] Cmdlet 'Get-AzKeyVaultCertificate' não disponível neste ambiente." -Color "Yellow"
+            Write-ColorOutput "    Instale o módulo Az.KeyVault: Install-Module -Name Az.KeyVault -Scope CurrentUser" -Color "Cyan"
+        }
     }
     catch {
         Write-ColorOutput "[✗] Erro ao recuperar Certificado: $_" -Color "Red"
     }
     
+    Pause
+}
+
+# ===== ACCESS / INFO HELPERS =====
+function Get-MyRolesAndIdentities {
+    Write-Header "Minhas Roles e Identidades"
+
+    try {
+        $context = Get-AzContext
+        if (-not $context) {
+            Write-ColorOutput "[!] Nenhum contexto Azure encontrado. Faça login primeiro." -Color "Yellow"
+            Pause
+            return
+        }
+        
+        $accountId = $context.Account.Id
+        Write-Host "Conta: $accountId"
+
+        # Obter token com resource URL correto (sem barra final)
+        try {
+            $tokenResponse = Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com" -ErrorAction Stop
+            $token = $tokenResponse.Token
+        }
+        catch {
+            Write-ColorOutput "[!] Erro ao obter token: $_" -Color "Yellow"
+            throw
+        }
+
+        # Validar se o token é uma string válida
+        if (-not $token -or $token.GetType().Name -ne "String" -or $token.Length -lt 100) {
+            throw "Token inválido ou vazio retornado"
+        }
+
+        $headers = @{ Authorization = "Bearer $token" }
+
+        $me = Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me" -Headers $headers -ErrorAction Stop
+        $userId = $me.id
+
+        Write-Separator
+        Write-ColorOutput "[*] Role Assignments (Azure RBAC):" -Color "Green"
+        try {
+            $roles = Get-AzRoleAssignment -ObjectId $userId -ErrorAction Stop
+            if ($roles) {
+                $roles | Select-Object @{Name='Role';Expression={$_.RoleDefinitionName}}, Scope | Format-Table -AutoSize
+            }
+            else {
+                Write-ColorOutput "[!] Nenhuma role encontrada." -Color "Yellow"
+            }
+        }
+        catch {
+            Write-ColorOutput "[!] Não foi possível listar Role Assignments: $_" -Color "Yellow"
+        }
+
+        Write-Separator
+        Write-ColorOutput "[*] Grupos (memberOf) no Azure AD:" -Color "Green"
+        try {
+            $memberOf = Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me/memberOf" -Headers $headers -ErrorAction Stop
+            if ($memberOf.value -and $memberOf.value.Count -gt 0) {
+                $memberOf.value | Select-Object id, displayName, @{Name='Type';Expression={ $_.'@odata.type' }} | Format-Table -AutoSize
+            }
+            else {
+                Write-ColorOutput "[!] Nenhum grupo encontrado." -Color "Yellow"
+            }
+        }
+        catch {
+            Write-ColorOutput "[!] Não foi possível consultar grupos via Microsoft Graph: $_" -Color "Yellow"
+        }
+
+    }
+    catch {
+        Write-ColorOutput "[✗] Erro obtendo informações do usuário: $_" -Color "Red"
+    }
+
+    Pause
+}
+
+function Get-AccessibleKeyVaults {
+    Write-Header "Key Vaults acessíveis (todas subscriptions)"
+
+    try {
+        $subscriptions = Get-AzSubscription -ErrorAction Stop
+    }
+    catch {
+        Write-ColorOutput "[✗] Erro listando subscriptions: $_" -Color "Red"
+        Pause
+        return
+    }
+
+    $allVaults = @()
+    foreach ($sub in $subscriptions) {
+        Write-ColorOutput "[*] Verificando subscription: $($sub.Name)" -Color "Cyan"
+        try {
+            Set-AzContext -SubscriptionId $sub.SubscriptionId -ErrorAction Stop | Out-Null
+            $vaults = Get-AzKeyVault -ErrorAction Stop
+            foreach ($v in $vaults) {
+                $name = $v.VaultName
+                if (-not $name) { $name = $v.Name }
+                $allVaults += [pscustomobject]@{
+                    Subscription = $sub.Name
+                    VaultName = $name
+                    ResourceGroup = $v.ResourceGroupName
+                    Location = $v.Location
+                    TenantId = $v.TenantId
+                }
+            }
+        }
+        catch {
+            Write-ColorOutput "[!] Não foi possível listar Key Vaults na subscription $($sub.Name): $_" -Color "Yellow"
+        }
+    }
+
+    if ((@($allVaults).Count) -eq 0) {
+        Write-ColorOutput "[!] Nenhum Key Vault acessível encontrado nas subscriptions consultadas." -Color "Yellow"
+    }
+    else {
+        Write-Separator
+        $allVaults | Sort-Object Subscription, VaultName | Format-Table -AutoSize
+        Write-Separator
+    }
+
+    Pause
+}
+
+function Get-AccessibleKeyVaultsList {
+    try {
+        $subscriptions = Get-AzSubscription -ErrorAction Stop
+    }
+    catch {
+        return @()
+    }
+
+    $allVaults = @()
+    foreach ($sub in $subscriptions) {
+        try {
+            Set-AzContext -SubscriptionId $sub.SubscriptionId -ErrorAction Stop | Out-Null
+
+            if (Get-Command -Name Get-AzKeyVault -ErrorAction SilentlyContinue) {
+                $vaults = @(Get-AzKeyVault -ErrorAction Stop)
+                foreach ($v in $vaults) {
+                    $name = $v.VaultName
+                    if (-not $name) { $name = $v.Name }
+                    $allVaults += [pscustomobject]@{
+                        Subscription = $sub.Name
+                        VaultName = $name
+                        ResourceGroup = $v.ResourceGroupName
+                        Location = $v.Location
+                        TenantId = $v.TenantId
+                    }
+                }
+            }
+            else {
+                # Fallback: usar Get-AzResource para listar recursos do tipo Key Vault
+                $res = @(Get-AzResource -ResourceType 'Microsoft.KeyVault/vaults' -ErrorAction Stop)
+                foreach ($r in $res) {
+                    $allVaults += [pscustomobject]@{
+                        Subscription = $sub.Name
+                        VaultName = $r.Name
+                        ResourceGroup = $r.ResourceGroupName
+                        Location = $r.Location
+                        TenantId = $null
+                    }
+                }
+            }
+        }
+        catch {
+            # ignorar subscriptions onde não temos permissão
+        }
+    }
+
+    return $allVaults
+}
+
+# ===== INSTALL HELPERS =====
+function Install-MissingModules {
+    Write-Header "Instalar módulos Az faltantes"
+
+    $required = @('Az.Accounts','Az.Resources','Az.KeyVault')
+    $missing = @()
+
+    foreach ($mod in $required) {
+        if (-not (Get-Module -ListAvailable -Name $mod)) {
+            $missing += $mod
+        }
+    }
+
+    if ($missing.Count -eq 0) {
+        Write-ColorOutput "[*] Todos os módulos necessários já estão instalados." -Color "Green"
+        Pause
+        return
+    }
+
+    Write-ColorOutput "Módulos faltantes: $($missing -join ', ')" -Color "Yellow"
+    $confirm = Read-Host "Deseja instalar os módulos acima para o usuário atual? (s/n)"
+    if ($confirm -ne 's') {
+        Write-ColorOutput "Operação cancelada pelo usuário." -Color "Yellow"
+        Pause
+        return
+    }
+
+    try {
+        Write-ColorOutput "[*] Preparando repositório PSGallery e NuGet..." -Color "Cyan"
+        Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -ErrorAction SilentlyContinue | Out-Null
+        try { Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -ErrorAction SilentlyContinue } catch {}
+
+        foreach ($mod in $missing) {
+            Write-ColorOutput "[*] Instalando $mod ..." -Color "Cyan"
+            Install-Module -Name $mod -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
+            Write-ColorOutput "[✓] $mod instalado." -Color "Green"
+        }
+
+        Write-ColorOutput "[*] Importando módulos instalados..." -Color "Cyan"
+        foreach ($mod in $missing) {
+            try { Import-Module $mod -ErrorAction Stop } catch { Write-ColorOutput "[!] Falha ao importar ${mod}: $_" -Color "Yellow" }
+        }
+
+        Write-ColorOutput "[✓] Instalação concluída." -Color "Green"
+    }
+    catch {
+        Write-ColorOutput "[✗] Erro durante a instalação: $_" -Color "Red"
+    }
+
     Pause
 }
 
@@ -496,7 +780,14 @@ function Main {
             "3" { $authenticated = Connect-AzureCertificate }
             "4" { 
                 Write-ColorOutput "`n[*] Usando Managed Identity..." -Color "Green"
-                $authenticated = $true
+                # Verificar se está em contexto de Managed Identity
+                try {
+                    $context = Get-AzContext -ErrorAction Stop
+                    if ($context) { $authenticated = $true }
+                }
+                catch {
+                    Write-ColorOutput "[✗] Não foi possível estabelecer contexto com Managed Identity: $_" -Color "Red"
+                }
             }
             "5" { $authenticated = Connect-AzureDeviceCode }
             "0" { 
@@ -526,6 +817,9 @@ function Main {
             "8" { Remove-KeyVaultKey -VaultName $vaultName }
             "9" { Get-KeyVaultCertificates -VaultName $vaultName }
             "10" { Get-KeyVaultCertificate -VaultName $vaultName }
+            "11" { Get-MyRolesAndIdentities }
+            "12" { Get-AccessibleKeyVaults }
+            "13" { Install-MissingModules }
             "0" { 
                 Write-ColorOutput "`n[!] Encerrando..." -Color "Yellow"
                 break
