@@ -1,9 +1,9 @@
 # Credenciais do Azure Storage
-$storageAccountName = "bicenter"
-$storageAccountKey  = "sv=2024-11-04&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2026-10-10T03:39:17Z&st=2025-10-10T19:24:17Z&spr=https&sig=4N%2BzEEGGFBw8UD7vjZLWIkUZzJanzGhEuyu7cVebeFg%3D"
-$containerName      = "bicenter"
-$localFolder        = "D:\5_HSBS\Export"  # <-- define the local folder
-$destinationFolder  = "BI Cloud Ops\QCA"             # optional subfolder in container
+$storageAccountName = ""
+$storageAccountKey  = ""
+$containerName      = ""
+$localFolder        = ""  # <-- define the local folder
+$destinationFolder  = ""             # optional subfolder in container
 
 # Garantir que o módulo Az.Storage esteja instalado e importado
 if (-not (Get-Module -ListAvailable -Name Az.Storage)) {
