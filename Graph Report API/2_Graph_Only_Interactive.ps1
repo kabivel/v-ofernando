@@ -44,7 +44,7 @@ if (-not (Test-Path $exportFolder)) {
 # ============================================================================
 # 3. DEFINIÇÃO DOS RELATÓRIOS
 #    Tipo "csv"  → endpoint retorna CSV diretamente   (OutputFilePath)
-#    Tipo "json" → endpoint retorna JSON/paginado     (convertido para CSV)
+#    Tipo "json" → endpoint retorna JSON/paginado     (gravado como JSON no arquivo)
 # ============================================================================
 $reports = @(
 
@@ -54,7 +54,7 @@ $reports = @(
     @{
         Name = "Copilot_UsageUserDetail"
         Uri  = "https://graph.microsoft.com/beta/reports/getMicrosoft365CopilotUsageUserDetail(period='D30')"
-        Type = "csv"
+        Type = "json"
     },
     @{
         Name = "Copilot_UserCountSummary"
@@ -64,27 +64,22 @@ $reports = @(
     @{
         Name = "Copilot_UserCountTrend"
         Uri  = "https://graph.microsoft.com/beta/reports/getMicrosoft365CopilotUserCountTrend(period='D30')"
+        Type = "json"
+    },
+    @{ 
+        Name = "getM365AppUserDetail"; 
+        Uri = "https://graph.microsoft.com/v1.0/reports/getM365AppUserDetail(period='D90')"
+        Type = "csv"
+     },
+    @{ 
+        Name = "getOffice365ActiveUserCounts"
+        Uri  = "https://graph.microsoft.com/v1.0/reports/getOffice365ActiveUserCounts(period='D90')"
         Type = "csv"
     },
-
-    # ── ENTRA ID – AUTENTICAÇÃO / MFA / SSPR ────────────────────────────────
-    @{
-        # Detalhes de registro MFA/SSPR por usuário
-        Name = "EntraID_UserRegistrationDetails"
-        Uri  = "https://graph.microsoft.com/v1.0/reports/authenticationMethods/userRegistrationDetails"
-        Type = "json"
-    },
-    @{
-        # Contagem de usuários registrados por funcionalidade (MFA, SSPR, etc.)
-        Name = "EntraID_UsersRegisteredByFeature"
-        Uri  = "https://graph.microsoft.com/v1.0/reports/authenticationMethods/usersRegisteredByFeature"
-        Type = "json"
-    },
-    @{
-        # Contagem de usuários registrados por método (Authenticator, TOTP, etc.)
-        Name = "EntraID_UsersRegisteredByMethod"
-        Uri  = "https://graph.microsoft.com/v1.0/reports/authenticationMethods/usersRegisteredByMethod"
-        Type = "json"
+    @{ 
+        Name = "getOffice365ActiveUserDetail"
+        Uri  = "https://graph.microsoft.com/v1.0/reports/getOffice365ActiveUserDetail(period='D90')"
+        Type = "csv"
     }
 )
 
@@ -146,7 +141,8 @@ $failureCount = 0
 $failureList  = @()
 
 foreach ($report in $reports) {
-    $outPath = Join-Path $exportFolder "$($report.Name).csv"
+    $ext = if ($report.Type -eq "json") { ".json" } else { ".csv" }
+    $outPath = Join-Path $exportFolder "$($report.Name)$ext"
     Write-Host "⏳ $($report.Name)..." -ForegroundColor Blue -NoNewline
 
     try {
@@ -156,9 +152,17 @@ foreach ($report in $reports) {
                 -Uri $report.Uri `
                 -OutputFilePath $outPath `
                 -ErrorAction Stop | Out-Null
-        } else {
+        } elseif ($report.Type -eq "json") {
             $data = Get-GraphPagedData -Uri $report.Uri
-            Export-ToCsv -Data $data -Path $outPath
+            if ($null -eq $data -or $data.Count -eq 0) {
+                "[]" | Set-Content -Path $outPath -Encoding UTF8
+            } else {
+                $data | ConvertTo-Json -Depth 10 | Set-Content -Path $outPath -Encoding UTF8
+            }
+        } else {
+            # fallback: tratar como JSON
+            $data = Get-GraphPagedData -Uri $report.Uri
+            $data | ConvertTo-Json -Depth 10 | Set-Content -Path $outPath -Encoding UTF8
         }
 
         $size = (Get-Item $outPath -ErrorAction SilentlyContinue).Length

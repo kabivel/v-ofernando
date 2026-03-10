@@ -1,2 +1,0 @@
-﻿"IsReadOnly","IsFixedSize","IsSynchronized","Keys","Values","SyncRoot","Count"
-"False","False","False","userRoles; totalUserCount; userRegistrationFeatureCounts; @odata.context; userTypes","all; 36; System.Object[]; https://graph.microsoft.com/v1.0/$metadata#microsoft.graph.userRegistrationFeatureSummary; all","System.Collections.Hashtable","5"
