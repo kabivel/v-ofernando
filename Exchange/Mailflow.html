@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia de Revisão: Mail Flow no Exchange Online (EOP Básico) – SEFAZ-SP</title>
+<style>
+  :root {
+    --bg: #f4f6fa;
+    --panel: #ffffff;
+    --border: #d8dee9;
+    --primary: #0078d4;
+    --primary-dark: #005a9e;
+    --text: #1f2937;
+    --muted: #5a6675;
+    --note-bg: #eef5ff;
+    --note-border: #0078d4;
+    --code-bg: #f1f3f5;
+    --shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.55;
+  }
+  header.app-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    padding: 24px 32px;
+    box-shadow: var(--shadow);
+  }
+  header.app-header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  header.app-header .subtitle {
+    margin-top: 6px;
+    font-size: 0.95rem;
+    opacity: 0.9;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 24px auto;
+    padding: 0 16px;
+  }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 0;
+  }
+  .tab-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 12px 18px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.2s ease;
+    border-radius: 6px 6px 0 0;
+    font-family: inherit;
+  }
+  .tab-btn:hover {
+    background: rgba(0, 120, 212, 0.08);
+    color: var(--primary);
+  }
+  .tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    background: var(--panel);
+    font-weight: 600;
+  }
+  .panel {
+    display: none;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    box-shadow: var(--shadow);
+    animation: fadeIn 0.25s ease-in;
+  }
+  .panel.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .panel h2 {
+    margin-top: 0;
+    color: var(--primary-dark);
+    font-size: 1.4rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+  }
+  .panel h3 {
+    color: var(--primary-dark);
+    margin-top: 28px;
+    margin-bottom: 10px;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .panel ul { padding-left: 22px; }
+  .panel li { margin-bottom: 8px; }
+  .panel li strong { color: var(--primary-dark); }
+  .notes {
+    background: var(--note-bg);
+    border-left: 4px solid var(--note-border);
+    padding: 16px 20px;
+    margin-top: 16px;
+    border-radius: 0 6px 6px 0;
+  }
+  .notes h3 {
+    margin-top: 0;
+    color: var(--primary-dark);
+    font-size: 0.95rem;
+  }
+  .notes p { margin: 0 0 12px 0; }
+  .notes p:last-child { margin-bottom: 0; }
+  code, .code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "Cascadia Code", Consolas, monospace;
+    font-size: 0.9em;
+  }
+  .notes pre {
+    background: #1e1e1e;
+    color: #e6edf3;
+    padding: 12px 14px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-family: "Cascadia Code", Consolas, monospace;
+    font-size: 0.85em;
+    line-height: 1.45;
+    margin: 10px 0;
+  }
+  .notes pre code { background: transparent; color: inherit; padding: 0; }
+  .example {
+    background: #fff;
+    border: 1px dashed #b3c7e0;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 12px 0;
+  }
+  .example .label {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--primary-dark);
+    margin-bottom: 6px;
+  }
+  .tip {
+    background: #fff8e1;
+    border-left: 4px solid #f0b400;
+    padding: 10px 14px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .tip strong { color: #8a6300; }
+  .gui-path {
+    background: #eef9f1;
+    border-left: 4px solid #2e8b57;
+    padding: 12px 16px;
+    margin: 12px 0 18px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .gui-path .label {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #1f6b3f;
+    margin-bottom: 8px;
+  }
+  .gui-path ul { margin: 4px 0 0 0; padding-left: 20px; }
+  .gui-path li { margin-bottom: 6px; }
+  .gui-path .crumb {
+    font-family: "Cascadia Code", Consolas, monospace;
+    font-size: 0.88em;
+    background: #ffffff;
+    border: 1px solid #c5e1d0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #1f6b3f;
+  }
+  .gui-path .url {
+    font-family: "Cascadia Code", Consolas, monospace;
+    font-size: 0.85em;
+    color: #1f6b3f;
+    word-break: break-all;
+  }
+  .ref-group {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    background: #fafbfc;
+  }
+  .ref-group h4 {
+    margin: 0 0 10px 0;
+    color: var(--primary-dark);
+    font-size: 1.0rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+  .ref-group ul { margin: 0; padding-left: 20px; }
+  .ref-group li { margin-bottom: 8px; line-height: 1.45; }
+  .ref-group a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .ref-group a:hover { text-decoration: underline; }
+  .ref-group .meta {
+    display: inline-block;
+    font-size: 0.72rem;
+    background: #e3edf7;
+    color: var(--primary-dark);
+    padding: 1px 8px;
+    border-radius: 10px;
+    margin-left: 6px;
+    vertical-align: middle;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .case-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    background: #fafbfc;
+  }
+  .case-card h4 {
+    margin: 0 0 10px 0;
+    color: var(--primary-dark);
+    font-size: 1.05rem;
+  }
+  .case-card p { margin: 6px 0; }
+  .badge {
+    display: inline-block;
+    background: var(--primary);
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  footer.app-footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    padding: 16px;
+    margin-top: 24px;
+  }
+  @media (max-width: 700px) {
+    .tab-btn { padding: 10px 12px; font-size: 0.85rem; }
+    .panel { padding: 20px 18px; }
+    header.app-header { padding: 18px 20px; }
+    header.app-header h1 { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <h1>Guia de Revisão: Mail Flow no Exchange Online (EOP Básico)</h1>
+  <div class="subtitle">SEFAZ-SP &middot; Sessão técnica de 1h45</div>
+</header>
+
+<div class="container">
+  <nav class="tabs" role="tablist" aria-label="Tópicos da apresentação">
+    <button class="tab-btn active" data-tab="agenda" role="tab" aria-selected="true">Agenda</button>
+    <button class="tab-btn" data-tab="arquitetura" role="tab" aria-selected="false">Arquitetura</button>
+    <button class="tab-btn" data-tab="eop" role="tab" aria-selected="false">Proteções EOP</button>
+    <button class="tab-btn" data-tab="transport-rules" role="tab" aria-selected="false">Regras de Transporte</button>
+    <button class="tab-btn" data-tab="message-trace" role="tab" aria-selected="false">Message Trace</button>
+    <button class="tab-btn" data-tab="headers" role="tab" aria-selected="false">Análise de Headers</button>
+    <button class="tab-btn" data-tab="casos" role="tab" aria-selected="false">Casos Práticos</button>
+    <button class="tab-btn" data-tab="conclusao" role="tab" aria-selected="false">Conclusão</button>
+    <button class="tab-btn" data-tab="referencias" role="tab" aria-selected="false">Referências</button>
+  </nav>
+
+  <!-- AGENDA -->
+  <section class="panel active" id="agenda" role="tabpanel">
+    <h2>Agenda da Sessão (1h45)</h2>
+
+    <h3>Escopo &amp; Público-alvo</h3>
+    <ul>
+      <li><strong>Escopo:</strong> Exchange Online + Exchange Online Protection (EOP) básico, <em>sem</em> Microsoft Defender for Office 365 (P1/P2).</li>
+      <li><strong>Público-alvo:</strong> equipe de suporte e administração de mensageria da SEFAZ-SP.</li>
+      <li><strong>Pré-requisitos:</strong> noções básicas de SMTP, acesso ao Exchange Admin Center e familiaridade com PowerShell.</li>
+    </ul>
+
+    <h3>Objetivos de Aprendizagem</h3>
+    <p>Ao final desta sessão, o participante será capaz de:</p>
+    <ul>
+      <li>Descrever o caminho de uma mensagem inbound, outbound e interna pelo EOP.</li>
+      <li>Identificar a camada do pipeline EOP responsável por uma decisão (allow, junk, quarantine, reject).</li>
+      <li>Auditar e justificar regras de transporte existentes; criar novas com escopo mínimo seguro.</li>
+      <li>Executar um Message Trace via portal e via PowerShell, interpretando os status de entrega.</li>
+      <li>Ler um cabeçalho SMTP e diagnosticar SPF/DKIM/DMARC, SCL e veredito do EOP.</li>
+      <li>Aplicar um método consistente de troubleshooting: <em>sintoma → evidência → ação → documentação</em>.</li>
+    </ul>
+
+    <h3>Programação</h3>
+    <ol>
+      <li><strong>Arquitetura do Mail Flow</strong> — Inbound, Outbound, Interno, Conectores e Domínios Aceitos. <em>[~12 min]</em></li>
+      <li><strong>Proteções do EOP</strong> — Anti-Spam &amp; Anti-Malware, pipeline de filtros, SCL/BCL. <em>[~20 min]</em></li>
+      <li><strong>Revisão de Regras de Transporte</strong> — padrões úteis, anti-padrões, auditoria e governança. <em>[~15 min]</em></li>
+      <li><strong>Message Trace</strong> — busca, status, eventos e uso via PowerShell. <em>[~20 min]</em></li>
+      <li><strong>Análise de Cabeçalhos</strong> — Authentication-Results, X-Forefront-Antispam-Report e ferramentas. <em>[~15 min]</em></li>
+      <li><strong>Cenários Práticos</strong> — atraso, falso positivo, NDR e spoofing. <em>[~18 min]</em></li>
+      <li><strong>Conclusão &amp; Q&amp;A</strong> — checklist de saúde do tenant e próximos passos. <em>[~5 min]</em></li>
+    </ol>
+    <p style="margin-top:8px"><em>Total: ~105 min (1h45).</em> A aba <strong>Referências</strong> não consome tempo da sessão — fica como base de consulta permanente após o evento.</p>
+
+    <div class="notes">
+      <h3>Notas do Apresentador</h3>
+      <p>Bem-vindos. Esta sessão tem como objetivo nivelar o entendimento da equipe SEFAZ-SP sobre o fluxo de e-mails no Exchange Online, com foco no EOP básico (sem Defender for Office 365). Em 1h45, percorreremos a arquitetura, os mecanismos de proteção, a higiene das regras de transporte, as ferramentas de diagnóstico (Message Trace e leitura de cabeçalhos) e quatro cenários reais de troubleshooting. Ao final, abriremos espaço para perguntas.</p>
+
+      <p><strong>Por que esta sessão importa:</strong> a maior parte dos chamados de suporte de mensageria (atrasos, e-mail "sumido", spam ou bloqueios indevidos) pode ser resolvida em minutos quando o analista domina três pilares — entender o caminho que a mensagem percorre, saber inspecionar esse caminho com o Message Trace e validar a autenticação pelo cabeçalho. Sem isso, o ticket vira "caixa-preta" e acaba escalado desnecessariamente.</p>
+
+      <p><strong>Antes de começar — alinhamento rápido:</strong> pergunte aos participantes (1) qual o volume médio diário de tickets de mensageria, (2) quais cenários geram mais retrabalho, e (3) se já houve incidente recente de phishing/spoofing. Use as respostas para enfatizar os blocos de maior interesse durante a sessão.</p>
+
+      <p><strong>Como aproveitar melhor a sessão:</strong></p>
+      <ul>
+        <li>Tenha o Exchange Admin Center aberto em outra aba (<code>https://admin.exchange.microsoft.com</code>) — vamos acompanhar alguns passos juntos.</li>
+        <li>Se possível, separe um chamado real recente para reanalisarmos no bloco de Casos Práticos, aplicando o método.</li>
+        <li>Anote dúvidas específicas do tenant SEFAZ-SP (regras de transporte herdadas, conectores legados, fornecedores recorrentes em falso positivo) — vamos abrir espaço ao final.</li>
+      </ul>
+
+      <div class="tip">
+        <strong>Dica de condução:</strong> os blocos têm tempos sugeridos, mas se a equipe demonstrar mais interesse em <em>Regras de Transporte</em> ou <em>Casos Práticos</em>, comprima a parte teórica de Arquitetura/EOP (são abas que ficam disponíveis para releitura) e dedique mais tempo a hands-on. A aba <strong>Referências</strong> está aí justamente para que ninguém precise tomar nota dos links durante a sessão.
+      </div>
+
+      <p><strong>Materiais entregues:</strong> esta página HTML é o material principal — funciona offline, abre em qualquer navegador, contém slides + speaker notes + caminhos GUI + comandos PowerShell + links oficiais. Pode ser arquivada como referência interna do time.</p>
+    </div>
+  </section>
+
+  <!-- ARQUITETURA -->
+  <section class="panel" id="arquitetura" role="tabpanel">
+    <h2>Arquitetura do Mail Flow no Exchange Online</h2>
+
+    <h3>Tipos de Fluxo</h3>
+    <ul>
+      <li><strong>Inbound (entrada):</strong> remetente externo → MX público (EOP) → Transport Service do Exchange Online → Mailbox.</li>
+      <li><strong>Outbound (saída):</strong> Mailbox → Transport Service → EOP (saída) → MX do destinatário externo.</li>
+      <li><strong>Interno (intra-tenant):</strong> Mailbox → Transport Service do Exchange Online → Mailbox. <strong>Não passa pelo MX externo do EOP</strong>, mas as proteções internas (anti-malware, regras de transporte, anti-spam interno) ainda são aplicadas.</li>
+    </ul>
+
+    <h3>Componentes-chave</h3>
+    <ul>
+      <li><strong>Domínios Aceitos:</strong> domínios reconhecidos como pertencentes à organização. Tipicamente <em>Authoritative</em> (Exchange responde por todos os endereços) — habilita <em>DBEB</em> para rejeitar destinatários inexistentes com NDR imediato.</li>
+      <li><strong>Conectores:</strong> não necessários no fluxo padrão. Usados apenas para integração com servidor on-premises, smart hosts, parceiros com TLS forçado ou aplicações internas que precisam fazer relay autenticado por IP.</li>
+      <li><strong>Registros DNS:</strong> <code>MX</code> aponta para o EOP do tenant; <code>SPF</code>, <code>DKIM</code> e <code>DMARC</code> autenticam o envio do domínio.</li>
+      <li><strong>EOP (Exchange Online Protection):</strong> serviço de filtragem cloud que atua como fronteira em cada direção (inbound/outbound) — detalhado na próxima aba.</li>
+    </ul>
+
+    <div class="example">
+      <span class="label">Diagrama — três fluxos típicos</span>
+<pre><code>┌─────────────── INBOUND ───────────────┐
+│ Remetente externo                     │
+│   │                                   │
+│   ▼  (DNS MX)                         │
+│ EOP (filtros: connection, malware,    │
+│      transport rules, anti-spam)      │
+│   │                                   │
+│   ▼                                   │
+│ Mailbox @fazenda.sp.gov.br            │
+└───────────────────────────────────────┘
+
+┌─────────────── OUTBOUND ──────────────┐
+│ Mailbox @fazenda.sp.gov.br            │
+│   │                                   │
+│   ▼                                   │
+│ Transport Service (regras outbound)   │
+│   │                                   │
+│   ▼                                   │
+│ EOP saída (anti-spam outbound, DKIM)  │
+│   │                                   │
+│   ▼  (DNS MX do destino)              │
+│ Servidor remoto                       │
+└───────────────────────────────────────┘
+
+┌─────────────── INTERNO ───────────────┐
+│ user1@fazenda.sp.gov.br               │
+│   │                                   │
+│   ▼  (não sai do tenant)              │
+│ Transport Service                     │
+│   │  (anti-malware, transport rules)  │
+│   ▼                                   │
+│ user2@fazenda.sp.gov.br               │
+└───────────────────────────────────────┘</code></pre>
+    </div>
+
+    <div class="gui-path">
+      <span class="label">Caminhos via GUI</span>
+      <ul>
+        <li><strong>Domínios Aceitos:</strong> <span class="crumb">Exchange Admin Center</span> &rsaquo; <span class="crumb">Mail flow</span> &rsaquo; <span class="crumb">Accepted domains</span><br>
+          <span class="url">https://admin.exchange.microsoft.com/#/accepteddomains</span></li>
+        <li><strong>Conectores (Inbound/Outbound):</strong> <span class="crumb">Exchange Admin Center</span> &rsaquo; <span class="crumb">Mail flow</span> &rsaquo; <span class="crumb">Connectors</span><br>
+          <span class="url">https://admin.exchange.microsoft.com/#/connectors</span></li>
+        <li><strong>Domínios verificados (DNS / SPF / DKIM / DMARC):</strong> <span class="crumb">Microsoft 365 admin center</span> &rsaquo; <span class="crumb">Settings</span> &rsaquo; <span class="crumb">Domains</span><br>
+          <span class="url">https://admin.microsoft.com/#/Domains</span></li>
+      </ul>
+    </div>
+
+    <div class="notes">
+      <h3>Notas do Apresentador</h3>
+
+      <p><strong>Mini-glossário (use ao introduzir o tema):</strong></p>
+      <ul>
+        <li><strong>MX (Mail Exchanger):</strong> registro DNS público que diz para a internet "envie e-mail deste domínio para este servidor". No Exchange Online, aponta para <code>tenant-com-br.mail.protection.outlook.com</code>.</li>
+        <li><strong>EOP (Exchange Online Protection):</strong> serviço de filtragem cloud da Microsoft, fronteira de cada mensagem.</li>
+        <li><strong>Tenant:</strong> a instância isolada da organização no Microsoft 365 (no caso, o tenant da SEFAZ-SP).</li>
+        <li><strong>DBEB (Directory Based Edge Blocking):</strong> rejeita no perímetro qualquer mensagem para destinatário que não existe no diretório.</li>
+        <li><strong>NDR (Non-Delivery Report):</strong> mensagem automática de erro de entrega (bounce).</li>
+        <li><strong>Transport Service:</strong> motor interno do Exchange Online que move mensagens entre mailboxes e aplica regras dentro do tenant.</li>
+      </ul>
+
+      <p>O Exchange Online utiliza o serviço <strong>Exchange Online Protection (EOP)</strong> como fronteira para todo e-mail que entra ou sai do tenant. Assim, todo e-mail enviado à organização SEFAZ-SP (por exemplo, para <code>*@fazenda.sp.gov.br</code>) primeiro passa pelos servidores EOP, que aplicam scanners de spam e malware antes de entrar nas caixas de correio. Da mesma forma, e-mail enviado para fora (internet) sai pelas saídas do EOP — não existe "bypass" do EOP em uma configuração padrão.</p>
+
+      <p><strong>Importante sobre fluxo interno:</strong> mensagens entre dois usuários do mesmo tenant <em>não saem para a internet nem passam pelo MX externo</em>. Elas são processadas direto pelo Transport Service do Exchange Online, que ainda aplica anti-malware, regras de transporte e anti-spam interno (para detectar contas comprometidas enviando phishing internamente). Esse detalhe explica por que, em alguns chamados, vemos uma mensagem interna com um header bem mais enxuto que uma inbound externa — ela passou por menos saltos.</p>
+
+      <div class="example">
+        <span class="label">Exemplo — fluxo Inbound passo a passo</span>
+        <p style="margin:0">Um fornecedor envia <code>nf@fornecedor.com.br</code> → <code>compras@fazenda.sp.gov.br</code>:</p>
+        <ol>
+          <li>DNS público resolve <code>fazenda.sp.gov.br</code> e encontra o registro MX apontando para <code>fazenda-sp-gov-br.mail.protection.outlook.com</code>.</li>
+          <li>Servidor do fornecedor entrega via SMTP para o EOP (porta 25, com TLS oportunístico ou forçado).</li>
+          <li>EOP aplica o pipeline: connection filter → anti-malware → regras de transporte → anti-spam.</li>
+          <li>Após aprovação, EOP encaminha para o Transport Service do tenant.</li>
+          <li>Mensagem é entregue na caixa de <code>compras@fazenda.sp.gov.br</code>.</li>
+        </ol>
+      </div>
+
+      <p><strong>Portas SMTP relevantes</strong> (vai aparecer em chamados de aplicações que enviam e-mail):</p>
+      <ul>
+        <li><strong>25/TCP</strong> — SMTP server-to-server (entrada no EOP, padrão da internet). <em>Não use para envio autenticado de aplicações.</em></li>
+        <li><strong>587/TCP</strong> — SMTP submission com STARTTLS (recomendado para apps internas via <code>smtp.office365.com</code> com autenticação SMTP AUTH ou OAuth2).</li>
+        <li><strong>465/TCP</strong> — SMTPS implícito (legado; ainda aceito mas não recomendado).</li>
+      </ul>
+
+      <p>Com Exchange Online puro e EOP básico, não é preciso configurar conectores manualmente para o fluxo normal. <strong>Conectores</strong> só são usados em cenários especiais. Casos típicos:</p>
+      <ul>
+        <li><strong>Aplicações internas que enviam e-mail</strong> (sistemas de NF, alertas de monitoramento, ERP) — exigem um conector inbound <em>From: IP do servidor de aplicação Para: Office 365</em>, autenticando por IP corporativo público. Sem isso, o relay é rejeitado.</li>
+        <li><strong>Parceiros que exigem TLS forçado</strong> (ex.: outro órgão público, banco, Receita Federal) — cria-se um conector <em>Partner</em> para garantir que o tráfego com aquele domínio sempre saia/chegue criptografado, com falha caso TLS não seja negociado.</li>
+        <li><strong>Coexistência híbrida</strong> com Exchange Server on-premises — conectores bidirecionais entre on-prem e Office 365.</li>
+        <li><strong>Smart hosts / appliances de DLP ou arquivamento</strong> — força o tráfego de saída a passar por um gateway externo antes da internet.</li>
+      </ul>
+
+      <p><strong>Listar conectores existentes via PowerShell:</strong></p>
+      <pre><code>Connect-ExchangeOnline
+
+# Conectores de entrada (de servidores externos para o tenant)
+Get-InboundConnector | Select-Object Name, ConnectorType, Enabled,
+    SenderDomains, SenderIPAddresses, RequireTls
+
+# Conectores de saída (do tenant para destinos externos específicos)
+Get-OutboundConnector | Select-Object Name, ConnectorType, Enabled,
+    RecipientDomains, SmartHosts, TlsSettings</code></pre>
+
+      <p>Quanto aos <strong>Domínios Aceitos</strong>, no ambiente SEFAZ-SP o domínio principal (<code>fazenda.sp.gov.br</code>) está cadastrado como autoritativo. Isso significa que o EOP só aceita mensagens para destinatários válidos naquele domínio; se o endereço não existir no Entra ID/Exchange, o EOP rejeita no perímetro com um NDR. Este mecanismo (DBEB) evita processamento desnecessário de e-mails para usuários inválidos, melhorando segurança e performance.</p>
+
+      <div class="example">
+        <span class="label">Exemplo — NDR de DBEB</span>
+        <pre><code>Remote Server returned '550 5.1.10 RESOLVER.ADR.RecipientNotFound;
+Recipient not found by SMTP address lookup'</code></pre>
+        <p style="margin:0">Esse retorno chega ao remetente externo em segundos, antes mesmo do anti-spam — é o EOP dizendo "esse endereço não existe no diretório do tenant".</p>
+      </div>
+
+      <p><strong>Listar os domínios aceitos via PowerShell:</strong></p>
+      <pre><code>Get-AcceptedDomain | Select-Object Name, DomainName, DomainType, Default</code></pre>
+      <p>O <code>DomainType</code> mostra:</p>
+      <ul>
+        <li><code>Authoritative</code> — Exchange Online é dono de todos os endereços do domínio; aplica DBEB. <em>Mais comum.</em></li>
+        <li><code>InternalRelay</code> — encaminha o que não conhece para outro servidor (coexistência híbrida ou subdomínio gerenciado por terceiro). <em>Não aplica DBEB.</em></li>
+        <li>O atributo <code>Default = True</code> indica o domínio padrão usado para usuários novos sem domínio explícito.</li>
+      </ul>
+
+      <div class="tip">
+        <strong>Limites operacionais úteis (vão virar chamado em algum momento):</strong>
+        <ul style="margin:6px 0 0 0">
+          <li><strong>Tamanho máximo da mensagem:</strong> 35 MB padrão, configurável por mailbox até 150 MB (<code>Set-Mailbox -MaxSendSize / -MaxReceiveSize</code>).</li>
+          <li><strong>Destinatários por mensagem:</strong> 500 (interno + externo combinados).</li>
+          <li><strong>Mensagens enviadas por usuário/dia:</strong> 10.000.</li>
+          <li><strong>Destinatários únicos/dia:</strong> 10.000.</li>
+        </ul>
+      </div>
+
+      <div class="tip">
+        <strong>Dica de campo:</strong> sempre que receber um chamado do tipo "e-mail externo nem chega aqui", o primeiro check é confirmar que o destinatário existe e está licenciado. Se não existir, o EOP nunca vai aceitar — não adianta procurar no Message Trace do tenant, porque a mensagem é rejeitada no SMTP handshake.
+      </div>
+    </div>
+  </section>
+
+  <!-- EOP -->
+  <section class="panel" id="eop" role="tabpanel">
+    <h2>Proteções do Exchange Online Protection (EOP) – Anti-Spam &amp; Anti-Malware</h2>
+
+    <h3>Escopo desta seção</h3>
+    <ul>
+      <li>Cobre o <strong>EOP gratuito</strong> incluso em qualquer plano Exchange Online (Plan 1/Plan 2, M365 Business, M365 E3).</li>
+      <li><strong>Não cobre</strong> recursos do Microsoft Defender for Office 365 P1/P2 (Safe Links, Safe Attachments, Attack Simulation, Threat Explorer, Automated Investigation). Se aparecerem em chamados, escalar para a equipe de segurança.</li>
+    </ul>
+
+    <h3>Pipeline EOP (em ordem de execução)</h3>
+    <ol>
+      <li><strong>Connection Filtering:</strong> avalia o IP de origem (CIP no header), aplica IP Allow/Block List e DBEB (rejeita destinatário inexistente).</li>
+      <li><strong>Anti-Malware:</strong> escaneia anexos e conteúdo com múltiplos engines; vírus/ransomware vão para quarentena. Inclui o <em>Common Attachments Filter</em> (bloqueio por extensão: <code>.exe</code>, <code>.bat</code>, <code>.js</code>, <code>.iso</code>, etc.).</li>
+      <li><strong>Anti-Phish (básico):</strong> spoof intelligence, mailbox intelligence (impersonation simples), proteção contra spoofing do próprio domínio.</li>
+      <li><strong>Regras de Transporte:</strong> políticas personalizadas da organização (disclaimers, bloqueios, SCL override). Detalhadas na próxima aba.</li>
+      <li><strong>Anti-Spam (Content Filter):</strong> analisa conteúdo, reputação e padrões; atribui <strong>SCL</strong> (0–9) e <strong>BCL</strong> (0–9 para bulk/marketing).</li>
+      <li><strong>ZAP (Zero-Hour Auto Purge):</strong> pós-entrega — se o EOP identifica nova assinatura de malware/phish/spam após a mensagem já estar na mailbox, ele remove ou move para Junk automaticamente (até ~48h depois).</li>
+    </ol>
+
+    <h3>Políticas configuráveis</h3>
+    <ul>
+      <li><strong>Anti-Spam Inbound Policy:</strong> sensibilidade, ações por veredito (Junk/Quarentena), Allow/Block lists de remetentes/domínios, threshold de phish e bulk.</li>
+      <li><strong>Anti-Spam Outbound Policy:</strong> limites de envio para detectar contas comprometidas mandando spam de dentro do tenant.</li>
+      <li><strong>Connection Filter Policy:</strong> IP Allow List / IP Block List globais.</li>
+      <li><strong>Anti-Malware Policy:</strong> ações, notificações, Common Attachments Filter, ZAP para malware.</li>
+      <li><strong>Tenant Allow/Block List (TABL):</strong> entradas com expiração automática (ideal para liberações temporárias).</li>
+    </ul>
+
+    <div class="gui-path">
+      <span class="label">Caminhos via GUI</span>
+      <ul>
+        <li><strong>Políticas Anti-Spam (inbound / outbound) e Connection Filter:</strong> <span class="crumb">Microsoft Defender portal</span> &rsaquo; <span class="crumb">Email &amp; collaboration</span> &rsaquo; <span class="crumb">Policies &amp; rules</span> &rsaquo; <span class="crumb">Threat policies</span> &rsaquo; <span class="crumb">Anti-spam</span><br>
+          <span class="url">https://security.microsoft.com/antispam</span></li>
+        <li><strong>Políticas Anti-Malware:</strong> <span class="crumb">Microsoft Defender portal</span> &rsaquo; <span class="crumb">Threat policies</span> &rsaquo; <span class="crumb">Anti-malware</span><br>
+          <span class="url">https://security.microsoft.com/antimalwarev2</span></li>
+        <li><strong>Política Anti-Phish (básica EOP):</strong> <span class="crumb">Microsoft Defender portal</span> &rsaquo; <span class="crumb">Threat policies</span> &rsaquo; <span class="crumb">Anti-phishing</span><br>
+          <span class="url">https://security.microsoft.com/antiphishing</span></li>
+        <li><strong>Tenant Allow/Block List (TABL):</strong> <span class="crumb">Microsoft Defender portal</span> &rsaquo; <span class="crumb">Email &amp; collaboration</span> &rsaquo; <span class="crumb">Policies &amp; rules</span> &rsaquo; <span class="crumb">Tenant Allow/Block Lists</span><br>
+          <span class="url">https://security.microsoft.com/tenantAllowBlockList</span></li>
+        <li><strong>Quarentena (revisão e liberação):</strong> <span class="crumb">Microsoft Defender portal</span> &rsaquo; <span class="crumb">Email &amp; collaboration</span> &rsaquo; <span class="crumb">Review</span> &rsaquo; <span class="crumb">Quarantine</span><br>
+          <span class="url">https://security.microsoft.com/quarantine</span></li>
+      </ul>
+    </div>
+
+    <div class="notes">
+      <h3>Notas do Apresentador</h3>
+      <p>Nesta seção, abordamos como o EOP protege o fluxo de e-mail. O EOP aplica múltiplas camadas de filtros <strong>sequencialmente</strong> — entender essa ordem é crítico, porque uma decisão tomada em uma camada anterior (ex.: bloqueio por IP) impede que as camadas seguintes sejam executadas, o que muda completamente o que aparece no Message Trace e no header.</p>
+
+      <p><strong>1. Connection Filter</strong> — registra o IP de origem (CIP) da conexão no header e verifica políticas de conexão: por exemplo, se o IP estiver em listas de bloqueio corporativas do EOP, o e-mail é descartado imediatamente. Também é nessa fase inicial que ocorre o DBEB mencionado antes, garantindo que e-mails para usuários inexistentes sejam rejeitados com NDR apropriado.</p>
+
+      <div class="example">
+        <span class="label">Exemplo — IP allow list</span>
+        <p style="margin:0 0 6px 0">Cenário: a SEFAZ-SP recebe um relatório diário de um datacenter conhecido (IP estático <code>203.0.113.45</code>) e ele cai em quarentena por SCL alto. Solução temporária: incluir o IP na <em>IP Allow List</em> da política de Connection Filter.</p>
+        <pre><code># Sempre leia antes de alterar
+Get-HostedConnectionFilterPolicy -Identity Default |
+    Select-Object Name, IPAllowList, IPBlockList, EnableSafeList
+
+Set-HostedConnectionFilterPolicy -Identity Default `
+    -IPAllowList @{Add="203.0.113.45"}</code></pre>
+        <p style="margin:0">Mensagens vindas desse IP recebem <code>SCL = -1</code> e pulam o anti-spam. <strong>Cuidado:</strong> isso também ignora as checagens de SPF/DKIM/DMARC para o IP, então use só com origens 100% confiáveis e estáticas. Para liberações temporárias prefira o TABL (tem expiração).</p>
+      </div>
+
+      <p><strong>2. Anti-Malware</strong> — o EOP examina anexos e conteúdo em busca de vírus conhecidos, spyware ou ransomware, com múltiplos engines em paralelo. Se malware é encontrado, a mensagem é retida em quarentena automaticamente (<strong>somente administradores</strong> podem liberar esses e-mails — nunca o usuário). O <em>Common Attachments Filter</em> bloqueia tipos de arquivo perigosos por padrão (ex.: <code>.exe</code>, <code>.bat</code>, <code>.js</code>, <code>.vbs</code>, <code>.iso</code>) mesmo que não estejam infectados — útil para barrar vetores de ransomware.</p>
+
+      <p><strong>3. Anti-Phish (básico do EOP)</strong> — não confundir com Defender for Office 365. O EOP gratuito inclui:</p>
+      <ul>
+        <li><strong>Spoof intelligence:</strong> identifica remetentes externos que se passam pelo seu domínio ou por domínios conhecidos.</li>
+        <li><strong>Proteção contra spoofing intra-organização:</strong> bloqueia mensagens externas que dizem ser <code>@fazenda.sp.gov.br</code> mas falham SPF/DKIM/DMARC.</li>
+        <li><strong>Honra DMARC com p=quarantine ou p=reject</strong> publicado pelo remetente externo.</li>
+      </ul>
+      <p>Recursos como <em>impersonation protection</em> avançada (proteção de usuários e domínios específicos), <em>Mailbox intelligence</em> baseada em IA e <em>Safe Links/Attachments</em> exigem Defender P1/P2 — fora do escopo desta sessão.</p>
+
+      <p><strong>4. Regras de Transporte</strong> (Mail Flow Rules / Transport Rules) — filtros personalizáveis avaliados após o anti-malware/anti-phish. Detalhadas na próxima aba. Exemplos típicos no SEFAZ-SP:</p>
+      <ul>
+        <li><strong>Disclaimer externo:</strong> adicionar prefixo <code>[EXTERNO]</code> no assunto e um aviso no corpo quando o remetente está fora do domínio. Reduz drasticamente cliques em phishing.</li>
+        <li><strong>Bloqueio por palavra-chave / regex:</strong> reter mensagens de saída que contenham padrões de CPF, número de processo SEI ou outras informações sensíveis sem criptografia.</li>
+        <li><strong>SCL override:</strong> definir <code>SCL=-1</code> para mensagens vindas de um parceiro autenticado, sem precisar mexer em allow lists globais.</li>
+      </ul>
+      <pre><code>Get-TransportRule | Where-Object { $_.State -eq "Enabled" } |
+    Select-Object Name, Priority, Description</code></pre>
+
+      <p><strong>5. Anti-Spam (Content Filter)</strong> — faz a análise de conteúdo e contexto para determinar se o e-mail é spam, phishing ou bulk legítimo. Gera dois indicadores no header:</p>
+      <ul>
+        <li><strong>SCL — Spam Confidence Level</strong> (-1 a 9): probabilidade de ser spam.</li>
+        <li><strong>BCL — Bulk Complaint Level</strong> (0 a 9): nível de "marketing/bulk" (newsletters, promoções). BCL alto não significa spam, significa que muitos usuários globalmente reclamam. Threshold default = 7.</li>
+      </ul>
+
+      <div class="example">
+        <span class="label">Tabela de SCL e ação padrão</span>
+        <pre><code>SCL  Significado                       Ação padrão
+---  --------------------------------  -----------------------------
+ -1  Bypass (allow list / regra)       Inbox
+  0  Não filtrado (limpo)              Inbox
+  1  Limpo                             Inbox
+  5  Spam (suspeito)                   Junk Email
+  6  Spam                              Junk Email
+  7  Spam                              Junk Email
+  8  High confidence spam              Quarentena
+  9  High confidence spam / phish      Quarentena</code></pre>
+        <p style="margin:6px 0 0 0">Os valores 2, 3 e 4 não são atribuídos pelo EOP atualmente.</p>
+      </div>
+
+      <p><strong>Inspecionar a política de conteúdo via PowerShell:</strong></p>
+      <pre><code>Get-HostedContentFilterPolicy -Identity Default |
+    Select-Object Name,
+        SpamAction, HighConfidenceSpamAction,
+        PhishSpamAction, HighConfidencePhishAction, BulkSpamAction,
+        BulkThreshold,
+        AllowedSenders, AllowedSenderDomains,
+        BlockedSenders, BlockedSenderDomains</code></pre>
+
+      <p><strong>6. ZAP (Zero-Hour Auto Purge)</strong> — funciona <em>após</em> a mensagem já ter sido entregue. Quando o EOP identifica uma nova assinatura (vírus, phish ou spam recém-classificado), ele varre as mailboxes ativas e move/remove a mensagem retroativamente, normalmente em até 48 horas. Por isso é comum o usuário relatar "estava no inbox e sumiu" — confira o Message Trace, o evento ZAP aparece como <code>ZAP: Moved to Junk</code> ou <code>ZAP: Quarantine</code>.</p>
+
+      <p><strong>Quarentena — quem pode liberar:</strong></p>
+      <ul>
+        <li><strong>Spam (SCL 5–7), bulk e phish "comum":</strong> usuário pode visualizar e liberar via notificação por e-mail ou no portal <code>https://security.microsoft.com/quarantine</code>, <em>se a política permitir</em>.</li>
+        <li><strong>High-confidence phish, malware:</strong> apenas administradores podem liberar (configuração padrão e recomendada).</li>
+        <li><strong>Notificações ao usuário</strong> são configuradas via "Quarantine policies" no Defender portal — sem isso, o usuário não sabe que tem mensagem retida.</li>
+      </ul>
+
+      <div class="tip">
+        <strong>Boa prática:</strong> evite usar a <em>Allow List</em> da política anti-spam para resolver chamados pontuais. Ela é global, sobrescreve TODAS as checagens (inclusive autenticação) e é o vetor #1 explorado por phishers que sabem quais domínios estão liberados. Prefira liberar via Tenant Allow/Block List (TABL), que tem expiração automática (até 30 dias), ou via regra de transporte com escopo restrito (ex.: "de <code>fornecedor.com</code> + para <code>compras@fazenda.sp.gov.br</code>" + valida cabeçalho específico).
+      </div>
+    </div>
+  </section>
+
+  <!-- TRANSPORT RULES -->
+  <section class="panel" id="transport-rules" role="tabpanel">
+    <h2>Revisão de Regras de Transporte (Mail Flow Rules)</h2>
+
+    <h3>Tópicos no Slide</h3>
+    <ul>
+      <li><strong>O que são:</strong> regras avaliadas pelo EOP no pipeline de transporte (entre anti-malware e anti-spam) que aplicam ações condicionais sobre cada mensagem — modificar, redirecionar, bloquear, marcar, gerar relatórios.</li>
+      <li><strong>Onde gerenciar:</strong> Exchange Admin Center → <em>Mail Flow &gt; Rules</em>, ou via PowerShell (<code>Get-TransportRule</code>, <code>New-TransportRule</code>, <code>Set-TransportRule</code>).</li>
+      <li><strong>Estrutura de uma regra:</strong> <em>Condições</em> (quando aplicar) + <em>Ações</em> (o que fazer) + <em>Exceções</em> (quando não aplicar) + <em>Prioridade</em> (ordem de execução).</li>
+      <li><strong>Por que revisar:</strong> regras esquecidas viram brechas de segurança, geram comportamento inesperado e dificultam troubleshooting (mensagens "somem" sem motivo claro no Message Trace).</li>
+      <li><strong>Cadência recomendada:</strong> revisão trimestral completa + auditoria pontual após qualquer mudança relevante (incidente, novo fornecedor, mudança de escopo).</li>
+    </ul>
+
+    <div class="gui-path">
+      <span class="label">Caminhos via GUI</span>
+      <ul>
+        <li><strong>Listar / criar / editar regras:</strong> <span class="crumb">Exchange Admin Center</span> &rsaquo; <span class="crumb">Mail flow</span> &rsaquo; <span class="crumb">Rules</span><br>
+          <span class="url">https://admin.exchange.microsoft.com/#/transportrules</span></li>
+        <li><strong>Reordenar prioridade:</strong> mesma tela &rsaquo; botão <span class="crumb">Move up</span> / <span class="crumb">Move down</span> ou editar <span class="crumb">Priority</span> na regra.</li>
+        <li><strong>Histórico de alterações (auditoria):</strong> <span class="crumb">Microsoft Purview portal</span> &rsaquo; <span class="crumb">Audit</span> &rsaquo; filtrar por <em>Activity</em> = <code>New-TransportRule</code> / <code>Set-TransportRule</code> / <code>Remove-TransportRule</code><br>
+          <span class="url">https://purview.microsoft.com/audit</span></li>
+        <li><strong>Relatórios de uso de regras:</strong> <span class="crumb">Exchange Admin Center</span> &rsaquo; <span class="crumb">Reports</span> &rsaquo; <span class="crumb">Mail flow</span> &rsaquo; <span class="crumb">Top mail flow rules</span> / <span class="crumb">Mail flow rule matches</span><br>
+          <span class="url">https://admin.exchange.microsoft.com/#/mailflowreports</span></li>
+      </ul>
+    </div>
+
+    <div class="notes">
+      <h3>Notas do Apresentador</h3>
+      <p>As <strong>Regras de Transporte</strong> (também chamadas de Mail Flow Rules ou Transport Rules) são uma das ferramentas mais poderosas — e mais perigosas — do Exchange Online. Elas permitem que o administrador injete lógica customizada em cada mensagem que passa pelo tenant, sem precisar tocar em código. O problema: por serem fáceis de criar, viram uma espécie de "gambiarra universal" para resolver chamados, e em poucos meses o tenant acumula dezenas de regras das quais ninguém mais se lembra para que servem.</p>
+
+      <p><strong>Quando uma regra de transporte é a melhor escolha:</strong></p>
+      <ul>
+        <li>Comportamento condicional baseado em conteúdo, remetente, destinatário, anexo ou cabeçalho.</li>
+        <li>Ações que o EOP não oferece nativamente (disclaimer customizado, redirecionamento, BCC oculto para auditoria).</li>
+        <li>Exceções muito específicas em uma política global (ex.: aumentar SCL apenas para um conjunto de remetentes).</li>
+      </ul>
+
+      <p><strong>Quando NÃO usar regra de transporte:</strong></p>
+      <ul>
+        <li>Para liberar um único chamado de spam — use <em>Tenant Allow/Block List</em> (com expiração automática).</li>
+        <li>Para bloquear um domínio inteiro — use a Block List da política anti-spam ou TABL.</li>
+        <li>Para encaminhamento permanente de uma caixa — use mailbox forwarding ou regra do próprio Outlook do usuário.</li>
+      </ul>
+
+      <h3 style="margin-top:24px">Padrões de regras comuns no setor público</h3>
+
+      <div class="example">
+        <span class="label">Exemplo 1 — Aviso de remetente externo</span>
+        <p style="margin:0 0 6px 0"><strong>Objetivo:</strong> alertar visualmente o usuário sempre que uma mensagem vier de fora do domínio, reduzindo cliques em phishing.</p>
+        <pre><code>New-TransportRule -Name "AVISO - Remetente Externo" `
+    -FromScope NotInOrganization `
+    -SentToScope InOrganization `
+    -ApplyHtmlDisclaimerLocation Prepend `
+    -ApplyHtmlDisclaimerText '&lt;div style="background:#fff3cd;padding:8px;border-left:4px solid #f0b400;"&gt;
+      &lt;b&gt;[EXTERNO]&lt;/b&gt; Esta mensagem veio de fora da SEFAZ-SP.
+      Verifique remetente e links antes de responder ou clicar.
+    &lt;/div&gt;' `
+    -ApplyHtmlDisclaimerFallbackAction Wrap `
+    -Priority 0 `
+    -Mode Enforce</code></pre>
+        <p style="margin:0"><strong>Atenção:</strong> evite adicionar também <code>-PrependSubject "[EXTERNO] "</code> sem revisar respostas internas — o prefixo se acumula em threads longas.</p>
+      </div>
+
+      <div class="example">
+        <span class="label">Exemplo 2 — Bypass de filtro para parceiro confiável</span>
+        <p style="margin:0 0 6px 0"><strong>Objetivo:</strong> garantir que mensagens de um sistema crítico (ex.: portal de NF-e) nunca caiam em spam, mas SEM expor o domínio inteiro.</p>
+        <pre><code>New-TransportRule -Name "BYPASS - NF-e SEFAZ" `
+    -FromAddressContainsWords "@nfe.fazenda.gov.br" `
+    -SentToScope InOrganization `
+    -SenderIpRanges "200.198.10.0/24" `
+    -SetSCL -1 `
+    -StopRuleProcessing $true `
+    -Priority 1 `
+    -Mode Enforce</code></pre>
+        <p style="margin:0"><strong>Por que combinar domínio + IP:</strong> o filtro de domínio sozinho seria fácil de spoofar. Exigir também o IP de origem confiável reduz drasticamente o risco. <code>StopRuleProcessing</code> garante que regras posteriores não reclassifiquem.</p>
+      </div>
+
+      <div class="example">
+        <span class="label">Exemplo 3 — Bloqueio de tipos de anexo perigosos</span>
+        <p style="margin:0 0 6px 0"><strong>Objetivo:</strong> rejeitar mensagens com extensões executáveis ou de macro, comuns em campanhas de ransomware.</p>
+        <pre><code>New-TransportRule -Name "BLOQUEIO - Anexos Executáveis" `
+    -AttachmentExtensionMatchesWords @("exe","scr","bat","js","vbs","iso","jar","hta","lnk") `
+    -RejectMessageReasonText "Anexo bloqueado pela política de segurança da SEFAZ-SP. Use compartilhamento via SharePoint/OneDrive." `
+    -RejectMessageEnhancedStatusCode "5.7.1" `
+    -Priority 2 `
+    -Mode Enforce</code></pre>
+      </div>
+
+      <div class="example">
+        <span class="label">Exemplo 4 — Auditoria de mensagens sensíveis</span>
+        <p style="margin:0 0 6px 0"><strong>Objetivo:</strong> enviar cópia oculta para uma caixa de auditoria quando palavras-chave de processo ou CPF aparecem em mensagens externas.</p>
+        <pre><code>New-TransportRule -Name "AUDITORIA - Dados Sensíveis Saída" `
+    -FromScope InOrganization `
+    -SentToScope NotInOrganization `
+    -SubjectOrBodyMatchesPatterns @('\d{3}\.\d{3}\.\d{3}-\d{2}','processo\s+\d{4,}/\d{4}') `
+    -BlindCopyTo "auditoria-mail@fazenda.sp.gov.br" `
+    -GenerateIncidentReport "compliance@fazenda.sp.gov.br" `
+    -IncidentReportContent Sender,Recipients,Subject,MessageId,Headers `
+    -Priority 5 `
+    -Mode AuditAndNotify</code></pre>
+        <p style="margin:0"><strong>Dica:</strong> comece sempre em <code>-Mode AuditAndNotify</code> ou <code>-Mode Audit</code> antes de promover para <code>Enforce</code> — você vê o impacto real da regra em relação a mensagens legítimas sem afetar o usuário.</p>
+      </div>
+
+      <h3 style="margin-top:24px">Auditoria prática das regras existentes</h3>
+
+      <p>O primeiro passo de qualquer revisão é listar e classificar tudo o que está ativo. Use o snippet abaixo:</p>
+      <pre><code># Inventario completo de regras com prioridade e modo
+Get-TransportRule | Sort-Object Priority |
+    Select-Object Priority, Name, State, Mode, WhenChanged,
+        @{N="Conditions";E={$_.Conditions.Count}},
+        @{N="Actions";E={$_.Actions.Count}},
+        Description |
+    Format-Table -AutoSize
+
+# Exportar para CSV (para revisão offline / planilha)
+Get-TransportRule | Sort-Object Priority |
+    Select-Object Name, State, Mode, Priority, WhenChanged, Description,
+        @{N="Conditions";E={($_.Conditions | ForEach-Object { $_.Name }) -join '; '}},
+        @{N="Actions";E={($_.Actions | ForEach-Object { $_.Name }) -join '; '}} |
+    Export-Csv -Path "D:\Auditoria\TransportRules_$(Get-Date -Format yyyyMMdd).csv" `
+               -NoTypeInformation -Encoding UTF8
+
+# Regras desabilitadas (candidatas a remoção)
+Get-TransportRule | Where-Object { $_.State -eq "Disabled" } |
+    Select-Object Name, WhenChanged, Description
+
+# Regras alteradas nos últimos 30 dias
+Get-TransportRule | Where-Object { $_.WhenChanged -gt (Get-Date).AddDays(-30) } |
+    Select-Object Name, State, WhenChanged, LastModifiedBy</code></pre>
+
+      <p><strong>Critérios de revisão</strong> — para cada regra, responda:</p>
+      <ol>
+        <li><strong>Owner identificado?</strong> Quem solicitou e/ou é responsável hoje? Sem owner, regra vira órfã.</li>
+        <li><strong>Justificativa atual?</strong> O motivo que levou à criação ainda vale? (Fornecedor descontinuado, sistema migrado, projeto encerrado.)</li>
+        <li><strong>Escopo mínimo?</strong> A regra usa filtros específicos (remetente + IP, ou destinatário + assunto) ou está "aberta demais" (qualquer remetente externo)?</li>
+        <li><strong>Ação proporcional?</strong> Bypass de SCL global é quase sempre exagero — prefira <code>SetSCL -1</code> escopado.</li>
+        <li><strong>Conflito de prioridade?</strong> Regras anteriores podem cancelar/sobrescrever esta? Use <code>StopRuleProcessing</code> conscientemente.</li>
+        <li><strong>Documentação no campo Description?</strong> Anote: ticket de origem, owner, data de criação, data prevista de revisão.</li>
+      </ol>
+
+      <h3 style="margin-top:24px">Anti-padrões a eliminar</h3>
+      <ul>
+        <li><strong>"Allow geral" para um domínio inteiro</strong> com <code>SetSCL -1</code> sem condição adicional — vetor clássico de bypass de phishing. Sempre adicione restrição por IP/header de autenticação.</li>
+        <li><strong>Forward externo silencioso</strong> via <em>BlindCopyTo</em> para endereços pessoais (gmail/hotmail) — risco de DLP e compliance. Audite com <code>Get-TransportRule | Where { $_.BlindCopyTo -match "gmail|hotmail|outlook\.com|yahoo" }</code>.</li>
+        <li><strong>Regras com nome genérico</strong> ("Regra 1", "Teste", "Temporário") — renômeie ou remova. Padronize: <code>[AÇÃO] - [SUBJECT] - [TICKET]</code>, ex.: <code>BYPASS - NF-e - INC0012345</code>.</li>
+        <li><strong>Disclaimers duplicados</strong> que aplicam o mesmo aviso várias vezes (regras herdadas de migrações). Consolide em uma única regra.</li>
+        <li><strong>Modo <em>Enforce</em> em regras experimentais</strong> sem validar antes em <em>Audit</em> — risco de afetar produção.</li>
+      </ul>
+
+      <h3 style="margin-top:24px">Testando uma regra antes de promover</h3>
+      <p>Antes de habilitar uma regra crítica, use os modos não intrusivos:</p>
+      <ul>
+        <li><code>-Mode Audit</code> — a regra avalia condições e <strong>não aplica a ação</strong>; apenas registra.</li>
+        <li><code>-Mode AuditAndNotify</code> — idem, mas envia <em>Incident Report</em> para o admin com cada match.</li>
+        <li><code>-Mode Enforce</code> — modo padrão produtivo, aplica a ação.</li>
+      </ul>
+      <p>Para validar o impacto sem aguardar tráfego real, use o Message Trace + filtro por <em>Transport rule</em>:</p>
+      <pre><code># Quais mensagens nas últimas 24h foram afetadas por uma regra específica?
+Get-MessageTrace -StartDate (Get-Date).AddDays(-1) -EndDate (Get-Date) |
+    Get-MessageTraceDetail |
+    Where-Object { $_.Event -eq "Transport rule" -and $_.Detail -match "BYPASS - NF-e" } |
+    Select-Object Date, MessageId, Detail</code></pre>
+
+      <div class="tip">
+        <strong>Boa prática de governança:</strong> mantenha um repositório (planilha ou wiki interna) com o inventário das regras: <em>nome, owner, ticket, justificativa, data de criação, data da última revisão, data prevista para nova revisão</em>. A cada trimestre, qualquer regra cuja revisão esteja vencida deve ser justificada novamente ou desativada. Esse simples ritual elimina ~80% da "fauna" de regras esquecidas.
+      </div>
+
+      <p><strong>Em resumo:</strong> regras de transporte são como filtros de roteador — indispensáveis quando bem aplicadas, mas se acumulam silenciosamente e podem virar a maior superfície de risco do tenant. Inventarie, audite, escope ao mínimo necessário, documente e revise periodicamente.</p>
+    </div>
+  </section>
+
+  <!-- MESSAGE TRACE -->
+  <section class="panel" id="message-trace" role="tabpanel">
+    <h2>Ferramenta de Rastreamento de Mensagens (Message Trace)</h2>
+
+    <h3>Tópicos no Slide</h3>
+    <ul>
+      <li><strong>O que é:</strong> ferramenta do EAC (Exchange Admin Center) para seguir o caminho das mensagens em seu trajeto pelo sistema.</li>
+      <li><strong>Onde acessar:</strong> Portal Exchange Online (<em>Mail Flow &gt; Message Trace</em>) ou via PowerShell (cmdlets <code>Get-MessageTrace</code>).</li>
+      <li><strong>Uso básico:</strong> permite buscar por período (até 90 dias), remetentes/destinatários específicos, ou status de entrega.</li>
+      <li><strong>Resultados:</strong> mostra status final (Entregue, Falha, Pendente, Quarentenado, etc.) para cada destinatário. Em buscas &lt; 10 dias, resultados imediatos (<em>Summary Report</em>); &gt; 10 dias requer gerar relatório CSV (<em>Extended Report</em>).</li>
+      <li><strong>Detalhes Avançados:</strong> ao abrir um item, exibe eventos (Receive, Deliver, Fail, etc.) e informações como IP de origem, conector usado e Message-ID.</li>
+    </ul>
+
+    <div class="gui-path">
+      <span class="label">Caminhos via GUI</span>
+      <ul>
+        <li><strong>Message Trace (modern – EAC):</strong> <span class="crumb">Exchange Admin Center</span> &rsaquo; <span class="crumb">Mail flow</span> &rsaquo; <span class="crumb">Message trace</span> &rsaquo; <span class="crumb">Start a trace</span><br>
+          <span class="url">https://admin.exchange.microsoft.com/#/messagetrace</span></li>
+        <li><strong>Histórico estendido (10 a 90 dias):</strong> mesma tela &rsaquo; botão <span class="crumb">Custom queries</span> &rsaquo; preencher janela &gt; 10 dias e enviar para gerar relatório CSV assíncrono.</li>
+        <li><strong>Relatórios de fluxo (visão agregada):</strong> <span class="crumb">Exchange Admin Center</span> &rsaquo; <span class="crumb">Reports</span> &rsaquo; <span class="crumb">Mail flow</span><br>
+          <span class="url">https://admin.exchange.microsoft.com/#/mailflowreports</span></li>
+        <li><strong>Visão por mensagem (entity):</strong> <span class="crumb">Microsoft Defender portal</span> &rsaquo; <span class="crumb">Email &amp; collaboration</span> &rsaquo; <span class="crumb">Explorer</span> (P1/P2) ou <span class="crumb">Real-time detections</span><br>
+          <span class="url">https://security.microsoft.com/threatexplorerv3</span></li>
+      </ul>
+    </div>
+
+    <div class="notes">
+      <h3>Notas do Apresentador</h3>
+      <p>O <strong>Message Trace</strong> é a principal ferramenta de troubleshooting de fluxo à disposição do administrador Exchange Online. Com ela, podemos responder à pergunta clássica: <em>“O que aconteceu com o e-mail X?”</em>. No Exchange Admin Center moderno, a funcionalidade se encontra em <strong>Fluxo de E-mails &gt; Rastreamento de Mensagens</strong>. O escopo de pesquisa é bastante flexível: podemos filtrar por remetente, destinatário, intervalo de datas/hora (até 90 dias) e até pelo estado de entrega.</p>
+
+      <p><strong>Nota:</strong> para intervalos de até 10 dias, o trace retorna quase instantaneamente uma lista de resultados (limite ~20.000 registros). Já consultas maiores que 10 dias são processadas via dados arquivados, e você receberá um CSV para download após alguns minutos ou horas (o portal notifica quando pronto). Por isso, no dia a dia, recomenda-se buscar janelas menores primeiro (ex.: últimos 7 dias) para agilidade.</p>
+
+      <p>Cada resultado no rastreio terá colunas como <strong>Data/Hora, Remetente, Destinatário, Assunto e Status</strong>. O Status de entrega indica o destino final ou ação:</p>
+      <ul>
+        <li><strong>Delivered:</strong> chegou ao destino final (mailbox interno ou servidor remoto que aceitou a mensagem).</li>
+        <li><strong>Failed:</strong> rejeição definitiva — examinar a SMTP response para a causa (ex.: <code>550 5.7.1 Unable to relay</code>, <code>550 5.4.1 Recipient address rejected</code>).</li>
+        <li><strong>Pending / Deferred:</strong> o EOP está retentando — servidor de destino temporariamente indisponível, ou rate limit do destino.</li>
+        <li><strong>Quarantined:</strong> o EOP reteve a mensagem (malware ou high-confidence spam) e ela está aguardando ação do admin.</li>
+        <li><strong>FilteredAsSpam:</strong> bloqueada como spam, mas <em>não</em> em quarentena — descartada ou enviada ao Lixo Eletrônico.</li>
+        <li><strong>GettingStatus / Resubmitted:</strong> mensagem ainda em processamento ou reenviada após uma regra/retry.</li>
+      </ul>
+
+      <p>Ao clicar em um item específico, abre-se um painel de detalhes mostrando os <strong>Eventos de Mensagem</strong> (cada etapa que o e-mail passou). Por exemplo: <em>Receive</em> (EOP recebeu do servidor remetente), <em>Filter</em> (passou pelos filtros EOP), <em>Deliver</em> (foi entregue ao mailbox). Podemos ver IDs de correlação (Message-ID, Network Message ID) e até referências a NDRs ou mensagens bifurcadas (via campo <em>reference</em>).</p>
+
+      <div class="example">
+        <span class="label">Exemplo — interpretando Recipient Status</span>
+        <pre><code>compras@fazenda.sp.gov.br##RECEIVE, DELIVER
+financeiro@fazenda.sp.gov.br##RECEIVE, FAIL
+rh@fazenda.sp.gov.br##RECEIVE, QUARANTINE</code></pre>
+        <p style="margin:0">Mesma mensagem para 3 destinatários: o primeiro recebeu normalmente, o segundo falhou (provavelmente caixa cheia ou mailbox desabilitada — abrir o detalhe para ver o SMTP response), o terceiro foi para a quarentena (verificar se um filtro pegou ou se foi uma regra de transporte específica).</p>
+      </div>
+
+      <p><strong>Usando o PowerShell</strong> — para volumes maiores, scripts agendados ou integrações com SIEM, o cmdlet <code>Get-MessageTrace</code> é muito mais rápido que o portal:</p>
+      <pre><code># Últimas 24h, mensagens de um remetente externo
+Get-MessageTrace -SenderAddress "nf@fornecedor.com.br" `
+    -StartDate (Get-Date).AddDays(-1) -EndDate (Get-Date) |
+    Select-Object Received, SenderAddress, RecipientAddress, Subject, Status
+
+# Detalhes de uma mensagem específica (eventos completos)
+Get-MessageTraceDetail -MessageTraceId &lt;GUID&gt; `
+    -RecipientAddress "compras@fazenda.sp.gov.br"
+
+# Histórico estendido (10–90 dias) — gera relatório assíncrono
+Start-HistoricalSearch -ReportTitle "Auditoria NF mar/2026" `
+    -StartDate "2026-03-01" -EndDate "2026-03-31" `
+    -ReportType MessageTraceDetail `
+    -SenderAddress "nf@fornecedor.com.br" `
+    -NotifyAddress "admin@fazenda.sp.gov.br"</code></pre>
+
+      <div class="tip">
+        <strong>Dica de produtividade:</strong> quando o usuário diz "não recebi nada", peça SEMPRE três informações antes de abrir o trace — (1) endereço exato do remetente, (2) data/hora aproximada e (3) assunto ou trecho do conteúdo. Sem isso, em um tenant grande você cai no limite de 20.000 resultados e perde tempo refinando filtros.
+      </div>
+
+      <p>Em resumo, o Message Trace é fundamental para auditar se um e-mail entrou ou saiu do ambiente e o que aconteceu com ele. Casos típicos do dia a dia:</p>
+      <ul>
+        <li><strong>"Mandei e o cliente não recebeu":</strong> trace por remetente interno → ver se chegou a sair do tenant e qual foi a SMTP response do servidor remoto.</li>
+        <li><strong>"Estou recebendo spam de domínio X":</strong> trace inbound do domínio + verificar Authentication-Results no header.</li>
+        <li><strong>Auditoria de campanha interna:</strong> exportar CSV de uma janela e cruzar com a lista de destinatários esperados para descobrir quem ficou de fora.</li>
+        <li><strong>Suspeita de vazamento:</strong> trace por remetente interno + filtro de destinatários externos para mapear o que saiu.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- HEADERS -->
+  <section class="panel" id="headers" role="tabpanel">
+    <h2>Análise de Cabeçalhos de Mensagem (Header Analysis)</h2>
+
+    <h3>Tópicos no Slide</h3>
+    <ul>
+      <li><strong>Como obter o header:</strong> via Outlook (Propriedades) ou Outlook Web (<em>Exibir origem da mensagem</em>). Admins: pelo portal <code>security.microsoft.com</code> (<em>Email &amp; Collaboration &gt; Explorer</em> &gt; abrir mensagem &gt; Análise).</li>
+      <li><strong>Elementos-chave:</strong>
+        <ul>
+          <li><code>Received</code>: lista de servidores e horários de encaminhamento (cada salto do e-mail).</li>
+          <li><code>Authentication-Results</code>: indica resultado de SPF, DKIM e DMARC (pass/fail) para o remetente.</li>
+          <li><code>X-Forefront-Antispam-Report</code> / <code>X-Microsoft-Antispam</code>: detalhes da verificação EOP (IP de origem – CIP, vereditos SFV, SCL, BCL, categorização de ameaça).</li>
+        </ul>
+      </li>
+      <li><strong>Ferramenta de Parser:</strong> <em>Message Header Analyzer</em> (web) para colar o header bruto e obter resumo analisado (com tempos entre hops, etc.).</li>
+    </ul>
+
+    <div class="gui-path">
+      <span class="label">Caminhos via GUI</span>
+      <ul>
+        <li><strong>Outlook Desktop:</strong> abrir a mensagem em janela própria &rsaquo; <span class="crumb">File</span> &rsaquo; <span class="crumb">Properties</span> &rsaquo; campo <span class="crumb">Internet headers</span>.</li>
+        <li><strong>Outlook na Web / novo Outlook:</strong> abrir a mensagem &rsaquo; <span class="crumb">⋯ (more actions)</span> &rsaquo; <span class="crumb">View</span> &rsaquo; <span class="crumb">View message source</span>.</li>
+        <li><strong>Admin (sem precisar do usuário):</strong> <span class="crumb">Microsoft Defender portal</span> &rsaquo; <span class="crumb">Email &amp; collaboration</span> &rsaquo; <span class="crumb">Explorer</span> &rsaquo; localizar a mensagem &rsaquo; <span class="crumb">Email entity</span> &rsaquo; aba <span class="crumb">Header</span><br>
+          <span class="url">https://security.microsoft.com/threatexplorerv3</span></li>
+        <li><strong>Message Header Analyzer (Microsoft):</strong><br>
+          <span class="url">https://mha.azurewebsites.net/</span></li>
+        <li><strong>MXToolbox Header Analyzer (alternativo):</strong><br>
+          <span class="url">https://mxtoolbox.com/EmailHeaders.aspx</span></li>
+      </ul>
+    </div>
+
+    <div class="notes">
+      <h3>Notas do Apresentador</h3>
+      <p>A leitura de cabeçalhos de e-mail é um complemento essencial ao Message Trace, pois fornece informação técnica detalhada sobre cada mensagem. Para incidentes específicos (ex.: validação de autenticação de remetente, rastreamento externo), muitas vezes solicitamos ao usuário que nos encaminhe o cabeçalho da mensagem.</p>
+
+      <p><strong>Como obter o header — passo a passo:</strong></p>
+      <ul>
+        <li><strong>Outlook desktop:</strong> abrir a mensagem em janela própria → <em>Arquivo &gt; Propriedades</em> → copiar tudo do campo <em>Cabeçalhos da Internet</em>.</li>
+        <li><strong>Outlook Web (OWA / novo Outlook):</strong> abrir a mensagem → <em>… (mais ações) &gt; Exibir &gt; Exibir origem da mensagem</em>.</li>
+        <li><strong>Admin (sem precisar do usuário):</strong> portal <code>security.microsoft.com</code> → <em>Email &amp; Collaboration &gt; Explorer</em> → localizar a mensagem → <em>Email entity</em> → aba <em>Header</em>.</li>
+      </ul>
+
+      <p>No contexto de fluxo de e-mail, as partes mais relevantes do header são:</p>
+      <ul>
+        <li>A cadeia de linhas <code>Received</code> (ordem inversa, do remetente ao destinatário). Cada servidor que encaminhou a mensagem adiciona sua própria linha <code>Received</code> no topo, incluindo o timestamp. <strong>Análise:</strong> comparando os horários dessas linhas, identificamos eventuais atrasos (gaps grandes entre timestamps) e qual servidor pode tê-los causado.</li>
+        <li>As linhas <code>Authentication-Results</code> e <code>Received-SPF</code> nos dizem se o remetente foi autenticado (SPF, DKIM, DMARC, e o veredito de <em>composite authentication</em> do EOP).</li>
+        <li>O campo <code>X-Forefront-Antispam-Report</code> mostra o que o EOP pensou do e-mail (CIP, CTRY, SCL, SFV, CAT etc.).</li>
+      </ul>
+
+      <div class="example">
+        <span class="label">Exemplo — header de mensagem legítima</span>
+<pre><code>Received: from BN8PR12MB3666.namprd12.prod.outlook.com (...)
+ by SN6PR12MB4762.namprd12.prod.outlook.com with HTTPS; Tue, 5 May 2026 14:02:11 +0000
+Received: from mail.fornecedor.com.br (200.150.10.20)
+ by BN8PR12MB3666.namprd12.prod.outlook.com (10.172.x.x) with TLS; Tue, 5 May 2026 14:02:09 +0000
+Authentication-Results: spf=pass (sender IP is 200.150.10.20)
+ smtp.mailfrom=fornecedor.com.br;
+ dkim=pass (signature was verified) header.d=fornecedor.com.br;
+ dmarc=pass action=none header.from=fornecedor.com.br;
+ compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of fornecedor.com.br
+ designates 200.150.10.20 as permitted sender)
+X-Forefront-Antispam-Report:
+ CIP:200.150.10.20; CTRY:BR; LANG:pt;
+ SCL:1; SFV:NSPM; DIR:INB; SFTY:; CAT:NONE;
+ SFP:; IPV:NLI; H:mail.fornecedor.com.br;</code></pre>
+        <p style="margin:0">Leitura: SPF, DKIM e DMARC todos <code>pass</code>; <code>compauth=pass</code> (autenticação composta OK); SCL=1 (limpo); SFV=NSPM (não spam); DIR=INB (inbound). E-mail entregue corretamente.</p>
+      </div>
+
+      <div class="example">
+        <span class="label">Exemplo — header de tentativa de spoofing</span>
+<pre><code>Authentication-Results: spf=fail (sender IP is 45.83.x.x)
+ smtp.mailfrom=fazenda.sp.gov.br;
+ dkim=none (message not signed) header.d=none;
+ dmarc=fail action=quarantine header.from=fazenda.sp.gov.br;
+ compauth=fail reason=001
+X-Forefront-Antispam-Report:
+ CIP:45.83.x.x; CTRY:RU; LANG:en;
+ SCL:9; SFV:SPM; DIR:INB;
+ CAT:SPOOF; SFTY:9.11; SFP:;</code></pre>
+        <p style="margin:0">Leitura: o atacante tentou enviar como <code>@fazenda.sp.gov.br</code> a partir de um IP russo não autorizado. SPF e DMARC falharam, sem DKIM, <code>compauth=fail</code>, <code>CAT:SPOOF</code> e <code>SFTY:9.11</code> (high-confidence phish). EOP corretamente jogou em quarentena.</p>
+      </div>
+
+      <p><strong>Glossário rápido dos campos do EOP:</strong></p>
+      <ul>
+        <li><code>CIP</code> — Connecting IP (IP que abriu a sessão SMTP com o EOP).</li>
+        <li><code>CTRY</code> / <code>LANG</code> — país de origem do IP e idioma detectado do conteúdo.</li>
+        <li><code>SCL</code> — Spam Confidence Level (-1 a 9).</li>
+        <li><code>BCL</code> — Bulk Complaint Level (0 a 9; quanto maior, mais "bulk/marketing").</li>
+        <li><code>SFV</code> — Spam Filter Verdict: <code>NSPM</code> (não spam), <code>SPM</code> (spam), <code>SKS</code> (skip por regra), <code>SKA</code> (skip por allow list), <code>SKB</code> (skip por block list), <code>SKQ</code> (released from quarantine), <code>SKN</code> (skip — marcado como não-spam por regra).</li>
+        <li><code>DIR</code> — direção: <code>INB</code> (inbound), <code>OUT</code> (outbound), <code>INT</code> (internal).</li>
+        <li><code>CAT</code> — categoria de ameaça: <code>SPM</code>, <code>PHSH</code>, <code>HSPM</code> (high-conf spam), <code>SPOOF</code>, <code>MALW</code>, <code>BULK</code>, <code>NONE</code>.</li>
+        <li><code>SFTY</code> — safety tip / nível de phishing detectado.</li>
+        <li><code>compauth</code> — composite authentication: combina SPF/DKIM/DMARC + sinais. <code>pass</code>, <code>fail</code> ou <code>softpass</code>.</li>
+      </ul>
+
+      <p>Para facilitar, administradores podem usar ferramentas como o <strong>Message Header Analyzer</strong> da Microsoft (<code>mha.azurewebsites.net</code>). Basta colar o header bruto: a ferramenta parseia os campos, calcula tempos entre <code>Received</code> (útil para ver quanto tempo o e-mail ficou em cada hop) e destaca problemas de SPF/DMARC. Há também opções de terceiros como <em>MXToolbox Header Analyzer</em>.</p>
+
+      <div class="tip">
+        <strong>Atenção:</strong> ao copiar o header do Outlook, verifique se não há quebras de linha extras (algumas versões cortam linhas longas e isso confunde o parser). Se a análise vier estranha, peça ao usuário que reenvie o e-mail original como anexo (<em>Encaminhar como Anexo</em>) — assim você recebe o <code>.eml</code> intacto.
+      </div>
+    </div>
+  </section>
+
+  <!-- CASOS PRÁTICOS -->
+  <section class="panel" id="casos" role="tabpanel">
+    <h2>Cenários Práticos de Troubleshooting de Mail Flow</h2>
+
+    <p>Quatro cenários comuns de problemas de mail flow e como abordá-los usando os princípios e ferramentas discutidos.</p>
+
+    <div class="gui-path">
+      <span class="label">Caminhos via GUI — ferramentas usadas nos casos</span>
+      <ul>
+        <li><strong>Message Trace:</strong> <span class="crumb">EAC</span> &rsaquo; <span class="crumb">Mail flow</span> &rsaquo; <span class="crumb">Message trace</span> — <span class="url">https://admin.exchange.microsoft.com/#/messagetrace</span></li>
+        <li><strong>Quarentena (liberar / reportar):</strong> <span class="crumb">Defender portal</span> &rsaquo; <span class="crumb">Email &amp; collaboration</span> &rsaquo; <span class="crumb">Review</span> &rsaquo; <span class="crumb">Quarantine</span> — <span class="url">https://security.microsoft.com/quarantine</span></li>
+        <li><strong>Reportar falso positivo / falso negativo (Submissions):</strong> <span class="crumb">Defender portal</span> &rsaquo; <span class="crumb">Email &amp; collaboration</span> &rsaquo; <span class="crumb">Submissions</span> — <span class="url">https://security.microsoft.com/reportsubmission</span></li>
+        <li><strong>Tenant Allow/Block List (liberações temporárias):</strong> <span class="crumb">Defender portal</span> &rsaquo; <span class="crumb">Policies &amp; rules</span> &rsaquo; <span class="crumb">Tenant Allow/Block Lists</span> — <span class="url">https://security.microsoft.com/tenantAllowBlockList</span></li>
+        <li><strong>Recipientes / mailbox (validar existência, licença, forwarding):</strong> <span class="crumb">EAC</span> &rsaquo; <span class="crumb">Recipients</span> &rsaquo; <span class="crumb">Mailboxes</span> — <span class="url">https://admin.exchange.microsoft.com/#/mailboxes</span></li>
+      </ul>
+    </div>
+
+    <div class="case-card">
+      <h4><span class="badge">Caso 1</span>Atraso no recebimento (latência)</h4>
+      <p><strong>Análise:</strong> pelo Message Trace, identificamos status <em>Pendente</em> ou <em>Adiado (deferred)</em> antes do <em>Entregue</em>. Isso indica que o EOP tentou entregar várias vezes até conseguir. Os cabeçalhos <code>Received</code> podem mostrar um intervalo grande de tempo numa etapa específica, sinalizando onde ocorreu a lentidão.</p>
+      <p><strong>Causa típica:</strong> problemas temporários no servidor do destinatário (se for e-mail de saída) ou no servidor do remetente (se entrada) – por exemplo, timeout de conexão ou greylisting reprogramando a entrega. O EOP reenfileira mensagens <em>deferred</em> por até 24h antes de desistir.</p>
+      <p><strong>Resolução:</strong> geralmente aguardar ou investigar o servidor causador do atraso (ex.: conferir se houve manutenção ou lentidão naquele servidor/hop). Para mitigar, se for recorrente no lado do SEFAZ-SP, avaliar capacidade de rede; se for do remetente/destino, contatar o admin remoto ou sugerir canal alternativo, se crítico.</p>
+    </div>
+
+    <div class="case-card">
+      <h4><span class="badge">Caso 2</span>Falso positivo de spam (legítimo marcado como spam)</h4>
+      <p><strong>Análise:</strong> pelo Message Trace, vemos destinatário com status <em>Quarentenada</em> ou <em>Filtrada como spam</em>. No header, o <code>X-Forefront-Antispam-Report</code> mostra SCL alto (por ex. 9) e possivelmente <code>SFV:SPM</code> (marcado como spam pelo filtro). Pode haver pistas como alta pontuação de spam ou ausência de autenticação (<code>SPF=fail</code>).</p>
+      <p><strong>Resolução:</strong> se de fato for legítimo, liberar a mensagem da quarentena e marcar como <em>Não é spam</em>. Adicionar o remetente a uma <em>Allow List</em> temporária se necessário (mas cuidado: isso atribui SCL -1 para todos os e-mails desse endereço/domínio). Revisar conteúdo: se o e-mail tinha alguma característica de spam (anexos suspeitos, links, ou texto que disparou filtro), talvez orientar o remetente a ajustar. Em última instância, ajustar a política de anti-spam (ex.: permitir aquele domínio ou diminuir agressividade para tipos de mensagem similares).</p>
+    </div>
+
+    <div class="case-card">
+      <h4><span class="badge">Caso 3</span>Falha de entrega (NDR – destinatário inválido)</h4>
+      <p><strong>Análise:</strong> um usuário externo recebe um bounce informando <em>“Recipient not found”</em> ao enviar para alguém da SEFAZ-SP. No Message Trace do remetente externo (se disponível) ou nos logs do EOP, vê-se a mensagem rejeitada com erro <code>550 5.1.10 RESOLVER.ADR.RecipientNotFound</code> — código específico do DBEB do EOP para destinatário inexistente no diretório. Outros códigos relacionados que você pode encontrar: <code>550 5.1.1</code> (mailbox existe mas está desabilitada/sem licença) ou <code>550 5.4.1</code> (relay access denied / problema de roteamento entre servidores).</p>
+      <p><strong>Causa comum:</strong> erro de digitação no endereço do destinatário pelo remetente, ou o usuário foi removido/mudou de endereço. O EOP (com DBEB ativo) não aceitará a mensagem, devolvendo NDR imediatamente — a rejeição acontece já no SMTP handshake, então não aparecerá no Message Trace do tenant SEFAZ-SP.</p>
+      <p><strong>Resolução:</strong> corrigir o endereço de e-mail e reenviar. Se o usuário realmente não existir mais, informar o remetente (ou criar um alias ou forward adequado se preciso manter o recebimento).</p>
+    </div>
+
+    <div class="case-card">
+      <h4><span class="badge">Caso 4</span>Tentativa de spoofing bloqueada pelo EOP</h4>
+      <p><strong>Análise:</strong> uma mensagem falsificada aparentando vir de um domínio confiável (ex.: domínio do próprio governo) foi bloqueada pelo EOP. O Message Trace deve mostrar status <em>Falha</em> ou <em>Quarentenada</em>, possivelmente com veredito de spam/phishing (SCL alto). No cabeçalho, o campo <code>Authentication-Results</code> provavelmente tem <code>spf=fail</code> e/ou <code>dmarc=fail</code>, indicando que o remetente foi rejeitado nas checagens de autenticação. O EOP também marca <code>CAT:SPOOF</code> ou <code>CAT:PHSH</code> se detecta tentativa de falsificação de identidade.</p>
+      <p><strong>Resolução:</strong> nenhuma ação necessária para liberar – o bloqueio está correto. Recomenda-se informar a equipe de segurança e, caso aplicável, verificar se o domínio abusado tem SPF, DKIM e DMARC configurados corretamente para minimizar spoofing. No EOP, o admin pode analisar a quarentena para confirmar se era phishing e mantê-la bloqueada.</p>
+    </div>
+
+    <div class="notes">
+      <h3>Notas do Apresentador</h3>
+      <p>Em todos os cenários, as ferramentas e conhecimento cobrindo Mail Flow, Message Trace e Header Analysis permitem diagnosticar a causa raiz. O passo a passo lógico é sempre o mesmo:</p>
+      <ol>
+        <li><strong>Identificar o sintoma</strong> — atraso, falha de entrega, falso positivo, suspeita de spoofing. Pergunte ao usuário: "qual o comportamento esperado vs. observado?".</li>
+        <li><strong>Coletar evidências objetivas</strong> — Message Trace (de quando, para quem, status) + cabeçalho completo da mensagem (quando disponível).</li>
+        <li><strong>Cruzar dados</strong> — Trace mostra <em>o que</em> o EOP fez; o header mostra <em>por quê</em> (qual SCL, qual veredito, qual autenticação).</li>
+        <li><strong>Aplicar solução ou mitigação</strong> — preferencialmente uma ação reversível e com escopo restrito (ex.: regra de transporte específica) em vez de mudanças globais (allow list de domínio inteiro).</li>
+        <li><strong>Documentar</strong> — registrar no chamado o Message-ID, o veredito e a ação tomada. Isso acelera o próximo caso similar e gera base para auditoria.</li>
+      </ol>
+
+      <div class="tip">
+        <strong>Padrão de resposta ao usuário:</strong> evite respostas como "caiu no spam". Prefira algo como: <em>"O e-mail foi recebido pelo EOP às 14:02 e classificado como SCL 9 (alta confiança de spam) porque o remetente falhou em SPF e DMARC. Liberei a mensagem da quarentena e adicionei uma regra específica para mensagens desse remetente para você. Recomendo solicitar ao remetente que ajuste o registro SPF do domínio dele."</em> Esse nível de precisão constrói confiança e reduz reincidências.
+      </div>
+
+      <p><strong>Quando escalar:</strong> se após Message Trace + análise de header o sintoma persiste sem causa clara — especialmente em fluxos com conectores, mailboxes híbridas ou regras complexas — abrir ticket com Microsoft Support e enviar: Message-ID, Network Message ID, intervalo de datas, e o header completo de uma amostra. Isso evita ida-e-volta de coleta.</p>
+    </div>
+  </section>
+
+  <!-- CONCLUSÃO -->
+  <section class="panel" id="conclusao" role="tabpanel">
+    <h2>Conclusão &amp; Dicas Finais</h2>
+
+    <h3>Tópicos no Slide</h3>
+    <ul>
+      <li><strong>Conheça seu fluxo:</strong> tenha clareza da arquitetura (domínios, conectores) e políticas ativas para entender comportamentos esperados.</li>
+      <li><strong>Higiene de regras de transporte:</strong> revise trimestralmente; cada regra deve ter owner, justificativa e escopo mínimo documentados.</li>
+      <li><strong>Monitore e revise exceções:</strong> use Message Trace regularmente em casos de suporte. Mantenha listas de permitidos/bloqueados curtas e revisadas.</li>
+      <li><strong>Autenticação de remetentes:</strong> refine configurações de SPF/DKIM/DMARC no domínio do SEFAZ-SP para reduzir spam e spoofing recebidos (e garantir que a saída seja aceita pelos destinatários externos).</li>
+      <li><strong>Treinamento contínuo:</strong> compartilhe esses procedimentos com a equipe, garantindo prontidão para diagnosticar problemas futuros.</li>
+    </ul>
+
+    <div class="gui-path">
+      <span class="label">Portais de referência (favoritar)</span>
+      <ul>
+        <li><strong>Microsoft 365 admin center:</strong> <span class="url">https://admin.microsoft.com</span></li>
+        <li><strong>Exchange Admin Center (EAC):</strong> <span class="url">https://admin.exchange.microsoft.com</span></li>
+        <li><strong>Microsoft Defender portal (Email &amp; Collaboration):</strong> <span class="url">https://security.microsoft.com</span></li>
+        <li><strong>Microsoft Purview (auditoria, eDiscovery):</strong> <span class="url">https://purview.microsoft.com</span></li>
+        <li><strong>Entra ID (usuários, grupos, licenças):</strong> <span class="url">https://entra.microsoft.com</span></li>
+      </ul>
+    </div>
+
+    <div class="notes">
+      <h3>Notas do Apresentador</h3>
+      <p>Recapitulando, cobrimos a arquitetura do mail flow no Exchange Online, as camadas de proteção do EOP básico, e ferramentas como Message Trace e header analysis para investigação. Para a equipe da SEFAZ-SP, reforçamos algumas boas práticas:</p>
+      <ul>
+        <li><strong>Higiene de regras de transporte:</strong> manter-se alerta às políticas configuradas e evitar regras ou exceções excessivas que possam comprometer a segurança. Faça uma revisão trimestral — regra criada para resolver um chamado pontual e nunca removida é a maior fonte de "buracos" no filtro.</li>
+        <li><strong>Monitorar quarentenas e filas:</strong> idealmente uma vez por dia ou via alerta agendado. Especialmente após mudanças de política, picos de spam ou incidentes externos divulgados na imprensa (campanhas de phishing direcionadas a órgãos públicos).</li>
+        <li><strong>Autenticação do próprio domínio:</strong> assegurar que <code>fazenda.sp.gov.br</code> (e qualquer subdomínio que envie e-mail) tenha SPF com todos IPs autorizados, DKIM ativado e assinado pelo Exchange Online, e DMARC com política aplicada. Isso fortalece tanto a entrega de e-mails legítimos quanto o bloqueio de abusos.</li>
+      </ul>
+
+      <div class="example">
+        <span class="label">Checklist mínimo de saúde do tenant</span>
+        <ul style="margin:0">
+          <li>SPF do domínio principal inclui <code>include:spf.protection.outlook.com</code> e termina em <code>-all</code> ou <code>~all</code>.</li>
+          <li>DKIM habilitado e ativo: <code>Get-DkimSigningConfig | ft Domain, Enabled, Status</code>.</li>
+          <li>DMARC publicado com pelo menos <code>p=quarantine</code> e <code>rua=</code> apontando para uma caixa monitorada.</li>
+          <li>Standard Anti-Spam Policy ativa para todos os usuários (sem exceções globais perigosas).</li>
+          <li>Quarentena revisada nos últimos 7 dias; nenhum item esquecido por &gt; 30 dias.</li>
+          <li>Lista de regras de transporte revisada nos últimos 90 dias; cada regra tem <em>owner</em> e <em>justificativa</em> documentados.</li>
+          <li>Conectores existentes (se houver) com TLS forçado e restrição por IP/certificado.</li>
+        </ul>
+      </div>
+
+      <p><strong>Próximos passos sugeridos para o time:</strong></p>
+      <ol>
+        <li>Agendar oficina prática (hands-on) onde cada analista resolve 2 chamados reais usando o método: sintoma → trace → header → ação.</li>
+        <li>Construir um pequeno runbook interno com os comandos PowerShell vistos hoje, adaptados aos domínios e fluxos do órgão.</li>
+        <li>Definir SLA interno para revisão da quarentena (ex.: até 4h em horário comercial).</li>
+        <li>Avaliar evolução para Defender for Office 365 (P1/P2) caso o órgão precise de Safe Links, Safe Attachments e investigação automatizada — temas para uma próxima sessão.</li>
+      </ol>
+
+      <p><strong>Encerramos a sessão e abrimos para perguntas. Obrigado a todos pela atenção e participação!</strong></p>
+    </div>
+  </section>
+
+  <!-- REFERÊNCIAS -->
+  <section class="panel" id="referencias" role="tabpanel">
+    <h2>Referências e Documentação Oficial</h2>
+    <p>Todas as afirmações desta apresentação podem ser verificadas nos artigos oficiais da Microsoft Learn listados abaixo, agrupados pela mesma ordem das abas. Mantenha esta lista à mão como base de consulta contínua — a documentação evolui frequentemente.</p>
+
+    <div class="ref-group">
+      <h4>Arquitetura, Conectores e Domínios Aceitos</h4>
+      <ul>
+        <li><a href="https://learn.microsoft.com/exchange/mail-flow-best-practices/mail-flow-best-practices" target="_blank" rel="noopener">Mail flow best practices for Exchange Online</a> <span class="meta">visão geral</span></li>
+        <li><a href="https://learn.microsoft.com/exchange/mail-flow-best-practices/use-connectors-to-configure-mail-flow/use-connectors-to-configure-mail-flow" target="_blank" rel="noopener">Configure mail flow using connectors in Exchange Online</a></li>
+        <li><a href="https://learn.microsoft.com/exchange/mail-flow-best-practices/manage-accepted-domains/manage-accepted-domains" target="_blank" rel="noopener">Manage accepted domains in Exchange Online</a></li>
+        <li><a href="https://learn.microsoft.com/exchange/standalone-eop/manage-mail-users-in-eop" target="_blank" rel="noopener">Directory Based Edge Blocking (DBEB)</a> <span class="meta">DBEB</span></li>
+        <li><a href="https://learn.microsoft.com/exchange/mail-flow/mail-routing/mail-routing" target="_blank" rel="noopener">Mail routing in Exchange Online</a></li>
+      </ul>
+    </div>
+
+    <div class="ref-group">
+      <h4>Exchange Online Protection (EOP) — Anti-Spam &amp; Anti-Malware</h4>
+      <ul>
+        <li><a href="https://learn.microsoft.com/defender-office-365/eop-about" target="_blank" rel="noopener">Exchange Online Protection overview</a> <span class="meta">conceitos</span></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/mail-flow-in-eop" target="_blank" rel="noopener">Mail flow in EOP — ordem de processamento das camadas</a></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/anti-spam-protection-about" target="_blank" rel="noopener">Anti-spam protection in EOP</a></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/anti-spam-spam-confidence-level-scl-about" target="_blank" rel="noopener">Spam Confidence Level (SCL) in EOP</a> <span class="meta">tabela SCL</span></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/anti-spam-bulk-complaint-level-bcl-about" target="_blank" rel="noopener">Bulk Complaint Level (BCL) in EOP</a></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/connection-filter-policies-configure" target="_blank" rel="noopener">Configure the default Connection Filter policy</a> <span class="meta">IP allow/block</span></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/anti-malware-protection-about" target="_blank" rel="noopener">Anti-malware protection in EOP</a></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/anti-malware-policies-configure" target="_blank" rel="noopener">Configure anti-malware policies (Common Attachments Filter)</a></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/tenant-allow-block-list-about" target="_blank" rel="noopener">Tenant Allow/Block List (TABL) overview</a></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/quarantine-about" target="_blank" rel="noopener">Quarantine in EOP</a> <span class="meta">quarentena</span></li>
+      </ul>
+    </div>
+
+    <div class="ref-group">
+      <h4>Regras de Transporte (Mail Flow Rules)</h4>
+      <ul>
+        <li><a href="https://learn.microsoft.com/exchange/security-and-compliance/mail-flow-rules/mail-flow-rules" target="_blank" rel="noopener">Mail flow rules (transport rules) in Exchange Online</a> <span class="meta">referência principal</span></li>
+        <li><a href="https://learn.microsoft.com/exchange/security-and-compliance/mail-flow-rules/conditions-and-exceptions" target="_blank" rel="noopener">Mail flow rule conditions and exceptions</a></li>
+        <li><a href="https://learn.microsoft.com/exchange/security-and-compliance/mail-flow-rules/mail-flow-rule-actions" target="_blank" rel="noopener">Mail flow rule actions</a></li>
+        <li><a href="https://learn.microsoft.com/exchange/security-and-compliance/mail-flow-rules/manage-mail-flow-rules" target="_blank" rel="noopener">Manage mail flow rules — criar, modificar, modos Audit/Enforce</a></li>
+        <li><a href="https://learn.microsoft.com/exchange/security-and-compliance/mail-flow-rules/disclaimers-signatures-footers-or-headers" target="_blank" rel="noopener">Disclaimers, signatures, footers and headers</a> <span class="meta">aviso EXTERNO</span></li>
+        <li><a href="https://learn.microsoft.com/exchange/security-and-compliance/mail-flow-rules/inspect-message-attachments" target="_blank" rel="noopener">Inspect message attachments — bloqueio por tipo</a></li>
+        <li><a href="https://learn.microsoft.com/powershell/module/exchange/new-transportrule" target="_blank" rel="noopener">New-TransportRule (PowerShell)</a> <span class="meta">cmdlet</span></li>
+        <li><a href="https://learn.microsoft.com/powershell/module/exchange/get-transportrule" target="_blank" rel="noopener">Get-TransportRule (PowerShell)</a></li>
+      </ul>
+    </div>
+
+    <div class="ref-group">
+      <h4>Message Trace</h4>
+      <ul>
+        <li><a href="https://learn.microsoft.com/defender-office-365/message-trace-defender-portal" target="_blank" rel="noopener">Message trace in the Microsoft Defender portal</a> <span class="meta">versão moderna</span></li>
+        <li><a href="https://learn.microsoft.com/exchange/monitoring/trace-an-email-message/message-trace-modern-eac" target="_blank" rel="noopener">Run a message trace in the modern EAC</a></li>
+        <li><a href="https://learn.microsoft.com/powershell/module/exchange/get-messagetrace" target="_blank" rel="noopener">Get-MessageTrace (PowerShell)</a></li>
+        <li><a href="https://learn.microsoft.com/powershell/module/exchange/get-messagetracedetail" target="_blank" rel="noopener">Get-MessageTraceDetail (PowerShell)</a> <span class="meta">eventos</span></li>
+        <li><a href="https://learn.microsoft.com/powershell/module/exchange/start-historicalsearch" target="_blank" rel="noopener">Start-HistoricalSearch (10–90 dias)</a></li>
+        <li><a href="https://learn.microsoft.com/exchange/monitoring/trace-an-email-message/message-trace-faq" target="_blank" rel="noopener">Message trace FAQ — limites, retção, eventos</a></li>
+      </ul>
+    </div>
+
+    <div class="ref-group">
+      <h4>Análise de Cabeçalhos (Header Analysis)</h4>
+      <ul>
+        <li><a href="https://learn.microsoft.com/defender-office-365/message-headers-eop-mdo" target="_blank" rel="noopener">Anti-spam message headers in EOP / MDO</a> <span class="meta">CIP, SCL, SFV, CAT</span></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/email-authentication-about" target="_blank" rel="noopener">Email authentication in Microsoft 365 (SPF, DKIM, DMARC)</a></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/email-authentication-spf-configure" target="_blank" rel="noopener">Set up SPF to help prevent spoofing</a></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/email-authentication-dkim-configure" target="_blank" rel="noopener">Use DKIM to validate outbound email</a></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/email-authentication-dmarc-configure" target="_blank" rel="noopener">Use DMARC to validate email</a></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/anti-spoofing-about" target="_blank" rel="noopener">Anti-spoofing protection in EOP</a> <span class="meta">compauth</span></li>
+        <li><a href="https://support.microsoft.com/office/view-internet-message-headers-in-outlook-cd039382-dc6e-4264-ac74-c048563d212c" target="_blank" rel="noopener">View Internet message headers in Outlook</a></li>
+        <li><a href="https://mha.azurewebsites.net/" target="_blank" rel="noopener">Message Header Analyzer (Microsoft)</a> <span class="meta">ferramenta</span></li>
+      </ul>
+    </div>
+
+    <div class="ref-group">
+      <h4>Cenários e Troubleshooting</h4>
+      <ul>
+        <li><a href="https://learn.microsoft.com/exchange/troubleshoot/email-delivery/non-delivery-report-in-exchange-online" target="_blank" rel="noopener">Non-delivery reports (NDRs) in Exchange Online</a> <span class="meta">códigos 5.x.x</span></li>
+        <li><a href="https://learn.microsoft.com/exchange/troubleshoot/email-delivery/email-non-delivery-report-faqs" target="_blank" rel="noopener">Email NDR FAQs</a></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/submissions-admin" target="_blank" rel="noopener">Admin submissions — reportar falsos positivos / negativos</a></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/quarantine-end-user" target="_blank" rel="noopener">End-user quarantine experience</a></li>
+        <li><a href="https://learn.microsoft.com/exchange/troubleshoot/delay-or-failure-delivery/messages-delayed-when-sent-or-received-in-eop-or-exchange-online" target="_blank" rel="noopener">Mensagens atrasadas no EOP / Exchange Online</a></li>
+      </ul>
+    </div>
+
+    <div class="ref-group">
+      <h4>PowerShell, Conexão e Permissões</h4>
+      <ul>
+        <li><a href="https://learn.microsoft.com/powershell/exchange/connect-to-exchange-online-powershell" target="_blank" rel="noopener">Connect to Exchange Online PowerShell</a> <span class="meta">Connect-ExchangeOnline</span></li>
+        <li><a href="https://learn.microsoft.com/powershell/exchange/exchange-online-powershell-v3-module" target="_blank" rel="noopener">Exchange Online PowerShell V3 module</a></li>
+        <li><a href="https://learn.microsoft.com/powershell/exchange/exchange-online-powershell" target="_blank" rel="noopener">Exchange Online PowerShell — visão geral de cmdlets</a></li>
+        <li><a href="https://learn.microsoft.com/exchange/permissions-exo/permissions-exo" target="_blank" rel="noopener">Permissions in Exchange Online (RBAC)</a> <span class="meta">roles</span></li>
+      </ul>
+    </div>
+
+    <div class="ref-group">
+      <h4>Portais &amp; Ferramentas Online</h4>
+      <ul>
+        <li><a href="https://admin.microsoft.com" target="_blank" rel="noopener">Microsoft 365 admin center</a></li>
+        <li><a href="https://admin.exchange.microsoft.com" target="_blank" rel="noopener">Exchange Admin Center (EAC)</a></li>
+        <li><a href="https://security.microsoft.com" target="_blank" rel="noopener">Microsoft Defender portal (Email &amp; Collaboration)</a></li>
+        <li><a href="https://purview.microsoft.com" target="_blank" rel="noopener">Microsoft Purview (auditoria, eDiscovery)</a></li>
+        <li><a href="https://entra.microsoft.com" target="_blank" rel="noopener">Microsoft Entra admin center</a></li>
+        <li><a href="https://mxtoolbox.com/SuperTool.aspx" target="_blank" rel="noopener">MXToolbox SuperTool (MX, SPF, DKIM, DMARC, blacklist)</a> <span class="meta">terceiros</span></li>
+        <li><a href="https://dmarcian.com/dmarc-inspector/" target="_blank" rel="noopener">dmarcian DMARC Inspector</a> <span class="meta">terceiros</span></li>
+      </ul>
+    </div>
+
+    <div class="ref-group">
+      <h4>Aprofundamento opcional</h4>
+      <ul>
+        <li><a href="https://learn.microsoft.com/defender-office-365/mdo-about" target="_blank" rel="noopener">Microsoft Defender for Office 365 (P1/P2)</a> <span class="meta">evolução</span></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/safe-links-about" target="_blank" rel="noopener">Safe Links em Defender for Office 365</a></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/safe-attachments-about" target="_blank" rel="noopener">Safe Attachments em Defender for Office 365</a></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/preset-security-policies" target="_blank" rel="noopener">Preset security policies (Standard / Strict)</a></li>
+        <li><a href="https://learn.microsoft.com/defender-office-365/secure-by-default" target="_blank" rel="noopener">Secure by default in Office 365</a></li>
+      </ul>
+    </div>
+
+    <div class="tip">
+      <strong>Como usar esta lista:</strong> em qualquer chamado, antes de aplicar uma mudança estrutural, abra o artigo correspondente desta página e confirme: (1) o comportamento atual documentado, (2) as opções de configuração e (3) avisos de remoção/deprecation. A documentação oficial é atualizada com frequência — tomar uma decisão com base em material desatualizado é a principal fonte de retrabalho.
+    </div>
+  </section>
+</div>
+
+<footer class="app-footer">
+  Guia de Revisão &middot; Mail Flow no Exchange Online &middot; SEFAZ-SP
+</footer>
+
+<script>
+  (function () {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.panel');
+
+    function activate(tabId) {
+      tabs.forEach(t => {
+        const isActive = t.dataset.tab === tabId;
+        t.classList.toggle('active', isActive);
+        t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+      panels.forEach(p => {
+        p.classList.toggle('active', p.id === tabId);
+      });
+      // Update URL hash without scrolling
+      if (history.replaceState) {
+        history.replaceState(null, '', '#' + tabId);
+      }
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => activate(tab.dataset.tab));
+    });
+
+    // Open tab from URL hash if present
+    const initial = window.location.hash.replace('#', '');
+    if (initial && document.getElementById(initial)) {
+      activate(initial);
+    }
+
+    // Keyboard navigation (left/right arrows on the tab list)
+    const tabList = document.querySelector('.tabs');
+    tabList.addEventListener('keydown', (e) => {
+      const current = document.querySelector('.tab-btn.active');
+      if (!current) return;
+      const arr = Array.from(tabs);
+      const idx = arr.indexOf(current);
+      if (e.key === 'ArrowRight') {
+        const next = arr[(idx + 1) % arr.length];
+        next.focus(); activate(next.dataset.tab);
+      } else if (e.key === 'ArrowLeft') {
+        const prev = arr[(idx - 1 + arr.length) % arr.length];
+        prev.focus(); activate(prev.dataset.tab);
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>
