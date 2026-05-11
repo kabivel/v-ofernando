@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guia de Revisão: Mail Flow no Exchange Online (EOP Básico) – SEFAZ-SP</title>
+<title>Guia de Revisão: Mail Flow no Exchange Online (EOP Básico)</title>
 <style>
   :root {
     --bg: #f4f6fa;
@@ -278,7 +278,7 @@
 
 <header class="app-header">
   <h1>Guia de Revisão: Mail Flow no Exchange Online (EOP Básico)</h1>
-  <div class="subtitle">SEFAZ-SP &middot; Sessão técnica de 1h45</div>
+  <div class="subtitle">Sessão técnica de 1h45</div>
 </header>
 
 <div class="container">
@@ -301,7 +301,7 @@
     <h3>Escopo &amp; Público-alvo</h3>
     <ul>
       <li><strong>Escopo:</strong> Exchange Online + Exchange Online Protection (EOP) básico, <em>sem</em> Microsoft Defender for Office 365 (P1/P2).</li>
-      <li><strong>Público-alvo:</strong> equipe de suporte e administração de mensageria da SEFAZ-SP.</li>
+      <li><strong>Público-alvo:</strong> equipe de suporte e administração de mensageria da organização.</li>
       <li><strong>Pré-requisitos:</strong> noções básicas de SMTP, acesso ao Exchange Admin Center e familiaridade com PowerShell.</li>
     </ul>
 
@@ -330,7 +330,7 @@
 
     <div class="notes">
       <h3>Notas do Apresentador</h3>
-      <p>Bem-vindos. Esta sessão tem como objetivo nivelar o entendimento da equipe SEFAZ-SP sobre o fluxo de e-mails no Exchange Online, com foco no EOP básico (sem Defender for Office 365). Em 1h45, percorreremos a arquitetura, os mecanismos de proteção, a higiene das regras de transporte, as ferramentas de diagnóstico (Message Trace e leitura de cabeçalhos) e quatro cenários reais de troubleshooting. Ao final, abriremos espaço para perguntas.</p>
+      <p>Bem-vindos. Esta sessão tem como objetivo nivelar o entendimento da equipe sobre o fluxo de e-mails no Exchange Online, com foco no EOP básico (sem Defender for Office 365). Em 1h45, percorreremos a arquitetura, os mecanismos de proteção, a higiene das regras de transporte, as ferramentas de diagnóstico (Message Trace e leitura de cabeçalhos) e quatro cenários reais de troubleshooting. Ao final, abriremos espaço para perguntas.</p>
 
       <p><strong>Por que esta sessão importa:</strong> a maior parte dos chamados de suporte de mensageria (atrasos, e-mail "sumido", spam ou bloqueios indevidos) pode ser resolvida em minutos quando o analista domina três pilares — entender o caminho que a mensagem percorre, saber inspecionar esse caminho com o Message Trace e validar a autenticação pelo cabeçalho. Sem isso, o ticket vira "caixa-preta" e acaba escalado desnecessariamente.</p>
 
@@ -340,7 +340,7 @@
       <ul>
         <li>Tenha o Exchange Admin Center aberto em outra aba (<code>https://admin.exchange.microsoft.com</code>) — vamos acompanhar alguns passos juntos.</li>
         <li>Se possível, separe um chamado real recente para reanalisarmos no bloco de Casos Práticos, aplicando o método.</li>
-        <li>Anote dúvidas específicas do tenant SEFAZ-SP (regras de transporte herdadas, conectores legados, fornecedores recorrentes em falso positivo) — vamos abrir espaço ao final.</li>
+        <li>Anote dúvidas específicas do tenant (regras de transporte herdadas, conectores legados, fornecedores recorrentes em falso positivo) — vamos abrir espaço ao final.</li>
       </ul>
 
       <div class="tip">
@@ -380,11 +380,11 @@
 │      transport rules, anti-spam)      │
 │   │                                   │
 │   ▼                                   │
-│ Mailbox @fazenda.sp.gov.br            │
+│ Mailbox @contoso.com                  │
 └───────────────────────────────────────┘
 
 ┌─────────────── OUTBOUND ──────────────┐
-│ Mailbox @fazenda.sp.gov.br            │
+│ Mailbox @contoso.com                  │
 │   │                                   │
 │   ▼                                   │
 │ Transport Service (regras outbound)   │
@@ -397,13 +397,13 @@
 └───────────────────────────────────────┘
 
 ┌─────────────── INTERNO ───────────────┐
-│ user1@fazenda.sp.gov.br               │
+│ user1@contoso.com                     │
 │   │                                   │
 │   ▼  (não sai do tenant)              │
 │ Transport Service                     │
 │   │  (anti-malware, transport rules)  │
 │   ▼                                   │
-│ user2@fazenda.sp.gov.br               │
+│ user2@contoso.com                     │
 └───────────────────────────────────────┘</code></pre>
     </div>
 
@@ -426,25 +426,25 @@
       <ul>
         <li><strong>MX (Mail Exchanger):</strong> registro DNS público que diz para a internet "envie e-mail deste domínio para este servidor". No Exchange Online, aponta para <code>tenant-com-br.mail.protection.outlook.com</code>.</li>
         <li><strong>EOP (Exchange Online Protection):</strong> serviço de filtragem cloud da Microsoft, fronteira de cada mensagem.</li>
-        <li><strong>Tenant:</strong> a instância isolada da organização no Microsoft 365 (no caso, o tenant da SEFAZ-SP).</li>
+        <li><strong>Tenant:</strong> a instância isolada da organização no Microsoft 365.</li>
         <li><strong>DBEB (Directory Based Edge Blocking):</strong> rejeita no perímetro qualquer mensagem para destinatário que não existe no diretório.</li>
         <li><strong>NDR (Non-Delivery Report):</strong> mensagem automática de erro de entrega (bounce).</li>
         <li><strong>Transport Service:</strong> motor interno do Exchange Online que move mensagens entre mailboxes e aplica regras dentro do tenant.</li>
       </ul>
 
-      <p>O Exchange Online utiliza o serviço <strong>Exchange Online Protection (EOP)</strong> como fronteira para todo e-mail que entra ou sai do tenant. Assim, todo e-mail enviado à organização SEFAZ-SP (por exemplo, para <code>*@fazenda.sp.gov.br</code>) primeiro passa pelos servidores EOP, que aplicam scanners de spam e malware antes de entrar nas caixas de correio. Da mesma forma, e-mail enviado para fora (internet) sai pelas saídas do EOP — não existe "bypass" do EOP em uma configuração padrão.</p>
+      <p>O Exchange Online utiliza o serviço <strong>Exchange Online Protection (EOP)</strong> como fronteira para todo e-mail que entra ou sai do tenant. Assim, todo e-mail enviado à organização (por exemplo, para <code>*@contoso.com</code>) primeiro passa pelos servidores EOP, que aplicam scanners de spam e malware antes de entrar nas caixas de correio. Da mesma forma, e-mail enviado para fora (internet) sai pelas saídas do EOP — não existe "bypass" do EOP em uma configuração padrão.</p>
 
       <p><strong>Importante sobre fluxo interno:</strong> mensagens entre dois usuários do mesmo tenant <em>não saem para a internet nem passam pelo MX externo</em>. Elas são processadas direto pelo Transport Service do Exchange Online, que ainda aplica anti-malware, regras de transporte e anti-spam interno (para detectar contas comprometidas enviando phishing internamente). Esse detalhe explica por que, em alguns chamados, vemos uma mensagem interna com um header bem mais enxuto que uma inbound externa — ela passou por menos saltos.</p>
 
       <div class="example">
         <span class="label">Exemplo — fluxo Inbound passo a passo</span>
-        <p style="margin:0">Um fornecedor envia <code>nf@fornecedor.com.br</code> → <code>compras@fazenda.sp.gov.br</code>:</p>
+        <p style="margin:0">Um fornecedor envia <code>nf@fornecedor.com.br</code> → <code>compras@contoso.com</code>:</p>
         <ol>
-          <li>DNS público resolve <code>fazenda.sp.gov.br</code> e encontra o registro MX apontando para <code>fazenda-sp-gov-br.mail.protection.outlook.com</code>.</li>
+          <li>DNS público resolve <code>contoso.com</code> e encontra o registro MX apontando para <code>contoso-com.mail.protection.outlook.com</code>.</li>
           <li>Servidor do fornecedor entrega via SMTP para o EOP (porta 25, com TLS oportunístico ou forçado).</li>
           <li>EOP aplica o pipeline: connection filter → anti-malware → regras de transporte → anti-spam.</li>
           <li>Após aprovação, EOP encaminha para o Transport Service do tenant.</li>
-          <li>Mensagem é entregue na caixa de <code>compras@fazenda.sp.gov.br</code>.</li>
+          <li>Mensagem é entregue na caixa de <code>compras@contoso.com</code>.</li>
         </ol>
       </div>
 
@@ -474,7 +474,7 @@ Get-InboundConnector | Select-Object Name, ConnectorType, Enabled,
 Get-OutboundConnector | Select-Object Name, ConnectorType, Enabled,
     RecipientDomains, SmartHosts, TlsSettings</code></pre>
 
-      <p>Quanto aos <strong>Domínios Aceitos</strong>, no ambiente SEFAZ-SP o domínio principal (<code>fazenda.sp.gov.br</code>) está cadastrado como autoritativo. Isso significa que o EOP só aceita mensagens para destinatários válidos naquele domínio; se o endereço não existir no Entra ID/Exchange, o EOP rejeita no perímetro com um NDR. Este mecanismo (DBEB) evita processamento desnecessário de e-mails para usuários inválidos, melhorando segurança e performance.</p>
+      <p>Quanto aos <strong>Domínios Aceitos</strong>, em um cenário típico o domínio principal da organização (por exemplo, <code>contoso.com</code>) está cadastrado como autoritativo. Isso significa que o EOP só aceita mensagens para destinatários válidos naquele domínio; se o endereço não existir no Entra ID/Exchange, o EOP rejeita no perímetro com um NDR. Este mecanismo (DBEB) evita processamento desnecessário de e-mails para usuários inválidos, melhorando segurança e performance.</p>
 
       <div class="example">
         <span class="label">Exemplo — NDR de DBEB</span>
@@ -561,7 +561,7 @@ Recipient not found by SMTP address lookup'</code></pre>
 
       <div class="example">
         <span class="label">Exemplo — IP allow list</span>
-        <p style="margin:0 0 6px 0">Cenário: a SEFAZ-SP recebe um relatório diário de um datacenter conhecido (IP estático <code>203.0.113.45</code>) e ele cai em quarentena por SCL alto. Solução temporária: incluir o IP na <em>IP Allow List</em> da política de Connection Filter.</p>
+        <p style="margin:0 0 6px 0">Cenário: a organização recebe um relatório diário de um datacenter conhecido (IP estático <code>203.0.113.45</code>) e ele cai em quarentena por SCL alto. Solução temporária: incluir o IP na <em>IP Allow List</em> da política de Connection Filter.</p>
         <pre><code># Sempre leia antes de alterar
 Get-HostedConnectionFilterPolicy -Identity Default |
     Select-Object Name, IPAllowList, IPBlockList, EnableSafeList
@@ -576,12 +576,12 @@ Set-HostedConnectionFilterPolicy -Identity Default `
       <p><strong>3. Anti-Phish (básico do EOP)</strong> — não confundir com Defender for Office 365. O EOP gratuito inclui:</p>
       <ul>
         <li><strong>Spoof intelligence:</strong> identifica remetentes externos que se passam pelo seu domínio ou por domínios conhecidos.</li>
-        <li><strong>Proteção contra spoofing intra-organização:</strong> bloqueia mensagens externas que dizem ser <code>@fazenda.sp.gov.br</code> mas falham SPF/DKIM/DMARC.</li>
+        <li><strong>Proteção contra spoofing intra-organização:</strong> bloqueia mensagens externas que dizem ser do seu próprio domínio (ex.: <code>@contoso.com</code>) mas falham SPF/DKIM/DMARC.</li>
         <li><strong>Honra DMARC com p=quarantine ou p=reject</strong> publicado pelo remetente externo.</li>
       </ul>
       <p>Recursos como <em>impersonation protection</em> avançada (proteção de usuários e domínios específicos), <em>Mailbox intelligence</em> baseada em IA e <em>Safe Links/Attachments</em> exigem Defender P1/P2 — fora do escopo desta sessão.</p>
 
-      <p><strong>4. Regras de Transporte</strong> (Mail Flow Rules / Transport Rules) — filtros personalizáveis avaliados após o anti-malware/anti-phish. Detalhadas na próxima aba. Exemplos típicos no SEFAZ-SP:</p>
+      <p><strong>4. Regras de Transporte</strong> (Mail Flow Rules / Transport Rules) — filtros personalizáveis avaliados após o anti-malware/anti-phish. Detalhadas na próxima aba. Exemplos típicos:</p>
       <ul>
         <li><strong>Disclaimer externo:</strong> adicionar prefixo <code>[EXTERNO]</code> no assunto e um aviso no corpo quando o remetente está fora do domínio. Reduz drasticamente cliques em phishing.</li>
         <li><strong>Bloqueio por palavra-chave / regex:</strong> reter mensagens de saída que contenham padrões de CPF, número de processo SEI ou outras informações sensíveis sem criptografia.</li>
@@ -630,7 +630,7 @@ Set-HostedConnectionFilterPolicy -Identity Default `
       </ul>
 
       <div class="tip">
-        <strong>Boa prática:</strong> evite usar a <em>Allow List</em> da política anti-spam para resolver chamados pontuais. Ela é global, sobrescreve TODAS as checagens (inclusive autenticação) e é o vetor #1 explorado por phishers que sabem quais domínios estão liberados. Prefira liberar via Tenant Allow/Block List (TABL), que tem expiração automática (até 30 dias), ou via regra de transporte com escopo restrito (ex.: "de <code>fornecedor.com</code> + para <code>compras@fazenda.sp.gov.br</code>" + valida cabeçalho específico).
+        <strong>Boa prática:</strong> evite usar a <em>Allow List</em> da política anti-spam para resolver chamados pontuais. Ela é global, sobrescreve TODAS as checagens (inclusive autenticação) e é o vetor #1 explorado por phishers que sabem quais domínios estão liberados. Prefira liberar via Tenant Allow/Block List (TABL), que tem expiração automática (até 30 dias), ou via regra de transporte com escopo restrito (ex.: "de <code>fornecedor.com</code> + para <code>compras@contoso.com</code>" + valida cabeçalho específico).
       </div>
     </div>
   </section>
@@ -641,11 +641,20 @@ Set-HostedConnectionFilterPolicy -Identity Default `
 
     <h3>Tópicos no Slide</h3>
     <ul>
-      <li><strong>O que são:</strong> regras avaliadas pelo EOP no pipeline de transporte (entre anti-malware e anti-spam) que aplicam ações condicionais sobre cada mensagem — modificar, redirecionar, bloquear, marcar, gerar relatórios.</li>
+      <li><strong>O que são:</strong> regras avaliadas pelo EOP no pipeline de transporte (após anti-malware e anti-phish, <strong>antes</strong> do anti-spam de conteúdo) que aplicam ações condicionais sobre cada mensagem — modificar, redirecionar, bloquear, marcar, gerar relatórios.</li>
       <li><strong>Onde gerenciar:</strong> Exchange Admin Center → <em>Mail Flow &gt; Rules</em>, ou via PowerShell (<code>Get-TransportRule</code>, <code>New-TransportRule</code>, <code>Set-TransportRule</code>).</li>
-      <li><strong>Estrutura de uma regra:</strong> <em>Condições</em> (quando aplicar) + <em>Ações</em> (o que fazer) + <em>Exceções</em> (quando não aplicar) + <em>Prioridade</em> (ordem de execução).</li>
+      <li><strong>Estrutura de uma regra:</strong>
+        <ul>
+          <li><em>Conditions</em> — quando aplicar (remetente, destinatário, conteúdo, anexo, header).</li>
+          <li><em>Actions</em> — o que fazer (set SCL, prepend disclaimer, redirect, reject, BCC).</li>
+          <li><em>Exceptions</em> — quando não aplicar.</li>
+          <li><em>Priority</em> — ordem de execução (0 = primeira; menor número, maior prioridade).</li>
+          <li><em>Mode</em> — <code>Enforce</code> (aplica), <code>Audit</code> (só registra) ou <code>AuditAndNotify</code> (registra + notifica admin).</li>
+          <li><em>RuleErrorAction</em> — o que fazer se a regra falhar (<code>Ignore</code> = segue o pipeline; <code>Defer</code> = retém para retry).</li>
+        </ul>
+      </li>
       <li><strong>Por que revisar:</strong> regras esquecidas viram brechas de segurança, geram comportamento inesperado e dificultam troubleshooting (mensagens "somem" sem motivo claro no Message Trace).</li>
-      <li><strong>Cadência recomendada:</strong> revisão trimestral completa + auditoria pontual após qualquer mudança relevante (incidente, novo fornecedor, mudança de escopo).</li>
+      <li><strong>Limite técnico:</strong> até 300 regras por tenant — antes de chegar perto, consolide.</li>
     </ul>
 
     <div class="gui-path">
@@ -677,9 +686,10 @@ Set-HostedConnectionFilterPolicy -Identity Default `
         <li>Para liberar um único chamado de spam — use <em>Tenant Allow/Block List</em> (com expiração automática).</li>
         <li>Para bloquear um domínio inteiro — use a Block List da política anti-spam ou TABL.</li>
         <li>Para encaminhamento permanente de uma caixa — use mailbox forwarding ou regra do próprio Outlook do usuário.</li>
+        <li>Para detecção e bloqueio de dados sensíveis em escala — use políticas de <em>DLP do Microsoft Purview</em> (classificadores treinados, evidence, remediation rich). Regra de transporte com regex serve para casos pontuais ou complementares.</li>
       </ul>
 
-      <h3 style="margin-top:24px">Padrões de regras comuns no setor público</h3>
+      <h3 style="margin-top:24px">Padrões de regras comuns</h3>
 
       <div class="example">
         <span class="label">Exemplo 1 — Aviso de remetente externo</span>
@@ -689,22 +699,25 @@ Set-HostedConnectionFilterPolicy -Identity Default `
     -SentToScope InOrganization `
     -ApplyHtmlDisclaimerLocation Prepend `
     -ApplyHtmlDisclaimerText '&lt;div style="background:#fff3cd;padding:8px;border-left:4px solid #f0b400;"&gt;
-      &lt;b&gt;[EXTERNO]&lt;/b&gt; Esta mensagem veio de fora da SEFAZ-SP.
+      &lt;b&gt;[EXTERNO]&lt;/b&gt; Esta mensagem veio de fora da organização.
       Verifique remetente e links antes de responder ou clicar.
     &lt;/div&gt;' `
     -ApplyHtmlDisclaimerFallbackAction Wrap `
     -Priority 0 `
     -Mode Enforce</code></pre>
-        <p style="margin:0"><strong>Atenção:</strong> evite adicionar também <code>-PrependSubject "[EXTERNO] "</code> sem revisar respostas internas — o prefixo se acumula em threads longas.</p>
+        <p style="margin:0 0 6px 0"><strong>Atenção:</strong> evite adicionar também <code>-PrependSubject "[EXTERNO] "</code> sem revisar respostas internas — o prefixo se acumula em threads longas.</p>
+        <p style="margin:0"><strong>Alternativa nativa moderna:</strong> antes de criar essa regra, considere o recurso <em>External Sender Identification</em> do Outlook, que adiciona um pill "External" no cabeçalho da mensagem sem injeção HTML no corpo. Habilite com:</p>
+        <pre><code>Set-ExternalInOutlook -Enabled $true</code></pre>
+        <p style="margin:0">Funciona em Outlook (Win/Mac/Web/Mobile) sem afetar respostas/encaminhamentos. Use a regra de transporte só se precisar de aviso mais agressivo (banner amarelo no corpo) ou texto customizado.</p>
       </div>
 
       <div class="example">
         <span class="label">Exemplo 2 — Bypass de filtro para parceiro confiável</span>
-        <p style="margin:0 0 6px 0"><strong>Objetivo:</strong> garantir que mensagens de um sistema crítico (ex.: portal de NF-e) nunca caiam em spam, mas SEM expor o domínio inteiro.</p>
-        <pre><code>New-TransportRule -Name "BYPASS - NF-e SEFAZ" `
-    -FromAddressContainsWords "@nfe.fazenda.gov.br" `
+        <p style="margin:0 0 6px 0"><strong>Objetivo:</strong> garantir que mensagens de um sistema crítico (ex.: portal de um parceiro confiável) nunca caiam em spam, mas SEM expor o domínio inteiro.</p>
+        <pre><code>New-TransportRule -Name "BYPASS - Parceiro Confiável" `
+    -FromAddressContainsWords "@parceiro.com.br" `
     -SentToScope InOrganization `
-    -SenderIpRanges "200.198.10.0/24" `
+    -SenderIpRanges "203.0.113.0/24" `
     -SetSCL -1 `
     -StopRuleProcessing $true `
     -Priority 1 `
@@ -717,25 +730,27 @@ Set-HostedConnectionFilterPolicy -Identity Default `
         <p style="margin:0 0 6px 0"><strong>Objetivo:</strong> rejeitar mensagens com extensões executáveis ou de macro, comuns em campanhas de ransomware.</p>
         <pre><code>New-TransportRule -Name "BLOQUEIO - Anexos Executáveis" `
     -AttachmentExtensionMatchesWords @("exe","scr","bat","js","vbs","iso","jar","hta","lnk") `
-    -RejectMessageReasonText "Anexo bloqueado pela política de segurança da SEFAZ-SP. Use compartilhamento via SharePoint/OneDrive." `
+    -RejectMessageReasonText "Anexo bloqueado pela política de segurança da organização. Use compartilhamento via SharePoint/OneDrive." `
     -RejectMessageEnhancedStatusCode "5.7.1" `
     -Priority 2 `
     -Mode Enforce</code></pre>
+        <p style="margin:0"><strong>Nota:</strong> o <em>Common Attachments Filter</em> da política Anti-Malware (visto na aba EOP) já bloqueia esses tipos por padrão. Esta regra serve como camada extra (com NDR customizado para o usuário entender) ou para incluir extensões fora da lista padrão.</p>
       </div>
 
       <div class="example">
-        <span class="label">Exemplo 4 — Auditoria de mensagens sensíveis</span>
-        <p style="margin:0 0 6px 0"><strong>Objetivo:</strong> enviar cópia oculta para uma caixa de auditoria quando palavras-chave de processo ou CPF aparecem em mensagens externas.</p>
+        <span class="label">Exemplo 4 — Auditoria de mensagens com dados sensíveis</span>
+        <p style="margin:0 0 6px 0"><strong>Objetivo:</strong> enviar cópia oculta para uma caixa de auditoria quando padrões sensíveis (ex.: CPF brasileiro) aparecem em mensagens externas.</p>
         <pre><code>New-TransportRule -Name "AUDITORIA - Dados Sensíveis Saída" `
     -FromScope InOrganization `
     -SentToScope NotInOrganization `
-    -SubjectOrBodyMatchesPatterns @('\d{3}\.\d{3}\.\d{3}-\d{2}','processo\s+\d{4,}/\d{4}') `
-    -BlindCopyTo "auditoria-mail@fazenda.sp.gov.br" `
-    -GenerateIncidentReport "compliance@fazenda.sp.gov.br" `
+    -SubjectOrBodyMatchesPatterns @('\d{3}\.\d{3}\.\d{3}-\d{2}') `
+    -BlindCopyTo "auditoria-mail@contoso.com" `
+    -GenerateIncidentReport "compliance@contoso.com" `
     -IncidentReportContent Sender,Recipients,Subject,MessageId,Headers `
     -Priority 5 `
     -Mode AuditAndNotify</code></pre>
-        <p style="margin:0"><strong>Dica:</strong> comece sempre em <code>-Mode AuditAndNotify</code> ou <code>-Mode Audit</code> antes de promover para <code>Enforce</code> — você vê o impacto real da regra em relação a mensagens legítimas sem afetar o usuário.</p>
+        <p style="margin:0 0 6px 0"><strong>Dica:</strong> comece sempre em <code>-Mode AuditAndNotify</code> ou <code>-Mode Audit</code> antes de promover para <code>Enforce</code> — você vê o impacto real da regra em relação a mensagens legítimas sem afetar o usuário.</p>
+        <p style="margin:0"><strong>Quando preferir DLP do Purview:</strong> se a organização tem múltiplos tipos de dados sensíveis (CPF, cartão, dados de saúde, dados de cliente) e quer remediação inteligente (criptografia automática, justification prompt, bloqueio com override), as <em>Data Loss Prevention policies</em> do Purview cobrem isso de forma muito mais robusta — incluem classificadores treinados, evidence collection e relatórios prontos. Regra de transporte com regex resolve o caso pontual; DLP resolve a estratégia.</p>
       </div>
 
       <h3 style="margin-top:24px">Auditoria prática das regras existentes</h3>
@@ -744,8 +759,8 @@ Set-HostedConnectionFilterPolicy -Identity Default `
       <pre><code># Inventario completo de regras com prioridade e modo
 Get-TransportRule | Sort-Object Priority |
     Select-Object Priority, Name, State, Mode, WhenChanged,
-        @{N="Conditions";E={$_.Conditions.Count}},
-        @{N="Actions";E={$_.Actions.Count}},
+        @{N="Conditions";E={ if ($_.Conditions) { $_.Conditions.Count } else { 0 } }},
+        @{N="Actions";E={ if ($_.Actions) { $_.Actions.Count } else { 0 } }},
         Description |
     Format-Table -AutoSize
 
@@ -757,7 +772,8 @@ Get-TransportRule | Sort-Object Priority |
     Export-Csv -Path "D:\Auditoria\TransportRules_$(Get-Date -Format yyyyMMdd).csv" `
                -NoTypeInformation -Encoding UTF8
 
-# Regras desabilitadas (candidatas a remoção)
+# Regras desabilitadas (candidatas a revisão — confirmar com o owner antes de remover;
+# pode ter sido desativada temporariamente para investigação)
 Get-TransportRule | Where-Object { $_.State -eq "Disabled" } |
     Select-Object Name, WhenChanged, Description
 
@@ -778,8 +794,12 @@ Get-TransportRule | Where-Object { $_.WhenChanged -gt (Get-Date).AddDays(-30) } 
       <h3 style="margin-top:24px">Anti-padrões a eliminar</h3>
       <ul>
         <li><strong>"Allow geral" para um domínio inteiro</strong> com <code>SetSCL -1</code> sem condição adicional — vetor clássico de bypass de phishing. Sempre adicione restrição por IP/header de autenticação.</li>
-        <li><strong>Forward externo silencioso</strong> via <em>BlindCopyTo</em> para endereços pessoais (gmail/hotmail) — risco de DLP e compliance. Audite com <code>Get-TransportRule | Where { $_.BlindCopyTo -match "gmail|hotmail|outlook\.com|yahoo" }</code>.</li>
-        <li><strong>Regras com nome genérico</strong> ("Regra 1", "Teste", "Temporário") — renômeie ou remova. Padronize: <code>[AÇÃO] - [SUBJECT] - [TICKET]</code>, ex.: <code>BYPASS - NF-e - INC0012345</code>.</li>
+        <li><strong>Forward externo silencioso</strong> via <em>BlindCopyTo</em> para endereços pessoais (gmail/hotmail) — risco de DLP e compliance. Audite com:
+          <pre><code>Get-TransportRule | Where-Object {
+    ($_.BlindCopyTo -join ',') -match 'gmail|hotmail|outlook\.com|yahoo|live\.com'
+} | Select-Object Name, State, BlindCopyTo, LastModifiedBy</code></pre>
+        </li>
+        <li><strong>Regras com nome genérico</strong> ("Regra 1", "Teste", "Temporário") — renomeie ou remova. Padronize: <code>[AÇÃO] - [SUBJECT] - [TICKET]</code>, ex.: <code>BYPASS - Parceiro - INC0012345</code>.</li>
         <li><strong>Disclaimers duplicados</strong> que aplicam o mesmo aviso várias vezes (regras herdadas de migrações). Consolide em uma única regra.</li>
         <li><strong>Modo <em>Enforce</em> em regras experimentais</strong> sem validar antes em <em>Audit</em> — risco de afetar produção.</li>
       </ul>
@@ -787,19 +807,34 @@ Get-TransportRule | Where-Object { $_.WhenChanged -gt (Get-Date).AddDays(-30) } 
       <h3 style="margin-top:24px">Testando uma regra antes de promover</h3>
       <p>Antes de habilitar uma regra crítica, use os modos não intrusivos:</p>
       <ul>
-        <li><code>-Mode Audit</code> — a regra avalia condições e <strong>não aplica a ação</strong>; apenas registra.</li>
+        <li><code>-Mode Audit</code> — a regra avalia condições e <strong>não aplica a ação</strong>; apenas registra (visível no Message Trace e nos relatórios "Mail flow rule matches").</li>
         <li><code>-Mode AuditAndNotify</code> — idem, mas envia <em>Incident Report</em> para o admin com cada match.</li>
         <li><code>-Mode Enforce</code> — modo padrão produtivo, aplica a ação.</li>
       </ul>
-      <p>Para validar o impacto sem aguardar tráfego real, use o Message Trace + filtro por <em>Transport rule</em>:</p>
-      <pre><code># Quais mensagens nas últimas 24h foram afetadas por uma regra específica?
-Get-MessageTrace -StartDate (Get-Date).AddDays(-1) -EndDate (Get-Date) |
-    Get-MessageTraceDetail |
-    Where-Object { $_.Event -eq "Transport rule" -and $_.Detail -match "BYPASS - NF-e" } |
-    Select-Object Date, MessageId, Detail</code></pre>
+      <p>Para validar o impacto de uma regra específica usando o Message Trace, identifique uma mensagem de teste e abra o detalhe dela:</p>
+      <pre><code># 1. Liste mensagens que casaram com a regra no período (filtra pelo Status / Subject)
+$traces = Get-MessageTraceV2 -StartDate (Get-Date).AddDays(-1) -EndDate (Get-Date) `
+    -SenderAddress "remetente@parceiro.com.br"
+
+# 2. Para cada uma, busque os eventos detalhados e procure "TRANSPORTRULE"
+#    (V2 retorna o nome do evento em maiúsculas)
+$traces | ForEach-Object {
+    Get-MessageTraceDetailV2 -MessageTraceId $_.MessageTraceId `
+        -RecipientAddress $_.RecipientAddress |
+        Where-Object { $_.Event -ieq "TRANSPORTRULE" } |
+        Select-Object Date, @{N='Recipient';E={ $_.RecipientAddress }},
+                      @{N='Rule';E={ $_.Detail }}
+}</code></pre>
+      <p>Para análise mais simples, o relatório <em>Mail flow rule matches</em> no EAC já mostra contagens por regra sem precisar de PowerShell.</p>
 
       <div class="tip">
-        <strong>Boa prática de governança:</strong> mantenha um repositório (planilha ou wiki interna) com o inventário das regras: <em>nome, owner, ticket, justificativa, data de criação, data da última revisão, data prevista para nova revisão</em>. A cada trimestre, qualquer regra cuja revisão esteja vencida deve ser justificada novamente ou desativada. Esse simples ritual elimina ~80% da "fauna" de regras esquecidas.
+        <strong>Governança em 3 ritos:</strong>
+        <ol style="margin:6px 0 0 0">
+          <li><strong>Toda regra nova:</strong> criada em <code>-Mode Audit</code> + Description preenchida com ticket, owner e data prevista de revisão.</li>
+          <li><strong>Trimestral:</strong> rodar o snippet de inventário, exportar CSV e revisar com os owners. Regras vencidas sem justificativa renovada → desativar.</li>
+          <li><strong>Anual:</strong> análise consolidada de matches dos últimos 12 meses (relatório do EAC). Regras com 0 matches → fortes candidatas a remoção.</li>
+        </ol>
+        Esse simples ritual elimina ~80% da "fauna" de regras esquecidas.
       </div>
 
       <p><strong>Em resumo:</strong> regras de transporte são como filtros de roteador — indispensáveis quando bem aplicadas, mas se acumulam silenciosamente e podem virar a maior superfície de risco do tenant. Inventarie, audite, escope ao mínimo necessário, documente e revise periodicamente.</p>
@@ -812,11 +847,16 @@ Get-MessageTrace -StartDate (Get-Date).AddDays(-1) -EndDate (Get-Date) |
 
     <h3>Tópicos no Slide</h3>
     <ul>
-      <li><strong>O que é:</strong> ferramenta do EAC (Exchange Admin Center) para seguir o caminho das mensagens em seu trajeto pelo sistema.</li>
-      <li><strong>Onde acessar:</strong> Portal Exchange Online (<em>Mail Flow &gt; Message Trace</em>) ou via PowerShell (cmdlets <code>Get-MessageTrace</code>).</li>
-      <li><strong>Uso básico:</strong> permite buscar por período (até 90 dias), remetentes/destinatários específicos, ou status de entrega.</li>
-      <li><strong>Resultados:</strong> mostra status final (Entregue, Falha, Pendente, Quarentenado, etc.) para cada destinatário. Em buscas &lt; 10 dias, resultados imediatos (<em>Summary Report</em>); &gt; 10 dias requer gerar relatório CSV (<em>Extended Report</em>).</li>
-      <li><strong>Detalhes Avançados:</strong> ao abrir um item, exibe eventos (Receive, Deliver, Fail, etc.) e informações como IP de origem, conector usado e Message-ID.</li>
+      <li><strong>O que é:</strong> ferramenta do EAC (Exchange Admin Center) para seguir o caminho das mensagens em seu trajeto pelo EOP e pelo Transport Service.</li>
+      <li><strong>Onde acessar:</strong> Exchange Admin Center → <em>Mail Flow &gt; Message Trace</em>, ou via PowerShell (cmdlets <code>Get-MessageTraceV2</code> / <code>Get-MessageTraceDetailV2</code>).</li>
+      <li><strong>Modos de busca:</strong>
+        <ul>
+          <li><em>Real-time</em> (até 10 dias, ~10.000 mensagens) — resultado imediato no portal.</li>
+          <li><em>Custom query / Historical Search</em> (10 a 90 dias) — gera CSV assíncrono enviado por e-mail; suporta milhões de linhas.</li>
+        </ul>
+      </li>
+      <li><strong>Resultados:</strong> status final por destinatário (Delivered, Failed, Pending, Quarantined, FilteredAsSpam, Expanded, GettingStatus, Resubmitted) + eventos detalhados.</li>
+      <li><strong>Identificadores-chave:</strong> <em>Network Message ID</em> (GUID interno do EOP, único na rede Microsoft — é o ID que o suporte da Microsoft pede) e <em>Message-ID</em> (header SMTP, gerado pelo cliente — útil para correlacionar com logs externos).</li>
     </ul>
 
     <div class="gui-path">
@@ -827,62 +867,136 @@ Get-MessageTrace -StartDate (Get-Date).AddDays(-1) -EndDate (Get-Date) |
         <li><strong>Histórico estendido (10 a 90 dias):</strong> mesma tela &rsaquo; botão <span class="crumb">Custom queries</span> &rsaquo; preencher janela &gt; 10 dias e enviar para gerar relatório CSV assíncrono.</li>
         <li><strong>Relatórios de fluxo (visão agregada):</strong> <span class="crumb">Exchange Admin Center</span> &rsaquo; <span class="crumb">Reports</span> &rsaquo; <span class="crumb">Mail flow</span><br>
           <span class="url">https://admin.exchange.microsoft.com/#/mailflowreports</span></li>
-        <li><strong>Visão por mensagem (entity):</strong> <span class="crumb">Microsoft Defender portal</span> &rsaquo; <span class="crumb">Email &amp; collaboration</span> &rsaquo; <span class="crumb">Explorer</span> (P1/P2) ou <span class="crumb">Real-time detections</span><br>
+        <li><strong>Audit Log unificado (ações pós-entrega):</strong> <span class="crumb">Microsoft Purview portal</span> &rsaquo; <span class="crumb">Audit</span> &rsaquo; filtrar por <em>Activity</em> = <code>HardDelete</code>, <code>SoftDelete</code>, <code>MoveToDeletedItems</code>, <code>SendOnBehalf</code><br>
+          <span class="url">https://purview.microsoft.com/audit</span></li>
+        <li><strong>Visão por mensagem (Defender P1/P2 — fora do escopo desta sessão):</strong> <span class="crumb">Microsoft Defender portal</span> &rsaquo; <span class="crumb">Email &amp; collaboration</span> &rsaquo; <span class="crumb">Explorer</span> ou <span class="crumb">Real-time detections</span><br>
           <span class="url">https://security.microsoft.com/threatexplorerv3</span></li>
       </ul>
     </div>
 
     <div class="notes">
       <h3>Notas do Apresentador</h3>
-      <p>O <strong>Message Trace</strong> é a principal ferramenta de troubleshooting de fluxo à disposição do administrador Exchange Online. Com ela, podemos responder à pergunta clássica: <em>“O que aconteceu com o e-mail X?”</em>. No Exchange Admin Center moderno, a funcionalidade se encontra em <strong>Fluxo de E-mails &gt; Rastreamento de Mensagens</strong>. O escopo de pesquisa é bastante flexível: podemos filtrar por remetente, destinatário, intervalo de datas/hora (até 90 dias) e até pelo estado de entrega.</p>
+      <p>O <strong>Message Trace</strong> é a principal ferramenta de troubleshooting de fluxo à disposição do administrador Exchange Online. Com ela, podemos responder à pergunta clássica: <em>"o que aconteceu com o e-mail X?"</em>. No Exchange Admin Center moderno, a funcionalidade está em <strong>Mail flow → Message trace</strong>. O escopo de pesquisa é flexível: filtros por remetente, destinatário, intervalo de datas/hora (até 90 dias), Message-ID e estado de entrega.</p>
 
-      <p><strong>Nota:</strong> para intervalos de até 10 dias, o trace retorna quase instantaneamente uma lista de resultados (limite ~20.000 registros). Já consultas maiores que 10 dias são processadas via dados arquivados, e você receberá um CSV para download após alguns minutos ou horas (o portal notifica quando pronto). Por isso, no dia a dia, recomenda-se buscar janelas menores primeiro (ex.: últimos 7 dias) para agilidade.</p>
+      <p><strong>Modern vs Legacy:</strong> a Microsoft está descontinuando o Message Trace legacy (URL antigo no <code>protection.office.com</code>). O <em>Modern Message Trace</em> no novo EAC tem dois modos:</p>
+      <ul>
+        <li><strong>Real-time</strong> — janela &lt;= 10 dias, retorno imediato, até ~10.000 mensagens. Use para troubleshooting do dia.</li>
+        <li><strong>Custom query (Historical Search)</strong> — janela 10–90 dias, processamento assíncrono, gera CSV enviado por e-mail. Use para auditoria, investigação ou relatórios mensais.</li>
+      </ul>
+      <p>No dia a dia, comece sempre com janela menor (últimas 4–24h) e expanda só se necessário — buscas amplas em tenants grandes facilmente estouram o limite e deixam você refinando filtros.</p>
 
-      <p>Cada resultado no rastreio terá colunas como <strong>Data/Hora, Remetente, Destinatário, Assunto e Status</strong>. O Status de entrega indica o destino final ou ação:</p>
+      <p>Cada resultado tem colunas <strong>Date/Time, Sender, Recipient, Subject, Status</strong>. Os status possíveis:</p>
       <ul>
         <li><strong>Delivered:</strong> chegou ao destino final (mailbox interno ou servidor remoto que aceitou a mensagem).</li>
         <li><strong>Failed:</strong> rejeição definitiva — examinar a SMTP response para a causa (ex.: <code>550 5.7.1 Unable to relay</code>, <code>550 5.4.1 Recipient address rejected</code>).</li>
-        <li><strong>Pending / Deferred:</strong> o EOP está retentando — servidor de destino temporariamente indisponível, ou rate limit do destino.</li>
-        <li><strong>Quarantined:</strong> o EOP reteve a mensagem (malware ou high-confidence spam) e ela está aguardando ação do admin.</li>
-        <li><strong>FilteredAsSpam:</strong> bloqueada como spam, mas <em>não</em> em quarentena — descartada ou enviada ao Lixo Eletrônico.</li>
-        <li><strong>GettingStatus / Resubmitted:</strong> mensagem ainda em processamento ou reenviada após uma regra/retry.</li>
+        <li><strong>Pending / Deferred:</strong> o EOP está retentando — servidor de destino temporariamente indisponível, ou rate limit do destino. Reenfileira por até 24h antes de virar Failed.</li>
+        <li><strong>Quarantined:</strong> o EOP reteve a mensagem (malware, high-confidence phish ou high-confidence spam) e ela está aguardando ação.</li>
+        <li><strong>FilteredAsSpam:</strong> classificada como spam pelo Content Filter. Acão final depende da política anti-spam (mover para Junk, descartar silenciosamente, redirecionar etc.) — verifique a <code>SpamAction</code> da política aplicada.</li>
+        <li><strong>Expanded:</strong> mensagem foi para uma lista de distribuição que se expandiu em vários destinatários (cada um vira uma linha separada no trace).</li>
+        <li><strong>GettingStatus:</strong> ainda em processamento — apareceu mas o EOP não fechou o veredito; aguarde alguns minutos e refaça.</li>
+        <li><strong>Resubmitted:</strong> reenviada após uma regra de transporte ou retry — geralmente seguida de outra linha com o status final.</li>
       </ul>
 
-      <p>Ao clicar em um item específico, abre-se um painel de detalhes mostrando os <strong>Eventos de Mensagem</strong> (cada etapa que o e-mail passou). Por exemplo: <em>Receive</em> (EOP recebeu do servidor remetente), <em>Filter</em> (passou pelos filtros EOP), <em>Deliver</em> (foi entregue ao mailbox). Podemos ver IDs de correlação (Message-ID, Network Message ID) e até referências a NDRs ou mensagens bifurcadas (via campo <em>reference</em>).</p>
+      <p><strong>Eventos detalhados</strong> (ao abrir o detalhe de uma mensagem) — é aqui que você descobre <em>por que</em> o status é o que é. <strong>Atenção ao case:</strong> no portal aparecem capitalizados (ex.: "Receive"), mas o output do PowerShell <code>Get-MessageTraceDetailV2</code> retorna em maiúsculas (ex.: <code>RECEIVE</code>, <code>TRANSPORTRULE</code>) — ao filtrar por <code>-eq</code> respeite isso ou use <code>-ieq</code>:</p>
+      <ul>
+        <li><code>RECEIVE</code> — EOP aceitou a mensagem do servidor remetente.</li>
+        <li><code>SUBMIT</code> — mensagem submetida ao Transport Service (intra-tenant).</li>
+        <li><code>TRANSPORTRULE</code> — uma regra de transporte casou; o campo <em>Detail</em> mostra o nome da regra e a ação aplicada.</li>
+        <li><code>SPAM</code> / <code>SPAMDIAGNOSTICS</code> — veredito de spam; mostra SCL atribuído.</li>
+        <li><code>MALWARE</code> — anti-malware identificou ameaça; mensagem para quarentena.</li>
+        <li><code>DEFER</code> — entrega adiada (greylisting, lentidão do destino, throttling).</li>
+        <li><code>RESOLVED</code> — destinatário resolvido para uma mailbox local.</li>
+        <li><code>DELIVER</code> — entregue ao mailbox.</li>
+        <li><code>SEND</code> — entregue ao MX externo (saída).</li>
+        <li><code>ZAP</code> — Zero-Hour Auto Purge agiu pós-entrega (movida para Junk ou removida).</li>
+        <li><code>BADMAIL</code> — mensagem descartada por inválida (loop, recipiente impossível, NDR órfão).</li>
+      </ul>
 
       <div class="example">
-        <span class="label">Exemplo — interpretando Recipient Status</span>
-        <pre><code>compras@fazenda.sp.gov.br##RECEIVE, DELIVER
-financeiro@fazenda.sp.gov.br##RECEIVE, FAIL
-rh@fazenda.sp.gov.br##RECEIVE, QUARANTINE</code></pre>
-        <p style="margin:0">Mesma mensagem para 3 destinatários: o primeiro recebeu normalmente, o segundo falhou (provavelmente caixa cheia ou mailbox desabilitada — abrir o detalhe para ver o SMTP response), o terceiro foi para a quarentena (verificar se um filtro pegou ou se foi uma regra de transporte específica).</p>
+        <span class="label">Exemplo — saída do V2 (uma linha por destinatário)</span>
+<pre><code>Received           SenderAddress           RecipientAddress           Status
+-----------------  ----------------------  -------------------------  -----------
+2026-05-07 14:02   nf@fornecedor.com.br    compras@contoso.com        Delivered
+2026-05-07 14:02   nf@fornecedor.com.br    financeiro@contoso.com     Failed
+2026-05-07 14:02   nf@fornecedor.com.br    rh@contoso.com             Quarantined</code></pre>
+        <p style="margin:0">Mesma mensagem para 3 destinatários: o primeiro recebeu normalmente, o segundo falhou (abrir o detalhe para ver o SMTP response — caixa cheia, mailbox desabilitada, etc.), o terceiro foi para a quarentena (verificar se um filtro pegou ou se foi uma regra de transporte específica). No legacy V1 o mesmo cenário aparecia condensado no campo <code>RecipientStatus</code> com a sintaxe <code>compras@contoso.com##RECEIVE, DELIVER</code> — você ainda pode encontrar esse formato em CSVs antigos.</p>
       </div>
 
-      <p><strong>Usando o PowerShell</strong> — para volumes maiores, scripts agendados ou integrações com SIEM, o cmdlet <code>Get-MessageTrace</code> é muito mais rápido que o portal:</p>
+      <p><strong>Network Message ID vs Message-ID:</strong> dois identificadores diferentes que sempre confundem:</p>
+      <ul>
+        <li><strong>Message-ID</strong> (header SMTP <code>Message-ID:</code>) — gerado pelo cliente/servidor que originou a mensagem. Formato típico: <code>&lt;abc123@server.example.com&gt;</code>. <em>Persistente</em>, viaja com a mensagem fim a fim. Útil para correlacionar com logs do remetente externo.</li>
+        <li><strong>Network Message ID</strong> (header <code>X-MS-Exchange-Organization-Network-Message-Id</code>) — GUID interno gerado pelo EOP no momento que a mensagem entra na rede Microsoft. <em>Único globalmente no Microsoft 365.</em> É o ID que o suporte da Microsoft pede para investigar.</li>
+      </ul>
+
+      <div class="example">
+        <span class="label">Como extrair os IDs do header (visível pelo usuário)</span>
+<pre><code>Message-ID: &lt;CY4PR12MB1234ABCDEF@CY4PR12MB1234.namprd12.prod.outlook.com&gt;
+X-MS-Exchange-Organization-Network-Message-Id: 5f3e1c2a-9b8d-4a7e-b6c1-3f2d1e0b9a8c</code></pre>
+        <p style="margin:0">Peça ao usuário o cabeçalho completo (no Outlook: <em>Arquivo → Propriedades → Cabeçalhos da Internet</em>) e copie esses dois campos antes de abrir o trace ou o caso na Microsoft.</p>
+      </div>
+
+      <p>Ao abrir caso na Microsoft, sempre forneça no mínimo o <strong>Network Message ID</strong> mais o intervalo de datas (em UTC). Se tiver também o Message-ID e o cabeçalho completo, junte — economiza um round-trip de pedido de informação.</p>
+
+      <p><strong>Usando o PowerShell</strong> — para volumes maiores, scripts agendados ou integrações com SIEM, os cmdlets <code>V2</code> são significativamente mais rápidos e suportam paginação real (substituem o legacy <code>Get-MessageTrace</code> que está sendo descontinuado):</p>
       <pre><code># Últimas 24h, mensagens de um remetente externo
-Get-MessageTrace -SenderAddress "nf@fornecedor.com.br" `
+Get-MessageTraceV2 -SenderAddress "nf@fornecedor.com.br" `
     -StartDate (Get-Date).AddDays(-1) -EndDate (Get-Date) |
     Select-Object Received, SenderAddress, RecipientAddress, Subject, Status
 
-# Detalhes de uma mensagem específica (eventos completos)
-Get-MessageTraceDetail -MessageTraceId &lt;GUID&gt; `
-    -RecipientAddress "compras@fazenda.sp.gov.br"
+# Filtros úteis combinados
+Get-MessageTraceV2 -StartDate (Get-Date).AddDays(-2) -EndDate (Get-Date) `
+    -Status Failed -RecipientAddress "compras@contoso.com" |
+    Select-Object Received, SenderAddress, Subject, Status,
+                  MessageTraceId, MessageId
+
+# Buscar por Network Message ID (suporte Microsoft / forense)
+Get-MessageTraceV2 -StartDate (Get-Date).AddDays(-7) -EndDate (Get-Date) `
+    -MessageTraceId "00000000-0000-0000-0000-000000000000"
+
+# Detalhes (eventos completos) de uma mensagem específica
+Get-MessageTraceDetailV2 -MessageTraceId "&lt;GUID&gt;" `
+    -RecipientAddress "compras@contoso.com" |
+    Select-Object Date, Event, Action, Detail
 
 # Histórico estendido (10–90 dias) — gera relatório assíncrono
-Start-HistoricalSearch -ReportTitle "Auditoria NF mar/2026" `
+Start-HistoricalSearch -ReportTitle "Auditoria fornecedor mar/2026" `
     -StartDate "2026-03-01" -EndDate "2026-03-31" `
     -ReportType MessageTraceDetail `
     -SenderAddress "nf@fornecedor.com.br" `
-    -NotifyAddress "admin@fazenda.sp.gov.br"</code></pre>
+    -NotifyAddress "admin@contoso.com"</code></pre>
+
+      <p><strong>Paginação no V2</strong> (importante para tenants grandes): em vez de <code>-Page</code>, o V2 usa <code>-StartingRecipientAddress</code> e <code>-PageSize</code> (padrão 1.000, máximo 5.000). Para varrer mais de 5.000 resultados, itere capturando o último <code>RecipientAddress</code> e usando-o como ponto de partida da próxima chamada.</p>
 
       <div class="tip">
-        <strong>Dica de produtividade:</strong> quando o usuário diz "não recebi nada", peça SEMPRE três informações antes de abrir o trace — (1) endereço exato do remetente, (2) data/hora aproximada e (3) assunto ou trecho do conteúdo. Sem isso, em um tenant grande você cai no limite de 20.000 resultados e perde tempo refinando filtros.
+        <strong>Fuso horário:</strong> os parâmetros <code>-StartDate</code>/<code>-EndDate</code> e o campo <code>Received</code> da saída do V2 são em <strong>UTC</strong>, não no fuso local. Se o usuário reporta "recebi às 14h", ajuste para UTC antes de filtrar (UTC-3 → 17:00 UTC). O portal EAC já converte para o fuso da sessão do admin — daí o desencontro comum entre PowerShell e portal.
       </div>
+
+      <div class="tip">
+        <strong>Dica de produtividade:</strong> quando o usuário diz "não recebi nada", peça SEMPRE três informações antes de abrir o trace — (1) endereço exato do remetente, (2) data/hora aproximada e (3) assunto ou trecho do conteúdo. Sem isso, em um tenant grande você satura o limite de resultados e perde tempo refinando filtros.
+      </div>
+
+      <div class="tip">
+        <strong>Quando o Message Trace não basta — use o Audit Log:</strong> ações <em>pós-entrega</em> (usuário moveu para a lixeira, ZAP moveu para Junk depois, regra de Outlook redirecionou, item foi excluído permanentemente) <strong>não aparecem</strong> no Message Trace, que cobre só o trajeto até a entrega. Para esses casos, consulte o Audit Log unificado no Purview:
+        <pre style="margin:6px 0 0 0"><code># Pré-requisito: o tenant precisa ter o Unified Audit Log habilitado.
+# Verificar:
+Get-AdminAuditLogConfig | Select-Object UnifiedAuditLogIngestionEnabled
+
+# Habilitar (se necessário):
+Set-AdminAuditLogConfig -UnifiedAuditLogIngestionEnabled $true
+
+# Buscar ações do destinatário nos últimos 7 dias
+Search-UnifiedAuditLog -StartDate (Get-Date).AddDays(-7) -EndDate (Get-Date) `
+    -UserIds "compras@contoso.com" `
+    -Operations "HardDelete","SoftDelete","MoveToDeletedItems"</code></pre>
+      </div>
+
+      <p><strong>Atenção a fluxos intra-tenant:</strong> mensagens <em>internas</em> (vimos na aba Arquitetura que não saem para o MX externo) aparecem no Message Trace, mas certos eventos do EOP de borda (Connection filter, anti-malware externo) <strong>não</strong> ocorrem para elas — só os do Transport Service interno. Se você não está vendo eventos esperados, confirme se a mensagem é interna ou externa.</p>
 
       <p>Em resumo, o Message Trace é fundamental para auditar se um e-mail entrou ou saiu do ambiente e o que aconteceu com ele. Casos típicos do dia a dia:</p>
       <ul>
         <li><strong>"Mandei e o cliente não recebeu":</strong> trace por remetente interno → ver se chegou a sair do tenant e qual foi a SMTP response do servidor remoto.</li>
         <li><strong>"Estou recebendo spam de domínio X":</strong> trace inbound do domínio + verificar Authentication-Results no header.</li>
+        <li><strong>"Recebi e depois sumiu":</strong> trace para confirmar entrega + Audit Log para identificar exclusão/move + procurar evento <code>ZAP</code> no detail.</li>
         <li><strong>Auditoria de campanha interna:</strong> exportar CSV de uma janela e cruzar com a lista de destinatários esperados para descobrir quem ficou de fora.</li>
         <li><strong>Suspeita de vazamento:</strong> trace por remetente interno + filtro de destinatários externos para mapear o que saiu.</li>
       </ul>
@@ -895,23 +1009,29 @@ Start-HistoricalSearch -ReportTitle "Auditoria NF mar/2026" `
 
     <h3>Tópicos no Slide</h3>
     <ul>
-      <li><strong>Como obter o header:</strong> via Outlook (Propriedades) ou Outlook Web (<em>Exibir origem da mensagem</em>). Admins: pelo portal <code>security.microsoft.com</code> (<em>Email &amp; Collaboration &gt; Explorer</em> &gt; abrir mensagem &gt; Análise).</li>
-      <li><strong>Elementos-chave:</strong>
+      <li><strong>Como obter o header:</strong> Outlook desktop (<em>Arquivo &gt; Propriedades</em>), Outlook na Web (<em>… &gt; Exibir &gt; Exibir origem</em>) ou — para o admin — pelo <em>Email entity</em> no Defender portal.</li>
+      <li><strong>Headers essenciais para troubleshooting:</strong>
         <ul>
-          <li><code>Received</code>: lista de servidores e horários de encaminhamento (cada salto do e-mail).</li>
-          <li><code>Authentication-Results</code>: indica resultado de SPF, DKIM e DMARC (pass/fail) para o remetente.</li>
-          <li><code>X-Forefront-Antispam-Report</code> / <code>X-Microsoft-Antispam</code>: detalhes da verificação EOP (IP de origem – CIP, vereditos SFV, SCL, BCL, categorização de ameaça).</li>
+          <li><code>Received</code> — cadeia de saltos com timestamp; cada hop adiciona uma linha no topo.</li>
+          <li><code>Authentication-Results</code> — vereditos modernos (RFC 8601) de SPF, DKIM, DMARC e <em>compauth</em>. <code>Received-SPF</code> é o equivalente histórico (RFC 7208), gerado em paralelo.</li>
+          <li><code>ARC-Authentication-Results</code> — preserva autenticação original em mensagens encaminhadas (mailing lists, forwarders).</li>
+          <li><code>DKIM-Signature</code> — bloco com o <code>b=</code> (assinatura) e <code>bh=</code> (hash do corpo) que o EOP verifica para gerar o veredito <code>dkim=</code>.</li>
+          <li><code>Message-ID</code> (RFC 5322) — ID único atribuído pelo cliente de envio. <strong>Diferente</strong> do <code>X-MS-Exchange-Organization-Network-Message-Id</code>, que é o GUID do EOP usado em traces e suporte Microsoft.</li>
+          <li><code>X-Forefront-Antispam-Report</code> — diagnóstico do EOP (CIP, CTRY, SCL, SFV, CAT, IPV, PTR, H).</li>
+          <li><code>X-Microsoft-Antispam</code> — informações complementares (BCL, etc.).</li>
+          <li><code>X-MS-Exchange-Organization-Network-Message-Id</code> — GUID do EOP (ver aba Message Trace).</li>
+          <li><code>X-MS-Exchange-Organization-AuthAs</code> / <code>AuthSource</code> — distingue mensagem <em>Internal</em> de <em>Anonymous</em> (útil em casos de spoofing intra-org).</li>
         </ul>
       </li>
-      <li><strong>Ferramenta de Parser:</strong> <em>Message Header Analyzer</em> (web) para colar o header bruto e obter resumo analisado (com tempos entre hops, etc.).</li>
+      <li><strong>Parser recomendado:</strong> <em>Message Header Analyzer</em> (Microsoft) — cola o header bruto e retorna análise visual com tempos entre hops e destaque de problemas de autenticação.</li>
     </ul>
 
     <div class="gui-path">
       <span class="label">Caminhos via GUI</span>
       <ul>
-        <li><strong>Outlook Desktop:</strong> abrir a mensagem em janela própria &rsaquo; <span class="crumb">File</span> &rsaquo; <span class="crumb">Properties</span> &rsaquo; campo <span class="crumb">Internet headers</span>.</li>
+        <li><strong>Outlook Desktop:</strong> abrir a mensagem em janela própria &rsaquo; <span class="crumb">File</span> &rsaquo; <span class="crumb">Properties</span> &rsaquo; copiar o campo <span class="crumb">Internet headers</span>.</li>
         <li><strong>Outlook na Web / novo Outlook:</strong> abrir a mensagem &rsaquo; <span class="crumb">⋯ (more actions)</span> &rsaquo; <span class="crumb">View</span> &rsaquo; <span class="crumb">View message source</span>.</li>
-        <li><strong>Admin (sem precisar do usuário):</strong> <span class="crumb">Microsoft Defender portal</span> &rsaquo; <span class="crumb">Email &amp; collaboration</span> &rsaquo; <span class="crumb">Explorer</span> &rsaquo; localizar a mensagem &rsaquo; <span class="crumb">Email entity</span> &rsaquo; aba <span class="crumb">Header</span><br>
+        <li><strong>Admin (sem precisar do usuário) — Defender P1/P2:</strong> <span class="crumb">Microsoft Defender portal</span> &rsaquo; <span class="crumb">Email &amp; collaboration</span> &rsaquo; <span class="crumb">Explorer</span> &rsaquo; localizar a mensagem &rsaquo; <span class="crumb">Email entity</span> &rsaquo; aba <span class="crumb">Header</span><br>
           <span class="url">https://security.microsoft.com/threatexplorerv3</span></li>
         <li><strong>Message Header Analyzer (Microsoft):</strong><br>
           <span class="url">https://mha.azurewebsites.net/</span></li>
@@ -922,73 +1042,139 @@ Start-HistoricalSearch -ReportTitle "Auditoria NF mar/2026" `
 
     <div class="notes">
       <h3>Notas do Apresentador</h3>
-      <p>A leitura de cabeçalhos de e-mail é um complemento essencial ao Message Trace, pois fornece informação técnica detalhada sobre cada mensagem. Para incidentes específicos (ex.: validação de autenticação de remetente, rastreamento externo), muitas vezes solicitamos ao usuário que nos encaminhe o cabeçalho da mensagem.</p>
+      <p>A leitura de cabeçalhos é o complemento técnico ao Message Trace: o trace mostra <em>o que aconteceu</em> com a mensagem; o header mostra <em>por quê</em>. Dois cenários típicos exigem header obrigatoriamente: (1) auditoria de autenticação (SPF/DKIM/DMARC), (2) análise forense de phishing/spoofing.</p>
 
       <p><strong>Como obter o header — passo a passo:</strong></p>
       <ul>
         <li><strong>Outlook desktop:</strong> abrir a mensagem em janela própria → <em>Arquivo &gt; Propriedades</em> → copiar tudo do campo <em>Cabeçalhos da Internet</em>.</li>
         <li><strong>Outlook Web (OWA / novo Outlook):</strong> abrir a mensagem → <em>… (mais ações) &gt; Exibir &gt; Exibir origem da mensagem</em>.</li>
-        <li><strong>Admin (sem precisar do usuário):</strong> portal <code>security.microsoft.com</code> → <em>Email &amp; Collaboration &gt; Explorer</em> → localizar a mensagem → <em>Email entity</em> → aba <em>Header</em>.</li>
+        <li><strong>Admin (Defender P1/P2):</strong> portal <code>security.microsoft.com</code> → <em>Email &amp; Collaboration &gt; Explorer</em> → mensagem → <em>Email entity</em> → aba <em>Header</em>.</li>
+        <li><strong>Sem Defender:</strong> peça ao usuário para encaminhar a mensagem original como <strong>anexo</strong> (<em>Mais ações &gt; Encaminhar como anexo</em>) — você recebe o <code>.eml</code> intacto e abre direto no analisador.</li>
       </ul>
 
-      <p>No contexto de fluxo de e-mail, as partes mais relevantes do header são:</p>
+      <p>No contexto de mail flow, as partes mais relevantes do header são:</p>
       <ul>
-        <li>A cadeia de linhas <code>Received</code> (ordem inversa, do remetente ao destinatário). Cada servidor que encaminhou a mensagem adiciona sua própria linha <code>Received</code> no topo, incluindo o timestamp. <strong>Análise:</strong> comparando os horários dessas linhas, identificamos eventuais atrasos (gaps grandes entre timestamps) e qual servidor pode tê-los causado.</li>
-        <li>As linhas <code>Authentication-Results</code> e <code>Received-SPF</code> nos dizem se o remetente foi autenticado (SPF, DKIM, DMARC, e o veredito de <em>composite authentication</em> do EOP).</li>
-        <li>O campo <code>X-Forefront-Antispam-Report</code> mostra o que o EOP pensou do e-mail (CIP, CTRY, SCL, SFV, CAT etc.).</li>
+        <li>A cadeia de linhas <code>Received</code> (lida do final para o topo, do remetente ao destinatário). Cada servidor que tocou na mensagem adiciona sua linha. <strong>Análise:</strong> comparando os timestamps, identificamos atrasos (gaps grandes entre hops) e qual servidor causou.</li>
+        <li>As linhas <code>Authentication-Results</code> e <code>Received-SPF</code> nos dizem se o remetente foi autenticado.</li>
+        <li>O <code>X-Forefront-Antispam-Report</code> mostra o que o EOP pensou do e-mail.</li>
+        <li>O <code>ARC-Authentication-Results</code> aparece quando a mensagem passou por um intermediário confiável (lista de discussão, redirecionador) — ele "trava" a autenticação original para que o EOP possa honrá-la mesmo quando o SPF do salto final falharia.</li>
       </ul>
+
+      <h3 style="margin-top:24px">Checklist de leitura rápida</h3>
+      <p>Diante de um header desconhecido, faça a leitura nesta ordem (15 segundos):</p>
+      <ol>
+        <li><strong>Olhe primeiro o <code>Authentication-Results</code>:</strong>
+          <ul>
+            <li>Tudo <code>pass</code> + <code>compauth=pass</code> → autenticação OK, foque em outras causas (regra de transporte, política de filtro, allow/block do destinatário).</li>
+            <li>Algum <code>fail</code> → suspeite de spoofing ou de SPF/DKIM mal configurado do remetente. Confirme com o <code>reason=</code>.</li>
+            <li><code>compauth=softpass</code> (códigos 2xx) → o EOP aceitou por sinais secundários (PTR alinhado com o domínio From); o domínio remetente provavelmente publica DMARC fraco (<code>p=none</code>) ou não publica. Mensagem entregue, mas vale alertar o remetente.</li>
+            <li><code>compauth=none</code> (3xx/4xx/9xx) → não foi checado (ex.: <code>905</code> — roteamento complexo, mensagem chegou via on-prem antes do EOP).</li>
+          </ul>
+        </li>
+        <li><strong>Olhe o <code>X-Forefront-Antispam-Report</code> → campo <code>SCL</code>:</strong> <code>-1</code> (bypass por allow list/regra), <code>0</code>/<code>1</code> (não-spam), <code>5</code>/<code>6</code> (spam — Junk por padrão), <code>9</code> (alta confiança — quarentena por padrão).</li>
+        <li><strong>Olhe o <code>SFV</code>:</strong> conta a história — <code>NSPM</code>, <code>SPM</code>, <code>SKA</code> (skip por allow list), <code>SKN</code> (skip por regra) etc.</li>
+        <li><strong>Olhe o <code>CAT</code>:</strong> categoria de ameaça — <code>NONE</code>, <code>SPM</code>, <code>PHSH</code>, <code>SPOOF</code>, <code>MALW</code>, <code>BULK</code>.</li>
+        <li><strong>Por último, veja o <code>CIP</code>:</strong> IP de origem real. Bate com o <code>PTR</code>? Está no país esperado (<code>CTRY</code>)?</li>
+      </ol>
 
       <div class="example">
         <span class="label">Exemplo — header de mensagem legítima</span>
 <pre><code>Received: from BN8PR12MB3666.namprd12.prod.outlook.com (...)
  by SN6PR12MB4762.namprd12.prod.outlook.com with HTTPS; Tue, 5 May 2026 14:02:11 +0000
-Received: from mail.fornecedor.com.br (200.150.10.20)
+Received: from mail.fornecedor.com.br (203.0.113.20)
  by BN8PR12MB3666.namprd12.prod.outlook.com (10.172.x.x) with TLS; Tue, 5 May 2026 14:02:09 +0000
-Authentication-Results: spf=pass (sender IP is 200.150.10.20)
+Authentication-Results: spf=pass (sender IP is 203.0.113.20)
  smtp.mailfrom=fornecedor.com.br;
  dkim=pass (signature was verified) header.d=fornecedor.com.br;
  dmarc=pass action=none header.from=fornecedor.com.br;
  compauth=pass reason=100
 Received-SPF: Pass (protection.outlook.com: domain of fornecedor.com.br
- designates 200.150.10.20 as permitted sender)
+ designates 203.0.113.20 as permitted sender)
 X-Forefront-Antispam-Report:
- CIP:200.150.10.20; CTRY:BR; LANG:pt;
+ CIP:203.0.113.20; CTRY:BR; LANG:pt;
  SCL:1; SFV:NSPM; DIR:INB; SFTY:; CAT:NONE;
- SFP:; IPV:NLI; H:mail.fornecedor.com.br;</code></pre>
-        <p style="margin:0">Leitura: SPF, DKIM e DMARC todos <code>pass</code>; <code>compauth=pass</code> (autenticação composta OK); SCL=1 (limpo); SFV=NSPM (não spam); DIR=INB (inbound). E-mail entregue corretamente.</p>
+ SFP:; IPV:NLI; H:mail.fornecedor.com.br; PTR:mail.fornecedor.com.br;
+X-MS-Exchange-Organization-Network-Message-Id: 5f3e1c2a-9b8d-4a7e-b6c1-3f2d1e0b9a8c
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-Exchange-Organization-AuthSource: BN8PR12MB3666.namprd12.prod.outlook.com</code></pre>
+        <p style="margin:0">Leitura: SPF, DKIM e DMARC todos <code>pass</code>; <code>compauth=pass reason=100</code> (SPF <em>ou</em> DKIM passou com o domínio alinhado ao From); SCL=1 (limpo); SFV=NSPM (não spam); DIR=INB (inbound); PTR bate com o H (HELO). E-mail entregue corretamente. <code>AuthAs:Anonymous</code> é normal para inbound externo — significa "remetente externo, não autenticado no tenant"; em mensagens intra-org o valor seria <code>Internal</code>.</p>
       </div>
 
       <div class="example">
         <span class="label">Exemplo — header de tentativa de spoofing</span>
-<pre><code>Authentication-Results: spf=fail (sender IP is 45.83.x.x)
- smtp.mailfrom=fazenda.sp.gov.br;
+<pre><code>Authentication-Results: spf=fail (sender IP is 198.51.100.42)
+ smtp.mailfrom=contoso.com;
  dkim=none (message not signed) header.d=none;
- dmarc=fail action=quarantine header.from=fazenda.sp.gov.br;
- compauth=fail reason=001
+ dmarc=fail action=quarantine header.from=contoso.com;
+ compauth=fail reason=000
 X-Forefront-Antispam-Report:
- CIP:45.83.x.x; CTRY:RU; LANG:en;
+ CIP:198.51.100.42; CTRY:XX; LANG:en;
  SCL:9; SFV:SPM; DIR:INB;
- CAT:SPOOF; SFTY:9.11; SFP:;</code></pre>
-        <p style="margin:0">Leitura: o atacante tentou enviar como <code>@fazenda.sp.gov.br</code> a partir de um IP russo não autorizado. SPF e DMARC falharam, sem DKIM, <code>compauth=fail</code>, <code>CAT:SPOOF</code> e <code>SFTY:9.11</code> (high-confidence phish). EOP corretamente jogou em quarentena.</p>
+ CAT:SPOOF; SFP:; IPV:NLI; H:badmail.example.org;
+ PTR:198-51-100-42.dynamic.example.org;</code></pre>
+        <p style="margin:0">Leitura: o atacante tentou enviar como <code>@contoso.com</code> a partir de um IP não autorizado. SPF falhou, sem DKIM. <code>dmarc=fail action=quarantine</code> — atenção: o <code>action=</code> reflete a <strong>política DMARC publicada no DNS pelo dono do domínio</strong> (<code>p=quarantine</code>), não uma decisão local do EOP. <code>compauth=fail reason=000</code> = falha explícita por DMARC reject/quarantine. PTR genérico/dinâmico reforça a suspeita. SCL=9 + CAT=SPOOF — EOP corretamente jogou em quarentena.</p>
       </div>
 
-      <p><strong>Glossário rápido dos campos do EOP:</strong></p>
+      <p><strong>Glossário dos campos do EOP</strong> (referência rápida — fonte: <em>Anti-spam message headers</em> da Microsoft):</p>
       <ul>
         <li><code>CIP</code> — Connecting IP (IP que abriu a sessão SMTP com o EOP).</li>
-        <li><code>CTRY</code> / <code>LANG</code> — país de origem do IP e idioma detectado do conteúdo.</li>
-        <li><code>SCL</code> — Spam Confidence Level (-1 a 9).</li>
-        <li><code>BCL</code> — Bulk Complaint Level (0 a 9; quanto maior, mais "bulk/marketing").</li>
-        <li><code>SFV</code> — Spam Filter Verdict: <code>NSPM</code> (não spam), <code>SPM</code> (spam), <code>SKS</code> (skip por regra), <code>SKA</code> (skip por allow list), <code>SKB</code> (skip por block list), <code>SKQ</code> (released from quarantine), <code>SKN</code> (skip — marcado como não-spam por regra).</li>
+        <li><code>CTRY</code> / <code>LANG</code> — país de origem do IP (código ISO; <code>XX</code> = desconhecido) e idioma detectado.</li>
+        <li><code>H</code> — string HELO/EHLO do servidor remetente.</li>
+        <li><code>PTR</code> — reverse DNS lookup do CIP. PTR genérico ou inexistente é red flag.</li>
+        <li><code>IPV</code> — IP version/reputation: <code>CAL</code> (Customer Allowed — IP em allow list do cliente), <code>NLI</code> (Not Listed em qualquer lista de reputação).</li>
+        <li><code>SCL</code> — Spam Confidence Level: <code>-1</code> (skip por allow list/regra), <code>0</code>/<code>1</code> (não-spam), <code>5</code>/<code>6</code> (spam — Junk por padrão), <code>9</code> (alta confiança — quarentena por padrão). Valores <code>2</code>–<code>4</code>, <code>7</code> e <code>8</code> não são usados ativamente pelo EOP.</li>
+        <li><code>BCL</code> — Bulk Complaint Level: <code>0</code> (sem reputação bulk), <code>1</code>–<code>3</code> (poucas reclamações), <code>4</code>–<code>7</code> (mistura), <code>8</code>–<code>9</code> (muitas reclamações). Threshold padrão da política anti-spam = <code>7</code>.</li>
+        <li><code>SFV</code> — Spam Filter Verdict:
+          <ul>
+            <li><code>NSPM</code> — não spam.</li>
+            <li><code>SPM</code> — spam (filtrado).</li>
+            <li><code>SKS</code> — skip: marcado como spam por regra de transporte (SCL 5–9).</li>
+            <li><code>SKN</code> — skip: marcado como não-spam por regra de transporte (SCL -1).</li>
+            <li><code>SKA</code> — skip: allow list da política anti-spam.</li>
+            <li><code>SKB</code> — skip: block list da política anti-spam.</li>
+            <li><code>SKQ</code> — released from quarantine.</li>
+            <li><code>SFE</code> — skip: <em>Safe Senders</em> do destinatário.</li>
+            <li><code>BLK</code> — block: <em>Blocked Senders</em> do destinatário.</li>
+          </ul>
+        </li>
         <li><code>DIR</code> — direção: <code>INB</code> (inbound), <code>OUT</code> (outbound), <code>INT</code> (internal).</li>
-        <li><code>CAT</code> — categoria de ameaça: <code>SPM</code>, <code>PHSH</code>, <code>HSPM</code> (high-conf spam), <code>SPOOF</code>, <code>MALW</code>, <code>BULK</code>, <code>NONE</code>.</li>
-        <li><code>SFTY</code> — safety tip / nível de phishing detectado.</li>
-        <li><code>compauth</code> — composite authentication: combina SPF/DKIM/DMARC + sinais. <code>pass</code>, <code>fail</code> ou <code>softpass</code>.</li>
+        <li><code>CAT</code> — categoria de ameaça (EOP): <code>NONE</code>, <code>SPM</code>, <code>HSPM</code> (high-conf spam), <code>PHSH</code>, <code>HPHSH</code>/<code>HPHISH</code> (high-conf phishing), <code>SPOOF</code>, <code>MALW</code>, <code>AMP</code> (anti-malware), <code>FTBP</code> (Common Attachments Filter), <code>BULK</code>, <code>OSPM</code> (outbound spam). Categorias <strong>Defender-only</strong> (P1/P2): <code>INTOS</code> (intra-org phishing), <code>BIMP</code> (brand impersonation), <code>DIMP</code> (domain impersonation), <code>GIMP</code> (mailbox intelligence impersonation), <code>UIMP</code> (user impersonation), <code>SAP</code> (Safe Attachments).</li>
+        <li><code>SFTY</code> — safety tip / nível de phishing detectado (Defender P1/P2): <code>9.19</code> (domain impersonation), <code>9.20</code> (user impersonation), <code>9.25</code> (first contact). Vazio em EOP básico.</li>
       </ul>
 
-      <p>Para facilitar, administradores podem usar ferramentas como o <strong>Message Header Analyzer</strong> da Microsoft (<code>mha.azurewebsites.net</code>). Basta colar o header bruto: a ferramenta parseia os campos, calcula tempos entre <code>Received</code> (útil para ver quanto tempo o e-mail ficou em cada hop) e destaca problemas de SPF/DMARC. Há também opções de terceiros como <em>MXToolbox Header Analyzer</em>.</p>
+      <p><strong>Glossário do <code>Authentication-Results</code>:</strong></p>
+      <ul>
+        <li><code>spf</code> — <code>pass</code> | <code>fail</code> | <code>softfail</code> | <code>neutral</code> | <code>none</code> | <code>temperror</code> | <code>permerror</code>.</li>
+        <li><code>dkim</code> — <code>pass</code> | <code>fail (reason)</code> | <code>none</code>. <code>header.d=</code> indica o domínio assinante.</li>
+        <li><code>dmarc</code> — <code>pass</code> | <code>fail</code> | <code>bestguesspass</code> | <code>none</code>. <code>action=</code> indica a ação aplicada (<code>none</code>, <code>oreject</code>, <code>pct.quarantine</code>, etc.).</li>
+        <li><code>compauth</code> — composite authentication, combina SPF/DKIM/DMARC + sinais. Valores: <code>pass</code>, <code>fail</code>, <code>softpass</code>, <code>none</code>. <code>reason=</code> é um código de 3 dígitos:
+          <ul>
+            <li><code>0xx</code> — falha (<code>000</code> = DMARC reject/quarantine fail; <code>001</code> = falha implícita por config fraca do remetente; <code>002</code> = bloqueio explícito).</li>
+            <li><code>1xx</code> — passou explicitamente (<code>100</code> = SPF ou DKIM alinhado com From; <code>101</code> = DKIM assinado pelo domínio From; <code>130</code> = passou via ARC sealer confiável).</li>
+            <li><code>2xx</code> — softpass (passou por sinais secundários como PTR alinhado).</li>
+            <li><code>3xx</code>, <code>4xx</code>, <code>9xx</code> — bypass / não checado (ex.: <code>905</code> = roteamento complexo, mensagem passou por on-prem antes do EOP).</li>
+            <li><code>5xx</code> — NDR válido / DMARC não aplicável.</li>
+            <li><code>6xx</code> — falha implícita; <code>601</code> = self-to-self spoofing (alguém tentou se passar pelo seu próprio domínio).</li>
+            <li><code>7xx</code> — pass implícito por histórico.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <p><strong>Sobre <code>Received-SPF</code> vs <code>Authentication-Results: spf=...</code>:</strong> ambos carregam o mesmo veredito SPF. <code>Received-SPF</code> é o header histórico definido pela própria RFC 7208 (SPF). <code>Authentication-Results</code> é o header moderno definido pela RFC 8601, que agrupa SPF, DKIM e DMARC num só lugar. O EOP gera os dois para compatibilidade — em troubleshooting moderno, prefira ler o <code>Authentication-Results</code>.</p>
+
+      <p><strong>ARC (Authenticated Received Chain):</strong> quando uma mensagem passa por um intermediário (mailing list, forwarder, gateway de terceiros), o SPF do salto final geralmente falha porque o IP do intermediário não está no SPF do domínio original. ARC resolve isso: o intermediário "sela" criptograficamente os resultados de autenticação originais em <code>ARC-Authentication-Results</code> + <code>ARC-Message-Signature</code> + <code>ARC-Seal</code>. Se o EOP confia no ARC sealer, honra a autenticação original mesmo com SPF do salto direto falhando — você verá então <code>compauth=pass reason=130</code>. Visível no <code>X-Forefront-Antispam-Report</code> como subcampos <code>ARC: AAR=...; AMS=...; AS=cv=pass</code>.</p>
+      <p><strong>Caminho para configurar ARC trusted sealers:</strong> <span class="crumb">Microsoft Defender portal</span> &rsaquo; <span class="crumb">Email &amp; collaboration</span> &rsaquo; <span class="crumb">Policies &amp; rules</span> &rsaquo; <span class="crumb">Threat policies</span> &rsaquo; <span class="crumb">Email authentication settings</span> &rsaquo; aba <span class="crumb">ARC</span>. Ou via PowerShell: <code>Set-ArcConfig -ArcTrustedSealers "&lt;dominio&gt;"</code>.</p>
+
+      <p>Para análise visual rápida, use o <strong>Message Header Analyzer</strong> da Microsoft (<code>mha.azurewebsites.net</code>): cole o header bruto e a ferramenta parseia tudo, calcula tempos entre <code>Received</code> e destaca falhas de SPF/DMARC. <em>MXToolbox Header Analyzer</em> é alternativa de terceiros com visualização similar.</p>
 
       <div class="tip">
-        <strong>Atenção:</strong> ao copiar o header do Outlook, verifique se não há quebras de linha extras (algumas versões cortam linhas longas e isso confunde o parser). Se a análise vier estranha, peça ao usuário que reenvie o e-mail original como anexo (<em>Encaminhar como Anexo</em>) — assim você recebe o <code>.eml</code> intacto.
+        <strong>Atenção ao copiar headers:</strong>
+        <ul style="margin:6px 0 0 0">
+          <li>Algumas versões do Outlook quebram linhas longas ao exibir o campo <em>Internet headers</em> — isso confunde o parser. Se a análise vier estranha, peça <em>Encaminhar como anexo</em> e abra o <code>.eml</code> diretamente.</li>
+          <li>Headers contêm endereços de e-mail e IDs internos. O MHA da Microsoft processa client-side (não envia o conteúdo a servidor) — ok para uso direto. Para parsers de terceiros (MXToolbox e similares), <strong>anonimize</strong> antes de colar.</li>
+          <li>O <code>Received</code> mais recente fica <strong>no topo</strong> — ler de baixo para cima reconstrói o caminho cronológico.</li>
+          <li>Para abrir um chamado com o suporte Microsoft, basta o <code>X-MS-Exchange-Organization-Network-Message-Id</code> (não confundir com o <code>Message-ID</code> RFC 5322 do cliente de envio).</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -997,7 +1183,7 @@ X-Forefront-Antispam-Report:
   <section class="panel" id="casos" role="tabpanel">
     <h2>Cenários Práticos de Troubleshooting de Mail Flow</h2>
 
-    <p>Quatro cenários comuns de problemas de mail flow e como abordá-los usando os princípios e ferramentas discutidos.</p>
+    <p>Cinco cenários comuns de problemas de mail flow e como abordá-los usando os princípios e ferramentas discutidos.</p>
 
     <div class="gui-path">
       <span class="label">Caminhos via GUI — ferramentas usadas nos casos</span>
@@ -1012,28 +1198,60 @@ X-Forefront-Antispam-Report:
 
     <div class="case-card">
       <h4><span class="badge">Caso 1</span>Atraso no recebimento (latência)</h4>
-      <p><strong>Análise:</strong> pelo Message Trace, identificamos status <em>Pendente</em> ou <em>Adiado (deferred)</em> antes do <em>Entregue</em>. Isso indica que o EOP tentou entregar várias vezes até conseguir. Os cabeçalhos <code>Received</code> podem mostrar um intervalo grande de tempo numa etapa específica, sinalizando onde ocorreu a lentidão.</p>
-      <p><strong>Causa típica:</strong> problemas temporários no servidor do destinatário (se for e-mail de saída) ou no servidor do remetente (se entrada) – por exemplo, timeout de conexão ou greylisting reprogramando a entrega. O EOP reenfileira mensagens <em>deferred</em> por até 24h antes de desistir.</p>
-      <p><strong>Resolução:</strong> geralmente aguardar ou investigar o servidor causador do atraso (ex.: conferir se houve manutenção ou lentidão naquele servidor/hop). Para mitigar, se for recorrente no lado do SEFAZ-SP, avaliar capacidade de rede; se for do remetente/destino, contatar o admin remoto ou sugerir canal alternativo, se crítico.</p>
+      <p><strong>Análise:</strong> pelo Message Trace, identificamos status <em>Pending</em> antes do <em>Delivered</em>, ou eventos de <em>Defer</em> nos detalhes. Isso indica que o EOP tentou entregar várias vezes até conseguir. Os cabeçalhos <code>Received</code> podem mostrar um intervalo grande de tempo numa etapa específica, sinalizando onde ocorreu a lentidão.</p>
+      <p><strong>Causa típica:</strong> problemas temporários no servidor do destinatário (se for e-mail de saída) ou no servidor do remetente (se entrada) – por exemplo, timeout de conexão, greylisting reprogramando a entrega ou throttling. O Exchange Online tenta reentrega por <strong>até 48h</strong>: gera <em>delay notification</em> ao remetente em ~24h e, se ainda não conseguir entregar, emite NDR final em ~48h.</p>
+      <p><strong>Resolução:</strong> geralmente aguardar ou investigar o servidor causador do atraso (ex.: conferir se houve manutenção ou lentidão naquele servidor/hop). Para mitigar, se for recorrente no lado da organização, avaliar capacidade de rede; se for do remetente/destino, contatar o admin remoto ou sugerir canal alternativo, se crítico.</p>
     </div>
 
     <div class="case-card">
       <h4><span class="badge">Caso 2</span>Falso positivo de spam (legítimo marcado como spam)</h4>
-      <p><strong>Análise:</strong> pelo Message Trace, vemos destinatário com status <em>Quarentenada</em> ou <em>Filtrada como spam</em>. No header, o <code>X-Forefront-Antispam-Report</code> mostra SCL alto (por ex. 9) e possivelmente <code>SFV:SPM</code> (marcado como spam pelo filtro). Pode haver pistas como alta pontuação de spam ou ausência de autenticação (<code>SPF=fail</code>).</p>
-      <p><strong>Resolução:</strong> se de fato for legítimo, liberar a mensagem da quarentena e marcar como <em>Não é spam</em>. Adicionar o remetente a uma <em>Allow List</em> temporária se necessário (mas cuidado: isso atribui SCL -1 para todos os e-mails desse endereço/domínio). Revisar conteúdo: se o e-mail tinha alguma característica de spam (anexos suspeitos, links, ou texto que disparou filtro), talvez orientar o remetente a ajustar. Em última instância, ajustar a política de anti-spam (ex.: permitir aquele domínio ou diminuir agressividade para tipos de mensagem similares).</p>
+      <p><strong>Análise:</strong> pelo Message Trace, vemos destinatário com status <em>Quarantined</em> ou <em>FilteredAsSpam</em>. No header, o <code>X-Forefront-Antispam-Report</code> mostra SCL alto (5/6 = Junk; 9 = quarentena) e <code>SFV</code> indicando o veredito (<code>SPM</code> = spam, <code>SKB</code> = block list). Pode haver pistas como ausência de autenticação (<code>SPF=fail</code> ou <code>DMARC=fail</code>) ou <code>CAT:BULK</code> (e-mail de marketing).</p>
+      <p><strong>Resolução (fluxo recomendado):</strong></p>
+      <ol>
+        <li><strong>Liberar da quarentena</strong> (<em>Defender portal &gt; Quarantine &gt; Release</em>) e marcar a opção <em>Report message as not junk to Microsoft</em>.</li>
+        <li><strong>Reportar via Submissions</strong> (<em>Email &amp; collaboration &gt; Submissions &gt; Submit to Microsoft</em>): isso re-treina o filtro globalmente <strong>e</strong> oferece criar uma entrada na <strong>Tenant Allow/Block List</strong> com expiração configurável (1 dia, 7 dias, 30 dias, 45 dias ou never — padrão sugerido: 30 dias) — muito mais seguro do que adicionar o remetente a uma <em>allowed senders list</em> permanente da política anti-spam (que atribui SCL -1 e <strong>desliga toda</strong> a proteção para aquele remetente).</li>
+        <li><strong>Usuário final também pode reportar</strong> direto do Outlook com o botão <em>Report</em> &rsaquo; <em>Not junk</em> — alimenta o mesmo pipeline de Submissions.</li>
+        <li>Se for recorrente, orientar o remetente a corrigir SPF/DKIM/DMARC do domínio dele — a causa raiz quase sempre está lá.</li>
+      </ol>
+      <p><strong>Evite:</strong> editar a allow list do anti-spam policy ou criar regra de transporte com SCL -1 para um remetente específico. Ambos são pseudo-soluções que abrem brecha de spoofing.</p>
     </div>
 
     <div class="case-card">
       <h4><span class="badge">Caso 3</span>Falha de entrega (NDR – destinatário inválido)</h4>
-      <p><strong>Análise:</strong> um usuário externo recebe um bounce informando <em>“Recipient not found”</em> ao enviar para alguém da SEFAZ-SP. No Message Trace do remetente externo (se disponível) ou nos logs do EOP, vê-se a mensagem rejeitada com erro <code>550 5.1.10 RESOLVER.ADR.RecipientNotFound</code> — código específico do DBEB do EOP para destinatário inexistente no diretório. Outros códigos relacionados que você pode encontrar: <code>550 5.1.1</code> (mailbox existe mas está desabilitada/sem licença) ou <code>550 5.4.1</code> (relay access denied / problema de roteamento entre servidores).</p>
-      <p><strong>Causa comum:</strong> erro de digitação no endereço do destinatário pelo remetente, ou o usuário foi removido/mudou de endereço. O EOP (com DBEB ativo) não aceitará a mensagem, devolvendo NDR imediatamente — a rejeição acontece já no SMTP handshake, então não aparecerá no Message Trace do tenant SEFAZ-SP.</p>
-      <p><strong>Resolução:</strong> corrigir o endereço de e-mail e reenviar. Se o usuário realmente não existir mais, informar o remetente (ou criar um alias ou forward adequado se preciso manter o recebimento).</p>
+      <p><strong>Análise:</strong> um usuário externo recebe um bounce informando <em>“Recipient not found”</em> ao enviar para alguém da organização. No Message Trace do tenant a mensagem aparece com status <em>Failed</em> e <code>FailureDetails</code> contendo o código SMTP. Os códigos mais comuns:</p>
+      <ul>
+        <li><code>550 5.1.10 RESOLVER.ADR.RecipientNotFound</code> — destinatário inexistente no diretório (DBEB rejeitou).</li>
+        <li><code>550 5.1.1 RESOLVER.ADR.ExRecipNotFound</code> — mailbox existe mas está desabilitada/sem licença.</li>
+        <li><code>550 5.4.1 Relay access denied</code> — problema de roteamento (ex.: conector mal configurado).</li>
+      </ul>
+      <p><strong>Causa comum:</strong> erro de digitação no endereço do destinatário pelo remetente, ou o usuário foi removido/mudou de endereço. O EOP (com DBEB ativo) rejeita a mensagem ainda no SMTP handshake (no comando <code>RCPT TO</code>) e devolve NDR imediatamente — mas a tentativa <strong>fica registrada</strong> no Message Trace do tenant destinatário. Use o trace para confirmar o endereço exato tentado, contar quantas tentativas houve e identificar se é erro pontual ou ataque de enumeração (muitas tentativas com endereços variáveis).</p>
+      <p><strong>Resolução:</strong> corrigir o endereço de e-mail e reenviar. Se o usuário realmente não existir mais, informar o remetente (ou criar um alias ou forward adequado se preciso manter o recebimento). Em caso de enumeração, considerar bloquear o IP/domínio remetente via <em>Connection filter</em> ou Tenant Block List.</p>
     </div>
 
     <div class="case-card">
       <h4><span class="badge">Caso 4</span>Tentativa de spoofing bloqueada pelo EOP</h4>
-      <p><strong>Análise:</strong> uma mensagem falsificada aparentando vir de um domínio confiável (ex.: domínio do próprio governo) foi bloqueada pelo EOP. O Message Trace deve mostrar status <em>Falha</em> ou <em>Quarentenada</em>, possivelmente com veredito de spam/phishing (SCL alto). No cabeçalho, o campo <code>Authentication-Results</code> provavelmente tem <code>spf=fail</code> e/ou <code>dmarc=fail</code>, indicando que o remetente foi rejeitado nas checagens de autenticação. O EOP também marca <code>CAT:SPOOF</code> ou <code>CAT:PHSH</code> se detecta tentativa de falsificação de identidade.</p>
-      <p><strong>Resolução:</strong> nenhuma ação necessária para liberar – o bloqueio está correto. Recomenda-se informar a equipe de segurança e, caso aplicável, verificar se o domínio abusado tem SPF, DKIM e DMARC configurados corretamente para minimizar spoofing. No EOP, o admin pode analisar a quarentena para confirmar se era phishing e mantê-la bloqueada.</p>
+      <p><strong>Análise:</strong> uma mensagem falsificada aparentando vir de um domínio confiável (parceiro, banco, ou o próprio domínio da organização — <em>self-to-self spoofing</em>) foi bloqueada pelo EOP. O Message Trace mostra status <em>Quarantined</em> ou <em>FilteredAsSpam</em>. No cabeçalho, o <code>Authentication-Results</code> tem <code>spf=fail</code> e/ou <code>dmarc=fail</code>, e <code>compauth=fail</code> com <code>reason=000</code> (DMARC reject) ou <code>reason=601</code> (self-to-self). O <code>X-Forefront-Antispam-Report</code> mostra <code>CAT:SPOOF</code> ou <code>CAT:PHSH</code> e SCL alto.</p>
+      <p><strong>Resolução:</strong> nenhuma ação necessária para liberar — o bloqueio está correto. Recomendações:</p>
+      <ul>
+        <li>Se for spoofing do <strong>próprio domínio da organização</strong> (<code>reason=601</code>), revisar SPF/DKIM/DMARC publicados — o ataque só funciona porque algo na configuração própria é fraco. Considere endurecer DMARC para <code>p=quarantine</code> ou <code>p=reject</code>.</li>
+        <li>Se for spoofing de um <strong>parceiro/fornecedor legítimo</strong>, alertar o admin do domínio abusado para que ele publique/endureça SPF, DKIM e DMARC.</li>
+        <li>Reportar a amostra via <em>Submissions</em> como <em>Phishing</em> para alimentar a inteligência da Microsoft.</li>
+        <li>Se houver padrão de campanha (múltiplas tentativas), considerar adicionar o IP/domínio do atacante à <em>Tenant Block List</em> e/ou ao <em>IP Block List</em> do connection filter.</li>
+      </ul>
+    </div>
+
+    <div class="case-card">
+      <h4><span class="badge">Caso 5</span>E-mail encaminhado quebra autenticação (SPF/DMARC fail no destino)</h4>
+      <p><strong>Cenário:</strong> um usuário configurou forward automático do mailbox antigo para o novo (ou usa uma lista de discussão). As mensagens encaminhadas chegam marcadas como spam ou caem na quarentena, mesmo sendo legítimas.</p>
+      <p><strong>Análise:</strong> no header da mensagem encaminhada, o <code>Authentication-Results</code> mostra <code>spf=fail</code> porque o SPF do domínio original não lista o IP do servidor encaminhador (intermediário). DMARC tipicamente também falha por ausência de alinhamento. O <code>X-Forefront-Antispam-Report</code> mostra <code>CAT:SPOOF</code> ou SCL alto.</p>
+      <p><strong>Resolução:</strong> esse é o cenário clássico para <strong>ARC (Authenticated Received Chain)</strong>:</p>
+      <ul>
+        <li>Se o intermediário implementa ARC, ele “sela” criptograficamente os resultados de autenticação originais (<code>ARC-Authentication-Results</code>, <code>ARC-Message-Signature</code>, <code>ARC-Seal</code>). O Exchange Online já valida ARC por padrão para sealers públicos amplamente reconhecidos (Google, Office 365, etc.) — nesses casos não é preciso configuração adicional.</li>
+        <li>Para <strong>sealers privados ou não reconhecidos</strong> (gateway de segurança corporativo, mailing list interna), adicione-os explicitamente como <strong>ARC trusted sealers</strong>: <span class="crumb">Defender portal</span> &rsaquo; <span class="crumb">Email &amp; collaboration</span> &rsaquo; <span class="crumb">Policies &amp; rules</span> &rsaquo; <span class="crumb">Threat policies</span> &rsaquo; <span class="crumb">Email authentication settings</span> &rsaquo; aba <span class="crumb">ARC</span>. Ou via PowerShell: <code>Set-ArcConfig -ArcTrustedSealers "&lt;dominio.intermediario&gt;"</code>.</li>
+        <li>Após a configuração, mensagens encaminhadas mostrarão <code>compauth=pass reason=130</code> mesmo com SPF do salto direto falhando.</li>
+        <li><strong>Caso especial — mailing lists que reescrevem o From:</strong> muitas listas (Mailman, Google Groups em modo "reply-to-list") reescrevem o cabeçalho <code>From:</code> para o endereço da própria lista, justamente para não quebrar DMARC. Quando isso acontece, ARC não é necessário — a autenticação passa naturalmente porque o From já é o da lista. Se a lista <strong>não</strong> reescreve o From e o intermediário não faz ARC, a mensagem será marcada como spoof; não há correção limpa além de pedir ao operador da lista para habilitar uma das duas opções.</li>
+        <li><strong>Atenção ao auto-forward externo:</strong> regras de inbox que encaminham para fora do tenant são <strong>bloqueadas por padrão</strong> desde 2020 pela <em>Outbound Spam Policy</em> (parâmetro <code>AutoForwardingMode = Automatic</code>, default <code>Off</code>). Se o cenário legítimo exige forward para fora, prefira <em>mail-enabled contact</em> ou regra de transporte com escopo controlado em vez de inbox rule.</li>
+      </ul>
     </div>
 
     <div class="notes">
@@ -1043,15 +1261,15 @@ X-Forefront-Antispam-Report:
         <li><strong>Identificar o sintoma</strong> — atraso, falha de entrega, falso positivo, suspeita de spoofing. Pergunte ao usuário: "qual o comportamento esperado vs. observado?".</li>
         <li><strong>Coletar evidências objetivas</strong> — Message Trace (de quando, para quem, status) + cabeçalho completo da mensagem (quando disponível).</li>
         <li><strong>Cruzar dados</strong> — Trace mostra <em>o que</em> o EOP fez; o header mostra <em>por quê</em> (qual SCL, qual veredito, qual autenticação).</li>
-        <li><strong>Aplicar solução ou mitigação</strong> — preferencialmente uma ação reversível e com escopo restrito (ex.: regra de transporte específica) em vez de mudanças globais (allow list de domínio inteiro).</li>
-        <li><strong>Documentar</strong> — registrar no chamado o Message-ID, o veredito e a ação tomada. Isso acelera o próximo caso similar e gera base para auditoria.</li>
+        <li><strong>Aplicar solução ou mitigação</strong> — preferencialmente uma ação reversível e com escopo restrito (ex.: entrada na <em>Tenant Allow/Block List</em> com expiração de 30 dias) em vez de mudanças globais (regra de transporte permanente, allow list de domínio inteiro).</li>
+        <li><strong>Documentar</strong> — registrar no chamado o <code>X-MS-Exchange-Organization-Network-Message-Id</code>, o veredito e a ação tomada. Isso acelera o próximo caso similar e gera base para auditoria.</li>
       </ol>
 
       <div class="tip">
-        <strong>Padrão de resposta ao usuário:</strong> evite respostas como "caiu no spam". Prefira algo como: <em>"O e-mail foi recebido pelo EOP às 14:02 e classificado como SCL 9 (alta confiança de spam) porque o remetente falhou em SPF e DMARC. Liberei a mensagem da quarentena e adicionei uma regra específica para mensagens desse remetente para você. Recomendo solicitar ao remetente que ajuste o registro SPF do domínio dele."</em> Esse nível de precisão constrói confiança e reduz reincidências.
+        <strong>Padrão de resposta ao usuário:</strong> evite respostas como "caiu no spam". Prefira algo como: <em>"O e-mail foi recebido pelo EOP às 14:02 UTC e classificado como SCL 9 (alta confiança de spam) porque o remetente falhou em SPF e DMARC. Liberei a mensagem da quarentena e criei uma entrada na Tenant Allow/Block List com expiração de 30 dias para esse remetente específico. Recomendo solicitar ao remetente que ajuste o registro SPF do domínio dele — essa é a correção definitiva."</em> Esse nível de precisão constrói confiança e reduz reincidências.
       </div>
 
-      <p><strong>Quando escalar:</strong> se após Message Trace + análise de header o sintoma persiste sem causa clara — especialmente em fluxos com conectores, mailboxes híbridas ou regras complexas — abrir ticket com Microsoft Support e enviar: Message-ID, Network Message ID, intervalo de datas, e o header completo de uma amostra. Isso evita ida-e-volta de coleta.</p>
+      <p><strong>Quando escalar:</strong> se após Message Trace + análise de header o sintoma persiste sem causa clara — especialmente em fluxos com conectores, mailboxes híbridas ou regras complexas — abrir ticket com Microsoft Support e enviar: <code>X-MS-Exchange-Organization-Network-Message-Id</code>, intervalo de datas (em UTC) e o header completo de uma amostra. Isso evita ida-e-volta de coleta.</p>
     </div>
   </section>
 
@@ -1064,7 +1282,7 @@ X-Forefront-Antispam-Report:
       <li><strong>Conheça seu fluxo:</strong> tenha clareza da arquitetura (domínios, conectores) e políticas ativas para entender comportamentos esperados.</li>
       <li><strong>Higiene de regras de transporte:</strong> revise trimestralmente; cada regra deve ter owner, justificativa e escopo mínimo documentados.</li>
       <li><strong>Monitore e revise exceções:</strong> use Message Trace regularmente em casos de suporte. Mantenha listas de permitidos/bloqueados curtas e revisadas.</li>
-      <li><strong>Autenticação de remetentes:</strong> refine configurações de SPF/DKIM/DMARC no domínio do SEFAZ-SP para reduzir spam e spoofing recebidos (e garantir que a saída seja aceita pelos destinatários externos).</li>
+      <li><strong>Autenticação de remetentes:</strong> refine configurações de SPF/DKIM/DMARC no domínio da organização para reduzir spam e spoofing recebidos (e garantir que a saída seja aceita pelos destinatários externos).</li>
       <li><strong>Treinamento contínuo:</strong> compartilhe esses procedimentos com a equipe, garantindo prontidão para diagnosticar problemas futuros.</li>
     </ul>
 
@@ -1081,11 +1299,11 @@ X-Forefront-Antispam-Report:
 
     <div class="notes">
       <h3>Notas do Apresentador</h3>
-      <p>Recapitulando, cobrimos a arquitetura do mail flow no Exchange Online, as camadas de proteção do EOP básico, e ferramentas como Message Trace e header analysis para investigação. Para a equipe da SEFAZ-SP, reforçamos algumas boas práticas:</p>
+      <p>Recapitulando, cobrimos a arquitetura do mail flow no Exchange Online, as camadas de proteção do EOP básico, e ferramentas como Message Trace e header analysis para investigação. Reforce com a equipe algumas boas práticas:</p>
       <ul>
         <li><strong>Higiene de regras de transporte:</strong> manter-se alerta às políticas configuradas e evitar regras ou exceções excessivas que possam comprometer a segurança. Faça uma revisão trimestral — regra criada para resolver um chamado pontual e nunca removida é a maior fonte de "buracos" no filtro.</li>
         <li><strong>Monitorar quarentenas e filas:</strong> idealmente uma vez por dia ou via alerta agendado. Especialmente após mudanças de política, picos de spam ou incidentes externos divulgados na imprensa (campanhas de phishing direcionadas a órgãos públicos).</li>
-        <li><strong>Autenticação do próprio domínio:</strong> assegurar que <code>fazenda.sp.gov.br</code> (e qualquer subdomínio que envie e-mail) tenha SPF com todos IPs autorizados, DKIM ativado e assinado pelo Exchange Online, e DMARC com política aplicada. Isso fortalece tanto a entrega de e-mails legítimos quanto o bloqueio de abusos.</li>
+        <li><strong>Autenticação do próprio domínio:</strong> assegurar que o domínio principal (e qualquer subdomínio que envie e-mail) tenha SPF com todos IPs autorizados, DKIM ativado e assinado pelo Exchange Online, e DMARC com política aplicada. Isso fortalece tanto a entrega de e-mails legítimos quanto o bloqueio de abusos.</li>
       </ul>
 
       <div class="example">
@@ -1164,8 +1382,8 @@ X-Forefront-Antispam-Report:
       <ul>
         <li><a href="https://learn.microsoft.com/defender-office-365/message-trace-defender-portal" target="_blank" rel="noopener">Message trace in the Microsoft Defender portal</a> <span class="meta">versão moderna</span></li>
         <li><a href="https://learn.microsoft.com/exchange/monitoring/trace-an-email-message/message-trace-modern-eac" target="_blank" rel="noopener">Run a message trace in the modern EAC</a></li>
-        <li><a href="https://learn.microsoft.com/powershell/module/exchange/get-messagetrace" target="_blank" rel="noopener">Get-MessageTrace (PowerShell)</a></li>
-        <li><a href="https://learn.microsoft.com/powershell/module/exchange/get-messagetracedetail" target="_blank" rel="noopener">Get-MessageTraceDetail (PowerShell)</a> <span class="meta">eventos</span></li>
+        <li><a href="https://learn.microsoft.com/powershell/module/exchange/get-messagetracev2" target="_blank" rel="noopener">Get-MessageTraceV2 (PowerShell)</a></li>
+        <li><a href="https://learn.microsoft.com/powershell/module/exchange/get-messagetracedetailv2" target="_blank" rel="noopener">Get-MessageTraceDetailV2 (PowerShell)</a> <span class="meta">eventos</span></li>
         <li><a href="https://learn.microsoft.com/powershell/module/exchange/start-historicalsearch" target="_blank" rel="noopener">Start-HistoricalSearch (10–90 dias)</a></li>
         <li><a href="https://learn.microsoft.com/exchange/monitoring/trace-an-email-message/message-trace-faq" target="_blank" rel="noopener">Message trace FAQ — limites, retção, eventos</a></li>
       </ul>
@@ -1237,7 +1455,7 @@ X-Forefront-Antispam-Report:
 </div>
 
 <footer class="app-footer">
-  Guia de Revisão &middot; Mail Flow no Exchange Online &middot; SEFAZ-SP
+  Guia de Revisão &middot; Mail Flow no Exchange Online
 </footer>
 
 <script>
