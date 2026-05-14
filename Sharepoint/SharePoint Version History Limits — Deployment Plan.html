@@ -1,0 +1,2040 @@
+<!DOCTYPE html>
+<!-- saved from url=(0086)file:///C:/Users/kabiv/Downloads/SharePoint_Version_History_Deployment_Plan%20(3).html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SharePoint Version History Limits — Deployment Plan</title>
+<style>
+:root{--primary:#0078d4;--primary-dark:#005a9e;--accent:#106ebe;--bg:#fff;--bg-alt:#f4f6f8;--text:#1e293b;--text-muted:#555;--border:#e2e8f0;--code-bg:#0f172a;--code-text:#e2e8f0;--warn-bg:#fffbeb;--warn-bd:#fde68a;--danger-bg:#fef2f2;--danger-bd:#fecaca;--success-bg:#f0fdf4;--success-bd:#bbf7d0;--info-bg:#eff6ff;--info-bd:#bfdbfe;--radius:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI Variable','Segoe UI',-apple-system,BlinkMacSystemFont,'Inter',Roboto,sans-serif;color:#1e293b;line-height:1.75;background:#f1f5f9;font-size:15px;min-height:100vh;display:flex;flex-direction:column}
+.header{background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 50%,#0078d4 100%);color:#fff;padding:48px 40px 28px;text-align:center;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-50%;right:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(255,255,255,.06) 0%,transparent 70%);pointer-events:none}
+.header h1{font-size:2.2em;font-weight:700;letter-spacing:-.5px;margin-bottom:6px;position:relative}
+.header .sub{font-size:1.05em;opacity:.85;font-weight:400;position:relative}
+.header .meta{font-size:.82em;opacity:.55;margin-top:10px;position:relative}
+.app{display:flex;max-width:1280px;width:100%;margin:0 auto;flex:1;padding:0 16px}
+.sidebar{width:250px;flex-shrink:0;padding:24px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.main{flex:1;min-width:0;padding:24px 0 60px 24px}
+.nav-group{margin-bottom:8px}
+.nav-label{font-size:.7em;text-transform:uppercase;letter-spacing:1.2px;color:#94a3b8;padding:16px 16px 6px;font-weight:700}
+.nav-btn{display:flex;align-items:center;gap:10px;width:100%;border:none;background:none;padding:10px 16px;font-size:.86em;color:#475569;cursor:pointer;border-radius:10px;transition:all .2s ease;text-align:left;font-family:inherit;font-weight:500}
+.nav-btn:hover{background:#e2e8f0;color:#0f172a}
+.nav-btn.active{background:#0078d4;color:#fff;box-shadow:0 2px 8px rgba(0,120,212,.3)}
+.nav-btn .icon{font-size:1.1em;width:22px;text-align:center;flex-shrink:0}
+.mobile-tabs{display:none;overflow-x:auto;background:#fff;border-bottom:1px solid #e2e8f0;padding:8px 12px;gap:6px;position:sticky;top:0;z-index:100}
+.mobile-tab{flex-shrink:0;padding:8px 16px;font-size:.8em;font-weight:600;border:none;background:#f1f5f9;color:#475569;cursor:pointer;border-radius:20px;font-family:inherit;transition:all .2s;white-space:nowrap}
+.mobile-tab:hover{background:#e2e8f0}
+.mobile-tab.active{background:#0078d4;color:#fff}
+.card{display:none;opacity:0;background:#fff;border-radius:16px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);padding:40px 44px;transition:opacity .35s ease}
+.card.active{display:block;opacity:1}
+h2{font-size:1.45em;color:#0f172a;margin:0 0 20px;padding-bottom:12px;border-bottom:2px solid #e2e8f0;font-weight:700}
+h2 .accent{color:#0078d4}
+h3{font-size:1.15em;color:#0f172a;margin:28px 0 12px;font-weight:650}
+h4{font-size:.98em;margin:20px 0 8px;color:#334155;font-weight:600}
+p{margin-bottom:12px;color:#334155}
+ul,ol{margin:8px 0 16px 22px;color:#334155}
+li{margin-bottom:5px}
+strong{color:#0f172a}
+a{color:#0078d4;text-decoration:none;font-weight:500}
+a:hover{text-decoration:underline}
+hr{border:none;border-top:1px solid #e2e8f0;margin:32px 0}
+.phase-banner{background:linear-gradient(135deg,#0078d4,#0ea5e9);color:#fff;padding:16px 24px;border-radius:12px;font-size:1.15em;font-weight:700;margin-bottom:28px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 10px rgba(0,120,212,.2)}
+.phase-banner .num{background:rgba(255,255,255,.2);padding:4px 14px;border-radius:8px;font-size:.85em}
+table{width:100%;border-collapse:separate;border-spacing:0;margin:14px 0 22px;font-size:.92em;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0}
+thead th{background:#f8fafc;color:#0f172a;padding:12px 16px;text-align:left;font-weight:650;border-bottom:2px solid #e2e8f0}
+tbody td{padding:10px 16px;border-bottom:1px solid #f1f5f9;color:#334155}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:#f8fafc}
+pre{background:#0f172a;color:#e2e8f0;padding:22px 26px;border-radius:12px;overflow-x:auto;font-family:'Cascadia Code','Fira Code','JetBrains Mono',Consolas,monospace;font-size:.85em;line-height:1.7;margin:12px 0 22px;position:relative;border:1px solid #1e293b}
+pre .lang-tag{position:absolute;top:10px;right:14px;font-size:.68em;text-transform:uppercase;color:#64748b;letter-spacing:.6px;background:#1e293b;padding:3px 10px;border-radius:6px}
+code{font-family:'Cascadia Code','Fira Code','JetBrains Mono',Consolas,monospace;font-size:.9em}
+p code,li code{background:#f1f5f9;padding:2px 7px;border-radius:6px;color:#0f172a;font-size:.88em}
+.callout{padding:18px 22px;border-radius:12px;margin:16px 0 24px;display:flex;gap:14px;align-items:flex-start;border:1px solid transparent}
+.callout .ico{font-size:1.4em;flex-shrink:0;margin-top:1px}
+.callout .body{flex:1}
+.callout .body b{display:block;margin-bottom:4px;font-size:.95em}
+.c-warn{background:var(--warn-bg);border-color:var(--warn-bd);color:#92400e}
+.c-danger{background:var(--danger-bg);border-color:var(--danger-bd);color:#991b1b}
+.c-success{background:var(--success-bg);border-color:var(--success-bd);color:#166534}
+.c-info{background:var(--info-bg);border-color:var(--info-bd);color:#1e40af}
+.ref-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:22px 26px;margin-top:36px}
+.ref-box h3{margin-top:0;font-size:1em;color:#0078d4;display:flex;align-items:center;gap:8px}
+.ref-box ul{margin-bottom:0;list-style:none;padding:0}
+.ref-box li{margin-bottom:6px;padding-left:20px;position:relative}
+.ref-box li::before{content:'→';position:absolute;left:0;color:#0078d4;font-weight:700}
+/* Checklist styles */
+.cl-section{margin:24px 0}
+.cl-section h3{background:linear-gradient(90deg,#f8fafc,#fff);padding:12px 18px;border-radius:10px;border-left:4px solid #0078d4;margin:24px 0 14px}
+.cl-item{display:flex;align-items:flex-start;gap:12px;padding:10px 16px;border-radius:8px;transition:background .15s;cursor:pointer;user-select:none}
+.cl-item:hover{background:#f8fafc}
+.cl-item input[type="checkbox"]{display:none}
+.cl-item .check-box{width:22px;height:22px;border:2px solid #cbd5e1;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:2px;font-size:14px;color:transparent}
+.cl-item input:checked ~ .check-box{background:#0078d4;border-color:#0078d4;color:#fff}
+.cl-item .cl-text{flex:1;font-size:.93em;color:#334155;transition:all .2s}
+.cl-item input:checked ~ .cl-text{text-decoration:line-through;color:#94a3b8}
+.cl-progress{background:#e2e8f0;border-radius:10px;height:8px;margin:8px 0 20px;overflow:hidden}
+.cl-progress-bar{height:100%;background:linear-gradient(90deg,#0078d4,#0ea5e9);border-radius:10px;transition:width .4s ease;width:0}
+.cl-counter{font-size:.85em;color:#64748b;margin-bottom:4px}
+/* Prereq status badges */
+.badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:.78em;font-weight:600}
+.badge-req{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.badge-rec{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+.badge-ok{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.footer{text-align:center;padding:24px 20px;color:#94a3b8;font-size:.8em;border-top:1px solid #e2e8f0;background:#fff}
+@media(max-width:860px){
+  .sidebar{display:none!important}
+  .mobile-tabs{display:flex!important}
+  .app{padding:0}
+  .main{padding:16px}
+  .card{padding:24px 20px;border-radius:12px}
+  pre{padding:16px 18px;font-size:.82em}
+}
+@media print{
+  .sidebar,.mobile-tabs,.header,.footer{display:none!important}
+  .card{display:none!important}
+  .card.active{display:block!important;opacity:1!important;box-shadow:none;border:1px solid #ccc}
+  body{background:#fff}
+  .app{max-width:100%}
+  pre{white-space:pre-wrap;border:1px solid #ccc}
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card.active{animation:fadeIn .35s ease forwards}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>SharePoint Version History Limits</h1>
+  <div class="sub">Deployment Plan — Option 1: Site-by-Site Application to Existing Libraries</div>
+  <div class="meta">Status: Draft · May 2026</div>
+</div>
+
+<div class="mobile-tabs" id="mobileTabs">
+  <button class="mobile-tab active" data-tab="tabOverview">Overview</button>
+  <button class="mobile-tab" data-tab="tabPrereq">Prerequisites</button>
+  <button class="mobile-tab" data-tab="tabPhase1">Phase 1</button>
+  <button class="mobile-tab" data-tab="tabPhase2">Phase 2</button>
+  <button class="mobile-tab" data-tab="tabPhase3">Phase 3</button>
+  <button class="mobile-tab" data-tab="tabPhase4">Phase 4</button>
+  <button class="mobile-tab" data-tab="tabComm">Comms</button>
+  <button class="mobile-tab" data-tab="tabVal">Validation</button>
+  <button class="mobile-tab" data-tab="tabRoll">Rollback</button>
+  <button class="mobile-tab" data-tab="tabRisk">Risks</button>
+  <button class="mobile-tab" data-tab="tabGo">Go/No-Go</button>
+  <button class="mobile-tab" data-tab="tabChecklist">Checklist</button>
+</div>
+
+<div class="app">
+
+<aside class="sidebar">
+  <div class="nav-group">
+    <div class="nav-label">Plan</div>
+    <button class="nav-btn active" data-tab="tabOverview"><span class="icon">📋</span>Overview</button>
+    <button class="nav-btn" data-tab="tabPrereq"><span class="icon">🔧</span>Prerequisites</button>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Phases</div>
+    <button class="nav-btn" data-tab="tabPhase1"><span class="icon">🧪</span>Phase 1 — POC</button>
+    <button class="nav-btn" data-tab="tabPhase2"><span class="icon">🔬</span>Phase 2 — Test</button>
+    <button class="nav-btn" data-tab="tabPhase3"><span class="icon">🚀</span>Phase 3 — Pilot</button>
+    <button class="nav-btn" data-tab="tabPhase4"><span class="icon">🌐</span>Phase 4 — Full Deploy</button>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Operations</div>
+    <button class="nav-btn" data-tab="tabComm"><span class="icon">📨</span>Communication</button>
+    <button class="nav-btn" data-tab="tabVal"><span class="icon">✅</span>Validation</button>
+    <button class="nav-btn" data-tab="tabRoll"><span class="icon">↩️</span>Rollback</button>
+    <button class="nav-btn" data-tab="tabRisk"><span class="icon">⚠️</span>Risks</button>
+    <button class="nav-btn" data-tab="tabGo"><span class="icon">🚦</span>Go / No-Go</button>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Tools</div>
+    <button class="nav-btn" data-tab="tabChecklist"><span class="icon">☑️</span>Checklist</button>
+  </div>
+</aside>
+
+<main class="main">
+
+<!-- ══════════════════════════════════════ -->
+<!--            TAB: OVERVIEW              -->
+<!-- ══════════════════════════════════════ -->
+<div class="card active" id="tabOverview">
+<h2><span class="accent">1.</span> Objective</h2>
+<p>Apply, in a controlled and progressive manner, the organization's versioning standard to <strong>existing document libraries</strong> in SharePoint Online, closing the gap between new libraries (which already inherit the tenant policy) and existing libraries (which still carry their original settings).</p>
+<p>This is a <strong>configuration-only change</strong> — no file versions will be deleted. The policy defines limits going forward; any future version trimming would be a separate, independently approved initiative.</p>
+
+<h2><span class="accent">2.</span> Current State vs. Target State</h2>
+<table>
+  <thead><tr><th></th><th>Current State</th><th>Target State</th></tr></thead>
+  <tbody>
+    <tr><td><strong>New document libraries</strong></td><td>Inherit tenant policy: 50 major versions, no time expiration</td><td>No change — already aligned</td></tr>
+    <tr><td><strong>Existing document libraries</strong></td><td>Retain original settings (typically 500 major versions or SharePoint default)</td><td>Standardized to 50 major versions, no time expiration (<code>ExpireVersionsAfterDays = 0</code>)</td></tr>
+    <tr><td><strong>OneDrive libraries</strong></td><td>Follow tenant or account-level policy</td><td>Out of scope — separate initiative</td></tr>
+  </tbody>
+</table>
+
+<div class="callout c-info"><span class="ico">💡</span><div class="body"><b>What does <code>ExpireVersionsAfterDays = 0</code> mean?</b><br>A value of <code>0</code> means <strong>"never expire"</strong> — versions are kept indefinitely and are only removed when they exceed the major version count limit. It does <em>not</em> mean "expire immediately".</div></div>
+
+<h2><span class="accent">3.</span> How Version History Limits Work</h2>
+<p>SharePoint Online applies version history limits through an <strong>inheritance model</strong> with three levels:</p>
+
+<table>
+  <thead><tr><th>Level</th><th>Applies To</th><th>Behavior</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Organization (Tenant)</strong></td><td>All new libraries on sites without site-level overrides</td><td>Set via SharePoint Admin Center or <code>Set-SPOTenant</code>. Default baseline for the entire tenant.</td></tr>
+    <tr><td><strong>Site</strong></td><td>All new libraries on the site; optionally existing libraries</td><td>Breaks inheritance from org defaults. Set via <code>Set-SPOSite</code>. Can target new, existing, or both.</td></tr>
+    <tr><td><strong>Library</strong></td><td>Individual library only</td><td>Breaks inheritance from site/org. Set via <code>Set-SPOListVersionPolicy</code> or <code>Set-PnPList</code>.</td></tr>
+  </tbody>
+</table>
+
+<h4>Key Technical Behaviors</h4>
+<ul>
+  <li>When using <code>-ApplyToExistingDocumentLibraries</code>, settings on existing libraries are updated <strong>asynchronously</strong> via a background job that can take <strong>up to 24 hours</strong> to complete.</li>
+  <li>Setting new limits does <strong>not trim existing versions</strong>. Versions exceeding the new limit are only removed as new versions are created (rolling window) or through an explicit trim job.</li>
+  <li>Cancelling an in-progress job <strong>stops processing</strong> of remaining libraries but does <strong>not revert</strong> changes already applied.</li>
+  <li>Items under <strong>retention policies</strong> or <strong>eDiscovery holds</strong> are exempt — versioning limits are ignored while the hold is active.</li>
+  <li>Site-level settings can be managed via PowerShell only — there is no UI for this in the SharePoint Admin Center.</li>
+</ul>
+
+<h2><span class="accent">4.</span> Scope</h2>
+<h3>In Scope</h3>
+<ul>
+  <li>Existing SharePoint Online sites and document libraries with versioning enabled</li>
+  <li>Applies to <strong>SharePoint Online sites only</strong> — OneDrive accounts are excluded from this deployment plan and should be handled as a separate initiative if needed</li>
+  <li>Applying the versioning policy to existing libraries via <code>-ApplyToExistingDocumentLibraries</code></li>
+  <li>Library-level exceptions for libraries with specific business requirements</li>
+  <li>Validating behavior, operational impact, and governance adherence</li>
+</ul>
+<h3>Out of Scope</h3>
+<ul>
+  <li>Deletion of existing versions (trimming) — requires separate approval and What-if analysis</li>
+  <li>OneDrive personal libraries and account-level version settings</li>
+  <li>Changes to retention policies, eDiscovery, sensitivity labels, or compliance settings</li>
+  <li>Changes to permissions, site structure, or information architecture</li>
+  <li>File-type-specific version limits (<code>-FileTypesForVersionExpiration</code>)</li>
+</ul>
+
+<div class="callout c-danger"><span class="ico">🚨</span><div class="body"><b>Critical Distinction: Policy Change vs. Trimming</b><br>
+<strong>Policy change</strong> (this plan): Sets the version limit going forward. Existing versions beyond the limit are only removed as new versions are created. This is <strong>reversible</strong> — you can change the limit again at any time.<br><br>
+<strong>Trimming</strong> (NOT this plan): Actively deletes stored versions that exceed the limit. Versions removed by trimming are <strong>permanently deleted</strong> and <strong>bypass the recycle bin</strong>. This is <strong>irreversible</strong>.</div></div>
+
+<h2><span class="accent">5.</span> Deployment Strategy</h2>
+<p>The deployment follows four progressive phases with increasing scope and risk:</p>
+<table>
+  <thead><tr><th>#</th><th>Phase</th><th>Scope</th><th>Goal</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>POC</td><td>1 low-risk site</td><td>Technically validate the procedure and confirm expected behavior</td></tr>
+    <tr><td>2</td><td>POC2 / Test</td><td>3–10 diverse sites</td><td>Validate across different library profiles, identify exceptions</td></tr>
+    <tr><td>3</td><td>Production Pilot</td><td>5–20 production sites</td><td>Controlled production validation with real users and monitoring</td></tr>
+    <tr><td>4</td><td>Full Deployment</td><td>All eligible sites (waves)</td><td>Wave-based rollout with logging, exception handling, and closure reporting</td></tr>
+  </tbody>
+</table>
+<p>Each phase requires a formal <strong>Go / No-Go</strong> decision before advancing (see <strong>Go / No-Go</strong> tab). The deployment can be paused or rolled back at any point (see <strong>Rollback</strong> tab).</p>
+
+<h2><span class="accent">6.</span> Key Roles &amp; Responsibilities</h2>
+<table>
+  <thead><tr><th>Role</th><th>Responsibility</th></tr></thead>
+  <tbody>
+    <tr><td><strong>SharePoint Administrator</strong></td><td>Execute PowerShell commands, monitor background jobs, handle exceptions, perform rollbacks</td></tr>
+    <tr><td><strong>IT Manager / CTO</strong></td><td>Approve versioning policy, authorize phase transitions (Go / No-Go)</td></tr>
+    <tr><td><strong>Compliance Officer</strong></td><td>Identify sites under retention/hold, approve or exclude from scope</td></tr>
+    <tr><td><strong>Change Management</strong></td><td>Review communication plan, coordinate stakeholder notifications</td></tr>
+    <tr><td><strong>Site Owners</strong></td><td>Validate functionality post-change, report issues, approve exceptions</td></tr>
+  </tbody>
+</table>
+
+<h2><span class="accent">7.</span> Assumptions</h2>
+<ul>
+  <li>The tenant-level policy is already configured: <code>MajorVersionLimit = 50</code>, <code>ExpireVersionsAfterDays = 0</code>, <code>EnableAutoExpirationVersionTrim = $false</code></li>
+  <li>The SharePoint Online Management Shell (v16.0.24009.0+) is installed and the executing account has SharePoint Administrator privileges</li>
+  <li>A site inventory with owner, criticality, and storage data is available or will be created before Phase 1</li>
+  <li>Sites under active retention policies, legal holds, or eDiscovery will be identified and excluded prior to execution</li>
+  <li>No trimming will be performed during this deployment — trimming requires a separate approval process</li>
+  <li>Site owners are available for post-change validation within 48 hours of execution</li>
+</ul>
+
+<h2><span class="accent">8.</span> Quick Reference — PowerShell Commands</h2>
+
+<h4>Check Current Tenant-Level Settings</h4>
+<pre><span class="lang-tag">PowerShell</span>
+Connect-SPOService -Url "https://&lt;tenant&gt;-admin.sharepoint.com"
+
+Get-SPOTenant | Select-Object `
+    EnableAutoExpirationVersionTrim, `
+    MajorVersionLimit, `
+    ExpireVersionsAfterDays
+</pre>
+
+<h4>Check a Specific Site's Policy</h4>
+<pre><span class="lang-tag">PowerShell</span>
+Get-SPOSite -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/&lt;site-name&gt;" |
+    Select-Object Url,
+        EnableAutoExpirationVersionTrim,
+        MajorVersionLimit,
+        ExpireVersionsAfterDays
+</pre>
+
+<h4>Apply Policy to Existing Libraries (Site-Level)</h4>
+<pre><span class="lang-tag">PowerShell</span>
+Set-SPOSite -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/&lt;site-name&gt;" `
+    -EnableAutoExpirationVersionTrim $false `
+    -MajorVersionLimit 50 `
+    -ExpireVersionsAfterDays 0 `
+    -ApplyToExistingDocumentLibraries
+</pre>
+
+<h4>Track Background Job Progress</h4>
+<pre><span class="lang-tag">PowerShell</span>
+Get-SPOSiteVersionPolicyJobProgress `
+    -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/&lt;site-name&gt;"
+# Possible statuses: NoRequestFound | New | InProgress | CompleteSuccess | CompleteWithFailure
+</pre>
+
+<h4>Cancel an In-Progress Job</h4>
+<pre><span class="lang-tag">PowerShell</span>
+Remove-SPOSiteVersionPolicyJob `
+    -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/&lt;site-name&gt;"
+</pre>
+
+<div class="ref-box">
+<h3>🔗 Reference Links</h3>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/document-library-version-history-limits" target="_blank">Overview of version history limits for document libraries and OneDrive</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/site-version-limits" target="_blank">Change version history limits for a Site — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/tutorial-manage-version-limits" target="_blank">Tutorial: Manage version history limits for a site, library, or OneDrive account</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/plan-version-storage" target="_blank">Plan version storage — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-sposite" target="_blank">Set-SPOSite cmdlet reference — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-spolistversionpolicy" target="_blank">Set-SPOListVersionPolicy cmdlet reference — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/sharepoint-online/get-spositeversionpolicyjobprogress" target="_blank">Get-SPOSiteVersionPolicyJobProgress — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/sharepoint-online/remove-spositeversionpolicyjob" target="_blank">Remove-SPOSiteVersionPolicyJob — Microsoft Learn</a></li>
+  <li><a href="https://pnp.github.io/powershell/cmdlets/Set-PnPSiteVersionPolicy.html" target="_blank">Set-PnPSiteVersionPolicy — PnP PowerShell</a></li>
+  <li><a href="https://pnp.github.io/powershell/cmdlets/Set-PnPList.html" target="_blank">Set-PnPList — PnP PowerShell</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/trim-versions" target="_blank">Trim existing versions from site, library, or OneDrive — Microsoft Learn</a></li>
+</ul>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!--          TAB: PREREQUISITES            -->
+<!-- ══════════════════════════════════════ -->
+<div class="card" id="tabPrereq">
+<h2>🔧 Prerequisites</h2>
+<p>Before starting any deployment phase, ensure the following prerequisites are met. Each item is categorized as <span class="badge badge-req">Required</span> or <span class="badge badge-rec">Recommended</span>.</p>
+
+<h3>1. Required Permissions</h3>
+<table>
+  <thead><tr><th>Permission</th><th>Scope</th><th>Status</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td><strong>SharePoint Administrator</strong></td><td>Tenant</td><td><span class="badge badge-req">Required</span></td><td>Needed for <code>Set-SPOSite</code>, <code>Set-SPOListVersionPolicy</code>, and <code>Get-SPOSite</code></td></tr>
+    <tr><td><strong>Global Administrator</strong></td><td>Tenant</td><td><span class="badge badge-rec">Recommended</span></td><td>Only needed if SharePoint Admin role is not assigned; avoid using for daily operations</td></tr>
+    <tr><td><strong>Site Collection Administrator</strong></td><td>Site</td><td><span class="badge badge-rec">Recommended</span></td><td>Needed for PnP library-level changes on specific sites</td></tr>
+    <tr><td><strong>Compliance Administrator</strong></td><td>Tenant</td><td><span class="badge badge-rec">Recommended</span></td><td>Needed to query retention policies, eDiscovery holds, and sensitivity labels via Purview</td></tr>
+  </tbody>
+</table>
+
+<h3>2. Required PowerShell Modules</h3>
+<table>
+  <thead><tr><th>Module</th><th>Minimum Version</th><th>Status</th><th>Install / Update</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Microsoft.Online.SharePoint.PowerShell</strong></td><td>16.0.24009.0+</td><td><span class="badge badge-req">Required</span></td><td><code>Install-Module Microsoft.Online.SharePoint.PowerShell -Force</code></td></tr>
+    <tr><td><strong>PnP.PowerShell</strong></td><td>2.4.0+</td><td><span class="badge badge-rec">Recommended</span></td><td><code>Install-Module PnP.PowerShell -Force</code></td></tr>
+    <tr><td><strong>PowerShell</strong></td><td>7.2+</td><td><span class="badge badge-rec">Recommended</span></td><td>PowerShell 7.x for best compatibility</td></tr>
+  </tbody>
+</table>
+
+<div class="callout c-warn"><span class="ico">⚠️</span><div class="body"><b>PowerShell 7 Compatibility</b><br>The <code>Microsoft.Online.SharePoint.PowerShell</code> module runs in compatibility mode under PowerShell 7.x (it uses an implicit Windows PowerShell remoting session). If you experience issues, run the commands in <strong>Windows PowerShell 5.1</strong> instead. PnP.PowerShell runs natively on both.</div></div>
+
+<h4>Verify Installed Modules</h4>
+<pre><span class="lang-tag">PowerShell — Check Modules</span>
+# Check SPO Management Shell version
+Get-Module -Name Microsoft.Online.SharePoint.PowerShell -ListAvailable |
+    Select-Object Name, Version
+
+# Check PnP PowerShell version
+Get-Module -Name PnP.PowerShell -ListAvailable |
+    Select-Object Name, Version
+
+# Check PowerShell version
+$PSVersionTable.PSVersion
+
+# Update modules if needed
+Update-Module Microsoft.Online.SharePoint.PowerShell -Force
+Update-Module PnP.PowerShell -Force
+</pre>
+
+<h3>3. Tenant Configuration Checks</h3>
+<p>Verify the current tenant-level versioning defaults before proceeding:</p>
+<pre><span class="lang-tag">PowerShell — Verify Tenant Settings</span>
+Connect-SPOService -Url "https://&lt;tenant&gt;-admin.sharepoint.com"
+
+# Verify tenant-level version history settings
+$tenant = Get-SPOTenant
+Write-Host "AutoExpiration:    $($tenant.EnableAutoExpirationVersionTrim)"
+Write-Host "MajorVersionLimit: $($tenant.MajorVersionLimit)"
+Write-Host "ExpireAfterDays:   $($tenant.ExpireVersionsAfterDays)"
+
+# Expected output for your configuration:
+# AutoExpiration:    False
+# MajorVersionLimit: 50
+# ExpireAfterDays:   0
+</pre>
+
+<div class="callout c-info"><span class="ico">💡</span><div class="body"><b>Confirm Tenant Config</b><br>The tenant should already be configured with <code>EnableAutoExpirationVersionTrim = $false</code>, <code>MajorVersionLimit = 50</code>, and <code>ExpireVersionsAfterDays = 0</code> for new libraries. This deployment extends that same policy to <strong>existing</strong> libraries.</div></div>
+
+<h3>4. Stakeholder Approvals</h3>
+<table>
+  <thead><tr><th>Approval</th><th>Responsible</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr><td>Versioning policy approved by IT governance</td><td>IT Manager / CTO</td><td><span class="badge badge-req">Required</span></td></tr>
+    <tr><td>Communication plan reviewed</td><td>Change Management</td><td><span class="badge badge-req">Required</span></td></tr>
+    <tr><td>Compliance / retention team consulted</td><td>Compliance Officer</td><td><span class="badge badge-req">Required</span></td></tr>
+    <tr><td>Site owners notified (per phase)</td><td>SharePoint Admin</td><td><span class="badge badge-req">Required</span></td></tr>
+    <tr><td>Rollback plan reviewed</td><td>IT Operations</td><td><span class="badge badge-rec">Recommended</span></td></tr>
+  </tbody>
+</table>
+
+<h3>5. Documentation &amp; Readiness</h3>
+<ul>
+  <li><strong>Runbook:</strong> Step-by-step execution guide ready (this document)</li>
+  <li><strong>Site inventory:</strong> List of all target sites with owner, criticality, and storage usage</li>
+  <li><strong>Exception list:</strong> Sites or libraries excluded from standard policy (compliance, legal, etc.)</li>
+  <li><strong>Communication templates:</strong> Pre-change and post-change messages prepared (see Communication tab)</li>
+  <li><strong>Validation checklist:</strong> Technical and functional validation items defined (see Validation tab)</li>
+</ul>
+
+<h3>6. Compliance &amp; Retention Check</h3>
+<div class="callout c-warn"><span class="ico">📝</span><div class="body"><b>Before starting</b><br>Identify any sites or libraries under:<br>
+— <strong>Retention policies</strong> or retention labels<br>
+— <strong>eDiscovery hold</strong> or legal hold<br>
+— <strong>Sensitivity labels</strong> with version-related settings<br><br>
+These sites should be <strong>excluded</strong> from the deployment scope or handled with explicit compliance team approval.</div></div>
+
+<pre><span class="lang-tag">PowerShell — Check for Sites with Holds</span>
+# List sites with compliance-related properties
+Connect-SPOService -Url "https://&lt;tenant&gt;-admin.sharepoint.com"
+
+Get-SPOSite -Limit All |
+    Select-Object Url, LockState, SensitivityLabel,
+        ComplianceAttribute |
+    Where-Object {
+        $_.LockState -ne "Unlock" -or
+        (-not [string]::IsNullOrEmpty($_.SensitivityLabel)) -or
+        (-not [string]::IsNullOrEmpty($_.ComplianceAttribute))
+    } |
+    Export-Csv ".\sites-with-compliance-flags.csv" -NoTypeInformation
+
+Write-Host "Review the exported CSV for sites that may need exclusion."
+</pre>
+
+<h3>7. Backup &amp; Recovery Readiness</h3>
+<ul>
+  <li><strong>Understand:</strong> Changing versioning limits is a <em>configuration change</em> (reversible)</li>
+  <li><strong>Understand:</strong> Trimming is <em>destructive</em> (irreversible — versions bypass recycle bin)</li>
+  <li><strong>No backup needed</strong> for the configuration change itself — the policy can be re-adjusted</li>
+  <li><strong>If trimming is ever planned:</strong> Run a What-if report and export version storage data before execution</li>
+  <li><strong>Recommended:</strong> Document current versioning settings per site before making changes</li>
+</ul>
+
+<pre><span class="lang-tag">PowerShell — Export Current Settings (Baseline)</span>
+# Export current versioning settings for all sites as a baseline
+Connect-SPOService -Url "https://&lt;tenant&gt;-admin.sharepoint.com"
+
+$baseline = Get-SPOSite -Limit All |
+    Select-Object Url, Title, Owner, StorageUsageCurrent,
+        EnableAutoExpirationVersionTrim,
+        MajorVersionLimit,
+        ExpireVersionsAfterDays
+
+$baseline | Export-Csv ".\baseline-version-settings.csv" -NoTypeInformation
+Write-Host "Baseline exported: $($baseline.Count) sites"
+</pre>
+
+<h3>8. Test Connectivity</h3>
+<pre><span class="lang-tag">PowerShell — Verify Connection</span>
+# Test SPO connection
+try {
+    Connect-SPOService -Url "https://&lt;tenant&gt;-admin.sharepoint.com"
+    $test = Get-SPOSite -Limit 1
+    Write-Host "✅ SPO connection successful: $($test.Url)" -ForegroundColor Green
+}
+catch {
+    Write-Host "❌ SPO connection failed: $($_.Exception.Message)" -ForegroundColor Red
+}
+
+# Test PnP connection
+try {
+    Connect-PnPOnline -Url "https://&lt;tenant&gt;.sharepoint.com" -Interactive
+    $ctx = Get-PnPContext
+    Write-Host "✅ PnP connection successful" -ForegroundColor Green
+    Disconnect-PnPOnline
+}
+catch {
+    Write-Host "❌ PnP connection failed: $($_.Exception.Message)" -ForegroundColor Red
+}
+</pre>
+
+<div class="ref-box">
+<h3>🔗 Reference Links</h3>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/sharepoint/sharepoint-online/connect-sharepoint-online" target="_blank">Connect to SharePoint Online PowerShell — Microsoft Learn</a></li>
+  <li><a href="https://pnp.github.io/powershell/articles/installation.html" target="_blank">PnP PowerShell Installation Guide</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-sposite" target="_blank">Set-SPOSite — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/site-version-limits" target="_blank">Change version history limits for a Site — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/document-library-version-history-limits" target="_blank">Version history limits overview — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/trim-versions" target="_blank">Trim existing versions — Microsoft Learn</a></li>
+</ul>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!--          TAB: PHASE 1 — POC           -->
+<!-- ══════════════════════════════════════ -->
+<div class="card" id="tabPhase1">
+<div class="phase-banner"><span class="num">01</span> Phase 1 — Proof of Concept (POC)</div>
+
+<h3>Objective</h3>
+<p>Technically validate the application of the versioning policy to existing libraries on a single site or very small set of sites.</p>
+
+<h3>Suggested Scope</h3>
+<ul>
+  <li>1 low-risk site with 1–3 document libraries</li>
+  <li>Low number of active users, no high operational criticality</li>
+</ul>
+
+<h3>Activities</h3>
+
+<h4>1. Select a POC site</h4>
+<p>Criteria: site with existing libraries, versioning enabled, low risk, owner available for validation.</p>
+
+<h4>2. Record current state</h4>
+<pre><span class="lang-tag">PowerShell</span>
+$siteUrl = "https://&lt;tenant&gt;.sharepoint.com/sites/site-poc"
+
+Connect-SPOService -Url "https://&lt;tenant&gt;-admin.sharepoint.com"
+
+Get-SPOSite -Identity $siteUrl |
+    Select-Object Url,
+        EnableAutoExpirationVersionTrim,
+        MajorVersionLimit,
+        ExpireVersionsAfterDays |
+    Format-List
+
+# PnP — list all libraries and their version settings
+Connect-PnPOnline -Url $siteUrl -Interactive
+
+Get-PnPList | Where-Object { $_.BaseTemplate -eq 101 } |
+    Select-Object Title, EnableVersioning, MajorVersionLimit |
+    Format-Table -AutoSize
+</pre>
+
+<h4>3. Apply policy to existing libraries</h4>
+<pre><span class="lang-tag">PowerShell — SPO Management Shell</span>
+Set-SPOSite `
+    -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/site-poc" `
+    -EnableAutoExpirationVersionTrim $false `
+    -MajorVersionLimit 50 `
+    -ExpireVersionsAfterDays 0 `
+    -ApplyToExistingDocumentLibraries
+</pre>
+
+<pre><span class="lang-tag">PowerShell — PnP Alternative</span>
+Connect-PnPOnline -Url "https://&lt;tenant&gt;.sharepoint.com/sites/site-poc" -Interactive
+
+Set-PnPSiteVersionPolicy `
+    -EnableAutoExpirationVersionTrim $false `
+    -MajorVersions 50 `
+    -ExpireVersionsAfterDays 0 `
+    -ApplyToExistingDocumentLibraries
+</pre>
+
+<div class="callout c-warn"><span class="ico">📝</span><div class="body"><b>Note</b><br>Validate the command in your environment first. Parameter availability depends on the version of the SPO Management Shell / PnP module installed.</div></div>
+
+<h4>4. Track progress of background update</h4>
+<pre><span class="lang-tag">PowerShell</span>
+# Check job status — repeat until CompleteSuccess or CompleteWithFailure
+Get-SPOSiteVersionPolicyJobProgress `
+    -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/site-poc"
+
+# Expected statuses:
+#   NoRequestFound       — No pending job (check if command was run)
+#   New                  — Job queued, not yet started
+#   InProgress           — Job running (can take up to 24 hours)
+#   CompleteSuccess      — All libraries updated successfully
+#   CompleteWithFailure  — Some libraries failed (investigate individually)
+</pre>
+
+<div class="callout c-info"><span class="ico">💡</span><div class="body"><b>Wait for completion</b><br>Do not proceed to step 5 until the job reports <code>CompleteSuccess</code> or <code>CompleteWithFailure</code>. The background job can take up to 24 hours. If it reports <code>CompleteWithFailure</code>, check which libraries failed and reprocess them individually.</div></div>
+
+<h4>5. Validate application</h4>
+
+<p><strong>Technical validation (PowerShell):</strong></p>
+<pre><span class="lang-tag">PowerShell — Verify settings were applied</span>
+# Site-level check
+Get-SPOSite -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/site-poc" |
+    Select-Object Url, EnableAutoExpirationVersionTrim,
+        MajorVersionLimit, ExpireVersionsAfterDays | Format-List
+
+# Library-level check (PnP)
+Connect-PnPOnline -Url "https://&lt;tenant&gt;.sharepoint.com/sites/site-poc" -Interactive
+
+Get-PnPList | Where-Object { $_.BaseTemplate -eq 101 } |
+    Select-Object Title, EnableVersioning, MajorVersionLimit |
+    Format-Table -AutoSize
+</pre>
+
+<p><strong>Functional validation (manual):</strong></p>
+<ul>
+  <li>Versioning configuration updated on existing libraries</li>
+  <li>Upload a new file — new version created</li>
+  <li>Edit an existing file — new version created</li>
+  <li>Access version history — all recent versions visible</li>
+  <li>Restore a recent version — works</li>
+  <li>No impact on permissions or collaboration</li>
+</ul>
+
+<h4>6. Record evidence</h4>
+<p>Collect before/after screenshots, execution logs, list of changed libraries, and functional validation results.</p>
+
+<h3>Success Criteria</h3>
+<ul>
+  <li>Policy applied to existing libraries</li>
+  <li>No relevant functional impact</li>
+  <li>Behavior aligned with expectations</li>
+  <li>Procedure can be repeated safely</li>
+</ul>
+
+<h3>Stop Criteria</h3>
+<ul>
+  <li>Recurring errors when applying the policy</li>
+  <li>Impact on access, editing, or collaboration</li>
+  <li>Unexpected behavior on critical libraries</li>
+  <li>Divergence between applied and expected configuration</li>
+</ul>
+
+<h3>Deliverables</h3>
+<ul>
+  <li>POC Report with technical evidence</li>
+  <li>Adjustments needed to the runbook</li>
+  <li>Decision: advance to POC2 — Yes / No</li>
+</ul>
+
+<div class="ref-box">
+<h3>🔗 Reference Links</h3>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/site-version-limits" target="_blank">Change version history limits for a Site — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/tutorial-manage-version-limits" target="_blank">Tutorial: Manage version history limits — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-sposite" target="_blank">Set-SPOSite — Microsoft Learn</a></li>
+  <li><a href="https://pnp.github.io/powershell/cmdlets/Set-PnPSiteVersionPolicy.html" target="_blank">Set-PnPSiteVersionPolicy — PnP PowerShell</a></li>
+  <li><a href="https://pnp.github.io/powershell/cmdlets/Set-PnPList.html" target="_blank">Set-PnPList — PnP PowerShell</a></li>
+</ul>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!--         TAB: PHASE 2 — TEST           -->
+<!-- ══════════════════════════════════════ -->
+<div class="card" id="tabPhase2">
+<div class="phase-banner"><span class="num">02</span> Phase 2 — POC2 / Test Environment</div>
+
+<h3>Objective</h3>
+<p>Validate the process at a larger and more representative scope, covering different types of sites and libraries.</p>
+
+<h3>Suggested Scope</h3>
+<ul>
+  <li>3–10 test or low-criticality sites</li>
+  <li>Libraries with different profiles: Office docs, PDFs, large files, co-authoring, high-churn</li>
+</ul>
+
+<h3>Activities</h3>
+
+<h4>1. Classify test sites</h4>
+<table>
+  <thead><tr><th>Profile</th><th>Description</th><th>Strategy</th></tr></thead>
+  <tbody>
+    <tr><td>Low usage</td><td>Few files and users</td><td>Direct application</td></tr>
+    <tr><td>Medium usage</td><td>Regular collaboration</td><td>Apply with post-change validation</td></tr>
+    <tr><td>High usage</td><td>Many files or intensive co-authoring</td><td>Controlled and monitored application</td></tr>
+    <tr><td>Special libraries</td><td>Critical content or exceptions</td><td>Evaluate library-specific policy</td></tr>
+  </tbody>
+</table>
+
+<h4>2. Apply policy to multiple sites</h4>
+<pre><span class="lang-tag">PowerShell — SPO Management Shell</span>
+Connect-SPOService -Url "https://&lt;tenant&gt;-admin.sharepoint.com"
+
+$sites = @(
+    "https://&lt;tenant&gt;.sharepoint.com/sites/test01",
+    "https://&lt;tenant&gt;.sharepoint.com/sites/test02",
+    "https://&lt;tenant&gt;.sharepoint.com/sites/test03"
+)
+
+foreach ($site in $sites) {
+    try {
+        Set-SPOSite `
+            -Identity $site `
+            -EnableAutoExpirationVersionTrim $false `
+            -MajorVersionLimit 50 `
+            -ExpireVersionsAfterDays 0 `
+            -ApplyToExistingDocumentLibraries
+
+        Write-Host "SUCCESS: $site" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "FAILED : $site - $($_.Exception.Message)" -ForegroundColor Red
+    }
+}
+</pre>
+
+<pre><span class="lang-tag">PowerShell — PnP Alternative</span>
+foreach ($siteUrl in $sites) {
+    try {
+        Connect-PnPOnline -Url $siteUrl -Interactive
+
+        Set-PnPSiteVersionPolicy `
+            -EnableAutoExpirationVersionTrim $false `
+            -MajorVersions 50 `
+            -ExpireVersionsAfterDays 0 `
+            -ApplyToExistingDocumentLibraries
+
+        Write-Host "SUCCESS: $siteUrl" -ForegroundColor Green
+        Disconnect-PnPOnline
+    }
+    catch {
+        Write-Host "FAILED : $siteUrl - $($_.Exception.Message)" -ForegroundColor Red
+    }
+}
+</pre>
+
+<h4>2b. Track background jobs for all sites</h4>
+<pre><span class="lang-tag">PowerShell — Monitor progress</span>
+foreach ($site in $sites) {
+    Write-Host "`n--- $site ---" -ForegroundColor Cyan
+    Get-SPOSiteVersionPolicyJobProgress -Identity $site
+}
+# Repeat until all sites report CompleteSuccess or CompleteWithFailure
+</pre>
+
+<h4>3. Validate library-level exceptions</h4>
+<p>If a site has libraries with different needs, apply policy at the <strong>library level</strong>:</p>
+<pre><span class="lang-tag">PowerShell — SPO (library-level)</span>
+Set-SPOListVersionPolicy `
+    -Site "https://&lt;tenant&gt;.sharepoint.com/sites/test01" `
+    -List "Design Assets" `
+    -EnableAutoExpirationVersionTrim $false `
+    -MajorVersionLimit 20 `
+    -ExpireVersionsAfterDays 0
+</pre>
+<pre><span class="lang-tag">PowerShell — PnP (library-level)</span>
+Connect-PnPOnline -Url "https://&lt;tenant&gt;.sharepoint.com/sites/test01" -Interactive
+
+Set-PnPList -Identity "Design Assets" `
+    -EnableVersioning $true `
+    -MajorVersions 20 `
+    -EnableAutoExpirationVersionTrim $false `
+    -ExpireVersionsAfterDays 0
+</pre>
+
+<h4>4. Run What-if analysis (no actual trimming)</h4>
+<div class="callout c-danger"><span class="ico">🚨</span><div class="body"><b>Do NOT execute trimming at this stage</b><br>Only run a What-if / impact analysis report if storage recovery is an objective. Versions deleted by trimming are <strong>permanently removed</strong> and cannot be recovered from the recycle bin.</div></div>
+
+<pre><span class="lang-tag">PowerShell — Generate Version Storage Report</span>
+New-SPOSiteFileVersionExpirationReportJob `
+    -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/test01" `
+    -ReportUrl "/sites/test01/Shared Documents/VersionReport.csv"
+
+Get-SPOSiteFileVersionExpirationReportJobProgress `
+    -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/test01" `
+    -ReportUrl "/sites/test01/Shared Documents/VersionReport.csv"
+</pre>
+
+<h3>Stop Criteria</h3>
+<ul>
+  <li>Errors on more than 30% of target sites</li>
+  <li>Background jobs reporting <code>CompleteWithFailure</code> on multiple sites without clear cause</li>
+  <li>Functional issues reported (access, editing, co-authoring, version history)</li>
+  <li>Library-level exceptions significantly outnumber standard sites</li>
+  <li>Compliance concerns raised by retention or eDiscovery team</li>
+</ul>
+
+<h3>Success Criteria</h3>
+<ul>
+  <li>Policy successfully applied to multiple sites</li>
+  <li>Repeatable and documented process</li>
+  <li>Exceptions identified and documented</li>
+  <li>No critical impact on collaboration or recent version recovery</li>
+  <li>Runbook validated for production pilot</li>
+</ul>
+
+<h3>Deliverables</h3>
+<ul>
+  <li>Revised runbook &amp; exception list</li>
+  <li>Results report per site</li>
+  <li>Recommendation to proceed to production pilot</li>
+</ul>
+
+<div class="ref-box">
+<h3>🔗 Reference Links</h3>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/site-version-limits" target="_blank">Change version history limits for a Site — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-spolistversionpolicy" target="_blank">Set-SPOListVersionPolicy — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/trim-versions" target="_blank">Trim existing versions — What-if analysis — Microsoft Learn</a></li>
+  <li><a href="https://pnp.github.io/powershell/cmdlets/Set-PnPSiteVersionPolicy.html" target="_blank">Set-PnPSiteVersionPolicy — PnP PowerShell</a></li>
+  <li><a href="https://pnp.github.io/powershell/cmdlets/Set-PnPList.html" target="_blank">Set-PnPList — PnP PowerShell</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/document-library-version-history-limits" target="_blank">Version history limits overview — Microsoft Learn</a></li>
+</ul>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!--        TAB: PHASE 3 — PILOT           -->
+<!-- ══════════════════════════════════════ -->
+<div class="card" id="tabPhase3">
+<div class="phase-banner"><span class="num">03</span> Phase 3 — Small Production Test (Pilot)</div>
+
+<h3>Objective</h3>
+<p>Execute the deployment in production with a reduced, controlled, and monitored scope.</p>
+
+<h3>Suggested Scope</h3>
+<ul>
+  <li>5–20 production sites (low or medium risk)</li>
+  <li>At least 1 site with representative real usage</li>
+  <li>Exclude highly critical, legal, or retention-hold sites unless explicitly approved</li>
+</ul>
+
+<h3>Activities</h3>
+
+<h4>1. Pre-change communication</h4>
+<p>Send communication to site owners (see <strong>Communication</strong> tab for templates).</p>
+
+<h4>2. Freeze pilot site list</h4>
+<table>
+  <thead><tr><th>Field</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>Site URL</td><td>Target site</td></tr>
+    <tr><td>Site Owner</td><td>Business responsible</td></tr>
+    <tr><td>Criticality</td><td>Low / Medium / High</td></tr>
+    <tr><td>Approx. Volume</td><td>Storage usage</td></tr>
+    <tr><td>Execution Window</td><td>Planned date/time</td></tr>
+    <tr><td>Status</td><td>Pending / Executed / Validated</td></tr>
+  </tbody>
+</table>
+
+<h4>3. Execute change with full logging</h4>
+<pre><span class="lang-tag">PowerShell — Pilot Execution with Logging</span>
+Connect-SPOService -Url "https://&lt;tenant&gt;-admin.sharepoint.com"
+
+$pilotSites = @(
+    "https://&lt;tenant&gt;.sharepoint.com/sites/pilot01",
+    "https://&lt;tenant&gt;.sharepoint.com/sites/pilot02",
+    "https://&lt;tenant&gt;.sharepoint.com/sites/pilot03"
+)
+
+$results = @()
+$timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
+
+foreach ($site in $pilotSites) {
+    try {
+        Set-SPOSite `
+            -Identity $site `
+            -EnableAutoExpirationVersionTrim $false `
+            -MajorVersionLimit 50 `
+            -ExpireVersionsAfterDays 0 `
+            -ApplyToExistingDocumentLibraries
+
+        $results += [PSCustomObject]@{
+            Timestamp = (Get-Date)
+            Site      = $site
+            Status    = "Success"
+            Message   = "Policy applied to existing libraries"
+        }
+    }
+    catch {
+        $results += [PSCustomObject]@{
+            Timestamp = (Get-Date)
+            Site      = $site
+            Status    = "Failed"
+            Message   = $_.Exception.Message
+        }
+    }
+}
+
+$results | Export-Csv ".\pilot-results-$timestamp.csv" -NoTypeInformation
+$results | Format-Table -AutoSize
+</pre>
+
+<h4>4. Track background job progress</h4>
+<pre><span class="lang-tag">PowerShell</span>
+foreach ($site in $pilotSites) {
+    Write-Host "`n--- $site ---" -ForegroundColor Cyan
+    Get-SPOSiteVersionPolicyJobProgress -Identity $site
+}
+</pre>
+
+<h4>5. Post-change validation</h4>
+<p>Validate technically and with site owners (see <strong>Validation</strong> tab for the full checklist).</p>
+<pre><span class="lang-tag">PowerShell — Quick validation per pilot site</span>
+foreach ($site in $pilotSites) {
+    Write-Host "`n=== $site ===" -ForegroundColor Cyan
+
+    # Site-level settings
+    Get-SPOSite -Identity $site |
+        Select-Object Url, EnableAutoExpirationVersionTrim,
+            MajorVersionLimit, ExpireVersionsAfterDays |
+        Format-List
+
+    # Library-level settings (PnP)
+    Connect-PnPOnline -Url $site -Interactive
+    Get-PnPList | Where-Object { $_.BaseTemplate -eq 101 } |
+        Select-Object Title, EnableVersioning, MajorVersionLimit |
+        Format-Table -AutoSize
+    Disconnect-PnPOnline
+}
+</pre>
+<p>Request site owners to validate: upload, edit, version history access, restore, and co-authoring within <strong>48 hours</strong> of execution.</p>
+
+<h4>6. Assess trimming need</h4>
+<pre><span class="lang-tag">PowerShell — What-if Impact Analysis</span>
+# Step 1: Generate version storage report
+New-SPOSiteFileVersionExpirationReportJob `
+    -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/pilot01" `
+    -ReportUrl "/sites/pilot01/Shared Documents/VersionReport.csv"
+
+# Step 2: Review the report before any trimming decision
+# Step 3: Obtain formal approval before executing any trim job
+</pre>
+
+<div class="callout c-danger"><span class="ico">🚨</span><div class="body"><b>Trimming Reminder</b><br>Before any real trimming: run What-if, obtain formal approval, define restricted scope, and record the permanent-deletion risk. Versions deleted by trimming <strong>bypass the recycle bin</strong>.</div></div>
+
+<h3>Stop Criteria</h3>
+<ul>
+  <li>Any P1 or P2 incident on a pilot site (access loss, data corruption, version history missing)</li>
+  <li>Background jobs failing on more than 20% of pilot sites</li>
+  <li>Negative feedback from site owners indicating workflow disruption</li>
+  <li>Compliance team raises concerns about affected sites</li>
+  <li>Unexpected permission or collaboration changes observed</li>
+</ul>
+
+<h3>Success Criteria</h3>
+<ul>
+  <li>Change applied to all pilot sites — no critical incidents (P1/P2)</li>
+  <li>Positive or neutral feedback from site owners</li>
+  <li>Operational process validated for larger scale</li>
+  <li>Exception list consolidated</li>
+</ul>
+
+<h3>Deliverables</h3>
+<ul>
+  <li>Production pilot report &amp; final exception list</li>
+  <li>Final runbook</li>
+  <li>Recommendation to advance to full deployment</li>
+</ul>
+
+<div class="ref-box">
+<h3>🔗 Reference Links</h3>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/site-version-limits" target="_blank">Change version history limits for a Site — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/tutorial-manage-version-limits" target="_blank">Tutorial: Manage version history limits — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/trim-versions" target="_blank">Trim existing versions — What-if analysis — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-sposite" target="_blank">Set-SPOSite — Microsoft Learn</a></li>
+</ul>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!--      TAB: PHASE 4 — FULL DEPLOY       -->
+<!-- ══════════════════════════════════════ -->
+<div class="card" id="tabPhase4">
+<div class="phase-banner"><span class="num">04</span> Phase 4 — Full Deployment</div>
+
+<h3>Objective</h3>
+<p>Apply the versioning policy to existing libraries across <strong>all eligible sites</strong> in the tenant, in a controlled, auditable manner with exception handling.</p>
+
+<h3>Wave Strategy</h3>
+<table>
+  <thead><tr><th>Wave</th><th>Scope</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>Wave 1</td><td>Low-criticality sites</td><td>Lowest operational risk</td></tr>
+    <tr><td>Wave 2</td><td>Medium-usage sites</td><td>Scale validation</td></tr>
+    <tr><td>Wave 3</td><td>High-storage-consumption sites</td><td>Greatest expected benefit</td></tr>
+    <tr><td>Wave 4</td><td>Approved critical sites</td><td>Requires owner validation</td></tr>
+    <tr><td>Wave 5</td><td>Exceptions &amp; remaining</td><td>Individual treatment</td></tr>
+  </tbody>
+</table>
+
+<h3>Activities</h3>
+
+<h4>1. Prepare final inventory</h4>
+<pre><span class="lang-tag">PowerShell — Build Site Inventory</span>
+Connect-SPOService -Url "https://&lt;tenant&gt;-admin.sharepoint.com"
+
+$allSites = Get-SPOSite -Limit All |
+    Select-Object Url, Title, Owner, StorageUsageCurrent,
+        EnableAutoExpirationVersionTrim,
+        MajorVersionLimit,
+        ExpireVersionsAfterDays
+
+$allSites | Export-Csv ".\full-site-inventory.csv" -NoTypeInformation
+Write-Host "Exported $($allSites.Count) sites"
+</pre>
+
+<h4>2. Execute by waves</h4>
+<pre><span class="lang-tag">PowerShell — Wave Execution</span>
+$waveSites = Import-Csv ".\wave1-sites.csv"
+$results   = @()
+$timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
+
+foreach ($item in $waveSites) {
+    $site = $item.SiteUrl
+    try {
+        Set-SPOSite `
+            -Identity $site `
+            -EnableAutoExpirationVersionTrim $false `
+            -MajorVersionLimit 50 `
+            -ExpireVersionsAfterDays 0 `
+            -ApplyToExistingDocumentLibraries
+
+        $results += [PSCustomObject]@{
+            Wave = $item.Wave; Site = $site
+            Status = "Success"; Message = "Policy applied"
+        }
+    }
+    catch {
+        $results += [PSCustomObject]@{
+            Wave = $item.Wave; Site = $site
+            Status = "Failed"; Message = $_.Exception.Message
+        }
+    }
+}
+
+$results | Export-Csv ".\wave-results-$timestamp.csv" -NoTypeInformation
+$results | Group-Object Status | Select-Object Name, Count
+</pre>
+
+<h4>3. Monitor progress</h4>
+<pre><span class="lang-tag">PowerShell — Track All Jobs</span>
+$waveSites = Import-Csv ".\wave1-sites.csv"
+
+foreach ($item in $waveSites) {
+    Write-Host "`n--- $($item.SiteUrl) ---" -ForegroundColor Cyan
+    Get-SPOSiteVersionPolicyJobProgress -Identity $item.SiteUrl
+}
+</pre>
+
+<h4>4. Handle exceptions</h4>
+<table>
+  <thead><tr><th>Exception Type</th><th>Recommended Treatment</th></tr></thead>
+  <tbody>
+    <tr><td>Critical site</td><td>Schedule in a dedicated wave</td></tr>
+    <tr><td>Library with specific needs</td><td>Apply library-level policy via <code>Set-SPOListVersionPolicy</code></td></tr>
+    <tr><td>Site under retention / compliance</td><td>Validate with compliance team first</td></tr>
+    <tr><td>Site owner unavailable</td><td>Defer to a later wave</td></tr>
+    <tr><td>Technical error</td><td>Log and treat separately</td></tr>
+  </tbody>
+</table>
+
+<h4>5. Deployment closure report</h4>
+<p>Produce a consolidated report: sites processed, succeeded, failed, excluded, recommended next actions, residual risks.</p>
+
+<pre><span class="lang-tag">PowerShell — Final Audit</span>
+Connect-SPOService -Url "https://&lt;tenant&gt;-admin.sharepoint.com"
+
+# Check how many sites now match the target policy
+$allSites = Get-SPOSite -Limit All |
+    Select-Object Url, Title, MajorVersionLimit,
+        EnableAutoExpirationVersionTrim, ExpireVersionsAfterDays
+
+$matched    = $allSites | Where-Object { $_.MajorVersionLimit -eq 50 }
+$notMatched = $allSites | Where-Object { $_.MajorVersionLimit -ne 50 }
+
+Write-Host "Total sites:     $($allSites.Count)"
+Write-Host "Matching policy: $($matched.Count)" -ForegroundColor Green
+Write-Host "Not matching:    $($notMatched.Count)" -ForegroundColor Yellow
+
+$notMatched | Export-Csv ".\sites-not-matching-final.csv" -NoTypeInformation
+</pre>
+
+<div class="callout c-warn"><span class="ico">📝</span><div class="body"><b>Note</b><br>Total site numbers depend on the actual tenant inventory. Use totals extracted from the environment during the preparation step.</div></div>
+
+<h3>Stop Criteria (per wave)</h3>
+<ul>
+  <li>Any P1 incident during the current wave — pause all waves immediately</li>
+  <li>P2 incidents on more than 2 sites in the same wave</li>
+  <li>Background job failure rate exceeding 15% of the wave</li>
+  <li>Site owners reporting workflow disruption or data access issues</li>
+  <li>Compliance or legal escalation related to affected sites</li>
+</ul>
+
+<h3>Success Criteria</h3>
+<ul>
+  <li>All eligible sites have the target policy applied (<code>MajorVersionLimit = 50</code>)</li>
+  <li>Background jobs completed with <code>CompleteSuccess</code> across all waves</li>
+  <li>No unresolved P1/P2 incidents</li>
+  <li>Exception list finalized and shared with governance team</li>
+  <li>Site owners confirmed no negative impact (or issues resolved)</li>
+</ul>
+
+<h3>Deliverables</h3>
+<ul>
+  <li>Deployment closure report with per-wave results (success, failed, excluded)</li>
+  <li>Final exception list with justification for each excluded site/library</li>
+  <li>Final audit CSV confirming all sites match the target policy</li>
+  <li>Lessons learned document</li>
+  <li>Recommendation on trimming initiative (if storage recovery is desired)</li>
+</ul>
+
+<div class="ref-box">
+<h3>🔗 Reference Links</h3>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/site-version-limits" target="_blank">Change version history limits for a Site — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/tutorial-manage-version-limits" target="_blank">Tutorial: Manage version history limits — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-sposite" target="_blank">Set-SPOSite — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-spolistversionpolicy" target="_blank">Set-SPOListVersionPolicy — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/trim-versions" target="_blank">Trim existing versions — Microsoft Learn</a></li>
+  <li><a href="https://pnp.github.io/powershell/cmdlets/Set-PnPSiteVersionPolicy.html" target="_blank">Set-PnPSiteVersionPolicy — PnP PowerShell</a></li>
+</ul>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!--          TAB: COMMUNICATION            -->
+<!-- ══════════════════════════════════════ -->
+<div class="card" id="tabComm">
+<h2>📨 Communication Plan</h2>
+
+<h3>Multinational / Multi-Region Considerations</h3>
+<div class="callout c-info"><span class="ico">🌐</span><div class="body"><b>Global Deployment Guidance</b><br>For organizations operating across multiple countries and regions, the following considerations should be incorporated into every communication and execution step.</div></div>
+
+<h4>Regional Wave Alignment</h4>
+<p>Align deployment waves with geographic regions to manage time zones, local business hours, and regional IT support availability:</p>
+<table>
+  <thead><tr><th>Wave Group</th><th>Region Example</th><th>Execution Window (UTC)</th><th>Regional Contact</th></tr></thead>
+  <tbody>
+    <tr><td>Wave A</td><td>Americas (AMER)</td><td>00:00–06:00 UTC (off-hours EST/PST)</td><td><em>[Regional IT Lead]</em></td></tr>
+    <tr><td>Wave B</td><td>Europe, Middle East &amp; Africa (EMEA)</td><td>18:00–00:00 UTC (off-hours CET/GMT)</td><td><em>[Regional IT Lead]</em></td></tr>
+    <tr><td>Wave C</td><td>Asia-Pacific (APAC)</td><td>12:00–18:00 UTC (off-hours JST/AEST)</td><td><em>[Regional IT Lead]</em></td></tr>
+    <tr><td>Wave D</td><td>Latin America (LATAM)</td><td>02:00–08:00 UTC (off-hours BRT/ART)</td><td><em>[Regional IT Lead]</em></td></tr>
+  </tbody>
+</table>
+
+<div class="callout c-warn"><span class="ico">⏰</span><div class="body"><b>Time Zone Awareness</b><br>Background jobs run asynchronously and can take up to 24 hours. Schedule the <code>Set-SPOSite</code> execution during the region's off-peak hours to minimize any perceived impact. The actual policy application does not cause downtime, but site owners should be available during business hours for post-change validation.</div></div>
+
+<h4>Regional Compliance &amp; Data Residency</h4>
+<ul>
+  <li><strong>GDPR (EU/EEA):</strong> Confirm that the versioning policy change does not conflict with data retention obligations under GDPR. Engage the regional DPO (Data Protection Officer) if sites store personal data with specific retention requirements.</li>
+  <li><strong>Multi-Geo tenants:</strong> If the tenant uses <a href="https://learn.microsoft.com/en-us/microsoft-365/enterprise/microsoft-365-multi-geo" target="_blank">Microsoft 365 Multi-Geo</a>, identify which sites reside in which geo-location. The <code>Set-SPOSite</code> command works across geos, but the site inventory should include the geo-location field for tracking.</li>
+  <li><strong>Country-specific regulations:</strong> Some jurisdictions (e.g., Germany, Brazil LGPD, China PIPL) may have additional data handling requirements. Include the local compliance team in the review for sites in these regions.</li>
+  <li><strong>Sovereign / government clouds:</strong> If the organization has workloads in GCC, GCC High, or other sovereign clouds, those tenants require separate execution and may have different cmdlet availability.</li>
+</ul>
+
+<h4>Multi-Language Communication</h4>
+<p>For global organizations, communication templates should be translated into the primary languages of each region. Recommended approach:</p>
+<table>
+  <thead><tr><th>Region</th><th>Languages</th><th>Translation Owner</th></tr></thead>
+  <tbody>
+    <tr><td>AMER</td><td>English, Spanish, Portuguese (BR)</td><td><em>[Regional Comms Lead]</em></td></tr>
+    <tr><td>EMEA</td><td>English, French, German, Spanish</td><td><em>[Regional Comms Lead]</em></td></tr>
+    <tr><td>APAC</td><td>English, Japanese, Mandarin, Korean</td><td><em>[Regional Comms Lead]</em></td></tr>
+    <tr><td>LATAM</td><td>Spanish, Portuguese (BR)</td><td><em>[Regional Comms Lead]</em></td></tr>
+  </tbody>
+</table>
+
+<div class="callout c-info"><span class="ico">💡</span><div class="body"><b>Tip</b><br>Send all communications in <strong>English + local language</strong>. Use the English version as the authoritative reference and the local version for accessibility. Include the regional IT contact in all messages for local escalation.</div></div>
+
+<h4>Regional Escalation Matrix</h4>
+<table>
+  <thead><tr><th>Level</th><th>Scope</th><th>Responsible</th><th>SLA</th></tr></thead>
+  <tbody>
+    <tr><td>L1 — Local</td><td>Single site in one region</td><td>Regional IT Lead</td><td>≤ 2 hours</td></tr>
+    <tr><td>L2 — Regional</td><td>Multiple sites in one region</td><td>Regional IT Manager + SharePoint Admin</td><td>≤ 4 hours</td></tr>
+    <tr><td>L3 — Global</td><td>Cross-region or tenant-wide issue</td><td>Global IT Manager + Compliance + Vendor</td><td>≤ 1 hour (P1)</td></tr>
+  </tbody>
+</table>
+
+<h4>Communication Channels per Region</h4>
+<ul>
+  <li><strong>Email:</strong> Primary channel for all pre/post-change notifications — use regional distribution lists</li>
+  <li><strong>Microsoft Teams:</strong> Create a dedicated channel (e.g., <em>#sharepoint-versioning-rollout</em>) for real-time updates, questions, and issue reporting across regions</li>
+  <li><strong>SharePoint News:</strong> Post a site-level news article on the IT/Intranet hub for visibility</li>
+  <li><strong>Regional town halls / IT briefings:</strong> Brief regional IT leads before their wave starts — include a 5-minute overview of the change and expected behavior</li>
+  <li><strong>Service Desk / ITSM:</strong> Create a knowledge article in the ITSM tool (e.g., ServiceNow) so L1 support can handle basic inquiries without escalation</li>
+</ul>
+
+<hr>
+
+<h3>Pre-Change Communication Template</h3>
+<div class="callout c-success"><span class="ico">✉️</span><div class="body"><b>Suggested message to site owners</b>
+An update will be applied to the version history policy of existing SharePoint Online document libraries.<br><br>
+<strong>What will change:</strong> The versioning configuration of existing document libraries will be standardized to retain up to 50 major versions with no time-based expiration.<br><br>
+<strong>What will NOT change:</strong> No existing file versions will be deleted. No permissions, site structure, or compliance settings will be modified.<br><br>
+<strong>About version removal:</strong> Any activity to remove old versions (trimming) will be handled as a separate initiative with its own impact analysis and formal approval.<br><br>
+<strong>Action required:</strong> After the change, please perform basic validation — upload a file, edit a file, and check the version history. Report any unexpected behavior to the change management team.
+</div></div>
+
+<h3>Post-Change Communication Template</h3>
+<div class="callout c-success"><span class="ico">✅</span><div class="body"><b>Suggested message to site owners</b>
+The versioning policy has been applied to your site/library as planned.<br><br>
+<strong>Please validate:</strong> Upload, editing, version history access, and recent version restore.<br><br>
+<strong>If you notice any issues:</strong> Report to the change management team immediately with the site URL and a description of the behavior.
+</div></div>
+
+<h3>Escalation Communication Template</h3>
+<div class="callout c-info"><span class="ico">🔔</span><div class="body"><b>For incidents</b>
+We have identified an issue during the versioning policy rollout on the following site(s): <em>[Site URL]</em>.<br><br>
+The current wave has been <strong>paused</strong>. The team is investigating and will provide an update within <em>[SLA]</em>. No trimming has been executed; this is a configuration-only change.
+</div></div>
+
+<div class="ref-box">
+<h3>🔗 Reference Links</h3>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/site-version-limits" target="_blank">Change version history limits for a Site — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/document-library-version-history-limits" target="_blank">Version history limits overview — Microsoft Learn</a></li>
+</ul>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!--            TAB: VALIDATION             -->
+<!-- ══════════════════════════════════════ -->
+<div class="card" id="tabVal">
+<h2>✅ Validation Plan</h2>
+
+<p>This checklist should be executed after each phase. For Phases 3 and 4, use the batch validation script to verify multiple sites at once.</p>
+
+<h3>Expected Configuration (Target State)</h3>
+<table>
+  <thead><tr><th>Property</th><th>Expected Value</th></tr></thead>
+  <tbody>
+    <tr><td><code>EnableAutoExpirationVersionTrim</code></td><td><code>$false</code></td></tr>
+    <tr><td><code>MajorVersionLimit</code></td><td><code>50</code></td></tr>
+    <tr><td><code>ExpireVersionsAfterDays</code></td><td><code>0</code></td></tr>
+  </tbody>
+</table>
+
+<h3>Technical Validation Checklist</h3>
+<table>
+  <thead><tr><th>#</th><th>Validation Item</th><th>Method</th><th>Expected</th><th>Result</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Site-level policy applied</td><td><code>Get-SPOSite</code></td><td><code>MajorVersionLimit = 50</code></td><td></td></tr>
+    <tr><td>2</td><td>AutoExpiration disabled</td><td><code>Get-SPOSite</code></td><td><code>EnableAutoExpirationVersionTrim = False</code></td><td></td></tr>
+    <tr><td>3</td><td>Expiration days set to 0</td><td><code>Get-SPOSite</code></td><td><code>ExpireVersionsAfterDays = 0</code></td><td></td></tr>
+    <tr><td>4</td><td>Existing libraries updated</td><td><code>Get-PnPList</code></td><td>All doc libraries show <code>MajorVersionLimit = 50</code></td><td></td></tr>
+    <tr><td>5</td><td>Background job completed</td><td><code>Get-SPOSiteVersionPolicyJobProgress</code></td><td><code>CompleteSuccess</code></td><td></td></tr>
+    <tr><td>6</td><td>New versions are created on edit</td><td>Manual test</td><td>Version count increments</td><td></td></tr>
+    <tr><td>7</td><td>Version history accessible</td><td>UI / Manual test</td><td>All recent versions visible</td><td></td></tr>
+    <tr><td>8</td><td>Recent version restore works</td><td>Manual test</td><td>Restore succeeds, file content correct</td><td></td></tr>
+    <tr><td>9</td><td>Permissions unchanged</td><td>Spot check</td><td>Same access as before</td><td></td></tr>
+    <tr><td>10</td><td>No existing versions deleted</td><td>UI — version history count</td><td>Version count ≥ pre-change count</td><td></td></tr>
+  </tbody>
+</table>
+
+<h3>Functional Validation (with site owners / key users)</h3>
+<table>
+  <thead><tr><th>#</th><th>Validation Item</th><th>Method</th><th>Expected</th><th>Result</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Document upload</td><td>Upload via UI or Teams</td><td>File uploads normally, version 1.0 created</td><td></td></tr>
+    <tr><td>2</td><td>Document editing</td><td>Edit in browser or desktop app</td><td>New version created on save</td><td></td></tr>
+    <tr><td>3</td><td>Co-authoring</td><td>Two users edit simultaneously</td><td>No conflicts or errors (if applicable)</td><td></td></tr>
+    <tr><td>4</td><td>Access to version history</td><td>Right-click → Version history</td><td>Full history visible</td><td></td></tr>
+    <tr><td>5</td><td>Restore a recent version</td><td>Version history → Restore</td><td>File reverts to selected version</td><td></td></tr>
+    <tr><td>6</td><td>Workflows / Power Automate</td><td>Trigger existing flows</td><td>Flows execute normally (if applicable)</td><td></td></tr>
+    <tr><td>7</td><td>Search results</td><td>Search for a known file</td><td>File appears in search results</td><td></td></tr>
+  </tbody>
+</table>
+
+<h3>PowerShell — Verify Settings Post-Change (Single Site)</h3>
+<pre><span class="lang-tag">PowerShell — Site-level</span>
+Get-SPOSite -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/target" |
+    Select-Object Url,
+        EnableAutoExpirationVersionTrim,
+        MajorVersionLimit,
+        ExpireVersionsAfterDays |
+    Format-List
+</pre>
+<pre><span class="lang-tag">PowerShell — Library-level (PnP)</span>
+Connect-PnPOnline -Url "https://&lt;tenant&gt;.sharepoint.com/sites/target" -Interactive
+
+Get-PnPList | Where-Object { $_.BaseTemplate -eq 101 } |
+    Select-Object Title, EnableVersioning, MajorVersionLimit,
+        EnableMinorVersions, MajorWithMinorVersionsLimit |
+    Format-Table -AutoSize
+</pre>
+
+<h3>PowerShell — Batch Validation (Multiple Sites)</h3>
+<pre><span class="lang-tag">PowerShell — Validate all sites in a wave</span>
+Connect-SPOService -Url "https://&lt;tenant&gt;-admin.sharepoint.com"
+
+$waveSites = Import-Csv ".\wave1-sites.csv"
+$validation = @()
+
+foreach ($item in $waveSites) {
+    $site = Get-SPOSite -Identity $item.SiteUrl
+    $jobStatus = Get-SPOSiteVersionPolicyJobProgress -Identity $item.SiteUrl
+
+    $validation += [PSCustomObject]@{
+        SiteUrl          = $site.Url
+        AutoExpiration   = $site.EnableAutoExpirationVersionTrim
+        MajorVersions    = $site.MajorVersionLimit
+        ExpireDays       = $site.ExpireVersionsAfterDays
+        JobStatus        = $jobStatus
+        MatchesTarget    = (
+            $site.EnableAutoExpirationVersionTrim -eq $false -and
+            $site.MajorVersionLimit -eq 50 -and
+            $site.ExpireVersionsAfterDays -eq 0
+        )
+    }
+}
+
+# Summary
+$matched = ($validation | Where-Object { $_.MatchesTarget -eq $true }).Count
+$total   = $validation.Count
+Write-Host "`nValidation: $matched / $total sites match target policy" -ForegroundColor $(if ($matched -eq $total) { "Green" } else { "Yellow" })
+
+# Export full report
+$timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
+$validation | Export-Csv ".\validation-results-$timestamp.csv" -NoTypeInformation
+
+# Show any mismatches
+$validation | Where-Object { $_.MatchesTarget -eq $false } |
+    Format-Table SiteUrl, MajorVersions, AutoExpiration, JobStatus -AutoSize
+</pre>
+
+<div class="callout c-info"><span class="ico">💡</span><div class="body"><b>Validation Timing</b><br>Run the technical validation <strong>after the background job completes</strong> (<code>CompleteSuccess</code>). For functional validation, allow site owners <strong>up to 48 hours</strong> to test and report back. If no issues are reported within the window, record the validation as passed.</div></div>
+
+<div class="ref-box">
+<h3>🔗 Reference Links</h3>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-sposite" target="_blank">Set-SPOSite — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/sharepoint-online/get-spositeversionpolicyjobprogress" target="_blank">Get-SPOSiteVersionPolicyJobProgress — Microsoft Learn</a></li>
+  <li><a href="https://pnp.github.io/powershell/cmdlets/Set-PnPList.html" target="_blank">Set-PnPList — PnP PowerShell</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/site-version-limits" target="_blank">Change version history limits for a Site — Microsoft Learn</a></li>
+</ul>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!--        TAB: ROLLBACK (ENHANCED)        -->
+<!-- ══════════════════════════════════════ -->
+<div class="card" id="tabRoll">
+<h2>↩️ Rollback Plan</h2>
+
+<div class="callout c-danger"><span class="ico">🚨</span><div class="body"><b>Critical Distinction — Read Before Proceeding</b><br>
+<strong>Policy change = REVERSIBLE</strong> — You can change version limits again at any time. Existing versions are NOT deleted when a policy is changed. A rollback simply sets the limits back to the previous value.<br><br>
+<strong>Trimming = IRREVERSIBLE</strong> — Versions deleted by trimming bypass the recycle bin and CANNOT be recovered by any means (including Microsoft Support). There is no rollback for trimming.<br><br>
+<strong>Cancelling an in-progress background job = PARTIAL</strong> — Cancelling stops processing of remaining libraries, but does NOT revert changes on libraries already processed. You must explicitly revert those libraries.
+</div></div>
+
+<h3>Understanding Rollback Behavior</h3>
+<p>Before executing any rollback, understand these key behaviors:</p>
+<table>
+  <thead><tr><th>Scenario</th><th>What Happens</th><th>What Does NOT Happen</th></tr></thead>
+  <tbody>
+    <tr><td>Revert site policy to 500 versions</td><td>New versions will be kept up to the new limit (500). Existing libraries are updated asynchronously.</td><td>No versions are deleted. Versions already stored are retained.</td></tr>
+    <tr><td>Clear site override (inherit from tenant)</td><td>New libraries inherit tenant defaults. Existing libraries keep their current settings.</td><td>Existing libraries are NOT automatically reverted — they retain the last applied setting.</td></tr>
+    <tr><td>Cancel background job mid-progress</td><td>Unprocessed libraries keep their old settings.</td><td>Already-processed libraries are NOT reverted. You must re-apply to revert them.</td></tr>
+    <tr><td>Revert a single library</td><td>Only that library's settings change. No impact on other libraries or the site-level policy.</td><td>The site-level policy remains unchanged.</td></tr>
+    <tr><td>Sync library to site policy</td><td>Library inherits the current site-level setting (whatever it is at that moment).</td><td>Does not sync to tenant policy — only to site-level.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout c-warn"><span class="ico">⚠️</span><div class="body"><b>Important: Clearing a Site Override</b><br>Using <code>-InheritVersionPolicyFromTenant</code> or <code>Set-PnPSiteVersionPolicy -InheritFromTenant</code> only affects <strong>new libraries created after the command</strong>. It does NOT revert existing libraries to the tenant default. To revert existing libraries, you must either:<br>
+— Re-apply the previous policy with <code>-ApplyToExistingDocumentLibraries</code>, or<br>
+— Use <code>New-SPOSiteManageVersionPolicyJob -SyncListPolicy</code> to sync all libraries to the site-level setting, or<br>
+— Revert libraries individually with <code>Set-SPOListVersionPolicy</code>.</div></div>
+
+<h3>Rollback Options Summary</h3>
+<table>
+  <thead><tr><th>Option</th><th>Level</th><th>Command</th><th>Affects Existing Libraries?</th><th>When to Use</th></tr></thead>
+  <tbody>
+    <tr><td><strong>A.</strong> Revert to previous limit</td><td>Site</td><td><code>Set-SPOSite -MajorVersionLimit 500 -ApplyToExistingDocumentLibraries</code></td><td>Yes (async background job)</td><td>Full rollback of a site to pre-change state</td></tr>
+    <tr><td><strong>B.</strong> Clear site override</td><td>Site</td><td><code>Set-SPOSite -InheritVersionPolicyFromTenant</code></td><td>No — new libraries only</td><td>Remove site-level override; let new libraries inherit tenant defaults</td></tr>
+    <tr><td><strong>C.</strong> Sync libraries to site</td><td>Site → Libraries</td><td><code>New-SPOSiteManageVersionPolicyJob -SyncListPolicy</code></td><td>Yes (async background job)</td><td>Force all libraries to match current site-level setting</td></tr>
+    <tr><td><strong>D.</strong> Revert specific library</td><td>Library</td><td><code>Set-SPOListVersionPolicy -MajorVersionLimit 500</code></td><td>Yes (immediate)</td><td>Surgical rollback of one library</td></tr>
+    <tr><td><strong>E.</strong> Sync library to site</td><td>Library</td><td><code>Set-SPOListVersionPolicy -Sync</code></td><td>Yes (immediate)</td><td>Reset library to inherit from site</td></tr>
+    <tr><td><strong>F.</strong> Cancel in-progress job</td><td>Site</td><td><code>Remove-SPOSiteVersionPolicyJob</code></td><td>Stops remaining; does not revert processed</td><td>Emergency stop during background processing</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>Incident Classification</h3>
+<table>
+  <thead><tr><th>Priority</th><th>Severity</th><th>Description</th><th>Response SLA</th><th>Rollback Action</th></tr></thead>
+  <tbody>
+    <tr><td><strong>P1</strong></td><td>Critical</td><td>Multiple sites inaccessible or data loss suspected; collaboration blocked for many users</td><td>Immediate (≤ 30 min)</td><td>Full wave pause + immediate rollback of affected sites (Option A)</td></tr>
+    <tr><td><strong>P2</strong></td><td>High</td><td>Single site with access issues, version history corruption, or permission changes</td><td>≤ 2 hours</td><td>Pause wave + rollback specific site(s) (Option A or D)</td></tr>
+    <tr><td><strong>P3</strong></td><td>Medium</td><td>Minor UI issues, slow background job, or non-critical library not updated</td><td>≤ 8 hours</td><td>Investigate; no immediate rollback — reprocess if needed (Option D or E)</td></tr>
+    <tr><td><strong>P4</strong></td><td>Low</td><td>Cosmetic issue, reporting delay, or non-blocking observation</td><td>Next business day</td><td>Log and address in next wave cycle</td></tr>
+  </tbody>
+</table>
+
+<h3>Rollback Decision Matrix</h3>
+<table>
+  <thead><tr><th>Trigger</th><th>Severity</th><th>Action</th><th>Rollback Option</th><th>Owner</th></tr></thead>
+  <tbody>
+    <tr><td>Users cannot access files on affected site</td><td>P1</td><td>Revert policy immediately; pause all waves</td><td>Option A</td><td>SharePoint Admin</td></tr>
+    <tr><td>Version history missing or corrupted</td><td>P1</td><td>Revert policy; escalate to Microsoft Support</td><td>Option A + Support Ticket</td><td>SharePoint Admin + Vendor</td></tr>
+    <tr><td>Permissions changed unexpectedly</td><td>P2</td><td>Revert policy on affected site; investigate root cause</td><td>Option A</td><td>SharePoint Admin</td></tr>
+    <tr><td>Background job fails on multiple sites</td><td>P2</td><td>Cancel jobs (Option F); reprocess individually</td><td>Option F → Option D</td><td>SharePoint Admin</td></tr>
+    <tr><td>Site owner reports collaboration issues</td><td>P2/P3</td><td>Validate; revert site or library if confirmed</td><td>Option A or D</td><td>SharePoint Admin</td></tr>
+    <tr><td>Background job slow but progressing</td><td>P4</td><td>Monitor; no rollback needed (jobs can take up to 24h)</td><td>None</td><td>SharePoint Admin</td></tr>
+    <tr><td>Single library not updated</td><td>P3</td><td>Reprocess or sync that library</td><td>Option D or E</td><td>SharePoint Admin</td></tr>
+    <tr><td>Wrong site was targeted</td><td>P2</td><td>Revert the mistargeted site immediately</td><td>Option A or B</td><td>SharePoint Admin</td></tr>
+    <tr><td>Compliance team flags a site post-change</td><td>P2</td><td>Revert site; add to exclusion list</td><td>Option A</td><td>SharePoint Admin + Compliance</td></tr>
+    <tr><td>Trimming executed without approval</td><td>P1</td><td>Immediate escalation; no recovery possible for trimmed versions</td><td>No rollback available</td><td>IT Manager + Compliance</td></tr>
+    <tr><td>PowerShell errors across all sites</td><td>P2</td><td>Stop execution; check module version, permissions, and connectivity</td><td>Option F if jobs running</td><td>SharePoint Admin</td></tr>
+  </tbody>
+</table>
+
+<h3>Rollback Decision Flowchart</h3>
+<div class="callout c-info"><span class="ico">🔄</span><div class="body"><b>Rollback Decision Flow</b><br>
+<strong>Step 1:</strong> Issue detected → Classify severity (P1 / P2 / P3 / P4)<br><br>
+<strong>Step 2 (P1/P2):</strong> Pause current wave immediately → Notify stakeholders → Proceed to Step 3<br>
+<strong>Step 2 (P3/P4):</strong> Log issue → Continue wave with monitoring → Investigate in parallel<br><br>
+<strong>Step 3:</strong> Identify affected site(s) and scope of impact<br>
+— How many sites affected?<br>
+— How many users impacted?<br>
+— Is the background job still running?<br><br>
+<strong>Step 4:</strong> Is there a background job still in progress?<br>
+→ <strong>YES:</strong> Cancel it first with <code>Remove-SPOSiteVersionPolicyJob</code> (Option F)<br>
+→ <strong>NO:</strong> Proceed to Step 5<br><br>
+<strong>Step 5:</strong> Is the issue caused by the policy change?<br>
+→ <strong>YES:</strong> Proceed to Step 6<br>
+→ <strong>NO:</strong> Investigate other causes (permissions, tenant health, network); do NOT rollback<br>
+→ <strong>UNCLEAR:</strong> Rollback as precaution, then investigate<br><br>
+<strong>Step 6:</strong> Determine rollback scope:<br>
+→ <strong>Entire site:</strong> Option A (revert to 500 versions + ApplyToExisting) or Option B (inherit from tenant)<br>
+→ <strong>Specific libraries:</strong> Option D (revert library) or Option E (sync library to site)<br>
+→ <strong>All libraries need re-sync:</strong> Option C (New-SPOSiteManageVersionPolicyJob -SyncListPolicy)<br><br>
+<strong>Step 7:</strong> Execute rollback → Track the new background job progress<br><br>
+<strong>Step 8:</strong> Validate rollback:<br>
+— Confirm settings restored via <code>Get-SPOSite</code> and <code>Get-PnPList</code><br>
+— Confirm functionality OK (upload, edit, version history, restore)<br>
+— Confirm no new errors<br><br>
+<strong>Step 9:</strong> Record incident:<br>
+— Incident details, root cause, affected sites/libraries<br>
+— Rollback method used, time to resolve<br>
+— Lessons learned and runbook updates<br><br>
+<strong>Step 10:</strong> Resume wave only after:<br>
+— Root cause identified and corrected<br>
+— Rollback validated<br>
+— Go/No-Go approval from IT Manager
+</div></div>
+
+<h3>Rollback Scope Per Phase</h3>
+<table>
+  <thead><tr><th>Phase</th><th>Rollback Scope</th><th>Estimated Time</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>Phase 1 — POC</td><td>Revert 1 site</td><td>&lt; 5 minutes (command) + up to 24h (background job)</td><td>Low impact; manual execution</td></tr>
+    <tr><td>Phase 2 — Test</td><td>Revert 3–10 sites</td><td>&lt; 15 minutes (script) + up to 24h (background jobs)</td><td>Script-based; fast execution</td></tr>
+    <tr><td>Phase 3 — Pilot</td><td>Revert 5–20 sites</td><td>&lt; 30 minutes (script) + up to 24h (background jobs)</td><td>Use same logging script in reverse; CSV-driven</td></tr>
+    <tr><td>Phase 4 — Full Deploy</td><td>Revert per wave only</td><td>Varies by wave size</td><td>Only rollback the affected wave; keep stable waves intact</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>PowerShell — Emergency: Cancel In-Progress Job</h3>
+<pre><span class="lang-tag">PowerShell — Option F: Cancel background job</span>
+# Cancel the background job that is updating existing libraries
+# WARNING: This does NOT revert libraries already processed
+
+Remove-SPOSiteVersionPolicyJob `
+    -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/affected-site"
+
+# Verify the job was cancelled
+Get-SPOSiteVersionPolicyJobProgress `
+    -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/affected-site"
+# Expected: NoRequestFound (after cancellation takes effect)
+</pre>
+
+<div class="callout c-danger"><span class="ico">⚠️</span><div class="body"><b>Cancel ≠ Revert</b><br>Cancelling an in-progress job only stops processing of libraries not yet updated. Libraries that were already updated will retain the new settings. You must explicitly revert those libraries using Option A or Option D.</div></div>
+
+<h3>PowerShell — Option A: Revert Site to Previous Limit</h3>
+<pre><span class="lang-tag">PowerShell — Revert single site to 500 versions</span>
+# Revert a site to the previous / higher limit
+# This creates a new background job to update existing libraries
+Set-SPOSite `
+    -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/affected-site" `
+    -EnableAutoExpirationVersionTrim $false `
+    -MajorVersionLimit 500 `
+    -ExpireVersionsAfterDays 0 `
+    -ApplyToExistingDocumentLibraries
+
+# Track the rollback job
+Get-SPOSiteVersionPolicyJobProgress `
+    -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/affected-site"
+</pre>
+
+<pre><span class="lang-tag">PowerShell — Rollback multiple sites (batch) with logging</span>
+Connect-SPOService -Url "https://&lt;tenant&gt;-admin.sharepoint.com"
+
+# Import sites that need rollback — from execution results CSV
+$rollbackSites = Import-Csv ".\pilot-results-TIMESTAMP.csv" |
+    Where-Object { $_.Status -eq "Failed" -or $_.NeedsRollback -eq "Yes" }
+
+$rollbackResults = @()
+$timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
+
+foreach ($item in $rollbackSites) {
+    try {
+        # Cancel any running job first
+        try { Remove-SPOSiteVersionPolicyJob -Identity $item.Site -ErrorAction SilentlyContinue } catch {}
+
+        # Revert to 500 versions
+        Set-SPOSite `
+            -Identity $item.Site `
+            -EnableAutoExpirationVersionTrim $false `
+            -MajorVersionLimit 500 `
+            -ExpireVersionsAfterDays 0 `
+            -ApplyToExistingDocumentLibraries
+
+        $rollbackResults += [PSCustomObject]@{
+            Timestamp = (Get-Date); Site = $item.Site
+            Action = "Rollback"; Status = "Success"
+            Message = "Reverted to 500 versions"
+        }
+        Write-Host "REVERTED: $($item.Site)" -ForegroundColor Yellow
+    }
+    catch {
+        $rollbackResults += [PSCustomObject]@{
+            Timestamp = (Get-Date); Site = $item.Site
+            Action = "Rollback"; Status = "Failed"
+            Message = $_.Exception.Message
+        }
+        Write-Host "REVERT FAILED: $($item.Site) - $($_.Exception.Message)" -ForegroundColor Red
+    }
+}
+
+$rollbackResults | Export-Csv ".\rollback-results-$timestamp.csv" -NoTypeInformation
+$rollbackResults | Format-Table -AutoSize
+
+# Summary
+Write-Host "`nRollback Summary:" -ForegroundColor Cyan
+$rollbackResults | Group-Object Status | Select-Object Name, Count | Format-Table
+</pre>
+
+<h3>PowerShell — Option B: Clear Site Override (Inherit from Tenant)</h3>
+<pre><span class="lang-tag">PowerShell — SPO: Clear site override</span>
+# Clear site-level version policy — new libraries will inherit org defaults
+# NOTE: Existing libraries keep their current settings
+Set-SPOSite `
+    -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/affected-site" `
+    -InheritVersionPolicyFromTenant
+</pre>
+<pre><span class="lang-tag">PowerShell — PnP: Inherit from tenant</span>
+Connect-PnPOnline -Url "https://&lt;tenant&gt;.sharepoint.com/sites/affected-site" -Interactive
+
+Set-PnPSiteVersionPolicy -InheritFromTenant
+
+Disconnect-PnPOnline
+</pre>
+
+<h3>PowerShell — Option C: Sync All Libraries to Site Policy</h3>
+<pre><span class="lang-tag">PowerShell — Force all libraries to match site-level setting</span>
+# First, set the site-level policy to the desired rollback value
+Set-SPOSite `
+    -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/affected-site" `
+    -EnableAutoExpirationVersionTrim $false `
+    -MajorVersionLimit 500 `
+    -ExpireVersionsAfterDays 0
+
+# Then, sync all libraries to match the site-level setting
+New-SPOSiteManageVersionPolicyJob `
+    -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/affected-site" `
+    -SyncListPolicy
+
+# Track sync job progress (different cmdlet from the policy job)
+Get-SPOSiteManageVersionPolicyJobProgress `
+    -Identity "https://&lt;tenant&gt;.sharepoint.com/sites/affected-site"
+</pre>
+
+<div class="callout c-info"><span class="ico">💡</span><div class="body"><b>Sync vs. Apply</b><br><code>-SyncListPolicy</code> forces all libraries to match the current site-level setting. Use this when you want a clean, uniform state. This is different from <code>-ApplyToExistingDocumentLibraries</code> which applies the values specified in the same command.</div></div>
+
+<h3>PowerShell — Option D: Revert a Specific Library</h3>
+<pre><span class="lang-tag">PowerShell — SPO: Revert a specific library</span>
+Set-SPOListVersionPolicy `
+    -Site "https://&lt;tenant&gt;.sharepoint.com/sites/affected-site" `
+    -List "Documents" `
+    -EnableAutoExpirationVersionTrim $false `
+    -MajorVersionLimit 500 `
+    -ExpireVersionsAfterDays 0
+</pre>
+<pre><span class="lang-tag">PowerShell — PnP: Revert a specific library</span>
+Connect-PnPOnline -Url "https://&lt;tenant&gt;.sharepoint.com/sites/affected-site" -Interactive
+
+Set-PnPList -Identity "Documents" `
+    -EnableVersioning $true `
+    -MajorVersions 500 `
+    -EnableAutoExpirationVersionTrim $false `
+    -ExpireVersionsAfterDays 0
+
+Disconnect-PnPOnline
+</pre>
+
+<h3>PowerShell — Option E: Sync Library to Site/Tenant Policy</h3>
+<pre><span class="lang-tag">PowerShell — SPO: Reset library to inherit from site</span>
+Set-SPOListVersionPolicy `
+    -Site "https://&lt;tenant&gt;.sharepoint.com/sites/affected-site" `
+    -List "Documents" `
+    -Sync
+</pre>
+
+<h3>PowerShell — Validate Rollback Was Successful</h3>
+<pre><span class="lang-tag">PowerShell — Post-rollback verification</span>
+$siteUrl = "https://&lt;tenant&gt;.sharepoint.com/sites/affected-site"
+
+# 1. Check site-level settings
+Write-Host "`n=== Site-Level Settings ===" -ForegroundColor Cyan
+Get-SPOSite -Identity $siteUrl |
+    Select-Object Url, EnableAutoExpirationVersionTrim,
+        MajorVersionLimit, ExpireVersionsAfterDays |
+    Format-List
+
+# 2. Check background job status
+Write-Host "=== Job Status ===" -ForegroundColor Cyan
+Get-SPOSiteVersionPolicyJobProgress -Identity $siteUrl
+
+# 3. Check library-level settings (PnP)
+Write-Host "=== Library-Level Settings ===" -ForegroundColor Cyan
+Connect-PnPOnline -Url $siteUrl -Interactive
+Get-PnPList | Where-Object { $_.BaseTemplate -eq 101 } |
+    Select-Object Title, EnableVersioning, MajorVersionLimit |
+    Format-Table -AutoSize
+Disconnect-PnPOnline
+</pre>
+
+<hr>
+
+<h3>Rollback Communication Templates</h3>
+
+<h4>Internal Escalation (P1/P2)</h4>
+<div class="callout c-danger"><span class="ico">🚨</span><div class="body"><b>P1/P2 Rollback Alert — Internal</b><br>
+<strong>Subject:</strong> [P1/P2] Versioning Policy Rollback — Immediate Action Required<br><br>
+<strong>Incident:</strong> [Brief description]<br>
+<strong>Affected site(s):</strong> [URL(s)]<br>
+<strong>Affected users:</strong> [Estimated count / region]<br>
+<strong>Current status:</strong> Wave paused. Rollback in progress / completed.<br>
+<strong>Root cause:</strong> [Under investigation / Identified: ...]<br>
+<strong>Action needed:</strong> [Review / Approve resume / Investigate]<br>
+<strong>Escalation contacts:</strong> [SharePoint Admin], [IT Manager], [Compliance if applicable]
+</div></div>
+
+<h4>Site Owner Notification</h4>
+<div class="callout c-warn"><span class="ico">📢</span><div class="body"><b>Rollback Notification — Site Owners</b><br>
+<strong>Subject:</strong> [Action Required] Versioning Policy Rollback on [Site Name]<br><br>
+An issue was identified following the versioning policy update on <em>[Site URL]</em>. As a precaution, the policy has been <strong>reverted to the previous configuration</strong>.<br><br>
+<strong>What happened:</strong> [Brief description of the issue]<br>
+<strong>What we did:</strong> The versioning policy on the affected site has been rolled back to [500 versions / tenant default].<br>
+<strong>Impact:</strong> No file versions were deleted. This was a configuration-only change.<br>
+<strong>Next steps:</strong> The team will investigate and address the root cause before re-attempting the update.<br><br>
+<strong>Please validate:</strong> Upload a file, edit a file, check version history, and confirm normal behavior.<br><br>
+If you have any questions or notice unexpected behavior, contact the change management team at <em>[contact]</em>.
+</div></div>
+
+<h4>Management Summary (Post-Incident)</h4>
+<div class="callout c-info"><span class="ico">📋</span><div class="body"><b>Post-Incident Report — Template</b><br>
+<strong>Subject:</strong> Versioning Policy Rollback — Post-Incident Summary<br><br>
+<strong>Incident date/time:</strong> [Date] [Time UTC]<br>
+<strong>Severity:</strong> [P1 / P2 / P3]<br>
+<strong>Affected sites:</strong> [Count] sites in [Wave/Phase]<br>
+<strong>Affected users:</strong> [Estimated count]<br>
+<strong>Detection method:</strong> [Monitoring / User report / Automated alert]<br>
+<strong>Time to detect:</strong> [Duration]<br>
+<strong>Time to rollback:</strong> [Duration]<br>
+<strong>Time to resolve:</strong> [Duration]<br><br>
+<strong>Root cause:</strong> [Description]<br>
+<strong>Rollback method used:</strong> [Option A / B / C / D / E / F]<br>
+<strong>Data loss:</strong> None — this was a configuration-only change. No versions were deleted.<br><br>
+<strong>Corrective actions:</strong><br>
+1. [Action 1]<br>
+2. [Action 2]<br><br>
+<strong>Lessons learned:</strong><br>
+1. [Lesson 1]<br>
+2. [Lesson 2]<br><br>
+<strong>Recommendation:</strong> [Resume deployment / Revise runbook / Pause for further investigation]
+</div></div>
+
+<hr>
+
+<h3>Trimming — No Rollback Available</h3>
+<div class="callout c-danger"><span class="ico">⛔</span><div class="body"><b>No Recovery for Trimming</b><br>Versions deleted by trimming are <strong>permanently deleted</strong> and do not go to the recycle bin. There is no rollback for trimming. This is why this plan treats trimming as a <strong>completely separate initiative</strong> with its own approval, What-if analysis, and risk acceptance process.<br><br>
+<strong>If trimming was accidentally executed:</strong><br>
+1. Immediately escalate to IT Manager and Compliance Officer<br>
+2. Document which site(s) and library(ies) were trimmed<br>
+3. Open a Microsoft Support ticket (severity A) — note that recovery is NOT guaranteed<br>
+4. Notify affected site owners with transparent communication<br>
+5. Record the incident for the post-deployment lessons learned</div></div>
+
+<h3>Microsoft Support Escalation Guide</h3>
+<p>For P1 incidents that cannot be resolved by rollback alone:</p>
+<table>
+  <thead><tr><th>Step</th><th>Action</th><th>Details</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Open a support ticket</td><td><a href="https://admin.microsoft.com/#/support" target="_blank">Microsoft 365 Admin Center → Support</a> — select Severity A for P1</td></tr>
+    <tr><td>2</td><td>Provide diagnostics</td><td>Include: site URL, timestamp of change, PowerShell commands executed, error messages, <code>Get-SPOSiteVersionPolicyJobProgress</code> output</td></tr>
+    <tr><td>3</td><td>Request investigation</td><td>Ask for investigation into version history integrity on the affected site(s)</td></tr>
+    <tr><td>4</td><td>Document ticket number</td><td>Record the SR number in the incident report for tracking</td></tr>
+  </tbody>
+</table>
+
+<div class="ref-box">
+<h3>🔗 Reference Links</h3>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/site-version-limits" target="_blank">Change version history limits for a Site — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/sharepoint-online/remove-spositeversionpolicyjob" target="_blank">Remove-SPOSiteVersionPolicyJob (cancel job) — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/sharepoint-online/new-spositemanageversionpolicyjob" target="_blank">New-SPOSiteManageVersionPolicyJob (sync libraries) — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/sharepoint-online/get-spositemanageversionpolicyjobprogress" target="_blank">Get-SPOSiteManageVersionPolicyJobProgress — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/sharepoint-online/remove-spositemanageversionpolicyjob" target="_blank">Remove-SPOSiteManageVersionPolicyJob (cancel sync) — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/trim-versions" target="_blank">Trim existing versions — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-sposite" target="_blank">Set-SPOSite — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-spolistversionpolicy" target="_blank">Set-SPOListVersionPolicy — Microsoft Learn</a></li>
+  <li><a href="https://pnp.github.io/powershell/cmdlets/Set-PnPSiteVersionPolicy.html" target="_blank">Set-PnPSiteVersionPolicy — PnP PowerShell</a></li>
+  <li><a href="https://pnp.github.io/powershell/cmdlets/Set-PnPList.html" target="_blank">Set-PnPList — PnP PowerShell</a></li>
+</ul>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!--              TAB: RISKS                -->
+<!-- ══════════════════════════════════════ -->
+<div class="card" id="tabRisk">
+<h2>⚠️ Risks &amp; Mitigations</h2>
+
+<p>Each risk is scored using <strong>Probability × Impact</strong> to determine priority. Risk Score: Low (1–3), Medium (4–6), High (8–12), Critical (15–25).</p>
+
+<table>
+  <thead><tr><th>ID</th><th>Risk</th><th>Probability</th><th>Impact</th><th>Score</th><th>Mitigation</th><th>Rollback</th><th>Owner</th></tr></thead>
+  <tbody>
+    <tr><td>R01</td><td>Policy applied to wrong site</td><td>Low (1)</td><td>High (4)</td><td>4</td><td>Use an approved inventory and wave-based execution with logging; validate site URLs before execution</td><td>Option A or B</td><td>SharePoint Admin</td></tr>
+    <tr><td>R02</td><td>Critical libraries affected without prior validation</td><td>Medium (3)</td><td>High (4)</td><td>12</td><td>Create and maintain exception list; require owner approval before applying to critical sites</td><td>Option A or D</td><td>SharePoint Admin</td></tr>
+    <tr><td>R03</td><td>Confusion between policy change and trimming</td><td>High (4)</td><td>High (4)</td><td>16</td><td>Clearly communicate in all templates that trimming is a separate action; include distinction in every stakeholder message</td><td>N/A (communication)</td><td>Change Management</td></tr>
+    <tr><td>R04</td><td>Trimming executed without formal approval</td><td>Low (1)</td><td>Critical (5)</td><td>5</td><td>Require What-if analysis + written approval; restrict trim cmdlet access via RBAC or conditional access; audit trim events in Purview</td><td>No rollback</td><td>IT Manager + Compliance</td></tr>
+    <tr><td>R05</td><td>Partial failure on some sites (CompleteWithFailure)</td><td>Medium (3)</td><td>Medium (3)</td><td>9</td><td>Detailed logging per site; controlled reprocessing of failed sites individually; investigate before reprocessing</td><td>Option D or F</td><td>SharePoint Admin</td></tr>
+    <tr><td>R06</td><td>Different versioning needs across libraries in same site</td><td>Medium (3)</td><td>Medium (3)</td><td>9</td><td>Use library-level policy via <code>Set-SPOListVersionPolicy</code>; document exceptions per library</td><td>Option D</td><td>SharePoint Admin</td></tr>
+    <tr><td>R07</td><td>Stakeholders expect immediate storage reduction</td><td>High (4)</td><td>Medium (3)</td><td>12</td><td>Communicate clearly: policy change ≠ version removal; storage savings only occur through trimming (separate initiative)</td><td>N/A (communication)</td><td>Change Management</td></tr>
+    <tr><td>R08</td><td>Sites under retention / eDiscovery hold affected</td><td>Medium (3)</td><td>High (4)</td><td>12</td><td>Exclude from scope; validate with compliance team; run compliance audit script before each wave</td><td>Option A</td><td>Compliance Officer</td></tr>
+    <tr><td>R09</td><td>Background job takes longer than 24 hours</td><td>Medium (3)</td><td>Low (2)</td><td>6</td><td>Monitor progress with <code>Get-SPOSiteVersionPolicyJobProgress</code>; no functional impact during processing; communicate expected timeline to owners</td><td>None needed</td><td>SharePoint Admin</td></tr>
+    <tr><td>R10</td><td>Background job cancelled but partially applied</td><td>Low (2)</td><td>Medium (3)</td><td>6</td><td>If job is cancelled, identify which libraries were already updated vs. pending; revert processed libraries individually if needed (Option D)</td><td>Option F → Option D</td><td>SharePoint Admin</td></tr>
+    <tr><td>R11</td><td>PowerShell module version incompatibility</td><td>Low (2)</td><td>Medium (3)</td><td>6</td><td>Verify module versions in Prerequisites checklist; test connectivity before each phase; use Windows PowerShell 5.1 as fallback</td><td>N/A (pre-execution)</td><td>SharePoint Admin</td></tr>
+    <tr><td>R12</td><td>Multi-Geo tenant: sites in different geo-locations</td><td>Medium (3)</td><td>Medium (3)</td><td>9</td><td>Include geo-location field in site inventory; verify <code>Set-SPOSite</code> works across geos; track progress per geo</td><td>Option A</td><td>SharePoint Admin</td></tr>
+    <tr><td>R13</td><td>Regional compliance conflict (GDPR, LGPD, PIPL)</td><td>Medium (3)</td><td>High (4)</td><td>12</td><td>Engage regional DPO / compliance for sites in regulated regions; exclude if uncertain; document approval per region</td><td>Option A</td><td>Compliance Officer</td></tr>
+    <tr><td>R14</td><td>Execution during business hours disrupts user perception</td><td>Medium (3)</td><td>Low (2)</td><td>6</td><td>Schedule execution during off-peak hours per region; communicate that no downtime is expected</td><td>None needed</td><td>SharePoint Admin</td></tr>
+    <tr><td>R15</td><td>Site owners unresponsive for post-change validation</td><td>High (4)</td><td>Low (2)</td><td>8</td><td>Define 48-hour validation window; if no response, record as "no issues reported"; escalate if critical site</td><td>None needed</td><td>Change Management</td></tr>
+    <tr><td>R16</td><td>Tenant-level policy changed during deployment</td><td>Low (1)</td><td>High (4)</td><td>4</td><td>Freeze tenant-level versioning settings during deployment phases; document current tenant settings at start of each phase</td><td>Re-validate all sites</td><td>IT Manager</td></tr>
+  </tbody>
+</table>
+
+<h3>Risk Heat Map</h3>
+<table>
+  <thead><tr><th></th><th>Low Impact (1–2)</th><th>Medium Impact (3)</th><th>High Impact (4)</th><th>Critical Impact (5)</th></tr></thead>
+  <tbody>
+    <tr><td><strong>High Prob (4–5)</strong></td><td>R15</td><td>R07</td><td>R03</td><td></td></tr>
+    <tr><td><strong>Medium Prob (3)</strong></td><td>R09, R14</td><td>R05, R06, R12</td><td>R02, R08, R13</td><td></td></tr>
+    <tr><td><strong>Low Prob (1–2)</strong></td><td></td><td>R10, R11</td><td>R01, R16</td><td>R04</td></tr>
+  </tbody>
+</table>
+
+<h3>Top Priority Risks (Score ≥ 12)</h3>
+<div class="callout c-danger"><span class="ico">🔴</span><div class="body"><b>Risks requiring active management</b><br>
+<strong>R03 (Score 16):</strong> Confusion between policy change and trimming — Mitigate through all communication templates and stakeholder briefings.<br>
+<strong>R02 (Score 12):</strong> Critical libraries affected without validation — Maintain exception list and require owner sign-off.<br>
+<strong>R07 (Score 12):</strong> Stakeholders expect immediate storage reduction — Set expectations in pre-change and executive communications.<br>
+<strong>R08 (Score 12):</strong> Sites under retention/hold affected — Run compliance audit before each wave.<br>
+<strong>R13 (Score 12):</strong> Regional compliance conflict — Engage DPO/compliance per region before execution.
+</div></div>
+
+<h3>PowerShell — Audit Current Exceptions</h3>
+<pre><span class="lang-tag">PowerShell — Find sites NOT matching target policy</span>
+Connect-SPOService -Url "https://&lt;tenant&gt;-admin.sharepoint.com"
+
+# Find all sites that don't match any of the 3 target settings
+Get-SPOSite -Limit All |
+    Where-Object {
+        $_.MajorVersionLimit -ne 50 -or
+        $_.EnableAutoExpirationVersionTrim -ne $false -or
+        $_.ExpireVersionsAfterDays -ne 0
+    } |
+    Select-Object Url, MajorVersionLimit,
+        EnableAutoExpirationVersionTrim,
+        ExpireVersionsAfterDays |
+    Export-Csv ".\sites-not-matching-policy.csv" -NoTypeInformation
+
+Write-Host "Review the exported CSV to identify sites requiring attention."
+</pre>
+
+<div class="ref-box">
+<h3>🔗 Reference Links</h3>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/trim-versions" target="_blank">Trim existing versions — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/document-library-version-history-limits" target="_blank">Version history limits overview — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-spolistversionpolicy" target="_blank">Set-SPOListVersionPolicy — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/site-version-limits" target="_blank">Change version history limits for a Site — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/microsoft-365/enterprise/microsoft-365-multi-geo" target="_blank">Microsoft 365 Multi-Geo — Microsoft Learn</a></li>
+</ul>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!--        TAB: GO/NO-GO & TIMELINE        -->
+<!-- ══════════════════════════════════════ -->
+<div class="card" id="tabGo">
+<h2>🚦 Go / No-Go Criteria</h2>
+
+<h3>✅ Go — Advance to the next phase if:</h3>
+<ul>
+  <li>Previous phase completed successfully</li>
+  <li>No critical incidents (P1/P2)</li>
+  <li>Technical validation approved</li>
+  <li>Site owners reported no relevant impact</li>
+  <li>Runbook updated and reviewed</li>
+  <li>Exception list controlled and documented</li>
+</ul>
+
+<h3>🛑 No-Go — Do NOT advance if:</h3>
+<ul>
+  <li>Recurring failures in policy application</li>
+  <li>Incidents affecting access, editing, or collaboration</li>
+  <li>Lack of validation evidence</li>
+  <li>Unresolved concerns about critical sites</li>
+  <li>Trimming requests submitted without formal approval</li>
+</ul>
+
+<hr>
+
+<h2>📅 Timeline Model</h2>
+<table>
+  <thead><tr><th>Phase</th><th>Objective</th><th>Expected Output</th></tr></thead>
+  <tbody>
+    <tr><td>Phase 1 — POC</td><td>Technically validate on low-risk scope</td><td>Approved procedure &amp; runbook</td></tr>
+    <tr><td>Phase 2 — POC2 / Test</td><td>Validate varied scenarios &amp; exceptions</td><td>Refined runbook &amp; exception list</td></tr>
+    <tr><td>Phase 3 — Pilot</td><td>Validate in controlled production</td><td>Approval for full-scale rollout</td></tr>
+    <tr><td>Phase 4 — Full Deploy</td><td>Apply to all eligible sites (waves)</td><td>Standardized policy across tenant</td></tr>
+  </tbody>
+</table>
+
+<div class="callout c-warn"><span class="ico">📝</span><div class="body"><b>Note on Duration</b><br>Duration in days is not included because it depends on the number of sites, library sizes, internal governance, and available change windows. Populate durations based on your environment.</div></div>
+
+<hr>
+
+<h2>🎯 Final Recommendation &amp; Executive Summary</h2>
+
+<h3>Recommendation</h3>
+<ol>
+  <li><strong>Do not start with trimming.</strong></li>
+  <li>First, apply only the <strong>versioning policy to existing libraries</strong>.</li>
+  <li>Validate behavior and stability across all phases.</li>
+  <li>Then, if the objective is to recover storage, open a <strong>separate plan</strong> for:
+    <ul>
+      <li>Impact analysis (What-if)</li>
+      <li>Formal approval</li>
+      <li>Controlled trimming by site or library</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="callout c-info"><span class="ico">💡</span><div class="body"><b>Key Takeaway</b><br>The initial change is a <strong>governance/configuration update</strong> (reversible). Trimming is a <strong>destructive and permanent action</strong> (irreversible). Keeping them separate reduces risk significantly.</div></div>
+
+<h3>Executive Summary</h3>
+<ul>
+  <li><strong>POC:</strong> Validate the policy application on a single controlled site.</li>
+  <li><strong>POC2 / Test:</strong> Validate across multiple library profiles and exception handling.</li>
+  <li><strong>Small Production Test:</strong> Confirm behavior in production with low risk and real users.</li>
+  <li><strong>Full Deployment:</strong> Apply in waves to all eligible sites with logging, monitoring, and exception management.</li>
+</ul>
+<p>The policy can be applied at the site level to existing libraries using <code>-ApplyToExistingDocumentLibraries</code>. Any trimming action should be treated <strong>separately</strong>, as it removes versions permanently and without recycle bin recovery.</p>
+
+<div class="ref-box">
+<h3>🔗 Complete Reference Links</h3>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/document-library-version-history-limits" target="_blank">Overview of version history limits — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/site-version-limits" target="_blank">Change version history limits for a Site — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/tutorial-manage-version-limits" target="_blank">Tutorial: Manage version history limits — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/trim-versions" target="_blank">Trim existing versions — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-sposite" target="_blank">Set-SPOSite — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-spolistversionpolicy" target="_blank">Set-SPOListVersionPolicy — Microsoft Learn</a></li>
+  <li><a href="https://pnp.github.io/powershell/cmdlets/Set-PnPSiteVersionPolicy.html" target="_blank">Set-PnPSiteVersionPolicy — PnP PowerShell</a></li>
+  <li><a href="https://pnp.github.io/powershell/cmdlets/Set-PnPList.html" target="_blank">Set-PnPList — PnP PowerShell</a></li>
+</ul>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!--        TAB: CHECKLIST (NEW)            -->
+<!-- ══════════════════════════════════════ -->
+<div class="card" id="tabChecklist">
+<h2>☑️ Deployment Checklist</h2>
+<p>Interactive checklist organized by phase. Click any item to mark it as complete. Progress updates automatically.</p>
+
+<div class="cl-counter" id="clCounter">0 of 63 items completed (0%)</div>
+<div class="cl-progress"><div class="cl-progress-bar" id="clBar" style="width: 0%;"></div></div>
+
+<!-- PREREQUISITES -->
+<div class="cl-section">
+<h3>🔧 Prerequisites</h3>
+
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">SharePoint Administrator role confirmed</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">SPO Management Shell installed and updated (16.0.24009.0+)</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">PnP PowerShell installed and updated (2.4.0+)</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">Connectivity to SPO Admin Center verified</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">Tenant-level versioning settings verified (50 versions / 0 days)</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">IT governance approval obtained</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">Compliance / retention team consulted</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">Sites under retention/hold identified and excluded</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">Baseline version settings exported (CSV)</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">Communication templates prepared</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">Rollback plan reviewed and approved</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">Site inventory created with owner, criticality, and storage data</span></label>
+</div>
+
+<!-- PHASE 1 -->
+<div class="cl-section">
+<h3>🧪 Phase 1 — POC</h3>
+
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Pre:</strong> POC site selected (low-risk, versioning enabled)</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Pre:</strong> Current state documented (site URL, library settings, storage)</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Pre:</strong> Site owner informed</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Exec:</strong> Policy applied via Set-SPOSite -ApplyToExistingDocumentLibraries</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Exec:</strong> Background job progress tracked</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Post:</strong> Versioning settings verified on existing libraries</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Post:</strong> Upload / edit / version history / restore tested</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Post:</strong> No permission or collaboration issues</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Post:</strong> Evidence collected (screenshots, logs)</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Sign-off:</strong> POC report completed</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Sign-off:</strong> Go/No-Go decision for Phase 2 recorded</span></label>
+</div>
+
+<!-- PHASE 2 -->
+<div class="cl-section">
+<h3>🔬 Phase 2 — Test Environment</h3>
+
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Pre:</strong> 3–10 test sites selected and classified by profile</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Pre:</strong> Current state documented for all test sites</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Exec:</strong> Policy applied to all test sites</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Exec:</strong> Library-level exceptions applied where needed</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Exec:</strong> Background jobs tracked to completion</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Post:</strong> Settings verified across all test sites</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Post:</strong> Functional validation passed (upload, edit, restore)</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Post:</strong> What-if report generated (if storage review needed)</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Post:</strong> Exception list documented</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Sign-off:</strong> Runbook refined and reviewed</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Sign-off:</strong> Go/No-Go decision for Phase 3 recorded</span></label>
+</div>
+
+<!-- PHASE 3 -->
+<div class="cl-section">
+<h3>🚀 Phase 3 — Production Pilot</h3>
+
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Pre:</strong> 5–20 pilot sites selected and pilots list frozen</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Pre:</strong> Pre-change communication sent to site owners</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Pre:</strong> Execution window confirmed</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Exec:</strong> Policy applied with full logging (CSV export)</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Exec:</strong> Background jobs tracked</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Post:</strong> Technical validation completed</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Post:</strong> Functional validation with site owners completed</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Post:</strong> Post-change communication sent</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Post:</strong> No P1/P2 incidents reported</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Post:</strong> Trimming need assessed (if applicable)</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Sign-off:</strong> Pilot report completed</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Sign-off:</strong> Go/No-Go decision for Phase 4 recorded</span></label>
+</div>
+
+<!-- PHASE 4 -->
+<div class="cl-section">
+<h3>🌐 Phase 4 — Full Deployment</h3>
+
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Pre:</strong> Full site inventory prepared with wave assignments</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Pre:</strong> Exception list finalized</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Pre:</strong> Communication sent for current wave</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Exec:</strong> Wave 1 executed and validated</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Exec:</strong> Wave 2 executed and validated</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Exec:</strong> Wave 3 executed and validated</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Exec:</strong> Wave 4 executed and validated (critical sites)</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Exec:</strong> Wave 5 — exceptions and remaining handled</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Post:</strong> All background jobs completed</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Post:</strong> Final audit — all sites matching target policy</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text"><strong>Sign-off:</strong> Deployment closure report completed</span></label>
+</div>
+
+<!-- POST-DEPLOYMENT -->
+<div class="cl-section">
+<h3>📋 Post-Deployment</h3>
+
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">All execution logs and CSVs archived</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">Exception list finalized and shared with governance team</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">Lessons learned documented</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">Monitoring plan established for new sites inheriting tenant policy</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">Trimming initiative scoped separately (if storage recovery needed)</span></label>
+<label class="cl-item"><input type="checkbox" class="cl-check"><span class="check-box">✓</span><span class="cl-text">Final stakeholder communication sent</span></label>
+</div>
+
+<div class="ref-box">
+<h3>🔗 Reference Links</h3>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/site-version-limits" target="_blank">Change version history limits for a Site — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/tutorial-manage-version-limits" target="_blank">Tutorial: Manage version history limits — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/trim-versions" target="_blank">Trim existing versions — Microsoft Learn</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-sposite" target="_blank">Set-SPOSite — Microsoft Learn</a></li>
+</ul>
+</div>
+</div>
+
+</main>
+</div><!-- /app -->
+
+<div class="footer">
+  SharePoint Version History Limits — Deployment Plan &nbsp;·&nbsp; Generated May 2026
+</div>
+
+<!-- ═══════════ JAVASCRIPT ═══════════ -->
+<script>
+(function(){
+  // Tab switching
+  function switchTab(tabId){
+    var cards=document.querySelectorAll('.card');
+    for(var i=0;i<cards.length;i++) cards[i].classList.remove('active');
+    var navBtns=document.querySelectorAll('.nav-btn');
+    for(var i=0;i<navBtns.length;i++) navBtns[i].classList.remove('active');
+    var mobBtns=document.querySelectorAll('.mobile-tab');
+    for(var i=0;i<mobBtns.length;i++) mobBtns[i].classList.remove('active');
+    var target=document.getElementById(tabId);
+    if(target) target.classList.add('active');
+    var allBtns=document.querySelectorAll('[data-tab="'+tabId+'"]');
+    for(var i=0;i<allBtns.length;i++) allBtns[i].classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  var navBtns=document.querySelectorAll('.nav-btn');
+  for(var i=0;i<navBtns.length;i++){
+    navBtns[i].addEventListener('click',function(){switchTab(this.getAttribute('data-tab'));});
+  }
+  var mobBtns=document.querySelectorAll('.mobile-tab');
+  for(var i=0;i<mobBtns.length;i++){
+    mobBtns[i].addEventListener('click',function(){switchTab(this.getAttribute('data-tab'));});
+  }
+
+  // Checklist progress
+  function updateProgress(){
+    var all=document.querySelectorAll('.cl-check');
+    var checked=document.querySelectorAll('.cl-check:checked');
+    var total=all.length;
+    var done=checked.length;
+    var pct=total>0?Math.round((done/total)*100):0;
+    var counter=document.getElementById('clCounter');
+    var bar=document.getElementById('clBar');
+    if(counter) counter.textContent=done+' of '+total+' items completed ('+pct+'%)';
+    if(bar) bar.style.width=pct+'%';
+  }
+
+  var checks=document.querySelectorAll('.cl-check');
+  for(var i=0;i<checks.length;i++){
+    checks[i].addEventListener('change',updateProgress);
+  }
+  updateProgress();
+})();
+</script>
+
+
+
+</body></html>

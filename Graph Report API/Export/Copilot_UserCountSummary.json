@@ -1,0 +1,26 @@
+{
+  "adoptionByProduct": [
+    {
+      "outlookActiveUsers": 0,
+      "copilotChatEnabledUsers": 27,
+      "copilotChatActiveUsers": 0,
+      "wordEnabledUsers": 27,
+      "anyAppEnabledUsers": 27,
+      "powerPointEnabledUsers": 27,
+      "oneNoteEnabledUsers": 27,
+      "reportPeriod": 30,
+      "wordActiveUsers": 0,
+      "loopActiveUsers": 0,
+      "outlookEnabledUsers": 27,
+      "anyAppActiveUsers": 0,
+      "excelEnabledUsers": 27,
+      "oneNoteActiveUsers": 0,
+      "microsoftTeamsActiveUsers": 0,
+      "powerPointActiveUsers": 0,
+      "microsoftTeamsEnabledUsers": 27,
+      "loopEnabledUsers": 27,
+      "excelActiveUsers": 0
+    }
+  ],
+  "reportRefreshDate": "2026-03-07"
+}
