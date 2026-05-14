@@ -19,7 +19,13 @@ Collection of Microsoft 365 / Azure administration scripts, reports, and dashboa
 
 ## Live dashboards
 
-- M365 Roadmap (April 2026): https://kabivel.github.io/m365-roadmap-april/
+GitHub Pages root: https://kabivel.github.io/v-ofernando/
+
+- M365 Roadmap (April 2026) — root `index.html`: https://kabivel.github.io/v-ofernando/
+- M365 Roadmap (April 2026) — standalone: https://kabivel.github.io/v-ofernando/m365-roadmap-april.html
+- Exchange Mailflow report: https://kabivel.github.io/v-ofernando/Exchange/Mailflow.html
+
+> **Note:** GitHub Pages must be enabled — repo **Settings → Pages → Source: Deploy from a branch → Branch: `main` / folder: `/ (root)`**.
 
 ## Run locally
 
