@@ -4,9 +4,9 @@ Collection of Microsoft 365 / Azure administration scripts, reports, and dashboa
 
 ## Repository structure
 
-- **[index.html](index.html)** — M365 Roadmap dashboard (root entry).
-- **[m365-roadmap-april.html](m365-roadmap-april.html)** — Interactive single-page dashboard listing Microsoft 365 Roadmap features with GA in April 2026.
+- **[index.html](index.html)** — M365 Roadmap dashboard (April 2026, root entry).
 - **[keyvault_acess.ps1](keyvault_acess.ps1)** — Azure Key Vault access helper script.
+- **[Intune/](Intune/)** — Entra ID / Intune device management scripts.
 - **[Exchange/](Exchange/)** — Exchange Online reports (e.g. `Mailflow.html`).
 - **[Graph Report API/](Graph%20Report%20API/)** — Microsoft Graph reporting scripts:
   - `0_Setup_AppCretion.ps1` — App registration setup.
@@ -21,9 +21,9 @@ Collection of Microsoft 365 / Azure administration scripts, reports, and dashboa
 
 GitHub Pages root: https://kabivel.github.io/v-ofernando/
 
-- M365 Roadmap (April 2026) — root `index.html`: https://kabivel.github.io/v-ofernando/
-- M365 Roadmap (April 2026) — standalone: https://kabivel.github.io/v-ofernando/m365-roadmap-april.html
+- M365 Roadmap (April 2026): https://kabivel.github.io/v-ofernando/
 - Exchange Mailflow report: https://kabivel.github.io/v-ofernando/Exchange/Mailflow.html
+- SharePoint Version History — Deployment Plan (static): https://kabivel.github.io/v-ofernando/Sharepoint/SharePoint%20Version%20History%20Limits%20%E2%80%94%20Deployment%20Plan.html
 
 > **Note:** GitHub Pages must be enabled — repo **Settings → Pages → Source: Deploy from a branch → Branch: `main` / folder: `/ (root)`**.
 
