@@ -23,7 +23,7 @@ GitHub Pages root: https://kabivel.github.io/v-ofernando/
 
 - M365 Roadmap (April 2026): https://kabivel.github.io/v-ofernando/
 - Exchange Mailflow report: https://kabivel.github.io/v-ofernando/Exchange/Mailflow.html
-- SharePoint Version History — Deployment Plan (static): https://kabivel.github.io/v-ofernando/Sharepoint/SharePoint%20Version%20History%20Limits%20%E2%80%94%20Deployment%20Plan.html
+- SharePoint Version History — Deployment Plan (static): https://kabivel.github.io/v-ofernando/Sharepoint/version-history-deployment-plan.html
 
 > **Note:** GitHub Pages must be enabled — repo **Settings → Pages → Source: Deploy from a branch → Branch: `main` / folder: `/ (root)`**.
 
