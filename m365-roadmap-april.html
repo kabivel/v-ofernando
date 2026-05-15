@@ -10,20 +10,45 @@
     --txt:#e9ecff; --muted:#9aa3c7; --accent:#5b8def; --accent2:#7b5cff;
     --good:#3ddc97; --warn:#ffb347; --bad:#ff6b6b;
     --shadow:0 10px 30px rgba(0,0,0,.35);
+    --hero-bg:radial-gradient(1200px 800px at 20% 0%,#1b2358 0%,var(--bg) 60%);
+    --header-bg:rgba(11,16,32,.7);
+    --border:rgba(255,255,255,.08);
+    --border-strong:rgba(255,255,255,.18);
+    --card-bg:linear-gradient(180deg,var(--panel),var(--panel2));
+    --pill-bg:rgba(91,141,239,.18); --pill-border:rgba(91,141,239,.35); --pill-txt:#cfe0ff;
+    --box-bg:transparent; --box-border:rgba(255,255,255,.12);
+    --share-bg:rgba(255,255,255,.04); --share-border:rgba(255,255,255,.18); --share-txt:#bcd0ff;
+    --sq-on:var(--txt); --sq-off:rgba(255,255,255,.18);
+    --sep:rgba(255,255,255,.2);
+    --collapse-bg:rgba(255,255,255,.08);
+  }
+  body.light{
+    --bg:#f5f3ee; --panel:#ffffff; --panel2:#fdfcf9;
+    --txt:#1a1a1a; --muted:#616161; --accent:#0f6cbd; --accent2:#5b3df7;
+    --hero-bg:radial-gradient(1200px 800px at 20% 0%,#e8eef9 0%,#f5f3ee 60%);
+    --header-bg:rgba(255,255,255,.85);
+    --border:#e5e3df; --border-strong:#d8d5cf;
+    --card-bg:#fdfcf9;
+    --pill-bg:#e7eef7; --pill-border:#d3dcea; --pill-txt:#1f3a5f;
+    --box-bg:#ffffff; --box-border:#e5e3df;
+    --share-bg:#ffffff; --share-border:#d8d5cf; --share-txt:#3b5b9a;
+    --sq-on:#1a1a1a; --sq-off:#d8d5cf;
+    --sep:#c8c6c0;
+    --collapse-bg:#1a1a1a;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;background:radial-gradient(1200px 800px at 20% 0%,#1b2358 0%,var(--bg) 60%) fixed;color:var(--txt);font-family:Segoe UI,Inter,system-ui,Arial,sans-serif}
-  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);background:rgba(11,16,32,.7);border-bottom:1px solid rgba(255,255,255,.08)}
+  html,body{margin:0;background:var(--hero-bg) fixed;color:var(--txt);font-family:Segoe UI,Inter,system-ui,Arial,sans-serif}
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);background:var(--header-bg);border-bottom:1px solid var(--border)}
   .nav{max-width:1200px;margin:auto;display:flex;align-items:center;gap:16px;padding:14px 22px}
   .brand{font-weight:700}.brand small{color:var(--muted);font-weight:400;margin-left:8px}
   .nav .spacer{flex:1}
   .nav .btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border:none;padding:9px 14px;border-radius:10px;cursor:pointer;font-weight:600;text-decoration:none}
-  .nav .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,.18)}
+  .nav .btn.secondary{background:transparent;border:1px solid var(--border-strong);color:var(--txt)}
 
   .hero{position:relative;max-width:1200px;margin:24px auto 8px;padding:28px 22px 8px;display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:center}
   .hero h1{font-size:34px;margin:0 0 10px;line-height:1.15}
   .hero p{color:var(--muted);margin:0 0 14px;max-width:60ch}
-  .pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;background:rgba(91,141,239,.18);border:1px solid rgba(91,141,239,.35);color:#cfe0ff;margin-right:6px}
+  .pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;background:var(--pill-bg);border:1px solid var(--pill-border);color:var(--pill-txt);margin-right:6px}
 
   .orbit{position:relative;width:380px;height:380px;margin:auto}
   .orbit .core{position:absolute;inset:0;margin:auto;width:160px;height:160px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 10px 30px rgba(91,141,239,.55))}
@@ -31,7 +56,7 @@
   .orbit .ring{position:absolute;inset:0;border:1px dashed rgba(255,255,255,.12);border-radius:50%;animation:spin 28s linear infinite}
   .orbit .ring.r2{inset:30px;animation-duration:40s;animation-direction:reverse}
   .orbit .ring.r3{inset:60px;animation-duration:55s}
-  .logo{position:absolute;width:64px;height:64px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5));animation:floaty 6s ease-in-out infinite;font-weight:700;color:#cbd3ff;font-size:11px;text-align:center}
+  .logo{position:absolute;width:64px;height:64px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 6px 14px rgba(0,0,0,.25));animation:floaty 6s ease-in-out infinite;font-weight:700;color:var(--muted);font-size:11px;text-align:center}
   .logo img{width:100%;height:100%;object-fit:contain}
   .logo.teams{top:6%;left:48%}
   .logo.outlook{top:22%;left:84%;animation-delay:.4s}
@@ -53,11 +78,11 @@
   }
 
   .toolbar{max-width:1200px;margin:8px auto 16px;padding:0 22px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .toolbar input,.toolbar select{background:var(--panel);border:1px solid rgba(255,255,255,.1);color:var(--txt);padding:10px 12px;border-radius:10px;outline:none}
+  .toolbar input,.toolbar select{background:var(--card-bg);border:1px solid var(--border-strong);color:var(--txt);padding:10px 12px;border-radius:10px;outline:none}
   .toolbar input{min-width:280px}
   .count{color:var(--muted);font-size:13px;margin-left:auto}
 
-  .tabsbar{max-width:1200px;margin:auto;padding:0 22px;display:flex;gap:8px;overflow-x:auto;border-bottom:1px solid rgba(255,255,255,.08)}
+  .tabsbar{max-width:1200px;margin:auto;padding:0 22px;display:flex;gap:8px;overflow-x:auto;border-bottom:1px solid var(--border)}
   .tabsbar button{flex:none;background:transparent;border:none;color:var(--muted);padding:12px 14px;cursor:pointer;font-weight:600;border-bottom:2px solid transparent;display:flex;align-items:center;gap:6px}
   .tabsbar button.active{color:var(--txt);border-bottom-color:var(--accent)}
   .tabsbar .close{color:var(--muted);background:transparent;border:none;cursor:pointer}
@@ -65,51 +90,55 @@
 
   .view{max-width:1200px;margin:18px auto;padding:0 22px}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px}
-  .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s}
-  .card:hover{transform:translateY(-2px);border-color:rgba(91,141,239,.4);box-shadow:var(--shadow)}
+  .card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s}
+  .card:hover{transform:translateY(-2px);border-color:var(--pill-border);box-shadow:var(--shadow)}
   .card .top{display:flex;align-items:center;gap:10px}
-  .badge{font-size:11px;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.08);color:#dbe1ff;border:1px solid rgba(255,255,255,.08)}
-  .badge.s-launched{background:rgba(61,220,151,.15);color:#9ff5cc;border-color:rgba(61,220,151,.3)}
-  .badge.s-rolling{background:rgba(255,179,71,.15);color:#ffd9a8;border-color:rgba(255,179,71,.3)}
-  .badge.s-dev{background:rgba(123,92,255,.15);color:#cbbeff;border-color:rgba(123,92,255,.35)}
-  .card h3{margin:4px 0 0;font-size:16px;line-height:1.3}
+  .badge{font-size:11px;padding:3px 8px;border-radius:999px;background:var(--pill-bg);color:var(--pill-txt);border:1px solid var(--pill-border)}
+  .badge.s-launched{background:rgba(61,220,151,.15);color:#1f7a4d;border-color:rgba(61,220,151,.45)}
+  body:not(.light) .badge.s-launched{color:#9ff5cc}
+  .badge.s-rolling{background:rgba(255,179,71,.18);color:#8a5a10;border-color:rgba(255,179,71,.45)}
+  body:not(.light) .badge.s-rolling{color:#ffd9a8}
+  .badge.s-dev{background:rgba(123,92,255,.15);color:#4a2db3;border-color:rgba(123,92,255,.45)}
+  body:not(.light) .badge.s-dev{color:#cbbeff}
+  .card h3{margin:4px 0 0;font-size:16px;line-height:1.3;color:var(--txt)}
   .card .meta{color:var(--muted);font-size:12.5px;display:flex;flex-wrap:wrap;gap:8px}
-  .card p{color:#c8d0ee;font-size:13.5px;margin:6px 0 0}
+  .card p{color:var(--txt);opacity:.85;font-size:13.5px;margin:6px 0 0}
   .card .footer{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted)}
-  .card .open{color:#bcd0ff;font-weight:600}
+  .card .open{color:var(--share-txt);font-weight:600}
 
   /* Layout estilo card oficial do Microsoft Roadmap (mantendo tema escuro) */
-  .detail{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:0}
+  .detail{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:0}
   .msft-card{padding:28px 32px;position:relative;max-width:1100px}
   .msft-card .row1{display:grid;grid-template-columns:1fr auto auto;gap:24px;align-items:flex-start}
   .msft-card h2.mtitle{font-size:20px;font-weight:600;margin:0 0 14px;line-height:1.35;color:var(--txt);max-width:62ch}
-  .msft-card .ptag{display:inline-block;background:rgba(91,141,239,.18);color:#cfe0ff;border:1px solid rgba(91,141,239,.35);padding:6px 14px;border-radius:4px;font-size:13px;font-weight:500;margin-bottom:18px}
-  .msft-card .mdesc{color:#d8def9;font-size:14px;line-height:1.6;margin:0 0 22px;max-width:75ch;white-space:pre-wrap}
-  .msft-card .boxes{display:flex;flex-wrap:wrap;gap:0;margin-bottom:20px;border:1px solid rgba(255,255,255,.12);border-radius:4px;overflow:hidden;width:fit-content}
-  .msft-card .box{padding:12px 18px;min-width:180px;border-right:1px solid rgba(255,255,255,.12)}
+  .msft-card .ptag{display:inline-block;background:var(--pill-bg);color:var(--pill-txt);border:1px solid var(--pill-border);padding:6px 14px;border-radius:4px;font-size:13px;font-weight:500;margin-bottom:18px}
+  .msft-card .mdesc{color:var(--txt);opacity:.88;font-size:14px;line-height:1.6;margin:0 0 22px;max-width:75ch;white-space:pre-wrap}
+  .msft-card .boxes{display:flex;flex-wrap:wrap;gap:0;margin-bottom:20px;border:1px solid var(--box-border);border-radius:4px;overflow:hidden;width:fit-content;background:var(--box-bg)}
+  .msft-card .box{padding:12px 18px;min-width:180px;border-right:1px solid var(--box-border)}
   .msft-card .box:last-child{border-right:none}
   .msft-card .box .lbl{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600}
   .msft-card .box .val{font-size:13.5px;color:var(--txt)}
-  .msft-card .added{font-size:12.5px;color:var(--muted);margin:18px 0;border-top:1px solid rgba(255,255,255,.08);padding-top:14px}
-  .msft-card .added .sep{display:inline-block;color:rgba(255,255,255,.2);margin:0 10px}
+  .msft-card .added{font-size:12.5px;color:var(--muted);margin:18px 0;border-top:1px solid var(--border);padding-top:14px}
+  .msft-card .added .sep{display:inline-block;color:var(--sep);margin:0 10px}
   .msft-card .share{font-size:11px;font-weight:700;letter-spacing:1.2px;color:var(--muted);margin-bottom:8px}
   .msft-card .share-icons{display:flex;gap:10px}
-  .msft-card .share-icons a{width:34px;height:34px;border:1px solid rgba(255,255,255,.18);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;color:#bcd0ff;text-decoration:none;background:rgba(255,255,255,.04);transition:background .15s}
-  .msft-card .share-icons a:hover{background:rgba(91,141,239,.18)}
+  .msft-card .share-icons a{width:34px;height:34px;border:1px solid var(--share-border);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;color:var(--share-txt);text-decoration:none;background:var(--share-bg);transition:background .15s}
+  .msft-card .share-icons a:hover{background:var(--pill-bg)}
   .msft-card .share-icons svg{width:16px;height:16px;fill:currentColor}
   .msft-card .status-block{text-align:left;min-width:160px}
   .msft-card .status-block .sq{display:inline-flex;gap:5px;margin-bottom:6px}
-  .msft-card .status-block .sq i{width:11px;height:11px;background:var(--txt);display:inline-block}
-  .msft-card .status-block .sq i.off{background:rgba(255,255,255,.18)}
+  .msft-card .status-block .sq i{width:11px;height:11px;background:var(--sq-on);display:inline-block}
+  .msft-card .status-block .sq i.off{background:var(--sq-off)}
   .msft-card .status-block .slabel{font-size:11px;font-weight:700;letter-spacing:1.2px;color:var(--txt)}
   .msft-card .rollout{margin-top:14px}
   .msft-card .rollout .lbl{font-size:11px;font-weight:700;letter-spacing:1.2px;color:var(--muted);margin-bottom:4px}
   .msft-card .rollout .val{font-size:14px;color:var(--txt)}
-  .msft-card .collapse{width:34px;height:34px;background:rgba(255,255,255,.08);color:var(--txt);border:1px solid rgba(255,255,255,.15);border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;line-height:1}
+  .msft-card .collapse{width:34px;height:34px;background:var(--collapse-bg);color:#fff;border:1px solid var(--border-strong);border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;line-height:1}
+  body.light .msft-card .collapse{color:#fff}
   .detail .actions{margin:0 32px 24px;display:flex;gap:10px;flex-wrap:wrap}
-  .detail a.link{color:#bcd0ff;text-decoration:none;background:rgba(91,141,239,.18);padding:8px 12px;border-radius:10px;border:1px solid rgba(91,141,239,.35)}
-  .detail a.link:hover{background:rgba(91,141,239,.3)}
-  .detail .closebtn{background:transparent;border:1px solid rgba(255,255,255,.18);color:var(--txt);padding:9px 14px;border-radius:10px;cursor:pointer}
+  .detail a.link{color:var(--share-txt);text-decoration:none;background:var(--pill-bg);padding:8px 12px;border-radius:10px;border:1px solid var(--pill-border)}
+  .detail a.link:hover{filter:brightness(.95)}
+  .detail .closebtn{background:transparent;border:1px solid var(--border-strong);color:var(--txt);padding:9px 14px;border-radius:10px;cursor:pointer}
   @media (max-width:760px){.msft-card .row1{grid-template-columns:1fr}.msft-card{padding:20px}.detail .actions{margin:0 20px 20px}}
 
   footer{max-width:1200px;margin:30px auto;padding:0 22px;color:var(--muted);font-size:12px}
@@ -124,6 +153,7 @@
   <div class="nav">
     <div class="brand">Microsoft 365 Roadmap <small>· April 2026</small></div>
     <div class="spacer"></div>
+    <button class="btn secondary" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">🌙 Dark</button>
     <button class="btn secondary" onclick="goHome()">Home</button>
     <a class="btn" href="https://www.microsoft.com/en-us/microsoft-365/roadmap" target="_blank" rel="noopener">Official roadmap</a>
   </div>
@@ -145,7 +175,7 @@
     <div class="logo outlook" title="Outlook"><img src="https://img.icons8.com/color/96/microsoft-outlook-2019.png" alt="Outlook" onerror="this.parentNode.textContent='Outlook'"></div>
     <div class="logo purview" title="Microsoft Purview"><img src="https://img.icons8.com/fluency/96/security-shield-green.png" alt="Purview" onerror="this.parentNode.textContent='Purview'"></div>
     <div class="logo sharepoint" title="SharePoint"><img src="https://img.icons8.com/color/96/microsoft-sharepoint-2019.png" alt="SharePoint" onerror="this.parentNode.textContent='SharePoint'"></div>
-    <div class="logo copilot" title="Microsoft Copilot"><img src="https://img.icons8.com/fluency/96/copilot.png" alt="Copilot" onerror="this.parentNode.textContent='Copilot'"></div>
+    <div class="logo copilot" title="Microsoft Copilot"><img src="https://img.icons8.com/fluency/96/microsoft-copilot.png" alt="Copilot" onerror="this.onerror=null;this.src='https://img.icons8.com/color/96/microsoft-copilot.png';this.onerror=function(){this.parentNode.textContent='Copilot'}"></div>
     <div class="logo onedrive" title="OneDrive"><img src="https://img.icons8.com/color/96/microsoft-onedrive-2019.png" alt="OneDrive" onerror="this.parentNode.textContent='OneDrive'"></div>
     <div class="logo edge" title="Microsoft Edge"><img src="https://img.icons8.com/color/96/ms-edge-new.png" alt="Edge" onerror="this.parentNode.textContent='Edge'"></div>
     <div class="logo viva" title="Microsoft Viva"><img src="https://img.icons8.com/fluency/96/conference-call.png" alt="Viva" onerror="this.parentNode.textContent='Viva'"></div>
@@ -374,6 +404,20 @@ function closeTab(id){
   renderTabsBar(); render();
 }
 function goHome(){ switchTab("home"); }
+
+function toggleTheme(){
+  const isLight = document.body.classList.toggle('light');
+  document.getElementById('themeBtn').textContent = isLight ? '☀️ Light' : '🌙 Dark';
+  try{ localStorage.setItem('m365theme', isLight?'light':'dark'); }catch(e){}
+}
+(function(){
+  try{
+    if(localStorage.getItem('m365theme')==='light'){
+      document.body.classList.add('light');
+      var b=document.getElementById('themeBtn'); if(b) b.textContent='☀️ Light';
+    }
+  }catch(e){}
+})();
 
 function renderTabsBar(){
   const bar = document.getElementById('tabsbar');
