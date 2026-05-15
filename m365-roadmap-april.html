@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
-<title>Microsoft 365 Roadmap — Abril 2026</title>
+<title>Microsoft 365 Roadmap — April 2026</title>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <style>
   :root{
@@ -78,14 +78,39 @@
   .card .footer{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted)}
   .card .open{color:#bcd0ff;font-weight:600}
 
-  .detail{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:22px}
-  .detail h2{margin-top:0}
-  .detail .meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
-  .detail .desc{line-height:1.55;color:#d8def9;white-space:pre-wrap}
-  .detail .actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+  /* Layout estilo card oficial do Microsoft Roadmap (mantendo tema escuro) */
+  .detail{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:0}
+  .msft-card{padding:28px 32px;position:relative;max-width:1100px}
+  .msft-card .row1{display:grid;grid-template-columns:1fr auto auto;gap:24px;align-items:flex-start}
+  .msft-card h2.mtitle{font-size:20px;font-weight:600;margin:0 0 14px;line-height:1.35;color:var(--txt);max-width:62ch}
+  .msft-card .ptag{display:inline-block;background:rgba(91,141,239,.18);color:#cfe0ff;border:1px solid rgba(91,141,239,.35);padding:6px 14px;border-radius:4px;font-size:13px;font-weight:500;margin-bottom:18px}
+  .msft-card .mdesc{color:#d8def9;font-size:14px;line-height:1.6;margin:0 0 22px;max-width:75ch;white-space:pre-wrap}
+  .msft-card .boxes{display:flex;flex-wrap:wrap;gap:0;margin-bottom:20px;border:1px solid rgba(255,255,255,.12);border-radius:4px;overflow:hidden;width:fit-content}
+  .msft-card .box{padding:12px 18px;min-width:180px;border-right:1px solid rgba(255,255,255,.12)}
+  .msft-card .box:last-child{border-right:none}
+  .msft-card .box .lbl{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600}
+  .msft-card .box .val{font-size:13.5px;color:var(--txt)}
+  .msft-card .added{font-size:12.5px;color:var(--muted);margin:18px 0;border-top:1px solid rgba(255,255,255,.08);padding-top:14px}
+  .msft-card .added .sep{display:inline-block;color:rgba(255,255,255,.2);margin:0 10px}
+  .msft-card .share{font-size:11px;font-weight:700;letter-spacing:1.2px;color:var(--muted);margin-bottom:8px}
+  .msft-card .share-icons{display:flex;gap:10px}
+  .msft-card .share-icons a{width:34px;height:34px;border:1px solid rgba(255,255,255,.18);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;color:#bcd0ff;text-decoration:none;background:rgba(255,255,255,.04);transition:background .15s}
+  .msft-card .share-icons a:hover{background:rgba(91,141,239,.18)}
+  .msft-card .share-icons svg{width:16px;height:16px;fill:currentColor}
+  .msft-card .status-block{text-align:left;min-width:160px}
+  .msft-card .status-block .sq{display:inline-flex;gap:5px;margin-bottom:6px}
+  .msft-card .status-block .sq i{width:11px;height:11px;background:var(--txt);display:inline-block}
+  .msft-card .status-block .sq i.off{background:rgba(255,255,255,.18)}
+  .msft-card .status-block .slabel{font-size:11px;font-weight:700;letter-spacing:1.2px;color:var(--txt)}
+  .msft-card .rollout{margin-top:14px}
+  .msft-card .rollout .lbl{font-size:11px;font-weight:700;letter-spacing:1.2px;color:var(--muted);margin-bottom:4px}
+  .msft-card .rollout .val{font-size:14px;color:var(--txt)}
+  .msft-card .collapse{width:34px;height:34px;background:rgba(255,255,255,.08);color:var(--txt);border:1px solid rgba(255,255,255,.15);border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;line-height:1}
+  .detail .actions{margin:0 32px 24px;display:flex;gap:10px;flex-wrap:wrap}
   .detail a.link{color:#bcd0ff;text-decoration:none;background:rgba(91,141,239,.18);padding:8px 12px;border-radius:10px;border:1px solid rgba(91,141,239,.35)}
   .detail a.link:hover{background:rgba(91,141,239,.3)}
   .detail .closebtn{background:transparent;border:1px solid rgba(255,255,255,.18);color:var(--txt);padding:9px 14px;border-radius:10px;cursor:pointer}
+  @media (max-width:760px){.msft-card .row1{grid-template-columns:1fr}.msft-card{padding:20px}.detail .actions{margin:0 20px 20px}}
 
   footer{max-width:1200px;margin:30px auto;padding:0 22px;color:var(--muted);font-size:12px}
   @media (max-width:860px){.hero{grid-template-columns:1fr}.orbit{width:320px;height:320px}}
@@ -97,17 +122,17 @@
 
 <header>
   <div class="nav">
-    <div class="brand">Microsoft 365 Roadmap <small>· Abril 2026</small></div>
+    <div class="brand">Microsoft 365 Roadmap <small>· April 2026</small></div>
     <div class="spacer"></div>
-    <button class="btn secondary" onclick="goHome()">Início</button>
-    <a class="btn" href="https://www.microsoft.com/en-us/microsoft-365/roadmap" target="_blank" rel="noopener">Roadmap oficial</a>
+    <button class="btn secondary" onclick="goHome()">Home</button>
+    <a class="btn" href="https://www.microsoft.com/en-us/microsoft-365/roadmap" target="_blank" rel="noopener">Official roadmap</a>
   </div>
 </header>
 
 <section class="hero">
   <div>
-    <h1>Atualizações com GA em Abril/2026</h1>
-    <p>Resumo curado das atualizações do Microsoft 365 Roadmap com data alvo em abril de 2026. Clique em um cartão para abrir uma aba com os detalhes da feature.</p>
+    <h1>Updates with GA in April 2026</h1>
+    <p>Curated summary of Microsoft 365 Roadmap updates targeting April 2026 — including features already launched, currently rolling out, and still in development. Click a card to open a tab with the feature details.</p>
     <div>
       <span class="pill">Teams</span><span class="pill">Copilot</span><span class="pill">Purview</span>
       <span class="pill">SharePoint</span><span class="pill">Outlook</span><span class="pill">Edge</span>
@@ -128,94 +153,130 @@
 </section>
 
 <div class="toolbar">
-  <input id="q" type="search" placeholder="Buscar título, produto, palavra-chave..." oninput="render()" />
-  <select id="product" onchange="render()"><option value="">Todos os produtos</option></select>
+  <input id="q" type="search" placeholder="Search title, product, keyword..." oninput="render()" />
+  <select id="product" onchange="render()"><option value="">All products</option></select>
   <select id="status" onchange="render()">
-    <option value="">Todos os status</option>
-    <option value="Launched">Lançado</option>
-    <option value="Rolling out">Lançando</option>
-    <option value="In development">Em desenvolvimento</option>
+    <option value="">All statuses</option>
+    <option value="Launched">Launched</option>
+    <option value="Rolling out">Rolling out</option>
+    <option value="In development">In development</option>
   </select>
   <span class="count" id="count"></span>
 </div>
 
 <div class="tabsbar" id="tabsbar">
-  <button class="active" data-tab="home" onclick="switchTab('home')">📋 Lista</button>
+  <button class="active" data-tab="home" onclick="switchTab('home')">📋 List</button>
 </div>
 
 <main class="view" id="view"></main>
 
-<footer>Fonte: feed RSS oficial do Microsoft 365 Roadmap (14/05/2026). Verifique sempre o link oficial para o status mais recente.</footer>
+<footer>Source: official Microsoft 365 Roadmap RSS feed (05/14/2026). Always check the official link for the most up-to-date status.</footer>
 
 <script>
 const FEATURES = [
-  { id:"559261", title:"Purview DLM — Retenção para Teams call logs", product:"Microsoft Purview", status:"Launched", date:"Abr 2026",
-    short:"Aplique políticas de retenção a call logs do Teams (CDR) para atender regulações que exigem janela máxima de armazenamento.",
-    desc:"Microsoft Teams armazena call logs em vários locais persistentes (como CDR logs). Hoje esses logs são retidos indefinidamente, criando gap de conformidade para regulações que definem período máximo. Esta atualização permite que admins definam políticas de retenção sobre call logs do Teams, garantindo conformidade ao mesmo tempo em que permite retenção estendida para experiência do usuário quando necessário." },
-  { id:"557676", title:"Outlook — Política de delimitador de destinatários", product:"Outlook", status:"Launched", date:"Abr 2026",
-    short:"Admins podem definir o delimitador padrão (vírgula ou ponto e vírgula) entre destinatários no compose.",
-    desc:"Admins poderão definir tenant-wide um valor padrão para a configuração de Mail Compose and Reply que controla se vírgulas são usadas para separar destinatários nos campos To/Cc/Bcc." },
-  { id:"558438", title:"Viva Engage — Conversas em destaque para toda a rede", product:"Microsoft Viva", status:"Launched", date:"Abr 2026",
-    short:"Destaque uma conversa para toda a rede ou apenas para a comunidade pública.",
-    desc:"O recurso de featured conversations em comunidades públicas do Viva Engage agora inclui a opção de destacar uma conversa para todos os membros da rede ou apenas para os membros daquela comunidade — útil para comunicações de liderança e anúncios corporativos." },
-  { id:"558443", title:"Copilot em PowerPoint — Edição com modelo à sua escolha", product:"Copilot / PowerPoint", status:"Launched", date:"Abr 2026",
-    short:"Selecione modelos OpenAI ou Anthropic ao criar/editar apresentações com Copilot.",
-    desc:"Ao criar ou editar uma apresentação com Copilot em PowerPoint, agora é possível selecionar qual modelo usar, incluindo modelos OpenAI e Anthropic. Disponível para usuários licenciados de Microsoft 365 Copilot." },
-  { id:"557277", title:"Copilot edita seu documento em PowerPoint (Desktop)", product:"Copilot / PowerPoint", status:"Launched", date:"Abr 2026",
-    short:"Crie, edite e refine slides via conversa natural com Copilot, mantendo formatação e branding.",
-    desc:"Copilot em PowerPoint permite criar, editar e refinar apresentações por meio de conversa natural diretamente na apresentação. Você pode iniciar uma nova apresentação ou trabalhar em uma existente, pedindo ao Copilot para gerar slides, atualizar conteúdo, melhorar layouts e polir o design — preservando formatação, estrutura e marca. Disponível para usuários do Copilot Chat (sem licença M365 Copilot)." },
-  { id:"559481", title:"OneDrive — Ações do Copilot no File Preview", product:"OneDrive / SharePoint", status:"Launched", date:"Abr 2026",
-    short:"Prompts prontos para resumir, gerar FAQs e mais aparecem ao lado do botão Copilot durante o preview.",
-    desc:"Veja o que o Copilot pode fazer no momento em que você abre o preview de um arquivo em OneDrive ou SharePoint. Prompts ready-to-use aparecem ao lado do botão Copilot, ajudando a resumir documentos, gerar FAQs e mais — sem precisar escrever um prompt." },
-  { id:"559388", title:"Purview DSI — Análise de dados pessoais", product:"Microsoft Purview", status:"Rolling out", date:"Abr 2026",
-    short:"Nova área de exame no Data Security Investigations focada em identificar PII.",
-    desc:"Data Security Investigations (DSI) está introduzindo uma nova focus area concentrada em identificar dados pessoais. O exame identificará e extrairá vários tipos de PII (nomes, endereços, números de contas bancárias e mais) dos itens selecionados. Funciona em conjunto com os recursos AI-powered de análise de conteúdo do DSI (categorização, AI search e exame de risco)." },
-  { id:"557557", title:"Purview DSPM — Investigação e remediação por item", product:"Microsoft Purview", status:"Rolling out", date:"Abr 2026",
-    short:"Investigue e remedeie itens individuais com oversharing em SharePoint direto pelo Data Risk Assessment.",
-    desc:"Microsoft Purview Data Risk Assessments agora suporta investigação e remediação a nível de item para dados do SharePoint. Insights como sensitivity label e sharing link information ajudam a identificar itens com risco de oversharing. Usuários podem remediar resolvendo, notificando, aplicando label ou removendo sharing links dos itens selecionados." },
-  { id:"557716", title:"Teams Phone — multi-line (até 10 números/usuário)", product:"Microsoft Teams", status:"Launched", date:"Abr 2026",
-    short:"Atribua até 10 números a um único usuário em desktop, mobile e devices.",
-    desc:"Teams Phone user multi-line oferece mais flexibilidade ao permitir que administradores atribuam até 10 números a um único usuário. Com suporte completo em Teams desktop, mobile e devices, usuários podem fazer e receber chamadas de múltiplos números sem trocar de conta ou hardware — ideal para gerenciar diferentes papéis, departamentos ou identidades regionais." },
-  { id:"553590", title:"Teams Phone Device user multi-line (Android)", product:"Microsoft Teams", status:"Rolling out", date:"Abr 2026",
-    short:"Versão do multi-line para dispositivos Teams Phone Android.",
-    desc:"Equivalente ao 557716 estendido para dispositivos Teams Phone Android: até 10 números por usuário, chamadas seamless entre números sem trocar de conta ou hardware. Ideal para mercados globais e usuários multi-papel." },
-  { id:"557371", title:"Copilot — Admins habilitam modelos Anthropic", product:"Copilot", status:"Launched", date:"Abr 2026",
-    short:"Controle granular para habilitar Anthropic como provedor de modelos por usuário ou grupo.",
-    desc:"Este recurso introduz controles administrativos para gerenciar Anthropic como provedor de modelos para usuários e grupos específicos no tenant. Habilita governança de qual provedor LLM cada coorte de usuários pode usar dentro do Microsoft 365 Copilot." },
-  { id:"557187", title:"Edge — Cross Tenant Support via Intune MAM", product:"Microsoft Edge / Purview", status:"Launched", date:"Abr 2026",
-    short:"Aplique Intune App Protection Policies em perfis Edge for Business mesmo em dispositivos gerenciados por outro tenant.",
-    desc:"Edge for Business estende sua capacidade de aplicar Intune App Protection Policies via Intune MAM. Organizações podem aplicar controles de DLP em perfis Edge for Business mesmo em dispositivos gerenciados por outro tenant. Isso aplica políticas MAM como clipboard boundaries, watermarking e protected downloads dentro do work profile do Edge. Downloads são redirecionados para OneDrive for Business em vez de storage local, e leak controls (screenshots, DevTools) ativam quando data protection está aplicado." },
-  { id:"558342", title:"Purview IP — Override de labels manuais & remoção via auto-labeling", product:"Microsoft Purview", status:"Launched", date:"Abr 2026",
-    short:"SharePoint/OneDrive: sobrescrever labels aplicados manualmente e remover labels em massa via auto-labeling.",
-    desc:"Aprimoramentos para SharePoint e OneDrive permitem que organizações automaticamente sobrescrevam labels de sensibilidade aplicados manualmente e removam labels em escala em arquivos Word, Excel, PowerPoint e PDF. Garante que dados permaneçam corretamente classificados conforme políticas evoluem — reduzindo dependência de updates manuais e melhorando consistência para dados at rest em Microsoft 365." },
-  { id:"502875", title:"Copilot — Graph APIs para inventário de Apps & Agents", product:"Copilot / Graph", status:"Launched", date:"Abr 2026",
-    short:"Inventory API e Details API para gerenciamento programático de apps e agents em todo o tenant.",
-    desc:"Microsoft 365 introduzirá novos endpoints da Graph API para empoderar IT admins e developers com acesso programático robusto a app and agent management em Copilot, Teams, Outlook e outros MetaOS hosts.\n\n• Inventory API: recupera inventário completo de apps e agents, com filtros por tipo (1P, 3P, LOB, Shared), host (Copilot, Outlook, Teams, Office), última atualização e mais. Permite bulk management, compliance checks e governança simplificada.\n\n• Details API: acessa metadados detalhados de qualquer app/agent — disponibilidade, deployment status, hosts suportados, criador, versão, sensibilidade, categorias e capabilities (graph connectors, knowledge sources, plugin actions). Suporta auditoria, lifecycle management e integração em workflows existentes de TI." },
-  { id:"502519", title:"Endpoint DLP — Proteção para Recall em Copilot+ PCs", product:"Microsoft Purview", status:"Rolling out", date:"Abr 2026",
-    short:"DLP estende cobertura a Copilot+ PCs para impedir captura de Recall snapshots de conteúdo sensível.",
-    desc:"Microsoft Purview Endpoint DLP expande cobertura para Copilot+ PCs inicialmente para suportar Recall snapshots — determinando se políticas existem para impedir captura de janelas contendo restricted sensitivity labels e Sensitive Information Types (SITs). Purview admins criam políticas DLP customizadas que se integram com Windows Copilot+ PC Recall configurado por admins Intune exclusivamente para Copilot+ PC devices." },
-  { id:"500895", title:"Endpoint DLP — Classificação de Office files com Azure RMS", product:"Microsoft Purview", status:"Rolling out", date:"Abr 2026",
-    short:"Endpoint DLP agora classifica arquivos Office com proteção Azure RMS em dispositivos Windows.",
-    desc:"Endpoint DLP agora pode classificar arquivos Office armazenados em Windows devices que tenham proteção Azure RMS aplicada. A classificação é disparada quando o arquivo é usado em aplicações ou quando just-in-time classification está habilitado." },
-  { id:"558546", title:"Purview DSI — Simplificação de role-based access", product:"Microsoft Purview", status:"Launched", date:"Abr 2026",
-    short:"Roles do DSI agora estão integradas em role groups existentes (Compliance, IRM, DSM).",
-    desc:"Estamos simplificando os roles de Data Security Investigations (DSI) baseado em feedback do cliente e na contínua integração com DSPM, Insider Risk Management (IRM) e Defender XDR. Adicionamos o role 'Data Security Investigation Admin' ao role group Compliance Administrator. Adicionamos o role 'Data Security Investigation Contributor' aos role groups: Organization Management; Data Security Management; Insider Risk Management." },
-  { id:"557348", title:"Copilot — Infinite Scroll no histórico de chat", product:"Copilot", status:"Launched", date:"Abr 2026",
-    short:"Role pelo histórico antigo sem limitações — chats são carregados continuamente.",
-    desc:"Infinite scroll permite que usuários naveguem continuamente por sessões de chat antigas, carregando automaticamente conversas adicionais conforme rolam. Cria uma experiência de histórico de chat mais suave e moderna." },
-  { id:"558340", title:"Teams — Account Switching nativo no Mac", product:"Microsoft Teams", status:"Rolling out", date:"Abr 2026",
-    short:"Troque de conta/tenant direto pelo Dock e Menu Bar do macOS.",
-    desc:"Usuários agora encontrarão controles para alternar entre contas e tenants nos quais estão signed in via Dock e Menu Bar nativos do Mac, facilitando a navegação." },
-  { id:"557562", title:"OneDrive — Nome customizável da pasta de sync", product:"OneDrive", status:"Launched", date:"Abr 2026",
-    short:"Admins podem definir um nome curto para a pasta local de sync do OneDrive.",
-    desc:"IT admins agora podem customizar o nome da pasta raiz de sync local do OneDrive nas máquinas Windows dos usuários. Por padrão a pasta é nomeada 'OneDrive - {organization name}', o que pode consumir valuable path length para arquivos profundamente aninhados. Com essa policy, admins podem definir um nome mais curto específico da organização — reduzindo problemas de path length e oferecendo uma experiência de file system mais limpa." }
+  // ===== LAUNCHED (April 2026) =====
+  { id:"559261", title:"Microsoft Purview: Data Lifecycle Management - DLM Retention support for Microsoft Teams call logs", product:"Microsoft Purview", status:"Launched", date:"April 2026",
+    cloud:"Worldwide (Standard Multi-Tenant)", platform:"Web", added:"03/23/2026", modified:"05/08/2026",
+    short:"Apply retention policies to Teams call logs (CDR) to meet regulatory maximum-retention requirements.",
+    desc:"Microsoft Teams stores call logs in several persistent locations, such as CDR logs. Currently, these logs are retained indefinitely. However, regulatory requirements in various countries specify maximum retention periods for calling-related logs. This discrepancy creates a compliance gap, as the existing retention practices may not meet regulatory obligations. Additionally, tenant administrators may prefer to retain data for longer periods to improve the user experience. Therefore, this solution would help organizations ensure that Microsoft Teams remains compliant with regulatory mandates while also supporting evolving product features and business needs." },
+  { id:"557676", title:"Outlook: Delimiter setting admin policy", product:"Outlook", status:"Launched", date:"April 2026",
+    short:"Admins can define the default delimiter (comma or semicolon) used to separate recipients during compose.",
+    desc:"Admins will be able to define a tenant-wide default value for the Mail Compose and Reply setting that controls whether commas are used to separate recipients in the To/Cc/Bcc fields." },
+  { id:"558438", title:"Viva Engage: Feature conversations to all network members", product:"Microsoft Viva", status:"Launched", date:"April 2026",
+    short:"Highlight a conversation to the entire network, or only to the public community.",
+    desc:"The featured conversation feature in public Viva Engage communities will include the option to feature a conversation to all network members or only to community members — useful for leadership communications and corporate announcements." },
+  { id:"558443", title:"Copilot in PowerPoint: Edit with the model of your choice", product:"Microsoft Copilot (Microsoft 365)", status:"Launched", date:"April 2026",
+    short:"Select OpenAI or Anthropic models when creating/editing presentations with Copilot.",
+    desc:"When creating or editing a presentation with Copilot in PowerPoint, you can now select which model to use, including both OpenAI and Anthropic models. Available to Microsoft 365 Copilot–licensed users." },
+  { id:"557277", title:"Copilot can edit your document in PowerPoint (Desktop)", product:"Microsoft Copilot (Microsoft 365)", status:"Launched", date:"April 2026",
+    short:"Create, edit and refine slides via natural conversation with Copilot — preserving formatting and branding.",
+    desc:"Copilot in PowerPoint lets you create, edit, and refine presentations through natural conversation, directly in your presentation. You can start a new presentation or build on an existing one, asking Copilot to generate slides, update content, improve layouts, and polish design — while preserving formatting, structure, and branding. Available to Copilot Chat users (without a Microsoft 365 Copilot license)." },
+  { id:"559481", title:"OneDrive: Discover Copilot actions in File Preview", product:"OneDrive / SharePoint", status:"Launched", date:"April 2026",
+    short:"Ready-to-use prompts to summarize, generate FAQs, and more appear next to the Copilot button during preview.",
+    desc:"See what Copilot can do the moment you preview a file in OneDrive or SharePoint. Ready-to-use prompts appear alongside the Copilot button, helping you summarize documents, generate FAQs, and more — all without writing a single prompt." },
+  { id:"557716", title:"Teams Phone: User multi-line (up to 10 numbers per user)", product:"Microsoft Teams", status:"Launched", date:"April 2026",
+    short:"Assign up to 10 phone numbers to a single user across desktop, mobile and devices.",
+    desc:"Teams Phone user multi-line gives callers more flexibility and control by allowing administrators to assign up to 10 phone numbers to a single user. With full support across Teams desktop, mobile and devices, users can seamlessly make and receive calls from multiple numbers without switching accounts or hardware — ideal for managing different roles, departments, or regional identities, all from one unified Teams experience." },
+  { id:"557371", title:"Copilot: Admins can enable Anthropic models for specific users and groups", product:"Microsoft Copilot (Microsoft 365)", status:"Launched", date:"April 2026",
+    short:"Granular control to enable Anthropic as a model provider per user or group.",
+    desc:"This feature introduces admin controls for managing Anthropic as a model provider for specific users and groups in the tenant — enabling governance over which LLM provider each user cohort can use within Microsoft 365 Copilot." },
+  { id:"557187", title:"Microsoft Edge: Cross Tenant Support using Intune MAM", product:"Microsoft Edge", status:"Launched", date:"April 2026",
+    short:"Apply Intune App Protection Policies to Edge for Business profiles even on devices managed by another tenant.",
+    desc:"Edge for Business extends its capability to deliver Intune App Protection Policies via Intune MAM. Organizations are enabled to apply data loss prevention controls to Edge for Business profiles even on devices managed by another tenant. This capability enforces Intune MAM policies — such as clipboard boundaries, watermarking, and protected downloads — within the Edge work profile, ensuring sensitive data remains governed by your tenant. When enabled, downloads initiated in Edge are redirected to OneDrive for Business instead of local storage, and leak controls for screenshots and DevTools activate when data protection settings are applied." },
+  { id:"558342", title:"Microsoft Purview: Information Protection — Override manual labels & remove labels with auto-labeling", product:"Microsoft Purview", status:"Launched", date:"April 2026",
+    short:"SharePoint/OneDrive: automatically override manually applied labels and remove labels at scale via auto-labeling.",
+    desc:"New enhancements for SharePoint and OneDrive enable organizations to automatically override manually applied sensitivity labels and remove labels at scale on Word, Excel, PowerPoint, and PDF files. These capabilities help ensure data remains correctly classified as policies, labels, and business requirements evolve — reducing reliance on manual user updates and improving consistency for data at rest across Microsoft 365." },
+  { id:"502875", title:"Microsoft Copilot: Graph APIs for App & Agent Inventory and Details", product:"Microsoft Copilot (Microsoft 365)", status:"Launched", date:"April 2026",
+    short:"Inventory API and Details API for programmatic management of apps and agents across the tenant.",
+    desc:"Microsoft 365 will introduce new Graph API endpoints designed to empower IT administrators and developers with robust programmatic access to app and agent management across Copilot, Teams, Outlook, and other MetaOS hosts.\n\n• Inventory API: Retrieve a comprehensive inventory of all apps and agents within your tenant, with advanced filtering by type (1P, 3P, LOB, Shared), host (Copilot, Outlook, Teams, Office), last updated date, and more. Enables bulk management, compliance checks, and streamlined governance.\n\n• Details API: Access detailed metadata for any specific app or agent, including availability, deployment status, supported hosts, creator information, version, sensitivity, categories, and capabilities (graph connectors, knowledge sources, plugin actions). Supports auditing, lifecycle management, and integration into existing IT workflows." },
+  { id:"558546", title:"Microsoft Purview: Data Security Investigations — role-based access simplification", product:"Microsoft Purview", status:"Launched", date:"April 2026",
+    short:"DSI roles are now integrated into existing role groups (Compliance, IRM, Data Security Management).",
+    desc:"We are simplifying Data Security Investigations (DSI) roles following customer feedback and the continued integration with Data Security Posture Management (DSPM), Insider Risk Management (IRM), and Defender XDR. We added the Data Security Investigation Admin role to the Compliance Administrator role group. We added the Data Security Investigation Contributor role to the: Organization Management role group; Data Security Management role group; Insider Risk Management role group." },
+  { id:"557348", title:"Microsoft Copilot: Infinite Scroll Chat History", product:"Microsoft Copilot (Microsoft 365)", status:"Launched", date:"April 2026",
+    short:"Scroll through older chat sessions seamlessly — conversations load continuously.",
+    desc:"Infinite scroll enables users to continuously browse older chat sessions by automatically loading additional conversations as they scroll. This creates a smoother, more modern chat history experience." },
+  { id:"557562", title:"OneDrive: Set a custom name for the OneDrive sync folder", product:"OneDrive", status:"Launched", date:"April 2026",
+    short:"Admins can set a shorter custom name for the local OneDrive sync folder.",
+    desc:"IT admins can now customize the local OneDrive sync root folder name on users' Windows computers. By default, the folder is named \"OneDrive - {organization name},\" which can consume valuable path length for deeply nested files and folders. With this new policy, admins can set a shorter, organization-specific folder name — reducing path length issues and giving users a cleaner file system experience." },
+  { id:"422725", title:"Microsoft 365 app: Microsoft Loop — Require existing Microsoft 365 Group for new Loop workspaces", product:"Microsoft 365 app", status:"Launched", date:"April 2026",
+    short:"Optional IT admin policy to ensure new shared Loop workspaces are tied to an existing Teams-enabled M365 Group.",
+    desc:"Ensure via optional IT admin policy that new shared Loop workspaces are connected to and managed by an existing Teams-enabled Microsoft 365 Group." },
+  { id:"558688", title:"Endpoint DLP: Hyperlinks in warn & block toast messages for Edge browser", product:"Microsoft Purview", status:"Launched", date:"April 2026",
+    short:"Embed hyperlinks in customized DLP toast messages for the Edge browser.",
+    desc:"With this feature, data officers can now complete their coverage story by embedding hyperlinks within toast messages for the Edge browser. When a rule is triggered, the end user will see a toast with a customized title and message with a hyperlink — useful when organizations need to direct users to a specific resource (e.g. internal policy SharePoint site)." },
+
+  // ===== ROLLING OUT (April 2026) =====
+  { id:"559388", title:"Microsoft Purview: Data Security Investigations — new personal data examination", product:"Microsoft Purview", status:"Rolling out", date:"April 2026",
+    short:"New examination focus area in Data Security Investigations focused on identifying personal data (PII).",
+    desc:"Data Security Investigations (DSI) is introducing a new examination focus area concentrated on identifying personal data. The personal data examination will identify and extract various types of personal data from the selected items including but not limited to, names, addresses, bank account numbers, and more. This works alongside DSI's AI-powered content analysis features, such as categorization, AI search, and examination for risk." },
+  { id:"557557", title:"Microsoft Purview: DSPM Data Risk Assessments — item-level investigation & remediation", product:"Microsoft Purview", status:"Rolling out", date:"April 2026",
+    short:"Investigate and remediate individual SharePoint items at risk of oversharing, directly from Data Risk Assessment.",
+    desc:"Microsoft Purview Data Risk Assessments now support item-level investigation and remediation of SharePoint data. New insights like sensitivity label and sharing link information help users identify items at risk of oversharing. Users are empowered to remediate overshared items by resolving, notifying, applying a sensitivity label, or removing sharing links for selected item(s)." },
+  { id:"553590", title:"Teams Phone Device user multi-line (Android)", product:"Microsoft Teams", status:"Rolling out", date:"April 2026",
+    short:"Multi-line capability extended to Teams Phone Android devices.",
+    desc:"Equivalent to 557716 extended to Teams Phone Android devices: up to 10 numbers per user, seamless calls between numbers without switching accounts or hardware. Ideal for global markets and multi-role users." },
+  { id:"502519", title:"Endpoint DLP: Expand protection to Copilot+ PCs for Recall snapshots", product:"Microsoft Purview", status:"Rolling out", date:"April 2026",
+    short:"DLP extends coverage to Copilot+ PCs to prevent capture of Recall snapshots containing sensitive content.",
+    desc:"Microsoft Purview Endpoint DLP is expanding coverage to Copilot+ PCs initially to support Recall snapshots — determining whether policies exist to prevent capture of windows containing restricted sensitivity labels and Sensitive Information Types (SITs). Purview admins author Endpoint DLP custom policies to integrate with Windows Copilot+ PC Recall setup by Intune admins for Copilot+ PC devices exclusively." },
+  { id:"500895", title:"Endpoint DLP: Classification of Azure RMS protected Office documents", product:"Microsoft Purview", status:"Rolling out", date:"April 2026",
+    short:"Endpoint DLP can now classify Office files with Azure RMS protection on Windows devices.",
+    desc:"Endpoint DLP can now classify Office files stored in Windows devices that have Azure RMS protection applied. Classification is triggered when the file is used in applications or when just-in-time classification is enabled." },
+  { id:"558340", title:"Microsoft Teams: Account Switching for native Mac controls via Dock and Menu Bar", product:"Microsoft Teams", status:"Rolling out", date:"April 2026",
+    short:"Switch between accounts/tenants directly from the macOS Dock and Menu Bar.",
+    desc:"Users will now find controls for switching between the accounts and tenants that they are signed into via the native Mac Dock and Menu Bar, making it easier to navigate." },
+  { id:"421612", title:"Microsoft 365 app: Microsoft Loop — Departed user content workflows for user-owned workspaces", product:"Microsoft 365 app", status:"Rolling out", date:"April 2026",
+    short:"Manage retention/deletion of user-owned Loop workspaces (e.g. Copilot Pages) when users leave the organization.",
+    desc:"Manage retention and deletion workflows for user-owned Loop workspaces like Copilot Pages when users leave the organization. Notify and provide temporary access to other employees or administrators to save important data before deletion policies take effect." },
+  { id:"485740", title:"Outlook: Import emails from PST file to mailbox in new Outlook for Windows (GCC)", product:"Outlook", status:"Rolling out", date:"April 2026",
+    short:"Import emails from .pst files into the mailbox in the new Outlook for Windows (GCC).",
+    desc:"With this update of support for .pst files (Outlook Data File) in the new Outlook for Windows, GCC users will be able to import emails from .pst file to mailbox. Future releases will expand the support for .pst file capabilities." },
+  { id:"558540", title:"Microsoft Teams: Video recap in Teams", product:"Microsoft Teams", status:"Rolling out", date:"April 2026",
+    short:"Intelligent meeting recap now includes narrated video highlights.",
+    desc:"Intelligent meeting recap will now include video-based recaps. Video recap creates narrated video highlights from recorded meetings, featuring key takeaways and short clips that showcase important moments." },
+
+  // ===== IN DEVELOPMENT (April 2026) =====
+  { id:"480722", title:"Microsoft Viva: Introducing the new Republish feature in Viva Amplify", product:"Microsoft Viva", status:"In development", date:"April 2026",
+    short:"Republish — refresh, reshare, and update existing published content across SharePoint, Engage, Outlook and Teams.",
+    desc:"We're excited to launch Republish, a new feature that keeps your content fresh, extends its reach, and maximizes engagement across SharePoint, Viva Engage, Outlook, and Teams. Update existing published content in a few clicks, re-share key messages to new audiences or channels, correct errors and refine your messaging — all without starting from scratch. Republish in Viva Amplify makes content management effortless." },
+  { id:"429876", title:"Microsoft Purview: Information Protection — MIP auto-labeling for Azure SQL & Storage", product:"Microsoft Purview", status:"In development", date:"April 2026",
+    short:"Extend sensitivity labels to Azure Storage and Azure SQL via auto-labeling policy.",
+    desc:"Extend your sensitivity labels to specific or all subscriptions within Azure Storage and Azure SQL Server via auto-labeling policy. Clearly define labeling conditions for data sources beyond M365 without fear of it interfering with existing M365 file configurations." },
+  { id:"503587", title:"Microsoft Copilot: Manage access more precisely with nested permissions in Jira, Confluence, and ServiceNow", product:"Microsoft Copilot (Microsoft 365)", status:"In development", date:"April 2026",
+    short:"Support for hierarchical ACLs for ServiceNow, Confluence and Jira connectors.",
+    desc:"Admins can manage access more precisely with support for nested permissions in Jira, Confluence, and ServiceNow connectors. Adds support for hierarchical ACLs (Access Control Lists) so Copilot honors source-system permissions when grounding on third-party content." },
+  { id:"487836", title:"Outlook: Play a Sound Rule", product:"Outlook", status:"Rolling out", date:"April 2026",
+    short:"Set up Outlook rules to play a sound or show a desktop alert when matching emails arrive.",
+    desc:"Users can set up Outlook rules to play a sound or show a desktop alert whenever an email that matches your chosen conditions arrives — whether it's from a specific person, includes certain words, or meets any other rule criteria you define. Helps you stay alerted to the emails that matter most." },
+  { id:"560321", title:"Microsoft Teams: Save your event as template to reuse event configurations", product:"Microsoft Teams", status:"In development", date:"June 2026",
+    short:"Save Teams event configurations as reusable templates in the Events app (related to April items).",
+    desc:"Organizers for Teams events instances will now be able to reuse their event configurations in the Events app in Teams. Organizers can save these configurations as a template in the Events app to use again for future Teams events." }
 ];
 
 let activeTab = "home";
 const openTabs = [];
 
 const statusClass = s => s==="Launched"?"s-launched":s==="Rolling out"?"s-rolling":"s-dev";
-const statusLabel = s => s==="Launched"?"Lançado":s==="Rolling out"?"Lançando":"Em desenvolvimento";
+const statusLabel = s => s==="Launched"?"Launched":s==="Rolling out"?"Rolling out":"In development";
 
 function populateFilters(){
   const sel = document.getElementById('product');
@@ -240,34 +301,62 @@ function render(){
 
 function renderHome(list){
   const v = document.getElementById('view');
-  if(!list.length){ v.innerHTML = `<div class="detail"><p style="color:var(--muted)">Nenhuma feature corresponde aos filtros.</p></div>`; return; }
+  if(!list.length){ v.innerHTML = `<div class="detail"><p style="color:var(--muted)">No feature matches the filters.</p></div>`; return; }
   v.innerHTML = `<div class="grid">` + list.map(f=>`
     <article class="card" onclick="openFeature('${f.id}')">
       <div class="top"><span class="badge ${statusClass(f.status)}">${statusLabel(f.status)}</span><span class="badge">${f.date}</span></div>
       <h3>${f.title}</h3>
       <div class="meta"><span>🏷️ ${f.product}</span><span>🆔 ${f.id}</span></div>
       <p>${f.short}</p>
-      <div class="footer"><span class="open">Abrir aba →</span><span>id=${f.id}</span></div>
+      <div class="footer"><span class="open">Open tab →</span><span>id=${f.id}</span></div>
     </article>`).join('') + `</div>`;
 }
 
 function renderDetail(id){
   const f = FEATURES.find(x=>x.id===id);
   if(!f){ activeTab="home"; render(); return; }
+  const phase = f.status === "In development" ? "Preview" : "General Availability";
+  const cloud = f.cloud || "Worldwide (Standard Multi-Tenant)";
+  const platform = f.platform || "Web";
+  const added = f.added || "—";
+  const modified = f.modified || "—";
+  const url = `https://www.microsoft.com/microsoft-365/roadmap?id=${f.id}`;
   document.getElementById('view').innerHTML = `
     <div class="detail">
-      <div class="meta">
-        <span class="badge ${statusClass(f.status)}">${statusLabel(f.status)}</span>
-        <span class="badge">${f.date}</span>
-        <span class="badge">${f.product}</span>
-        <span class="badge">ID ${f.id}</span>
+      <div class="msft-card">
+        <div class="row1">
+          <div>
+            <h2 class="mtitle">${f.title}</h2>
+            <span class="ptag">${f.product}</span>
+          </div>
+          <div class="status-block">
+            <div class="sq"><i></i><i></i><i></i></div>
+            <div class="slabel">${statusLabel(f.status).toUpperCase()}</div>
+            <div class="rollout">
+              <div class="lbl">ROLLOUT START</div>
+              <div class="val">${f.date}</div>
+            </div>
+          </div>
+          <button class="collapse" title="Collapse" onclick="closeTab('${f.id}')">—</button>
+        </div>
+        <p class="mdesc">${f.desc}</p>
+        <div class="boxes">
+          <div class="box"><div class="lbl">Roadmap ID</div><div class="val">${f.id}</div></div>
+          <div class="box"><div class="lbl">Cloud instances(s)</div><div class="val">${cloud}</div></div>
+          <div class="box"><div class="lbl">Platform(s)</div><div class="val">${platform}</div></div>
+          <div class="box"><div class="lbl">Release phases(s)</div><div class="val">${phase}</div></div>
+        </div>
+        <div class="added">Added to roadmap: ${added}<span class="sep">|</span>Last modified: ${modified}</div>
+        <div class="share">SHARE</div>
+        <div class="share-icons">
+          <a href="mailto:?subject=${encodeURIComponent(f.title)}&body=${encodeURIComponent(url)}" title="E-mail"><svg viewBox="0 0 24 24"><path d="M2 5h20v14H2zm2 2v.4l8 5 8-5V7zm16 2.6-8 5-8-5V17h16z"/></svg></a>
+          <a href="${url}" target="_blank" rel="noopener" title="RSS"><svg viewBox="0 0 24 24"><path d="M5 3a16 16 0 0 1 16 16h-3A13 13 0 0 0 5 6zm0 6a10 10 0 0 1 10 10h-3a7 7 0 0 0-7-7zm1.5 7a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/></svg></a>
+          <a href="${url}" target="_blank" rel="noopener" title="Link"><svg viewBox="0 0 24 24"><path d="M10.6 13.4a4 4 0 0 0 5.7 0l3-3a4 4 0 1 0-5.7-5.7l-1.3 1.3 1.4 1.4 1.3-1.3a2 2 0 1 1 2.9 2.9l-3 3a2 2 0 0 1-2.9 0zm2.8-2.8a4 4 0 0 0-5.7 0l-3 3a4 4 0 1 0 5.7 5.7l1.3-1.3-1.4-1.4-1.3 1.3a2 2 0 1 1-2.9-2.9l3-3a2 2 0 0 1 2.9 0z"/></svg></a>
+        </div>
       </div>
-      <h2>${f.title}</h2>
-      <p style="color:var(--muted);margin:0 0 14px">${f.short}</p>
-      <div class="desc">${f.desc}</div>
       <div class="actions">
-        <a class="link" href="https://www.microsoft.com/microsoft-365/roadmap?id=${f.id}" target="_blank" rel="noopener">Abrir no Microsoft 365 Roadmap ↗</a>
-        <button class="closebtn" onclick="closeTab('${f.id}')">Fechar aba</button>
+        <a class="link" href="${url}" target="_blank" rel="noopener">Open in Microsoft 365 Roadmap ↗</a>
+        <button class="closebtn" onclick="closeTab('${f.id}')">Close tab</button>
       </div>
     </div>`;
 }
@@ -288,12 +377,12 @@ function goHome(){ switchTab("home"); }
 
 function renderTabsBar(){
   const bar = document.getElementById('tabsbar');
-  let html = `<button class="${activeTab==='home'?'active':''}" onclick="switchTab('home')">📋 Lista</button>`;
+  let html = `<button class="${activeTab==='home'?'active':''}" onclick="switchTab('home')">📋 List</button>`;
   openTabs.forEach(id=>{
     const f = FEATURES.find(x=>x.id===id); if(!f) return;
     const short = f.title.length>32 ? f.title.slice(0,30)+'…' : f.title;
     html += `<button class="${activeTab===id?'active':''}" onclick="switchTab('${id}')" title="${f.title}">
-      <span>${short}</span><span class="close" onclick="event.stopPropagation();closeTab('${id}')" title="Fechar">✕</span></button>`;
+      <span>${short}</span><span class="close" onclick="event.stopPropagation();closeTab('${id}')" title="Close">✕</span></button>`;
   });
   bar.innerHTML = html;
 }
