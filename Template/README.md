@@ -6,9 +6,9 @@ Reusable HTML templates and shared visual assets for the v-ofernando workspace.
 
 | File | Purpose |
 |------|---------|
-| `Template.html` | AI Agents Workshop deck — visual reference (cover, bottom-nav patterns) |
+| `Workshop Template.html` | AI Agents Workshop deck — visual reference (cover, bottom-nav patterns) |
 | `m365-roadmap.template.html` | Monthly **M365 Roadmap** page template (placeholders below) |
-| `Icons/`, `other.icons/`, `partner.icons/` | Local icon assets used by `Template.html` |
+| `Icons/`, `other.icons/`, `partner.icons/` | Local icon assets used by `Workshop Template.html` |
 | `Screen.prints/` | Screenshots used during template iteration |
 
 ## `m365-roadmap.template.html` placeholders
