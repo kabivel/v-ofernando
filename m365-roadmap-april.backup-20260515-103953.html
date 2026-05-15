@@ -89,28 +89,10 @@
   .tabsbar .close:hover{color:var(--bad)}
 
   .view{max-width:1200px;margin:18px auto;padding:0 22px}
-
-  /* Roadmap section header */
-  .rmhead{max-width:1200px;margin:18px auto 6px;padding:22px 26px;border:1px solid var(--border);border-radius:14px;background:var(--card-bg);box-shadow:var(--shadow)}
-  .rmhead .eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--share-txt);text-transform:uppercase;margin:0 0 8px}
-  .rmhead h1{margin:0 0 8px;font-size:30px;line-height:1.15;font-weight:800;background:linear-gradient(90deg,#0078D4,#5C2D91 60%,#D83B01);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .rmhead p{margin:0;color:var(--muted);font-size:14px;line-height:1.55;max-width:78ch}
-  .rmhead p b{color:var(--txt);font-weight:600}
-  .rmhead .steps{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
-  .rmhead .step{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
-  .rmhead .step .dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--border-strong);background:transparent}
-  .rmhead .step.on{color:var(--txt)}
-  .rmhead .step.on .dot{background:#0078D4;border-color:#0078D4;box-shadow:0 0 0 3px rgba(0,120,212,.18)}
-  .rmhead .step .bar{width:38px;height:1px;background:var(--border-strong)}
-  @media (max-width:760px){.rmhead h1{font-size:24px}.rmhead .step .bar{width:18px}}
-  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
-  @media (max-width:880px){.grid{grid-template-columns:1fr}}
-  .card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px}
+  .card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s}
   .card:hover{transform:translateY(-2px);border-color:var(--pill-border);box-shadow:var(--shadow)}
   .card .top{display:flex;align-items:center;gap:10px}
-  .card .top .pico{width:28px;height:28px;border-radius:6px;background:#fff;border:1px solid #EDEBE9;padding:3px;flex:none;display:grid;place-items:center}
-  .card .top .pico img{width:100%;height:100%;object-fit:contain}
-  .card .top .pname{font-weight:600;font-size:13px;color:var(--txt);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .badge{font-size:11px;padding:3px 8px;border-radius:999px;background:var(--pill-bg);color:var(--pill-txt);border:1px solid var(--pill-border)}
   .badge.s-launched{background:rgba(61,220,151,.15);color:#1f7a4d;border-color:rgba(61,220,151,.45)}
   body:not(.light) .badge.s-launched{color:#9ff5cc}
@@ -171,27 +153,7 @@
     grid-template-columns:1fr 1fr;
   }
   #view-cover .cover-left{grid-column:1;padding:42px 56px}
-  #view-cover .cover-right{grid-column:2;overflow:hidden;min-height:0;width:100%;position:relative;padding:40px 110px}
-  #view-cover .cover-art{width:78%;max-width:560px}
-  /* Pull bubbles inward so animations don't push them past the area */
-  #view-cover .cover-bubble.b8 {left:4% !important}
-  #view-cover .cover-bubble.b3 {right:4% !important}
-  #view-cover .cover-bubble.b15{right:4% !important}
-  #view-cover .cover-bubble.b11{left:4% !important}
-  #view-cover .cover-bubble.b5 {right:6% !important}
-  #view-cover .cover-bubble.b12{left:6% !important}
-  #view-cover .cover-bubble.b20{left:5% !important}
-  #view-cover .cover-bubble.b19{right:6% !important}
-  #view-cover .cover-bubble.b26{right:10% !important}
-  #view-cover .cover-bubble.b35{right:12% !important}
-  #view-cover .cover-bubble.b17{left:6% !important}
-  #view-cover .cover-bubble.b22{left:6% !important}
-  #view-cover .cover-bubble.b14{right:10% !important}
-  #view-cover .cover-bubble.b18{right:18% !important}
-  #view-cover .cover-bubble.b9 {left:18% !important}
-  #view-cover .cover-bubble.b2 {left:6% !important}
-  #view-cover .cover-bubble.b4 {left:6% !important}
-  #view-cover .cover-bubble.b23{right:6% !important}
+  #view-cover .cover-right{grid-column:2;overflow:hidden;min-height:0}
   @media (max-width:980px){
     #view-cover section#hero.cover{grid-template-columns:1fr;height:auto;min-height:calc(100dvh - 110px)}
     #view-cover .cover-left,#view-cover .cover-right{grid-column:1}
@@ -360,7 +322,7 @@
     <div class="spacer"></div>
     <button class="btn secondary" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">🌙 Dark</button>
     <button class="btn secondary" onclick="goHome()">Home</button>
-    <a class="btn" href="https://www.microsoft.com/en-us/microsoft-365/roadmap" target="_blank" rel="noopener" title="Opens microsoft.com in a new tab">Open on microsoft.com ↗</a>
+    <a class="btn" href="https://www.microsoft.com/en-us/microsoft-365/roadmap" target="_blank" rel="noopener">Official roadmap</a>
   </div>
 </header>
 
@@ -433,20 +395,6 @@
 </div><!-- /view-cover -->
 
 <div class="page-view" id="view-roadmap" data-view="roadmap">
-<section class="rmhead" aria-label="Roadmap overview">
-  <p class="eyebrow">Microsoft 365 · April 2026 release</p>
-  <h1>What's shipping this month</h1>
-  <p>Track the latest Microsoft 365 features hitting <b>General Availability</b> in April 2026 — from <b>Copilot</b> updates to enhancements across <b>Teams, Outlook, SharePoint, Purview</b> and more. Filter by status to focus on what's <b>launched</b>, <b>rolling out</b>, or still <b>in development</b>.</p>
-  <div class="steps" role="list">
-    <span class="step on" role="listitem" data-step="discover"><span class="dot"></span>Discover</span>
-    <span class="bar"></span>
-    <span class="step" role="listitem" data-step="filter"><span class="dot"></span>Filter</span>
-    <span class="bar"></span>
-    <span class="step" role="listitem" data-step="detail"><span class="dot"></span>Open detail</span>
-    <span class="bar"></span>
-    <span class="step" role="listitem" data-step="rollout"><span class="dot"></span>Roll out</span>
-  </div>
-</section>
 <div class="toolbar">
   <input id="q" type="search" placeholder="Search title, product, keyword..." oninput="render()" />
   <select id="product" onchange="render()"><option value="">All products</option></select>
@@ -593,56 +541,6 @@ function render(){
   });
   document.getElementById('count').textContent = list.length + " feature(s)";
   if(activeTab==="home") renderHome(list); else renderDetail(activeTab);
-  updateSteps();
-}
-
-function updateSteps(){
-  const q = document.getElementById('q').value.trim();
-  const prod = document.getElementById('product').value;
-  const st = document.getElementById('status').value;
-  const hasFilter = !!(q || prod || st);
-  const onDetail = activeTab !== 'home';
-  const onRollout = st === 'Launched' || st === 'Rolling out';
-  const set = (name,on)=>{
-    const el = document.querySelector(`.rmhead .step[data-step="${name}"]`);
-    if(el) el.classList.toggle('on', on);
-  };
-  set('discover', true);
-  set('filter', hasFilter);
-  set('detail', onDetail);
-  set('rollout', onRollout);
-}
-
-function productIcon(product){
-  const p = (product||'').toLowerCase();
-  const map = [
-    ['copilot','https://img.icons8.com/fluency/48/microsoft-copilot.png'],
-    ['outlook','https://img.icons8.com/color/48/microsoft-outlook-2019.png'],
-    ['teams','https://img.icons8.com/color/48/microsoft-teams.png'],
-    ['sharepoint','https://img.icons8.com/color/48/microsoft-sharepoint-2019.png'],
-    ['onedrive','https://img.icons8.com/color/48/microsoft-onedrive-2019.png'],
-    ['onenote','https://img.icons8.com/color/48/microsoft-onenote-2019.png'],
-    ['word','https://img.icons8.com/color/48/microsoft-word-2019.png'],
-    ['excel','https://img.icons8.com/color/48/microsoft-excel-2019.png'],
-    ['powerpoint','https://img.icons8.com/color/48/microsoft-powerpoint-2019.png'],
-    ['planner','https://img.icons8.com/color/48/microsoft-planner.png'],
-    ['power bi','https://img.icons8.com/color/48/power-bi.png'],
-    ['power apps','https://img.icons8.com/color/48/microsoft-power-apps-2020.png'],
-    ['power automate','https://img.icons8.com/color/48/microsoft-power-automate-2020.png'],
-    ['power platform','https://img.icons8.com/color/48/power-bi.png'],
-    ['dynamics','https://img.icons8.com/color/48/microsoft-dynamics-365.png'],
-    ['intune','https://img.icons8.com/color/48/microsoft-intune.png'],
-    ['defender','https://img.icons8.com/color/48/defender.png'],
-    ['purview','https://img.icons8.com/color/48/azure-1.png'],
-    ['entra','https://img.icons8.com/color/48/azure-active-directory.png'],
-    ['edge','https://img.icons8.com/color/48/ms-edge-new.png'],
-    ['viva','https://img.icons8.com/color/48/microsoft-viva.png'],
-    ['graph','https://img.icons8.com/color/48/microsoft.png'],
-    ['azure','https://img.icons8.com/color/48/azure-1.png'],
-    ['microsoft 365','https://img.icons8.com/fluency/48/microsoft-365.png']
-  ];
-  for(const [k,u] of map){ if(p.includes(k)) return u; }
-  return 'https://img.icons8.com/color/48/microsoft.png';
 }
 
 function renderHome(list){
@@ -650,14 +548,11 @@ function renderHome(list){
   if(!list.length){ v.innerHTML = `<div class="detail"><p style="color:var(--muted)">No feature matches the filters.</p></div>`; return; }
   v.innerHTML = `<div class="grid">` + list.map(f=>`
     <article class="card" onclick="openFeature('${f.id}')">
-      <div class="top">
-        <span class="pico"><img src="${productIcon(f.product)}" alt="" onerror="this.src='https://img.icons8.com/color/48/microsoft.png'"></span>
-        <span class="pname" title="${f.product}">${f.product}</span>
-        <span class="badge ${statusClass(f.status)}">${statusLabel(f.status)}</span>
-      </div>
+      <div class="top"><span class="badge ${statusClass(f.status)}">${statusLabel(f.status)}</span><span class="badge">${f.date}</span></div>
       <h3>${f.title}</h3>
+      <div class="meta"><span>🏷️ ${f.product}</span><span>🆔 ${f.id}</span></div>
       <p>${f.short}</p>
-      <div class="footer"><span class="open">Open tab →</span><span>${f.date} · id ${f.id}</span></div>
+      <div class="footer"><span class="open">Open tab →</span><span>id=${f.id}</span></div>
     </article>`).join('') + `</div>`;
 }
 
@@ -695,7 +590,7 @@ function renderDetail(id){
           <div class="box"><div class="lbl">Platform(s)</div><div class="val">${platform}</div></div>
           <div class="box"><div class="lbl">Release phases(s)</div><div class="val">${phase}</div></div>
         </div>
-        ${(f.added||f.modified) ? `<div class="added">${f.added?`Added to roadmap: ${f.added}`:''}${(f.added&&f.modified)?'<span class="sep">|</span>':''}${f.modified?`Last modified: ${f.modified}`:''}</div>` : ''}
+        <div class="added">Added to roadmap: ${added}<span class="sep">|</span>Last modified: ${modified}</div>
         <div class="share">SHARE</div>
         <div class="share-icons">
           <a href="mailto:?subject=${encodeURIComponent(f.title)}&body=${encodeURIComponent(url)}" title="E-mail"><svg viewBox="0 0 24 24"><path d="M2 5h20v14H2zm2 2v.4l8 5 8-5V7zm16 2.6-8 5-8-5V17h16z"/></svg></a>
@@ -722,16 +617,7 @@ function closeTab(id){
   if(activeTab===id) activeTab = openTabs.length ? openTabs[openTabs.length-1] : "home";
   renderTabsBar(); render();
 }
-function goHome(){
-  // Switch to the roadmap view (in case we're on welcome) and reset to home tab
-  document.querySelectorAll('.page-view').forEach(v=>v.classList.toggle('active', v.dataset.view==='roadmap'));
-  document.querySelectorAll('#navPills .pill').forEach(p=>{
-    p.classList.toggle('active', p.getAttribute('data-view')==='roadmap' && !p.hasAttribute('data-status'));
-  });
-  const counter=document.getElementById('navCounter');
-  if(counter) counter.textContent='2 / 2';
-  switchTab("home");
-}
+function goHome(){ switchTab("home"); }
 
 function toggleTheme(){
   const isLight = document.body.classList.toggle('light');
@@ -822,7 +708,7 @@ render();
 <!-- ============ BOTTOM NAV ============ -->
 <nav class="bottomnav" id="bottomNav" aria-label="Roadmap navigation">
   <button class="brand" onclick="goHome()" title="Back to top">
-    <img src="https://img.icons8.com/color/48/microsoft.png" alt="" style="width:22px;height:22px;display:block">
+    <div class="logo"><span></span><span></span><span></span><span></span></div>
     <span>M365 Roadmap · April 2026</span>
   </button>
   <button class="arrow" id="prevBtn" title="Previous" aria-label="Previous">‹</button>
@@ -861,10 +747,6 @@ render();
       const view = p.getAttribute('data-view') || 'cover';
       showView(view);
       if(p.hasAttribute('data-status')){
-        // If a feature detail tab is open, return to the list so the filter is visible
-        if(typeof activeTab !== 'undefined' && activeTab !== 'home'){
-          if(typeof switchTab === 'function') switchTab('home');
-        }
         statusSel.value = p.getAttribute('data-status');
         statusSel.dispatchEvent(new Event('change'));
       }
