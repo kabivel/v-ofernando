@@ -9465,6 +9465,131 @@
     body{background:#fff}
   }
 </style>
+<!--
+  Online icons shim (non-destructive)
+  Mirrors the approach used by m365-roadmap-*.html: prefer Microsoft / icons8 CDN
+  icons over local Icons/* files. Local files remain in place as a fallback —
+  if this script is disabled or a CDN icon fails to load, original local paths
+  are restored automatically. No existing markup is modified.
+-->
+<script>
+(function(){
+  // Map of local icon basenames (lowercased) -> online CDN URL.
+  // Source CDN: icons8.com (same set used by m365-roadmap dashboards).
+  var MAP = {
+    'copilot.jpg':                'https://img.icons8.com/fluency/48/microsoft-copilot.png',
+    'copilotchat.jpg':            'https://img.icons8.com/fluency/48/microsoft-copilot.png',
+    'copilotstudio.png':          'https://img.icons8.com/color/48/copilot.png',
+    'outlook.jpg':                'https://img.icons8.com/color/48/microsoft-outlook-2019.png',
+    'powerpoint.jpg':             'https://img.icons8.com/color/48/microsoft-powerpoint-2019.png',
+    'teams.jpg':                  'https://img.icons8.com/color/48/microsoft-teams-2019.png',
+    'excel.jpg':                  'https://img.icons8.com/color/48/microsoft-excel-2019.png',
+    'sharepoint.webp':            'https://img.icons8.com/color/48/microsoft-sharepoint-2019.png',
+    'onenote.jpg':                'https://img.icons8.com/color/48/microsoft-onenote-2019.png',
+    'microsoft-onedrive-2025.jpg':'https://img.icons8.com/color/48/microsoft-onedrive-2019.png',
+    'microsoft-word-logo.png':    'https://img.icons8.com/color/48/microsoft-word-2019.png',
+    'planner icon.jpg':           'https://img.icons8.com/color/48/planner.png',
+    'microsoft loop.png':         'https://img.icons8.com/fluency/48/conference-call.png',
+    'm365.png':                   'https://img.icons8.com/fluency/48/microsoft-365.png',
+    'microsoft_logo_no_back.png': 'https://img.icons8.com/color/48/microsoft.png',
+    'microsoft_logo_png5.png':    'https://img.icons8.com/color/48/microsoft.png',
+    'microsoft_entra_logo.jpg':   'https://img.icons8.com/color/48/azure-active-directory.png',
+    'entra-cloud.png':            'https://img.icons8.com/color/48/azure-active-directory.png',
+    'intune.png':                 'https://img.icons8.com/color/48/microsoft-intune.png',
+    'icon-dynamics-365.png':      'https://img.icons8.com/color/48/microsoft-dynamics-2019.png',
+    'purview.svg':                'https://img.icons8.com/fluency/48/security-checked.png',
+    'securitycopilot.png':        'https://img.icons8.com/fluency/48/security-shield-green.png',
+    'defender.webp':              'https://img.icons8.com/fluency/48/security-shield-green.png',
+    'sentinel.webp':              'https://img.icons8.com/color/48/azure-1.png',
+    'azure-icon.webp':            'https://img.icons8.com/color/48/azure-1.png',
+    'azure-ai-foundry.webp':      'https://img.icons8.com/fluency/48/artificial-intelligence.png',
+    'ai.models.msft.png':         'https://img.icons8.com/fluency/48/artificial-intelligence.png',
+    'azure-search.png':           'https://img.icons8.com/color/48/azure-1.png',
+    'power-bi-logo-freelogovectors.net_.png': 'https://img.icons8.com/color/48/power-bi.png',
+    'power.plat.png':             'https://img.icons8.com/color/48/microsoft-power-platform.png',
+    'power.automate.png':         'https://img.icons8.com/color/48/automation.png',
+    'power-apps.webp':            'https://img.icons8.com/color/48/microsoft-power-apps-2020.png',
+    'dataverse-logo.png':         'https://img.icons8.com/color/48/azure-1.png',
+    'microsoft fabric.png':       'https://img.icons8.com/color/48/azure-1.png',
+    'viva.webp':                  'https://img.icons8.com/fluency/48/conference-call.png',
+    'microsoft-graph-source.webp':'https://img.icons8.com/fluency/48/artificial-intelligence.png',
+    'github_png40.png':           'https://img.icons8.com/glyph-neue/48/github.png',
+    'github.png':                 'https://img.icons8.com/glyph-neue/48/github.png',
+    'visual-studio-logo-2019.png':'https://img.icons8.com/fluency/48/visual-studio.png',
+    'vscode.icon.png':            'https://img.icons8.com/color/48/visual-studio-code-2019.png'
+  };
+
+  // Generic fallback for any image whose local file fails to load.
+  var GENERIC = 'https://img.icons8.com/fluency/48/microsoft-365.png';
+
+  function basename(p){
+    if(!p) return '';
+    var i = p.lastIndexOf('/');
+    return (i>=0 ? p.slice(i+1) : p).toLowerCase();
+  }
+  function mapUrl(p){
+    var b = basename(p);
+    return MAP[b] || null;
+  }
+
+  function attachFallback(img, original){
+    if (img.dataset.iconFallbackBound) return;
+    img.dataset.iconFallbackBound = '1';
+    img.addEventListener('error', function(){
+      if (img.dataset.iconFallbackTried === 'cdn'){
+        if (original && img.src !== original){
+          img.dataset.iconFallbackTried = 'local';
+          img.src = original;
+        } else if (img.src !== GENERIC){
+          img.dataset.iconFallbackTried = 'generic';
+          img.src = GENERIC;
+        }
+      } else if (img.src !== GENERIC){
+        img.dataset.iconFallbackTried = 'generic';
+        img.src = GENERIC;
+      }
+    });
+  }
+
+  function rewriteImages(root){
+    var imgs = (root||document).querySelectorAll('img[src]');
+    imgs.forEach(function(img){
+      var src = img.getAttribute('src') || '';
+      if (!/(^|\/)icons\//i.test(src)) return;
+      var online = mapUrl(src);
+      var original = src;
+      if (online){
+        img.dataset.iconFallbackTried = 'cdn';
+        img.src = online;
+      }
+      attachFallback(img, original);
+    });
+  }
+
+  function rewriteInlineStyles(root){
+    var nodes = (root||document).querySelectorAll('[style*="cons/"]');
+    nodes.forEach(function(el){
+      var s = el.getAttribute('style') || '';
+      var changed = s.replace(/url\((['"]?)([^'")]*?[Ii]cons\/[^'")]+)\1\)/g, function(m, q, url){
+        var online = mapUrl(url);
+        return online ? 'url(' + q + online + q + ')' : m;
+      });
+      if (changed !== s) el.setAttribute('style', changed);
+    });
+  }
+
+  function run(){
+    try { rewriteImages(document); } catch(e){}
+    try { rewriteInlineStyles(document); } catch(e){}
+  }
+
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+})();
+</script>
 </head>
 <body>
 
