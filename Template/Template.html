@@ -9564,7 +9564,42 @@
     'sensivity-labels.png':       'https://img.icons8.com/fluency/48/privacy.png',
     'icon.for.devs.png':          'https://img.icons8.com/fluency/48/code.png',
     'icon.for.makers.png':        'https://img.icons8.com/fluency/48/maintenance.png',
-    'icon.for.users.png':         'https://img.icons8.com/fluency/48/user-male-circle.png'
+    'icon.for.users.png':         'https://img.icons8.com/fluency/48/user-male-circle.png',
+
+    // --- Proprietary icons kept in repo, served via GitHub Pages ---
+    // (so the template renders correctly even when opened standalone)
+    'carrear.coach.agent.pres.original.png':  'https://kabivel.github.io/v-ofernando/Template/Icons/carrear.coach.agent.pres.original.png',
+    'connectors.icon.png':                    'https://kabivel.github.io/v-ofernando/Template/Icons/connectors.icon.png',
+    'icon-analyst-agent.png':                 'https://kabivel.github.io/v-ofernando/Template/Icons/icon-analyst-agent.png',
+    'icon-copilot-for-sales.png':             'https://kabivel.github.io/v-ofernando/Template/Icons/icon-copilot-for-sales.png',
+    'icon-researcher-agent.png':              'https://kabivel.github.io/v-ofernando/Template/Icons/icon-researcher-agent.png',
+    'idead.coach.agent.pres.original.png':    'https://kabivel.github.io/v-ofernando/Template/Icons/idead.coach.agent.pres.original.png',
+    'learning.coach.agent.pres.original.png': 'https://kabivel.github.io/v-ofernando/Template/Icons/learning.coach.agent.pres.original.png',
+    'messaging.msft.icon.png':                'https://kabivel.github.io/v-ofernando/Template/Icons/messaging.msft.icon.png',
+    'prompt.coach.agent':                     'https://kabivel.github.io/v-ofernando/Template/Icons/prompt.coach.agent',
+    'prompt.coach.agent.pres.original.png':   'https://kabivel.github.io/v-ofernando/Template/Icons/prompt.coach.agent.pres.original.png',
+    'skills.agent.ico.png':                   'https://kabivel.github.io/v-ofernando/Template/Icons/skills.agent.ico.png',
+    'visual.creator.agent.pres.original.png': 'https://kabivel.github.io/v-ofernando/Template/Icons/visual.creator.agent.pres.original.png',
+    'writing.coach.agent.pres.original.png':  'https://kabivel.github.io/v-ofernando/Template/Icons/writing.coach.agent.pres.original.png',
+    'enterprise.sites.cloud.png':             'https://kabivel.github.io/v-ofernando/Template/other.icons/enterprise.sites.cloud.png',
+    'guru.png':                               'https://kabivel.github.io/v-ofernando/Template/other.icons/guru.png',
+    'mcp.log.png':                            'https://kabivel.github.io/v-ofernando/Template/other.icons/mcp.log.png',
+    'veeva.vault.png':                        'https://kabivel.github.io/v-ofernando/Template/other.icons/veeva.vault.png',
+    'aisera.png':                             'https://kabivel.github.io/v-ofernando/Template/partner.icons/aisera.png',
+    'bigtincan.jpg':                          'https://kabivel.github.io/v-ofernando/Template/partner.icons/bigtincan.jpg',
+    'embark.png':                             'https://kabivel.github.io/v-ofernando/Template/partner.icons/embark.png',
+    'harvey.png.svg':                         'https://kabivel.github.io/v-ofernando/Template/partner.icons/harvey.png.svg',
+    'lexisnexis.png':                         'https://kabivel.github.io/v-ofernando/Template/partner.icons/lexisnexis.png',
+    'lumapps.png':                            'https://kabivel.github.io/v-ofernando/Template/partner.icons/lumapps.png',
+    'meltwater.png':                          'https://kabivel.github.io/v-ofernando/Template/partner.icons/meltwater.png',
+    'moveworks.png':                          'https://kabivel.github.io/v-ofernando/Template/partner.icons/moveworks.png',
+    'nowassist.png':                          'https://kabivel.github.io/v-ofernando/Template/partner.icons/nowassist.png',
+    'priority.matrix.png':                    'https://kabivel.github.io/v-ofernando/Template/partner.icons/priority.matrix.png',
+    'ramp.png':                               'https://kabivel.github.io/v-ofernando/Template/partner.icons/ramp.png',
+    'seismic.png':                            'https://kabivel.github.io/v-ofernando/Template/partner.icons/seismic.png',
+    'templafy.png':                           'https://kabivel.github.io/v-ofernando/Template/partner.icons/templafy.png',
+    'thomsonreuters.jpg':                     'https://kabivel.github.io/v-ofernando/Template/partner.icons/thomsonreuters.jpg',
+    'vantagecircle.png':                      'https://kabivel.github.io/v-ofernando/Template/partner.icons/vantagecircle.png'
   };
 
   // Generic fallback for any image whose local file fails to load.
@@ -9599,11 +9634,14 @@
     });
   }
 
+  // Matches any path under Icons/, icons/, other.icons/, partner.icons/, etc.
+  var ICON_PATH_RE = /icons\//i;
+
   function rewriteImages(root){
     var imgs = (root||document).querySelectorAll('img[src]');
     imgs.forEach(function(img){
       var src = img.getAttribute('src') || '';
-      if (!/(^|\/)icons\//i.test(src)) return;
+      if (!ICON_PATH_RE.test(src)) return;
       var online = mapUrl(src);
       var original = src;
       if (online){
@@ -9618,7 +9656,7 @@
     var nodes = (root||document).querySelectorAll('[style*="cons/"]');
     nodes.forEach(function(el){
       var s = el.getAttribute('style') || '';
-      var changed = s.replace(/url\((['"]?)([^'")]*?[Ii]cons\/[^'")]+)\1\)/g, function(m, q, url){
+      var changed = s.replace(/url\((['"]?)([^'")]*icons\/[^'")]+)\1\)/gi, function(m, q, url){
         var online = mapUrl(url);
         return online ? 'url(' + q + online + q + ')' : m;
       });
