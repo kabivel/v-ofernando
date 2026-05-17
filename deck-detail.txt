@@ -1,0 +1,95 @@
+1x Vial Smasher the Fierce | {1}{B}{R} | CMC 3 | Creature [CMD]
+1x Ishai, Ojutai Dragonspeaker | {2}{W}{U} | CMC 4 | Creature [CMD]
+1x Arcane Sanctum |  | CMC 0 | Land
+1x Cascade Bluffs |  | CMC 0 | Land
+1x Clifftop Retreat |  | CMC 0 | Land
+1x Command Tower |  | CMC 0 | Land
+1x Crumbling Necropolis |  | CMC 0 | Land
+1x Dragonskull Summit |  | CMC 0 | Land
+1x Exotic Orchard |  | CMC 0 | Land
+1x Fetid Heath |  | CMC 0 | Land
+1x Flooded Strand |  | CMC 0 | Land
+1x Glacial Fortress |  | CMC 0 | Land
+1x Godless Shrine |  | CMC 0 | Land
+1x Hallowed Fountain |  | CMC 0 | Land
+3x Island |  | CMC 0 | Land
+1x Isolated Chapel |  | CMC 0 | Land
+2x Mountain |  | CMC 0 | Land
+1x Mystic Monastery |  | CMC 0 | Land
+1x Nomad Outpost |  | CMC 0 | Land
+1x Path of Ancestry |  | CMC 0 | Land
+2x Plains |  | CMC 0 | Land
+1x Raugrin Triome |  | CMC 0 | Land
+1x Reflecting Pool |  | CMC 0 | Land
+1x Rugged Prairie |  | CMC 0 | Land
+1x Sacred Foundry |  | CMC 0 | Land
+1x Savai Triome |  | CMC 0 | Land
+1x Skycloud Expanse |  | CMC 0 | Land
+1x Sulfur Falls |  | CMC 0 | Land
+1x Sunscorched Divide |  | CMC 0 | Land
+2x Swamp |  | CMC 0 | Land
+1x Windswept Heath |  | CMC 0 | Land
+1x An Offer You Can't Refuse | {U} | CMC 1 | Instant
+1x Brainstorm | {U} | CMC 1 | Instant
+1x Mystic Remora | {U} | CMC 1 | Enchantment
+1x Sol Ring | {1} | CMC 1 | Artifact
+1x Swords to Plowshares | {W} | CMC 1 | Instant
+1x Arcane Denial | {1}{U} | CMC 2 | Instant
+1x Arcane Signet | {2} | CMC 2 | Artifact
+1x Boros Charm | {R}{W} | CMC 2 | Instant
+1x Boros Signet | {2} | CMC 2 | Artifact
+1x Crackle with Power | {X}{X}{X}{R}{R} | CMC 2 | Sorcery
+1x Despark | {W}{B} | CMC 2 | Instant
+1x Dimir Signet | {2} | CMC 2 | Artifact
+1x Dovin's Veto | {W}{U} | CMC 2 | Instant
+1x Experimental Augury | {1}{U} | CMC 2 | Instant
+1x Exsanguinate | {X}{B}{B} | CMC 2 | Sorcery
+1x Izzet Signet | {2} | CMC 2 | Artifact
+1x Krile Baldesion | {W}{U} | CMC 2 | Creature
+1x Narset's Reversal | {U}{U} | CMC 2 | Instant
+1x Nightscape Familiar | {1}{B} | CMC 2 | Creature
+1x Sapphire Medallion | {2} | CMC 2 | Artifact
+1x Talisman of Conviction | {2} | CMC 2 | Artifact
+1x Talisman of Creativity | {2} | CMC 2 | Artifact
+1x Talisman of Dominance | {2} | CMC 2 | Artifact
+1x Talisman of Progress | {2} | CMC 2 | Artifact
+1x Anguished Unmaking | {1}{W}{B} | CMC 3 | Instant
+1x Chandra, Acolyte of Flame | {1}{R}{R} | CMC 3 | Planeswalker
+1x Generous Gift | {2}{W} | CMC 3 | Instant
+1x Idyllic Tutor | {2}{W} | CMC 3 | Sorcery
+1x Lyse Hext | {1}{W}{U} | CMC 3 | Creature
+1x Monastery Mentor | {2}{W} | CMC 3 | Creature
+1x Monologue Tax | {2}{W} | CMC 3 | Enchantment
+1x Rhystic Study | {2}{U} | CMC 3 | Enchantment
+1x Saheeli, Sublime Artificer | {1}{U/R}{U/R} | CMC 3 | Planeswalker
+1x Search for Glory | {2}{W} | CMC 3 | Sorcery
+1x Solve the Equation | {2}{U} | CMC 3 | Sorcery
+1x Windfall | {2}{U} | CMC 3 | Sorcery
+1x Yawgmoth's Will | {2}{B} | CMC 3 | Sorcery
+1x Displacer Kitten | {3}{U} | CMC 4 | Creature
+1x Grand Arbiter Augustin IV | {2}{W}{U} | CMC 4 | Creature
+1x Insidious Dreams | {3}{B} | CMC 4 | Instant
+1x Kess, Dissident Mage | {1}{U}{B}{R} | CMC 4 | Creature
+1x Kykar, Wind's Fury | {1}{U}{R}{W} | CMC 4 | Creature
+1x Kykar, Zephyr Awakener | {2}{W}{U} | CMC 4 | Creature
+1x Mizzix's Mastery | {3}{R} | CMC 4 | Sorcery
+1x Radstorm | {3}{U} | CMC 4 | Instant
+1x Ral, Crackling Wit | {2}{U}{R} | CMC 4 | Planeswalker
+1x Smothering Tithe | {3}{W} | CMC 4 | Enchantment
+1x Talrand, Sky Summoner | {2}{U}{U} | CMC 4 | Creature
+1x Whirlwind of Thought | {1}{U}{R}{W} | CMC 4 | Enchantment
+1x Y'shtola, Night's Blessed | {1}{W}{U}{B} | CMC 4 | Creature
+1x Alhammarret's Archive | {5} | CMC 5 | Artifact
+1x Final Parting | {3}{B}{B} | CMC 5 | Sorcery
+1x Inexorable Tide | {3}{U}{U} | CMC 5 | Enchantment
+1x Jin-Gitaxias // The Great Synthesis |  | CMC 5 | Creature
+1x Lier, Disciple of the Drowned | {3}{U}{U} | CMC 5 | Creature
+1x Mystic Confluence | {3}{U}{U} | CMC 5 | Instant
+1x Perplexing Test | {3}{U}{U} | CMC 5 | Instant
+1x Tasha, the Witch Queen | {3}{U}{B} | CMC 5 | Planeswalker
+1x Chandra, Hope's Beacon | {4}{R}{R} | CMC 6 | Planeswalker
+1x Flood of Tears | {4}{U}{U} | CMC 6 | Sorcery
+1x Insult // Injury | {2}{R} // {2}{R} | CMC 6 | Sorcery
+1x Professor Onyx | {4}{B}{B} | CMC 6 | Planeswalker
+1x Shark Typhoon | {5}{U} | CMC 6 | Enchantment
+1x Thousand-Year Storm | {4}{U}{R} | CMC 6 | Enchantment

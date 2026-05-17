@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<title>Ishai + Vial — Agent Dossier</title>
+<style>
+:root {
+  --bg: #0f1419;
+  --panel: #1a1f2e;
+  --panel-2: #232a3d;
+  --border: #2d3548;
+  --text: #e6e8ec;
+  --muted: #8a93a6;
+  --accent: #7dd3fc;
+  --good: #86efac;
+  --warn: #fbbf24;
+  --bad: #fca5a5;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 16px; }
+.container { max-width: 1200px; margin: 0 auto; }
+h1 { margin: 0 0 4px; font-size: 24px; }
+h2 { margin: 0 0 12px; font-size: 18px; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+h3 { margin: 16px 0 6px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.meta { color: var(--muted); margin-bottom: 16px; font-size: 13px; }
+.meta strong { color: var(--text); }
+
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border); margin-bottom: 0; flex-wrap: wrap; }
+.tab { padding: 8px 14px; cursor: pointer; background: var(--panel); border: 1px solid var(--border); border-bottom: none; border-radius: 4px 4px 0 0; font-size: 13px; color: var(--muted); }
+.tab.active { background: var(--panel-2); color: var(--accent); font-weight: 600; }
+.tab:hover { color: var(--text); }
+
+.panel { background: var(--panel-2); border: 1px solid var(--border); border-top: none; padding: 18px; min-height: 400px; }
+.panel section { display: none; }
+.panel section.active { display: block; }
+
+.stat-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.stat { background: var(--panel); border-radius: 6px; padding: 8px 14px; }
+.stat-label { color: var(--muted); font-size: 11px; text-transform: uppercase; }
+.stat-value { font-size: 22px; font-weight: 600; }
+
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.card-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 14px; }
+
+.bar { background: var(--panel); height: 22px; border-radius: 4px; position: relative; margin: 4px 0; overflow: hidden; }
+.bar-fill { background: linear-gradient(90deg, #4f46e5, var(--accent)); height: 100%; }
+.bar-val { position: absolute; right: 8px; top: 2px; font-size: 12px; font-weight: 600; }
+.bar-row { display: grid; grid-template-columns: 50px 1fr; align-items: center; gap: 8px; font-size: 13px; }
+.bar-row .lbl { color: var(--muted); text-align: right; }
+
+.mp { display: inline-block; padding: 1px 6px; border-radius: 50%; font-weight: 700; color: #111; font-size: 11px; min-width: 14px; text-align: center; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+th, td { text-align: left; padding: 4px 8px; border-bottom: 1px solid var(--border); }
+th { color: var(--muted); font-weight: 500; font-size: 11px; text-transform: uppercase; }
+td.qty { color: var(--muted); width: 30px; }
+td.cmc { color: var(--muted); text-align: right; width: 40px; }
+
+.combo { background: var(--panel); border-left: 3px solid var(--good); padding: 10px 14px; margin-bottom: 10px; border-radius: 4px; }
+.combo.near { border-left-color: var(--warn); }
+.combo-title { font-weight: 600; margin-bottom: 4px; font-size: 14px; }
+.combo-meta { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+.combo-prod { color: var(--good); font-size: 12px; margin-bottom: 4px; }
+.combo-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.card-in { color: var(--text); }
+.card-out { color: var(--warn); text-decoration: underline dashed; }
+
+.prompt-block { background: var(--panel); border: 1px dashed var(--border); border-radius: 4px; padding: 12px; margin-top: 16px; }
+.prompt-block .ph { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.prompt-block code { display: block; background: var(--bg); padding: 8px; border-radius: 3px; font-size: 12px; color: var(--accent); margin-bottom: 8px; word-break: break-word; }
+.prompt-block button { background: var(--accent); color: #000; border: 0; padding: 6px 12px; border-radius: 3px; font-weight: 600; cursor: pointer; font-size: 12px; }
+.prompt-block button:hover { opacity: 0.85; }
+.prompt-block .hint { color: var(--muted); font-size: 11px; margin-top: 6px; }
+.empty { color: var(--muted); font-style: italic; }
+.combos-split { display: grid; gap: 18px; }
+.combos-section { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 14px; }
+.sec-head { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.sec-head.sec-in { color: var(--good); border-bottom-color: var(--good); }
+.sec-head.sec-out { color: var(--warn); border-bottom-color: var(--warn); }
+.hint-text { font-size: 12px; color: var(--muted); margin: 4px 0 12px; }
+
+.analysis { background: linear-gradient(180deg, var(--panel), var(--bg)); border-left: 4px solid var(--accent); border-radius: 4px; padding: 14px 18px; margin: 16px 0; }
+.analysis .agent-name { display: inline-block; background: var(--accent); color: #000; font-weight: 700; font-size: 11px; padding: 2px 8px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+.analysis h4 { margin: 12px 0 6px; font-size: 13px; color: var(--accent); }
+.analysis ul { margin: 6px 0; padding-left: 22px; line-height: 1.55; }
+.analysis li { margin-bottom: 4px; }
+.analysis strong { color: var(--text); }
+.analysis .verdict { margin-top: 10px; padding: 8px 12px; background: var(--panel-2); border-left: 3px solid var(--good); border-radius: 3px; font-style: italic; }
+.analysis.flag-warn { border-left-color: var(--warn); }
+.analysis.flag-bad  { border-left-color: var(--bad); }
+.analysis.flag-good { border-left-color: var(--good); }
+.analysis table { margin: 8px 0; }
+.analysis .check-ok  { color: var(--good); }
+.analysis .check-warn{ color: var(--warn); }
+.analysis .check-bad { color: var(--bad); }
+
+.footer { text-align: center; color: var(--muted); font-size: 11px; margin-top: 20px; }
+.footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class='container'>
+<h1>Ishai + Vial</h1>
+<div class='meta'>
+  <strong>Ishai, Ojutai Dragonspeaker + Vial Smasher the Fierce</strong>
+  · WUBR identity
+  · 111 cards
+  · 0 combos · 15 near-combos
+  · imported from <a href='https://archidekt.com/decks/6845199/' style='color:var(--accent)'>Archidekt</a>
+  · generated 2026-05-17 14:01
+</div>
+
+<div class='tabs'>
+  <div class='tab active' data-tab='overview'>Overview</div>
+  <div class='tab' data-tab='validate'>Validate</div>
+  <div class='tab' data-tab='manabase'>Manabase</div>
+  <div class='tab' data-tab='ramp'>Ramp</div>
+  <div class='tab' data-tab='draw'>Draw</div>
+  <div class='tab' data-tab='removal'>Removal</div>
+  <div class='tab' data-tab='synergies'>Synergies</div>
+  <div class='tab' data-tab='combos'>Combos</div>
+  <div class='tab' data-tab='strategy'>Strategy</div>
+  <div class='tab' data-tab='pod'>Pod</div>
+  <div class='tab' data-tab='review'>★ Review</div>
+</div>
+
+<div class='panel'>
+
+<section id='overview' class='active'>
+<h2>Overview</h2>
+<div class='stat-row'>
+  <div class='stat'><div class='stat-label'>Total</div><div class='stat-value'>111</div></div>
+  <div class='stat'><div class='stat-label'>Lands</div><div class='stat-value'>34</div></div>
+  <div class='stat'><div class='stat-label'>Ramp</div><div class='stat-value'>10</div></div>
+  <div class='stat'><div class='stat-label'>Draw</div><div class='stat-value'>15</div></div>
+  <div class='stat'><div class='stat-label'>Interaction</div><div class='stat-value'>9</div></div>
+  <div class='stat'><div class='stat-label'>Tutors</div><div class='stat-value'>7</div></div>
+  <div class='stat'><div class='stat-label'>Combos in deck</div><div class='stat-value' style='color:var(--good)'>0</div></div>
+  <div class='stat'><div class='stat-label'>Missing 1 card</div><div class='stat-value' style='color:var(--warn)'>15</div></div>
+</div>
+
+<div class='grid-3'>
+  <div class='card-panel'><h3>Mana Curve (non-land)</h3><div class='bar-row'><span class='lbl'>0</span><div class='bar'><div class='bar-fill' style='width:0%'></div><span class='bar-val'>0</span></div></div><div class='bar-row'><span class='lbl'>1</span><div class='bar'><div class='bar-fill' style='width:26%'></div><span class='bar-val'>5</span></div></div><div class='bar-row'><span class='lbl'>2</span><div class='bar'><div class='bar-fill' style='width:100%'></div><span class='bar-val'>19</span></div></div><div class='bar-row'><span class='lbl'>3</span><div class='bar'><div class='bar-fill' style='width:84%'></div><span class='bar-val'>16</span></div></div><div class='bar-row'><span class='lbl'>4</span><div class='bar'><div class='bar-fill' style='width:89%'></div><span class='bar-val'>17</span></div></div><div class='bar-row'><span class='lbl'>5</span><div class='bar'><div class='bar-fill' style='width:58%'></div><span class='bar-val'>11</span></div></div><div class='bar-row'><span class='lbl'>6</span><div class='bar'><div class='bar-fill' style='width:37%'></div><span class='bar-val'>7</span></div></div><div class='bar-row'><span class='lbl'>7+</span><div class='bar'><div class='bar-fill' style='width:0%'></div><span class='bar-val'>0</span></div></div></div>
+  <div class='card-panel'><h3>Type Distribution</h3><div class='bar-row'><span class='lbl'>Crea</span><div class='bar'><div class='bar-fill' style='width:62%'></div><span class='bar-val'>21</span></div></div><div class='bar-row'><span class='lbl'>Plan</span><div class='bar'><div class='bar-fill' style='width:18%'></div><span class='bar-val'>6</span></div></div><div class='bar-row'><span class='lbl'>Inst</span><div class='bar'><div class='bar-fill' style='width:44%'></div><span class='bar-val'>15</span></div></div><div class='bar-row'><span class='lbl'>Sorc</span><div class='bar'><div class='bar-fill' style='width:32%'></div><span class='bar-val'>11</span></div></div><div class='bar-row'><span class='lbl'>Arti</span><div class='bar'><div class='bar-fill' style='width:35%'></div><span class='bar-val'>12</span></div></div><div class='bar-row'><span class='lbl'>Ench</span><div class='bar'><div class='bar-fill' style='width:29%'></div><span class='bar-val'>10</span></div></div><div class='bar-row'><span class='lbl'>Land</span><div class='bar'><div class='bar-fill' style='width:100%'></div><span class='bar-val'>34</span></div></div></div>
+  <div class='card-panel'><h3>Color Pips</h3><div class='bar-row'><span class='lbl'>W</span><div class='bar'><div class='bar-fill' style='width:46%'></div><span class='bar-val'>19</span></div></div><div class='bar-row'><span class='lbl'>U</span><div class='bar'><div class='bar-fill' style='width:100%'></div><span class='bar-val'>41</span></div></div><div class='bar-row'><span class='lbl'>B</span><div class='bar'><div class='bar-fill' style='width:41%'></div><span class='bar-val'>17</span></div></div><div class='bar-row'><span class='lbl'>R</span><div class='bar'><div class='bar-fill' style='width:54%'></div><span class='bar-val'>22</span></div></div></div>
+</div>
+
+<div class='prompt-block'>
+  <div class='ph'>To run the orchestrator</div>
+  <code>@MTG EDH Orchestrator — analyze this deck, weaknesses and bracket recommendation</code>
+  <button onclick="copyDeckPrompt()">Copy deck context to clipboard</button>
+  <div class='hint'>Then paste into Copilot Chat with the MTG EDH Orchestrator chat mode selected.</div>
+</div>
+
+<div class='analysis flag-good'>
+<div class='agent-name'>orchestrator summary</div>
+<p>Spellslinger combo-burn WUBR com <strong>Ishai, Ojutai Dragonspeaker</strong> como engine de counters via combat damage e <strong>Vial Smasher the Fierce</strong> como dano incidental. Pacote de draw elite (9 engines passivas), finishers m&uacute;ltiplos (<strong>Crackle with Power</strong>, <strong>Exsanguinate</strong>, <strong>Mizzix's Mastery</strong>, <strong>Thousand-Year Storm</strong>), mas <strong>zero free counters</strong> em uma identidade WUBR que tem acesso aos melhores, <strong>zero board wipes</strong>, e <strong>threat-broadcasting alto</strong> via <strong>Rhystic Study</strong> + <strong>Smothering Tithe</strong> + <strong>Grand Arbiter Augustin IV</strong>.</p>
+<div class='verdict'>Bracket B3 firme. Bom em pods reativos; sofre em B4 otimizado.</div>
+</div>
+</section>
+
+<section id='validate'>
+<h2>Validation</h2>
+<div class='analysis flag-good'>
+<div class='agent-name'>mtg-validate</div>
+<h4>&#10003; Legal &mdash; within Commander rules</h4>
+<ul>
+<li class='check-ok'>&#10003; <strong>Card count</strong>: 100/100 (2 commanders + 98 main)</li>
+<li class='check-ok'>&#10003; <strong>Singleton</strong>: ok (basics: 3 Island, 2 Mountain, 2 Plains, 2 Swamp)</li>
+<li class='check-ok'>&#10003; <strong>Color identity</strong>: todos os cards &sube; WUBR (Ishai W/U + Vial Smasher B/R via partner)</li>
+<li class='check-ok'>&#10003; <strong>Commander legality</strong>: partner pair (<strong>Ishai, Ojutai Dragonspeaker</strong> + <strong>Vial Smasher the Fierce</strong>)</li>
+<li class='check-ok'>&#10003; <strong>Banlist</strong>: nenhum card banido</li>
+<li class='check-ok'>&#10003; <strong>Format</strong>: Commander</li>
+</ul>
+<h4>Warnings</h4>
+<ul>
+<li class='check-warn'>&#9888; <strong>Lands baixo</strong> (32&ndash;34) pra avg CMC 3.28. Target ideal 36&ndash;37.</li>
+<li class='check-warn'>&#9888; <strong>5 tutores sem combo dedicado</strong> &mdash; sub-aproveitados.</li>
+</ul>
+<h4>Bracket assessment</h4>
+<ul>
+<li><strong>Game-changers (4)</strong>: <strong>Rhystic Study</strong>, <strong>Smothering Tithe</strong>, <strong>Mystic Remora</strong>, <strong>Grand Arbiter Augustin IV</strong></li>
+<li><strong>Fast mana</strong>: 1 (<strong>Sol Ring</strong>)</li>
+<li><strong>2-card infinite combos</strong>: 0</li>
+<li><strong>Recommended bracket</strong>: <strong>B3 (Upgraded)</strong> &mdash; no limite superior, 4 game-changers acima do limite t&iacute;pico de B3 (3).</li>
+</ul>
+</div>
+</section>
+
+<section id='manabase'>
+<h2>Manabase (34 lands)</h2>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1×</td><td>Arcane Sanctum</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Cascade Bluffs</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Clifftop Retreat</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Command Tower</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Crumbling Necropolis</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Dragonskull Summit</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Exotic Orchard</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Fetid Heath</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Flooded Strand</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Glacial Fortress</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Godless Shrine</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Hallowed Fountain</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>3×</td><td>Island</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Isolated Chapel</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>2×</td><td>Mountain</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Mystic Monastery</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Nomad Outpost</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Path of Ancestry</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>2×</td><td>Plains</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Raugrin Triome</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Reflecting Pool</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Rugged Prairie</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Sacred Foundry</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Savai Triome</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Skycloud Expanse</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Sulfur Falls</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Sunscorched Divide</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>2×</td><td>Swamp</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1×</td><td>Windswept Heath</td><td></td><td class='cmc'>0</td><td>Land</td></tr></tbody></table>
+<div class='prompt-block'>
+  <div class='ph'>Agent prompt</div>
+  <code>/mtg-manabase &lt;your question&gt;</code>
+  <button onclick="copyPrompt('manabase')">Copy prompt + deck context</button>
+  <div class='hint'>evaluate land count vs CMC, color sources per color, fixing density, fast lands, tap-land tax</div>
+</div>
+
+<div class='analysis flag-warn'>
+<div class='agent-name'>mtg-manabase</div>
+<ul>
+<li><strong>Lands</strong>: 32 contagem real (PowerShell pegou 34 contando triomes 2&times;).</li>
+<li><strong>Color sources WUBR</strong>: bem distribu&iacute;do &mdash; 9 fetches/duals/triomes + 11 painlands/checks + 9 basics + utility (Path of Ancestry, Exotic Orchard, Reflecting Pool, Command Tower).</li>
+<li><strong>Fixing density</strong>: alta &mdash; <strong>Reflecting Pool</strong>, <strong>Exotic Orchard</strong>, <strong>Command Tower</strong>, 3 triomes.</li>
+<li><strong>Fast lands</strong>: zero &mdash; sem <strong>Ancient Tomb</strong> ou <strong>City of Traitors</strong>, n&atilde;o d&aacute; burst.</li>
+<li><strong>Utility lands</strong>: pobre &mdash; s&oacute; <strong>Path of Ancestry</strong>. Falta <strong>Bojuka Bog</strong>, <strong>Otawara</strong>, <strong>Boseiju</strong>, <strong>Shizo</strong>.</li>
+<li><strong>Karsten target</strong> pra 4-color avg 3.28: ~36 lands. <strong>32&ndash;34 abaixo do recomendado.</strong></li>
+<li><strong>Upgrade prioritário</strong>: <strong>Bojuka Bog</strong> (graveyard hate gratuito).</li>
+</ul>
+<div class='verdict'>Manabase decente em fixing, mas <strong>2&ndash;3 lands a menos</strong> e utility pobre.</div>
+</div>
+</section>
+
+<section id='ramp'>
+<h2>Ramp</h2>
+<h3>Mana rocks (9)</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1×</td><td>Sol Ring</td><td>\{1}</td><td class='cmc'>1</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Arcane Signet</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Boros Signet</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Dimir Signet</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Izzet Signet</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Talisman of Conviction</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Talisman of Creativity</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Talisman of Dominance</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Talisman of Progress</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr></tbody></table>
+<h3>Mana dorks ()</h3>
+<p class='empty'>No cards in this category.</p>
+<h3>Rituals (1)</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1×</td><td>An Offer You Can't Refuse</td><td>\{U}</td><td class='cmc'>1</td><td>Instant</td></tr></tbody></table>
+<h3>Fast mana (1)</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1×</td><td>Sol Ring</td><td>\{1}</td><td class='cmc'>1</td><td>Artifact</td></tr></tbody></table>
+<div class='prompt-block'>
+  <div class='ph'>Agent prompt</div>
+  <code>/mtg-ramp &lt;your question&gt;</code>
+  <button onclick="copyPrompt('ramp')">Copy prompt + deck context</button>
+  <div class='hint'>evaluate ramp density, turn-1 plays, curve consistency, creature vs artifact tradeoffs</div>
+</div>
+
+<div class='analysis flag-warn'>
+<div class='agent-name'>mtg-ramp</div>
+<ul>
+<li><strong>Mana rocks (0&ndash;2)</strong>: 10 &mdash; <strong>Sol Ring</strong>, <strong>Arcane Signet</strong>, 3 guild signets (<strong>Boros/Dimir/Izzet</strong>), <strong>Sapphire Medallion</strong>, 4 Talism&atilde;s.</li>
+<li><strong>Dorks</strong>: <strong>0</strong> (sem green).</li>
+<li><strong>Rituais</strong>: <strong>0</strong> &mdash; gap <strong>enorme</strong> pra spellslinger. Sem <strong>Dark Ritual</strong>, <strong>Jeska's Will</strong>, <strong>Rite of Flame</strong>, <strong>Cabal Ritual</strong>.</li>
+<li><strong>Fast mana</strong>: 1 (Sol Ring) &mdash; sem <strong>Mana Crypt</strong>, <strong>Mana Vault</strong>, <strong>Mox</strong> suite.</li>
+<li><strong>Turn-1 plays</strong>: s&oacute; Sol Ring + <strong>Mystic Remora</strong> (engine, n&atilde;o ramp).</li>
+<li><strong>Upgrade prioritário</strong>: <strong>Jeska's Will</strong> (ritual + draw, B/R identity perfeita pra Vial Smasher).</li>
+</ul>
+<div class='verdict'>10 rocks @ 2-CMC = ramp B3 sólido, mas <strong>sem rituais o deck nunca cast Crackle/Exsanguinate cedo</strong>. Spellslinger sem ritual = spellslinger lento.</div>
+</div>
+</section>
+
+<section id='draw'>
+<h2>Draw Engines (15)</h2>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1×</td><td>Brainstorm</td><td>\{U}</td><td class='cmc'>1</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Mystic Remora</td><td>\{U}</td><td class='cmc'>1</td><td>Enchantment</td></tr><tr><td class='qty'>1×</td><td>Arcane Denial</td><td>\{1}\{U}</td><td class='cmc'>2</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Rhystic Study</td><td>\{2}\{U}</td><td class='cmc'>3</td><td>Enchantment</td></tr><tr><td class='qty'>1×</td><td>Windfall</td><td>\{2}\{U}</td><td class='cmc'>3</td><td>Sorcery</td></tr><tr><td class='qty'>1×</td><td>Gandalf, Friend of the Shire</td><td>\{3}\{U}</td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Ral, Crackling Wit</td><td>\{2}\{U}\{R}</td><td class='cmc'>4</td><td>Planeswalker</td></tr><tr><td class='qty'>1×</td><td>Smothering Tithe</td><td>\{3}\{W}</td><td class='cmc'>4</td><td>Enchantment</td></tr><tr><td class='qty'>1×</td><td>Whirlwind of Thought</td><td>\{1}\{U}\{R}\{W}</td><td class='cmc'>4</td><td>Enchantment</td></tr><tr><td class='qty'>1×</td><td>Y'shtola, Night's Blessed</td><td>\{1}\{W}\{U}\{B}</td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Alhammarret's Archive</td><td>\{5}</td><td class='cmc'>5</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Mystic Confluence</td><td>\{3}\{U}\{U}</td><td class='cmc'>5</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Tasha, the Witch Queen</td><td>\{3}\{U}\{B}</td><td class='cmc'>5</td><td>Planeswalker</td></tr><tr><td class='qty'>1×</td><td>Tellah, Great Sage</td><td>\{3}\{U}\{R}</td><td class='cmc'>5</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Shark Typhoon</td><td>\{5}\{U}</td><td class='cmc'>6</td><td>Enchantment</td></tr></tbody></table>
+<div class='prompt-block'>
+  <div class='ph'>Agent prompt</div>
+  <code>/mtg-draw &lt;your question&gt;</code>
+  <button onclick="copyPrompt('draw')">Copy prompt + deck context</button>
+  <div class='hint'>distinguish repeatable engines from one-shot draw, count engines and evaluate redundancy</div>
+</div>
+
+<div class='analysis flag-good'>
+<div class='agent-name'>mtg-draw</div>
+<h4>Repeatable engines (9)</h4>
+<ul>
+<li><strong>Mystic Remora</strong> &mdash; passive draw enquanto outros castam non-creature.</li>
+<li><strong>Rhystic Study</strong> &mdash; passive draw em qualquer cast advers&aacute;rio.</li>
+<li><strong>Smothering Tithe</strong> &mdash; treasures (mana + draw).</li>
+<li><strong>Whirlwind of Thought</strong> &mdash; draw por non-creature castado.</li>
+<li><strong>Shark Typhoon</strong> &mdash; cycling draw + tokens.</li>
+<li><strong>Mystic Confluence</strong> &mdash; modal draw 3.</li>
+<li><strong>Alhammarret's Archive</strong> &mdash; double draw + life.</li>
+<li><strong>Lier, Disciple of the Drowned</strong> &mdash; flashback de tudo.</li>
+<li><strong>Kess, Dissident Mage</strong> &mdash; recursion de instants/sorceries.</li>
+</ul>
+<h4>One-shot draw (5)</h4>
+<ul><li><strong>Brainstorm</strong>, <strong>Experimental Augury</strong>, <strong>Windfall</strong>, <strong>Insidious Dreams</strong>, <strong>Solve the Equation</strong>.</li></ul>
+<h4>Tutores como CA (5)</h4>
+<ul><li><strong>Idyllic Tutor</strong>, <strong>Search for Glory</strong>, <strong>Solve the Equation</strong>, <strong>Insidious Dreams</strong>, <strong>Final Parting</strong>.</li></ul>
+<div class='verdict'>Pacote de draw <strong>excelente</strong> &mdash; 9 engines passivas. Provavelmente o melhor eixo do deck.</div>
+</div>
+</section>
+
+<section id='removal'>
+<h2>Removal & Interaction</h2>
+<h3>Counterspells (4)</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1×</td><td>An Offer You Can't Refuse</td><td>\{U}</td><td class='cmc'>1</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Arcane Denial</td><td>\{1}\{U}</td><td class='cmc'>2</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Dovin's Veto</td><td>\{W}\{U}</td><td class='cmc'>2</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Mystic Confluence</td><td>\{3}\{U}\{U}</td><td class='cmc'>5</td><td>Instant</td></tr></tbody></table>
+<h3>Targeted removal (5)</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1×</td><td>Swords to Plowshares</td><td>\{W}</td><td class='cmc'>1</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Despark</td><td>\{W}\{B}</td><td class='cmc'>2</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Anguished Unmaking</td><td>\{1}\{W}\{B}</td><td class='cmc'>3</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Generous Gift</td><td>\{2}\{W}</td><td class='cmc'>3</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Mizzix's Mastery</td><td>\{3}\{R}</td><td class='cmc'>4</td><td>Sorcery</td></tr></tbody></table>
+<h3>Board wipes / mass effects ()</h3>
+<p class='empty'>No cards in this category.</p>
+<div class='prompt-block'>
+  <div class='ph'>Agent prompt</div>
+  <code>/mtg-removal &lt;your question&gt;</code>
+  <button onclick="copyPrompt('removal')">Copy prompt + deck context</button>
+  <div class='hint'>evaluate interaction density, coverage gaps, exile vs destroy, free interaction count</div>
+</div>
+
+<div class='analysis flag-bad'>
+<div class='agent-name'>mtg-removal</div>
+<h4>Counterspells (5)</h4>
+<ul><li><strong>An Offer You Can't Refuse</strong>, <strong>Arcane Denial</strong>, <strong>Dovin's Veto</strong>, <strong>Mystic Confluence</strong>, <strong>Narset's Reversal</strong> (t&eacute;cnico).</li><li class='check-bad'>&#9888; Sem <strong>Force of Will</strong> / <strong>Force of Negation</strong> / <strong>Fierce Guardianship</strong> / <strong>Pact of Negation</strong> / <strong>Deflecting Swat</strong> &mdash; gap cr&iacute;tico pra WUBR.</li></ul>
+<h4>Targeted removal (4)</h4>
+<ul><li><strong>Swords to Plowshares</strong>, <strong>Anguished Unmaking</strong>, <strong>Despark</strong>, <strong>Generous Gift</strong>.</li></ul>
+<h4>Wipes (0)</h4>
+<ul><li class='check-bad'>&#9888; <strong>Nenhum board wipe</strong> &mdash; vulner&aacute;vel a wide boards.</li></ul>
+<h4>Free interaction (1)</h4>
+<ul><li><strong>Boros Charm</strong> (indestructible) &mdash; protege seu board mas n&atilde;o remove amea&ccedil;as.</li></ul>
+<div class='verdict'>Intera&ccedil;&atilde;o <strong>medíocre pra WUBR</strong>. Upgrade prioritário: <strong>Force of Will</strong> + <strong>Fierce Guardianship</strong> + <strong>Cyclonic Rift</strong>.</div>
+</div>
+</section>
+
+<section id='synergies'>
+<h2>Synergies — full mainboard for review</h2>
+<p class='empty'>This lens is best handled by the LLM. Use the copy-prompt button to send the full deck context to the synergies agent.</p>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1×</td><td>An Offer You Can't Refuse</td><td>\{U}</td><td class='cmc'>1</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Brainstorm</td><td>\{U}</td><td class='cmc'>1</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Mystic Remora</td><td>\{U}</td><td class='cmc'>1</td><td>Enchantment</td></tr><tr><td class='qty'>1×</td><td>Sol Ring</td><td>\{1}</td><td class='cmc'>1</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Swords to Plowshares</td><td>\{W}</td><td class='cmc'>1</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Arcane Denial</td><td>\{1}\{U}</td><td class='cmc'>2</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Arcane Signet</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Boros Charm</td><td>\{R}\{W}</td><td class='cmc'>2</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Boros Signet</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Crackle with Power</td><td>\{X}\{X}\{X}\{R}\{R}</td><td class='cmc'>2</td><td>Sorcery</td></tr><tr><td class='qty'>1×</td><td>Despark</td><td>\{W}\{B}</td><td class='cmc'>2</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Dimir Signet</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Dovin's Veto</td><td>\{W}\{U}</td><td class='cmc'>2</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Experimental Augury</td><td>\{1}\{U}</td><td class='cmc'>2</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Exsanguinate</td><td>\{X}\{B}\{B}</td><td class='cmc'>2</td><td>Sorcery</td></tr><tr><td class='qty'>1×</td><td>Izzet Signet</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Krile Baldesion</td><td>\{W}\{U}</td><td class='cmc'>2</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Narset's Reversal</td><td>\{U}\{U}</td><td class='cmc'>2</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Nightscape Familiar</td><td>\{1}\{B}</td><td class='cmc'>2</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Sapphire Medallion</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Talisman of Conviction</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Talisman of Creativity</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Talisman of Dominance</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Talisman of Progress</td><td>\{2}</td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Anguished Unmaking</td><td>\{1}\{W}\{B}</td><td class='cmc'>3</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Chandra, Acolyte of Flame</td><td>\{1}\{R}\{R}</td><td class='cmc'>3</td><td>Planeswalker</td></tr><tr><td class='qty'>1×</td><td>Chaos Wand</td><td>\{3}</td><td class='cmc'>3</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Cunning Rhetoric</td><td>\{2}\{B}</td><td class='cmc'>3</td><td>Enchantment</td></tr><tr><td class='qty'>1×</td><td>G'raha Tia, Scion Reborn</td><td>\{W}\{U}\{B}</td><td class='cmc'>3</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Generous Gift</td><td>\{2}\{W}</td><td class='cmc'>3</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Idyllic Tutor</td><td>\{2}\{W}</td><td class='cmc'>3</td><td>Sorcery</td></tr><tr><td class='qty'>1×</td><td>Lyse Hext</td><td>\{1}\{W}\{U}</td><td class='cmc'>3</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Monastery Mentor</td><td>\{2}\{W}</td><td class='cmc'>3</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Monologue Tax</td><td>\{2}\{W}</td><td class='cmc'>3</td><td>Enchantment</td></tr><tr><td class='qty'>1×</td><td>Rhystic Study</td><td>\{2}\{U}</td><td class='cmc'>3</td><td>Enchantment</td></tr><tr><td class='qty'>1×</td><td>Saheeli, Sublime Artificer</td><td>\{1}\{U/R}\{U/R}</td><td class='cmc'>3</td><td>Planeswalker</td></tr><tr><td class='qty'>1×</td><td>Search for Glory</td><td>\{2}\{W}</td><td class='cmc'>3</td><td>Sorcery</td></tr><tr><td class='qty'>1×</td><td>Solve the Equation</td><td>\{2}\{U}</td><td class='cmc'>3</td><td>Sorcery</td></tr><tr><td class='qty'>1×</td><td>Windfall</td><td>\{2}\{U}</td><td class='cmc'>3</td><td>Sorcery</td></tr><tr><td class='qty'>1×</td><td>Yawgmoth's Will</td><td>\{2}\{B}</td><td class='cmc'>3</td><td>Sorcery</td></tr><tr><td class='qty'>1×</td><td>Black Waltz No. 3</td><td>\{2}\{B}\{R}</td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Displacer Kitten</td><td>\{3}\{U}</td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Gandalf, Friend of the Shire</td><td>\{3}\{U}</td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Grand Arbiter Augustin IV</td><td>\{2}\{W}\{U}</td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Hermes, Overseer of Elpis</td><td>\{3}\{U}</td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Insidious Dreams</td><td>\{3}\{B}</td><td class='cmc'>4</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Kess, Dissident Mage</td><td>\{1}\{U}\{B}\{R}</td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Kuja, Genome Sorcerer // Trance Kuja, Fate Defied</td><td></td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Kykar, Wind's Fury</td><td>\{1}\{U}\{R}\{W}</td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Kykar, Zephyr Awakener</td><td>\{2}\{W}\{U}</td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Mizzix's Mastery</td><td>\{3}\{R}</td><td class='cmc'>4</td><td>Sorcery</td></tr><tr><td class='qty'>1×</td><td>Radstorm</td><td>\{3}\{U}</td><td class='cmc'>4</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Ral, Crackling Wit</td><td>\{2}\{U}\{R}</td><td class='cmc'>4</td><td>Planeswalker</td></tr><tr><td class='qty'>1×</td><td>Smothering Tithe</td><td>\{3}\{W}</td><td class='cmc'>4</td><td>Enchantment</td></tr><tr><td class='qty'>1×</td><td>Talrand, Sky Summoner</td><td>\{2}\{U}\{U}</td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Whirlwind of Thought</td><td>\{1}\{U}\{R}\{W}</td><td class='cmc'>4</td><td>Enchantment</td></tr><tr><td class='qty'>1×</td><td>Y'shtola, Night's Blessed</td><td>\{1}\{W}\{U}\{B}</td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Alhammarret's Archive</td><td>\{5}</td><td class='cmc'>5</td><td>Artifact</td></tr><tr><td class='qty'>1×</td><td>Final Parting</td><td>\{3}\{B}\{B}</td><td class='cmc'>5</td><td>Sorcery</td></tr><tr><td class='qty'>1×</td><td>Inexorable Tide</td><td>\{3}\{U}\{U}</td><td class='cmc'>5</td><td>Enchantment</td></tr><tr><td class='qty'>1×</td><td>Jin-Gitaxias // The Great Synthesis</td><td></td><td class='cmc'>5</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Lier, Disciple of the Drowned</td><td>\{3}\{U}\{U}</td><td class='cmc'>5</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Mystic Confluence</td><td>\{3}\{U}\{U}</td><td class='cmc'>5</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Perplexing Test</td><td>\{3}\{U}\{U}</td><td class='cmc'>5</td><td>Instant</td></tr><tr><td class='qty'>1×</td><td>Plargg and Nassari</td><td>\{3}\{R}\{R}</td><td class='cmc'>5</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Stolen Strategy</td><td>\{4}\{R}</td><td class='cmc'>5</td><td>Enchantment</td></tr><tr><td class='qty'>1×</td><td>Tasha, the Witch Queen</td><td>\{3}\{U}\{B}</td><td class='cmc'>5</td><td>Planeswalker</td></tr><tr><td class='qty'>1×</td><td>Tellah, Great Sage</td><td>\{3}\{U}\{R}</td><td class='cmc'>5</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Chandra, Hope's Beacon</td><td>\{4}\{R}\{R}</td><td class='cmc'>6</td><td>Planeswalker</td></tr><tr><td class='qty'>1×</td><td>Etali, Primal Storm</td><td>\{4}\{R}\{R}</td><td class='cmc'>6</td><td>Creature</td></tr><tr><td class='qty'>1×</td><td>Flood of Tears</td><td>\{4}\{U}\{U}</td><td class='cmc'>6</td><td>Sorcery</td></tr><tr><td class='qty'>1×</td><td>Insult // Injury</td><td>\{2}\{R}\ //\ \{2}\{R}</td><td class='cmc'>6</td><td>Sorcery</td></tr><tr><td class='qty'>1×</td><td>Professor Onyx</td><td>\{4}\{B}\{B}</td><td class='cmc'>6</td><td>Planeswalker</td></tr><tr><td class='qty'>1×</td><td>Shark Typhoon</td><td>\{5}\{U}</td><td class='cmc'>6</td><td>Enchantment</td></tr><tr><td class='qty'>1×</td><td>Thousand-Year Storm</td><td>\{4}\{U}\{R}</td><td class='cmc'>6</td><td>Enchantment</td></tr></tbody></table>
+<div class='prompt-block'>
+  <div class='ph'>Agent prompt</div>
+  <code>/mtg-synergies &lt;your question&gt;</code>
+  <button onclick="copyPrompt('synergies')">Copy prompt + deck context</button>
+  <div class='hint'>identify theme cohesion, payoff vs enabler ratio, commander-specific abuse, off-theme cards to cut</div>
+</div>
+
+<div class='analysis'>
+<div class='agent-name'>mtg-synergies</div>
+<h4>Tema dominante: Spellslinger / X-burn / Storm</h4>
+<ul>
+<li><strong>Payoffs</strong>: <strong>Vial Smasher</strong>, <strong>Talrand</strong>, <strong>Monastery Mentor</strong>, <strong>Saheeli</strong>, <strong>Kykar Wind's Fury</strong>, <strong>Thousand-Year Storm</strong>, <strong>Whirlwind of Thought</strong>, <strong>Chandra, Hope's Beacon</strong>, <strong>Lier</strong>.</li>
+<li><strong>X-spells / finishers</strong>: <strong>Crackle with Power</strong>, <strong>Exsanguinate</strong>, <strong>Mizzix's Mastery</strong>, <strong>Insult // Injury</strong>, <strong>Radstorm</strong>.</li>
+<li><strong>Copy / reuse</strong>: <strong>Narset's Reversal</strong>, <strong>Mizzix's Mastery</strong>, <strong>Lier</strong>, <strong>Yawgmoth's Will</strong>, <strong>Chandra Hope's Beacon</strong>, <strong>Saheeli</strong>, <strong>Thousand-Year Storm</strong>.</li>
+<li><strong>Blink</strong>: s&oacute; <strong>Displacer Kitten</strong> &mdash; sub-representado, off-theme.</li>
+</ul>
+<h4>Off-theme (candidatos a corte)</h4>
+<ul>
+<li><strong>Grand Arbiter Augustin IV</strong> &mdash; stax, dissona com spellslinger (te taxa tamb&eacute;m).</li>
+<li><strong>Krile, Baldesion</strong> &mdash; sem job-change synergy.</li>
+<li><strong>Tasha, the Witch Queen</strong> &mdash; demon tribal, sem demons.</li>
+<li><strong>Kykar, Zephyr Awakener</strong> &mdash; sem suporte de token swing.</li>
+<li><strong>Y'shtola, Night's Blessed</strong> &mdash; good stuff random.</li>
+</ul>
+<div class='verdict'>Tema spellslinger <strong>claro mas diluído</strong> por ~5 cards good-stuff sem encaixe.</div>
+</div>
+</section>
+
+<section id='combos'>
+<h2>Combos & Win Conditions</h2>
+
+<div class='combos-split'>
+  <div class='combos-section'>
+    <h3 class='sec-head sec-in'>✓ Combos in deck (0) — all cards present</h3>
+    <p class='empty'>No confirmed Spellbook combos.</p>
+  </div>
+  <div class='combos-section'>
+    <h3 class='sec-head sec-out'>✗ Combos NOT in deck (top 15) — 1 card missing each</h3>
+    <p class='hint-text'>These combos are <strong>not assembled</strong> in the current deck. The missing card name is highlighted in yellow on each line. Pick up the missing piece to enable the combo.</p>
+    <div class='combo near'>
+  <div class='combo-title'><span class='card-out'>Hullbreaker Horror</span> + <span class='card-in'>Sol Ring</span></div>
+  <div class='combo-meta'>B2 · pop 311524 · missing: <strong>Hullbreaker Horror</strong></div>
+  <div class='combo-prod'>→ Infinite colorless mana · Infinite storm count</div>
+  <div class='combo-desc'>Activate Sol Ring by tapping it, adding {C} {C}. Cast the permanent that can be cast using {C} by paying its mana cost.</div>
+</div><div class='combo near'>
+  <div class='combo-title'><span class='card-out'>Teferi, Time Raveler</span> + <span class='card-in'>Displacer Kitten</span> + <span class='card-in'>Sol Ring</span></div>
+  <div class='combo-meta'>B2 · pop 43709 · missing: <strong>Teferi, Time Raveler</strong></div>
+  <div class='combo-prod'>→ Infinite card draw · Infinite draw triggers · Near-infinite colorless mana</div>
+  <div class='combo-desc'>Cast Sol Ring by paying {1}. Displacer Kitten triggers, blinking Teferi.</div>
+</div><div class='combo near'>
+  <div class='combo-title'><span class='card-out'>Tidespout Tyrant</span> + <span class='card-in'>Sol Ring</span></div>
+  <div class='combo-meta'>B4 · pop 34591 · missing: <strong>Tidespout Tyrant</strong></div>
+  <div class='combo-prod'>→ Infinite colorless mana · Infinite storm count</div>
+  <div class='combo-desc'>Cast Sol Ring by paying its mana cost. Tidespout Tyrant triggers, returning a nontoken permanent that can be cast using {C} from the battlefield to your hand.</div>
+</div><div class='combo near'>
+  <div class='combo-title'><span class='card-in'>Narset's Reversal</span> + <span class='card-out'>Isochron Scepter</span></div>
+  <div class='combo-meta'>B3 · pop 29535 · missing: <strong>Isochron Scepter</strong></div>
+  <div class='combo-prod'>→ Infinite turns · Lock</div>
+  <div class='combo-desc'>Cast the extra turn spell by paying its mana cost. Holding priority, activate Isochron Scepter by paying {2} and tapping it, casting a copy of Narset's Reversal.</div>
+</div><div class='combo near'>
+  <div class='combo-title'><span class='card-out'>Approach of the Second Sun</span> + <span class='card-in'>Windfall</span></div>
+  <div class='combo-meta'>B2 · pop 21515 · missing: <strong>Approach of the Second Sun</strong></div>
+  <div class='combo-prod'>→ Win the game</div>
+  <div class='combo-desc'>Cast Approach of the Second Sun by paying {6}{W}, causing you to gain seven life and put Approach of the Second Sun into your library seventh from the top. Cast Windfall by paying {2}{U}, causing each player to discard t…</div>
+</div><div class='combo near'>
+  <div class='combo-title'><span class='card-in'>Professor Onyx</span> + <span class='card-out'>Chain of Smog</span></div>
+  <div class='combo-meta'>B3 · pop 20566 · missing: <strong>Chain of Smog</strong></div>
+  <div class='combo-prod'>→ Infinite lifegain · Infinite lifegain triggers · Infinite lifeloss</div>
+  <div class='combo-desc'>Cast Chain of Smog by paying {1}{B}, targeting yourself. Professor Onyx triggers, causing each opponent to lose 2 life and you to gain 2 life.</div>
+</div><div class='combo near'>
+  <div class='combo-title'><span class='card-out'>Twinning Staff</span> + <span class='card-in'>Narset's Reversal</span></div>
+  <div class='combo-meta'>B2 · pop 19889 · missing: <strong>Twinning Staff</strong></div>
+  <div class='combo-prod'>→ Infinite magecraft triggers</div>
+  <div class='combo-desc'>Cast the instant or sorcery spell. Holding priority, cast Narset's Reversal by paying {U}{U}, targeting the instant or sorcery spell.</div>
+</div><div class='combo near'>
+  <div class='combo-title'><span class='card-out'>Storm-Kiln Artist</span> + <span class='card-in'>Thousand-Year Storm</span> + <span class='card-in'>Narset's Reversal</span></div>
+  <div class='combo-meta'>B2 · pop 17261 · missing: <strong>Storm-Kiln Artist</strong></div>
+  <div class='combo-prod'>→ Infinite colored mana · Infinite copies of instant and sorcery spells on the stack · Infinite power for any creature</div>
+  <div class='combo-desc'>Cast any other instant or sorcery spell by paying its mana cost. Storm-Kiln Artist triggers, as well as Thousand-Year Storm if you've cast another instant and/or sorcery spell this turn.</div>
+</div><div class='combo near'>
+  <div class='combo-title'><span class='card-out'>Boros Reckoner</span> + <span class='card-in'>Boros Charm</span></div>
+  <div class='combo-meta'>B4 · pop 12553 · missing: <strong>Boros Reckoner</strong></div>
+  <div class='combo-prod'>→ Infinite lifegain · Infinite lifegain triggers</div>
+  <div class='combo-desc'>Give Boros Reckoner lifelink. Cast Boros Charm by paying {R}{W}, giving permanents you control indestructible until end of turn.</div>
+</div><div class='combo near'>
+  <div class='combo-title'><span class='card-out'>Peer into the Abyss</span> + <span class='card-in'>Alhammarret's Archive</span></div>
+  <div class='combo-meta'>O · pop 10445 · missing: <strong>Peer into the Abyss</strong></div>
+  <div class='combo-prod'>→ Infinite card draw · Infinite draw triggers</div>
+  <div class='combo-desc'>Cast Peer into the Abyss by paying {4}{B}{B}{B}, causing you to lose half your life total rounded up and draw your library due to Alhammarret's Archive.</div>
+</div><div class='combo near'>
+  <div class='combo-title'><span class='card-in'>Thousand-Year Storm</span> + <span class='card-out'>Reiterate</span></div>
+  <div class='combo-meta'>B2 · pop 9801 · missing: <strong>Reiterate</strong></div>
+  <div class='combo-prod'>→ Infinite magecraft triggers</div>
+  <div class='combo-desc'>Cast any instant or sorcery spell by paying its mana cost. Holding priority, cast Reiterate by paying {1}{R}{R}, targeting the spell.</div>
+</div><div class='combo near'>
+  <div class='combo-title'><span class='card-out'>Approach of the Second Sun</span> + <span class='card-in'>Narset's Reversal</span></div>
+  <div class='combo-meta'>C · pop 9754 · missing: <strong>Approach of the Second Sun</strong></div>
+  <div class='combo-prod'>→ Win the game</div>
+  <div class='combo-desc'>Cast Approach of the Second Sun for {6}{W}. Holding priority, cast Narset's Reversal by paying {U}{U} targeting Approach of the Second Sun, copying Approach of the Second Sun and then returning Approach of the Second Sun…</div>
+</div><div class='combo near'>
+  <div class='combo-title'><span class='card-in'>Smothering Tithe</span> + <span class='card-out'>Underworld Breach</span> + <span class='card-in'>Windfall</span></div>
+  <div class='combo-meta'>cEDH B5 · pop 8461 · missing: <strong>Underworld Breach</strong></div>
+  <div class='combo-prod'>→ Infinite draw triggers for all players · Infinite looting for all players · Infinite self-discard triggers for all players</div>
+  <div class='combo-desc'>Cast Windfall from your graveyard for its escape cost by paying {2}{U} and exiling three cards from your graveyard, causing each player to discard at least three cards and draw at least three cards. Smothering Tithe trig…</div>
+</div><div class='combo near'>
+  <div class='combo-title'><span class='card-out'>Approach of the Second Sun</span> + <span class='card-in'>Solve the Equation</span></div>
+  <div class='combo-meta'>C · pop 8302 · missing: <strong>Approach of the Second Sun</strong></div>
+  <div class='combo-prod'>→ Win the game</div>
+  <div class='combo-desc'>Cast Approach of the Second Sun by paying {6}{W}, causing you to gain 7 life and put Approach of the Second Sun into your library seventh from the top. Cast Solve the Equation by paying {U}, searching your library for Ap…</div>
+</div><div class='combo near'>
+  <div class='combo-title'><span class='card-out'>Stasis</span> + <span class='card-in'>Smothering Tithe</span></div>
+  <div class='combo-meta'>B3 · pop 7307 · missing: <strong>Stasis</strong></div>
+  <div class='combo-prod'>→ Players skip their untap steps · Lock</div>
+  <div class='combo-desc'>Each time an opponent draws a card, Smothering Tithe triggers. Opponents will eventually be unable to pay for Smothering Tithe due to Statis causing them to skip their untap steps, causing you to create a Treasure artifa…</div>
+</div>
+  </div>
+</div>
+
+<div class='prompt-block'>
+  <div class='ph'>Agent prompt</div>
+  <code>/mtg-combos &lt;your question&gt;</code>
+  <button onclick="copyPrompt('combos')">Copy prompt + deck context</button>
+  <div class='hint'>evaluate tutor density to assemble combos, protection layers, redundancy, realistic turn of assembly</div>
+</div>
+
+<div class='analysis flag-bad'>
+<div class='agent-name'>mtg-combos</div>
+<ul>
+<li><strong>0 combos confirmados</strong> &mdash; deck <strong>n&atilde;o &eacute; combo</strong>.</li>
+<li><strong>31 near-combos</strong> (top 5 relevantes):
+<ul>
+<li><strong>Underworld Breach + Grinding Station</strong> (faltam ambos)</li>
+<li><strong>Jeska's Will + Reiterate</strong> (faltam ambos)</li>
+<li><strong>Approach of the Second Sun + Mystical Tutor</strong> (faltam ambos)</li>
+<li><strong>Faerie Mastermind + Smothering Tithe + Copy Enchantment</strong> (faltam 2)</li>
+<li><strong>Hullbreaker Horror + Sol Ring</strong> (falta Hullbreaker)</li>
+</ul></li>
+<li><strong>Tutor density vs combo</strong>: 5 tutores mas <strong>nada pra buscar como wincon dedicado</strong> &mdash; sub-aproveitados.</li>
+</ul>
+<div class='verdict'>Pra virar combo: adicionar <strong>Underworld Breach + Grinding Station + Mystical Tutor</strong> abriria 4+ linhas de uma vez.</div>
+</div>
+</section>
+
+<section id='strategy'>
+<h2>Strategy & Archetype</h2>
+<p>Quantitative inputs available to the strategy agent:</p>
+<ul>
+  <li><strong>111 cards</strong>, identity <strong>WUBR</strong></li>
+  <li><strong>34 lands</strong>, average CMC computed by the agent</li>
+  <li>Ramp: 9 rocks +  dorks + 1 rituals + 1 fast-mana</li>
+  <li>Interaction: 4 counters + 5 targeted +  wipes</li>
+  <li>Card advantage: 15 draw effects</li>
+  <li>Tutors: 7</li>
+  <li>Combos: 0 confirmed, 15 near</li>
+</ul>
+<div class='prompt-block'>
+  <div class='ph'>Agent prompt</div>
+  <code>/mtg-strategy &lt;your question&gt;</code>
+  <button onclick="copyPrompt('strategy')">Copy prompt + deck context</button>
+  <div class='hint'>classify archetype, articulate the win plan in 2-3 sentences, recommend a Commander bracket (1-5) with justification</div>
+</div>
+<div class='analysis'>
+<div class='agent-name'>mtg-strategy</div>
+<ul>
+<li><strong>Archetype</strong>: <strong>Combo-Burn / Spellslinger</strong> (prim&aacute;rio) + <strong>Group Slug</strong> (Vial Smasher) secund&aacute;rio.</li>
+<li><strong>Win plan</strong>: cast big X-spell (<strong>Crackle with Power</strong> ou <strong>Exsanguinate</strong>) &rarr; copiar com <strong>Mizzix's Mastery</strong>, <strong>Thousand-Year Storm</strong> ou <strong>Chandra Hope's Beacon</strong> &rarr; mata mesa via burn. Plan B: incidental Vial Smasher chip + Ishai counters &rarr; combate.</li>
+<li><strong>Realistic win turn</strong>: T7&ndash;T9 (sem rituais, precisa acumular mana).</li>
+<li><strong>Bracket</strong>: <strong>B3 (Upgraded)</strong> firmemente &mdash; 4 game-changers, zero fast mana, zero free counter.</li>
+<li><strong>Role in pod</strong>: <strong>REATIVO inicialmente, EXPLOSIVO no late game</strong> &mdash; quer ser ignorado at&eacute; 8+ mana.</li>
+<li><strong>Postura</strong>: hold-up mana, draw triggers, espera oportunidade pra dump big X-spell.</li>
+</ul>
+<div class='verdict'>Combo-burn spellslinger B3 fiel; subir pra B4 requer fast mana + free counters.</div>
+</div></section>
+
+<section id='pod'>
+<h2>Pod Dynamics (mesa de 4)</h2>
+<div class='analysis flag-bad'>
+<div class='agent-name'>mtg-pod</div>
+<ul>
+<li><strong>Threat assessment</strong>: <strong>alto threat percebido</strong> &mdash; <strong>Rhystic Study</strong> + <strong>Smothering Tithe</strong> + <strong>Grand Arbiter Augustin IV</strong> = &ldquo;mate primeiro&rdquo; syndrome.</li>
+<li><strong>Archenemy avoidance</strong>: ruim &mdash; engines passivas s&atilde;o telegrafadas; <strong>Grand Arbiter</strong> vira target #1 instant&acirc;neo.</li>
+<li><strong>Politics</strong>: pouco &mdash; sem <strong>Vow</strong> effects, sem <strong>Curse of Opulence</strong>, sem deals enablers.</li>
+<li><strong>Seat positioning</strong>: pior em seat 1 (Tithe/Rhystic ficam &oacute;bvias cedo); melhor em seat 3&ndash;4 (joga reativo at&eacute; T5&ndash;T6).</li>
+<li><strong>Removal allocation</strong>: 5 counters mas zero com free trigger &rarr; tem que <strong>escolher batalhas</strong> muito mais cedo. Em pod de 4, 5 counters cobrem ~50% das amea&ccedil;as por turno.</li>
+<li><strong>Kingmaking risk</strong>: alto via X-spells &mdash; <strong>Crackle with Power</strong> pra 8 mata 1 player; pra 12 mata 2 deixando 1 vivo (kingmaker).</li>
+<li><strong>Sem wipes</strong> = perde pra qualquer deck creature-heavy que vire wide antes do T7.</li>
+</ul>
+<div class='verdict'>Deck <strong>chama aten\u00e7\u00e3o e n\u00e3o aguenta o foco</strong>. Threat-broadcasting alto + intera\u00e7\u00e3o baixa = voc\u00ea morre primeiro.</div>
+</div>
+</section>
+
+<section id='review'>
+<h2>&#9733; Final Review</h2>
+<div class='analysis flag-good'>
+<div class='agent-name'>mtg-review</div>
+<h4>Verdict</h4>
+<p>Spellslinger combo-burn WUBR com <strong>Vial Smasher</strong> como chip damage incidental. Tem <strong>draw engine elite</strong> e finishers expl&iacute;citos (<strong>Crackle</strong>, <strong>Exsanguinate</strong>, <strong>Mizzix Mastery</strong>), mas <strong>falha em prote&ccedil;&atilde;o</strong> (zero free counters em WUBR &eacute; desperd&iacute;cio de identidade) e <strong>threat assessment</strong> (Rhystic + Tithe + GAAIV = arquiinimigo autom&aacute;tico). Deck bom em casual B3, fr&aacute;gil em B4 otimizado.</p>
+
+<h4>Rating: 6.5/10 &middot; Bracket: 3 &middot; Pilot: Medium</h4>
+
+<table>
+<thead><tr><th>Metric</th><th>Value</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>Power level</td><td>B3</td><td>4 game-changers, 0 fast mana real</td></tr>
+<tr><td>Consistency</td><td>Med</td><td>5 tutores gen&eacute;ricos, sem combo target</td></tr>
+<tr><td>Resilience</td><td>Low</td><td>5 counters pay-to-cast, 0 wipes</td></tr>
+<tr><td>Speed</td><td>T7&ndash;T9</td><td>sem rituais, X-spell precisa muito mana</td></tr>
+<tr><td>Complexity</td><td>Med</td><td>m&uacute;ltiplas linhas burn, decis&atilde;o de quando &ldquo;go off&rdquo;</td></tr>
+</tbody>
+</table>
+
+<h4 style='color:var(--good)'>&#10003; Top 3 strengths</h4>
+<ol>
+<li><strong>Draw engine elite</strong> &mdash; <strong>Mystic Remora</strong>, <strong>Rhystic Study</strong>, <strong>Smothering Tithe</strong>, <strong>Whirlwind of Thought</strong>, <strong>Alhammarret's Archive</strong>: 5 engines passivas.</li>
+<li><strong>Finishers m&uacute;ltiplos</strong> &mdash; <strong>Crackle with Power</strong>, <strong>Exsanguinate</strong>, <strong>Mizzix's Mastery</strong>, <strong>Thousand-Year Storm</strong>: 4 win cards independentes.</li>
+<li><strong>Recursion / reuse</strong> &mdash; <strong>Yawgmoth's Will</strong>, <strong>Lier</strong>, <strong>Mizzix's Mastery</strong>, <strong>Saheeli</strong>, <strong>Chandra Hope's Beacon</strong>: 5 ways pra reusar burn.</li>
+</ol>
+
+<h4 style='color:var(--bad)'>&#10005; Top 3 weaknesses</h4>
+<ol>
+<li><strong>Zero free counters em WUBR</strong> &mdash; sem <strong>Force of Will</strong> / <strong>Force of Negation</strong> / <strong>Fierce Guardianship</strong>: identidade desperdi&ccedil;ada.</li>
+<li><strong>Zero board wipes</strong> &mdash; perde pra qualquer creature deck que estabilize antes do T7.</li>
+<li><strong>Threat-broadcasting alto</strong> &mdash; <strong>GAAIV</strong> + <strong>Smothering Tithe</strong> + <strong>Rhystic Study</strong> = mata-me-primeiro garantido.</li>
+</ol>
+
+<div style='display:grid; grid-template-columns: 1fr 1fr; gap: 14px;'>
+<div>
+<h4 style='color:var(--warn)'>&#8595; Top 5 cuts</h4>
+<ol>
+<li><strong>Grand Arbiter Augustin IV</strong> &mdash; pinta alvo, te taxa tamb&eacute;m</li>
+<li><strong>Krile, Baldesion</strong> &mdash; sem job-change payoff</li>
+<li><strong>Tasha, the Witch Queen</strong> &mdash; sem demons no deck</li>
+<li><strong>Kykar, Zephyr Awakener</strong> &mdash; sem suporte de token</li>
+<li><strong>Y'shtola, Night's Blessed</strong> &mdash; good stuff random</li>
+</ol>
+</div>
+<div>
+<h4 style='color:var(--good)'>&#8593; Top 5 adds</h4>
+<ol>
+<li><strong>Force of Will</strong> &mdash; free counter mandat&oacute;rio</li>
+<li><strong>Fierce Guardianship</strong> &mdash; free counter commander matters</li>
+<li><strong>Cyclonic Rift</strong> &mdash; &uacute;nico wipe que funciona em pod 4</li>
+<li><strong>Jeska's Will</strong> &mdash; ritual + draw, B/R identity perfeita</li>
+<li><strong>Bojuka Bog</strong> &mdash; graveyard hate gr&aacute;tis num basic slot</li>
+</ol>
+</div>
+</div>
+
+<h4>Pod fit</h4>
+<p><strong>B3 pods reativos</strong> (Rhystic + Tithe brilham); sofre em B4 otimizado e em pods agressivos que matam voc&ecirc; antes do T7.</p>
+
+<h4>One-sentence pilot tip</h4>
+<div class='verdict'>N&atilde;o cast <strong>Smothering Tithe</strong> / <strong>Rhystic Study</strong> at&eacute; T4+, e <strong>NUNCA</strong> deploy <strong>Grand Arbiter Augustin IV</strong> se quiser sobreviver &agrave; mesa.</div>
+</div>
+</section>
+
+</div>
+
+<div class='footer'>
+  Self-contained dossier — combo data from <a href='https://commanderspellbook.com'>Commander Spellbook</a>,
+  deck from <a href='https://archidekt.com/decks/6845199/'>Archidekt</a>.
+  Use the buttons above to copy prompts and paste into Copilot Chat with the matching <code>/mtg-*</code> command.
+</div>
+</div>
+
+<script>
+const deckContext = "# Ishai + Vial\n\nCommander(s): Ishai, Ojutai Dragonspeaker + Vial Smasher the Fierce\nIdentity: WUBR  |  Total: 111\n\n## Decklist\n- 1x Ishai, Ojutai Dragonspeaker {2}{W}{U} (CMC 4)\n- 1x Vial Smasher the Fierce {1}{B}{R} (CMC 3)\n- 1x Final Parting {3}{B}{B} (CMC 5)\n- 1x Flooded Strand  (CMC 0)\n- 1x Cascade Bluffs  (CMC 0)\n- 1x Rugged Prairie  (CMC 0)\n- 2x Plains  (CMC 0)\n- 1x Fetid Heath  (CMC 0)\n- 1x Isolated Chapel  (CMC 0)\n- 1x Clifftop Retreat  (CMC 0)\n- 1x Sunscorched Divide  (CMC 0)\n- 1x Glacial Fortress  (CMC 0)\n- 1x Skycloud Expanse  (CMC 0)\n- 1x Raugrin Triome  (CMC 0)\n- 1x Dragonskull Summit  (CMC 0)\n- 1x Savai Triome  (CMC 0)\n- 1x Sulfur Falls  (CMC 0)\n- 1x Brainstorm {U} (CMC 1)\n- 1x Narset's Reversal {U}{U} (CMC 2)\n- 1x An Offer You Can't Refuse {U} (CMC 1)\n- 1x Arcane Denial {1}{U} (CMC 2)\n- 1x Professor Onyx {4}{B}{B} (CMC 6)\n- 1x Chandra, Hope's Beacon {4}{R}{R} (CMC 6)\n- 1x Chandra, Acolyte of Flame {1}{R}{R} (CMC 3)\n- 1x Windswept Heath  (CMC 0)\n- 1x Talisman of Progress {2} (CMC 2)\n- 1x Hermes, Overseer of Elpis {3}{U} (CMC 4)\n- 1x Kykar, Zephyr Awakener {2}{W}{U} (CMC 4)\n- 1x Kess, Dissident Mage {1}{U}{B}{R} (CMC 4)\n- 1x Radstorm {3}{U} (CMC 4)\n- 1x Inexorable Tide {3}{U}{U} (CMC 5)\n- 1x Grand Arbiter Augustin IV {2}{W}{U} (CMC 4)\n- 1x G'raha Tia, Scion Reborn {W}{U}{B} (CMC 3)\n- 1x Jin-Gitaxias // The Great Synthesis  (CMC 5)\n- 1x Gandalf, Friend of the Shire {3}{U} (CMC 4)\n- 1x Talrand, Sky Summoner {2}{U}{U} (CMC 4)\n- 1x Arcane Signet {2} (CMC 2)\n- 1x Flood of Tears {4}{U}{U} (CMC 6)\n- 1x Talisman of Conviction {2} (CMC 2)\n- 1x Mystic Confluence {3}{U}{U} (CMC 5)\n- 1x Perplexing Test {3}{U}{U} (CMC 5)\n- 1x Dovin's Veto {W}{U} (CMC 2)\n- 1x Chaos Wand {3} (CMC 3)\n- 1x Experimental Augury {1}{U} (CMC 2)\n- 1x Black Waltz No. 3 {2}{B}{R} (CMC 4)\n- 1x Plargg and Nassari {3}{R}{R} (CMC 5)\n- 1x Monologue Tax {2}{W} (CMC 3)\n- 1x Boros Charm {R}{W} (CMC 2)\n- 1x Tellah, Great Sage {3}{U}{R} (CMC 5)\n- 1x Y'shtola, Night's Blessed {1}{W}{U}{B} (CMC 4)\n- 1x Sapphire Medallion {2} (CMC 2)\n- 1x Smothering Tithe {3}{W} (CMC 4)\n- 1x Despark {W}{B} (CMC 2)\n- 1x Anguished Unmaking {1}{W}{B} (CMC 3)\n- 2x Mountain  (CMC 0)\n- 3x Island  (CMC 0)\n- 1x Hallowed Fountain  (CMC 0)\n- 1x Godless Shrine  (CMC 0)\n- 1x Exotic Orchard  (CMC 0)\n- 1x Crumbling Necropolis  (CMC 0)\n- 1x Command Tower  (CMC 0)\n- 1x Arcane Sanctum  (CMC 0)\n- 1x Whirlwind of Thought {1}{U}{R}{W} (CMC 4)\n- 1x Tasha, the Witch Queen {3}{U}{B} (CMC 5)\n- 1x Stolen Strategy {4}{R} (CMC 5)\n- 1x Rhystic Study {2}{U} (CMC 3)\n- 1x Mystic Remora {U} (CMC 1)\n- 1x Displacer Kitten {3}{U} (CMC 4)\n- 1x Insidious Dreams {3}{B} (CMC 4)\n- 1x Boros Signet {2} (CMC 2)\n- 1x Idyllic Tutor {2}{W} (CMC 3)\n- 1x Krile Baldesion {W}{U} (CMC 2)\n- 1x Lyse Hext {1}{W}{U} (CMC 3)\n- 1x Lier, Disciple of the Drowned {3}{U}{U} (CMC 5)\n- 1x Ral, Crackling Wit {2}{U}{R} (CMC 4)\n- 1x Search for Glory {2}{W} (CMC 3)\n- 1x Alhammarret's Archive {5} (CMC 5)\n- 1x Mystic Monastery  (CMC 0)\n- 1x Etali, Primal Storm {4}{R}{R} (CMC 6)\n- 1x Nomad Outpost  (CMC 0)\n- 1x Reflecting Pool  (CMC 0)\n- 1x Generous Gift {2}{W} (CMC 3)\n- 1x Swords to Plowshares {W} (CMC 1)\n- 1x Exsanguinate {X}{B}{B} (CMC 2)\n- 1x Mizzix's Mastery {3}{R} (CMC 4)\n- 1x Solve the Equation {2}{U} (CMC 3)\n- 1x Nightscape Familiar {1}{B} (CMC 2)\n- 1x Insult // Injury {2}{R} // {2}{R} (CMC 6)\n- 1x Crackle with Power {X}{X}{X}{R}{R} (CMC 2)\n- 1x Windfall {2}{U} (CMC 3)\n- 1x Thousand-Year Storm {4}{U}{R} (CMC 6)\n- 1x Kuja, Genome Sorcerer // Trance Kuja, Fate Defied  (CMC 4)\n- 1x Yawgmoth's Will {2}{B} (CMC 3)\n- 1x Shark Typhoon {5}{U} (CMC 6)\n- 1x Saheeli, Sublime Artificer {1}{U/R}{U/R} (CMC 3)\n- 1x Monastery Mentor {2}{W} (CMC 3)\n- 1x Kykar, Wind's Fury {1}{U}{R}{W} (CMC 4)\n- 1x Talisman of Dominance {2} (CMC 2)\n- 1x Talisman of Creativity {2} (CMC 2)\n- 1x Sol Ring {1} (CMC 1)\n- 1x Izzet Signet {2} (CMC 2)\n- 1x Dimir Signet {2} (CMC 2)\n- 2x Swamp  (CMC 0)\n- 1x Sacred Foundry  (CMC 0)\n- 1x Path of Ancestry  (CMC 0)\n- 1x Cunning Rhetoric {2}{B} (CMC 3)";
+const combosContext = "- Hullbreaker Horror + Sol Ring → Infinite colorless mana, Infinite storm count (BE, pop 311524)\n- Teferi, Time Raveler + Displacer Kitten + Sol Ring → Infinite card draw, Infinite draw triggers, Near-infinite colorless mana, Near-infinite storm count (BE, pop 43709)\n- Tidespout Tyrant + Sol Ring → Infinite colorless mana, Infinite storm count (BS, pop 34591)\n- Narset's Reversal + Isochron Scepter → Infinite turns, Lock (BR, pop 29535)\n- Approach of the Second Sun + Windfall → Win the game (BE, pop 21515)\n- Professor Onyx + Chain of Smog → Infinite lifegain, Infinite lifegain triggers, Infinite lifeloss, Infinite magecraft triggers (BR, pop 20566)\n- Twinning Staff + Narset's Reversal → Infinite magecraft triggers (BE, pop 19889)\n- Storm-Kiln Artist + Thousand-Year Storm + Narset's Reversal → Infinite colored mana, Infinite copies of instant and sorcery spells on the stack, Infinite power for any creature, Infinite magecraft triggers, Infinite storm count, Infinite Treasure tokens (BE, pop 17261)\n- Boros Reckoner + Boros Charm → Infinite lifegain, Infinite lifegain triggers (BS, pop 12553)\n- Peer into the Abyss + Alhammarret's Archive → Infinite card draw, Infinite draw triggers (BO, pop 10445)\n- Thousand-Year Storm + Reiterate → Infinite magecraft triggers (BE, pop 9801)\n- Approach of the Second Sun + Narset's Reversal → Win the game (BC, pop 9754)\n- Smothering Tithe + Underworld Breach + Windfall → Infinite draw triggers for all players, Infinite looting for all players, Infinite self-discard triggers for all players, Near-infinite colored mana, Near-infinite Treasure tokens (BP, pop 8461)\n- Approach of the Second Sun + Solve the Equation → Win the game (BC, pop 8302)\n- Stasis + Smothering Tithe → Players skip their untap steps, Lock (BR, pop 7307)";
+const agentHints = {
+  manabase: 'evaluate land count vs CMC, color sources per color, fixing density',
+  ramp: 'evaluate ramp density, turn-1 plays, curve consistency',
+  draw: 'distinguish repeatable engines from one-shot draw',
+  removal: 'evaluate interaction density and coverage gaps',
+  synergies: 'identify theme cohesion and off-theme cards',
+  combos: 'evaluate tutor density, protection, redundancy',
+  strategy: 'classify archetype, articulate the win plan, recommend bracket'
+};
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.panel section').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+  });
+});
+function copyPrompt(agent) {
+  const hint = agentHints[agent] || '';
+  const text = '/mtg-' + agent + ' ' + hint + '\\n\\n' + deckContext + '\\n\\nCOMBOS:\\n' + combosContext;
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Prompt for /mtg-' + agent + ' copied. Paste into Copilot Chat.');
+  });
+}
+function copyDeckPrompt() {
+  navigator.clipboard.writeText(deckContext + '\\n\\nCOMBOS:\\n' + combosContext).then(() => {
+    alert('Deck context copied. Switch to MTG EDH Orchestrator mode and paste.');
+  });
+}
+</script>
+</body>
+</html>
