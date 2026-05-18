@@ -1,0 +1,62 @@
+1x Kraum, Ludevic's Opus | {3}{U}{R} | CMC 5 | Creature [CMD]
+1x Akroma, Vision of Ixidor | {5}{W}{W} | CMC 7 | Creature [CMD]
+32x Wastes |  | CMC 0 | Land
+1x Wheel of Fate |  | CMC 0 | Sorcery
+1x Mystic Remora | {U} | CMC 1 | Enchantment
+1x Sol Ring | {1} | CMC 1 | Artifact
+1x Arcane Signet | {2} | CMC 2 | Artifact
+1x Azorius Signet | {2} | CMC 2 | Artifact
+1x Boros Charm | {R}{W} | CMC 2 | Instant
+1x Boros Signet | {2} | CMC 2 | Artifact
+1x Brave the Sands | {1}{W} | CMC 2 | Enchantment
+1x Fellwar Stone | {2} | CMC 2 | Artifact
+1x Hushbringer | {1}{W} | CMC 2 | Creature
+1x Izzet Signet | {2} | CMC 2 | Artifact
+1x Pearl Medallion | {2} | CMC 2 | Artifact
+1x Selfless Spirit | {1}{W} | CMC 2 | Creature
+1x Spider-Woman, Stunning Savior | {1}{W/U} | CMC 2 | Creature
+1x Stormscape Familiar | {1}{U} | CMC 2 | Creature
+1x Talisman of Conviction | {2} | CMC 2 | Artifact
+1x Talisman of Creativity | {2} | CMC 2 | Artifact
+1x Talisman of Progress | {2} | CMC 2 | Artifact
+1x Watcher of the Spheres | {W}{U} | CMC 2 | Creature
+1x Archon of Emeria | {2}{W} | CMC 3 | Creature
+1x Aven Mindcensor | {2}{W} | CMC 3 | Creature
+1x Bastion Protector | {2}{W} | CMC 3 | Creature
+1x Boromir, Warden of the Tower | {2}{W} | CMC 3 | Creature
+1x Cut a Deal | {2}{W} | CMC 3 | Sorcery
+1x Day's Undoing | {2}{U} | CMC 3 | Sorcery
+1x Frostcliff Siege | {1}{U}{R} | CMC 3 | Enchantment
+1x Generous Gift | {2}{W} | CMC 3 | Instant
+1x Idyllic Tutor | {2}{W} | CMC 3 | Sorcery
+1x Lightning, Army of One | {1}{R}{W} | CMC 3 | Creature
+1x Long-Term Plans | {2}{U} | CMC 3 | Instant
+1x Loran of the Third Path | {2}{W} | CMC 3 | Creature
+1x Make a Stand | {2}{W} | CMC 3 | Instant
+1x Midnight Clock | {2}{U} | CMC 3 | Artifact
+1x Moon-Blessed Cleric | {2}{W} | CMC 3 | Creature
+1x Raph & Leo, Sibling Rivals | {1}{R/W}{R/W} | CMC 3 | Creature
+1x Rhystic Study | {2}{U} | CMC 3 | Enchantment
+1x Sevinne's Reclamation | {2}{W} | CMC 3 | Sorcery
+1x Stroke of Midnight | {2}{W} | CMC 3 | Instant
+1x Unbreakable Formation | {2}{W} | CMC 3 | Instant
+1x Warden of Evos Isle | {2}{U} | CMC 3 | Creature
+1x Windfall | {2}{U} | CMC 3 | Sorcery
+1x Your Temple Is Under Attack | {2}{W} | CMC 3 | Instant
+1x Akroma's Will | {3}{W} | CMC 4 | Instant
+1x Angelic Field Marshal | {2}{W}{W} | CMC 4 | Creature
+1x Bloodsworn Steward | {2}{R}{R} | CMC 4 | Creature
+1x Concerted Effort | {2}{W}{W} | CMC 4 | Enchantment
+1x Court of Grace | {2}{W}{W} | CMC 4 | Enchantment
+1x Nyx Lotus | {4} | CMC 4 | Artifact
+1x Odric, Lunarch Marshal | {3}{W} | CMC 4 | Creature
+1x Smothering Tithe | {3}{W} | CMC 4 | Enchantment
+1x The Wind Crystal | {2}{W}{W} | CMC 4 | Artifact
+1x Parallel Thoughts | {3}{U}{U} | CMC 5 | Enchantment
+1x Step Between Worlds | {3}{U}{U} | CMC 5 | Sorcery
+1x Time Reversal | {3}{U}{U} | CMC 5 | Sorcery
+1x Aurelia, the Warleader | {2}{R}{R}{W}{W} | CMC 6 | Creature
+1x The Immortal Sun | {6} | CMC 6 | Artifact
+1x True Conviction | {3}{W}{W}{W} | CMC 6 | Enchantment
+1x Vanquish the Horde | {6}{W}{W} | CMC 8 | Sorcery
+1x Blasphemous Act | {8}{R} | CMC 9 | Sorcery

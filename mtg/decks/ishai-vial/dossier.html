@@ -95,6 +95,38 @@ td.cmc { color: var(--muted); text-align: right; width: 40px; }
 .analysis .check-bad { color: var(--bad); }
 
 .footer { text-align: center; color: var(--muted); font-size: 11px; margin-top: 20px; }
+
+/* Card preview tooltip (Scryfall) */
+#card-preview {
+  position: fixed;
+  z-index: 9999;
+  display: none;
+  pointer-events: none;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+}
+#card-preview img {
+  display: block;
+  width: 244px;
+  height: 340px;
+  border-radius: 6px;
+  object-fit: contain;
+  background: #1a1f2e;
+}
+#card-preview .loading {
+  width: 244px;
+  height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+.hoverable-card { cursor: help; border-bottom: 1px dotted transparent; }
+.hoverable-card:hover { border-bottom-color: var(--accent); }
 .footer a { color: var(--accent); }
 </style>
 </head>
@@ -605,6 +637,109 @@ function copyDeckPrompt() {
     alert('Deck context copied. Switch to MTG EDH Orchestrator mode and paste.');
   });
 }
+
+// ─── Scryfall hover preview ───────────────────────────────────────────────
+(function () {
+  const preview = document.createElement('div');
+  preview.id = 'card-preview';
+  preview.innerHTML = '<div class="loading">…</div>';
+  document.body.appendChild(preview);
+  const imgCache = new Map(); // name → resolved image URL
+
+  function scryfallImageUrl(name) {
+    return 'https://api.scryfall.com/cards/named?exact=' +
+           encodeURIComponent(name) + '&format=image&version=normal';
+  }
+
+  function looksLikeCardName(s) {
+    if (!s) return false;
+    s = s.trim();
+    if (s.length < 3 || s.length > 60) return false;
+    // Must start with letter; must contain at least one letter; not pure digits/symbols
+    if (!/^[A-Z]/.test(s)) return false;
+    // Skip common non-card phrases
+    const skip = /^(Top|Combos|Near|Bracket|Identity|Mana|Verdict|Bracket|None|cEDH|EDH|Premium|Standard|Exhibition|Rare|MISSING|Total|Lands|Ramp|Draw|Removal|Interaction|Tutors|Pilot|Power level|Consistency|Resilience|Speed|Complexity|Tema|Hard|Med|Low|High|Easy|Medium|Hard|Expert)$/i;
+    if (skip.test(s)) return false;
+    return true;
+  }
+
+  function getCardName(target) {
+    // Strategy 1: <td> right after <td class='qty'> (deck list tables)
+    if (target.tagName === 'TD' && target.previousElementSibling &&
+        target.previousElementSibling.classList.contains('qty')) {
+      return target.textContent.trim();
+    }
+    // Strategy 2: <strong> inside .analysis or .combo blocks
+    if (target.tagName === 'STRONG' && target.closest('.analysis, .combo, .combo-title')) {
+      return target.textContent.trim();
+    }
+    // Strategy 3: .card-in / .card-out (combo card spans)
+    if (target.classList && (target.classList.contains('card-in') || target.classList.contains('card-out'))) {
+      return target.textContent.trim();
+    }
+    return null;
+  }
+
+  function showPreview(e, name) {
+    if (!looksLikeCardName(name)) return;
+    // Position near cursor, but flip if too close to right/bottom edge
+    const w = 252, h = 350;
+    let x = e.clientX + 18;
+    let y = e.clientY + 18;
+    if (x + w > window.innerWidth)  x = e.clientX - w - 18;
+    if (y + h > window.innerHeight) y = e.clientY - h - 18;
+    preview.style.left = x + 'px';
+    preview.style.top  = y + 'px';
+    preview.style.display = 'block';
+
+    const cached = imgCache.get(name);
+    if (cached === 'fail') {
+      preview.innerHTML = '<div class="loading">no preview</div>';
+      return;
+    }
+    if (cached) {
+      preview.innerHTML = '<img src="' + cached + '" alt="">';
+      return;
+    }
+    preview.innerHTML = '<div class="loading">loading ' + name + '…</div>';
+    const url = scryfallImageUrl(name);
+    const img = new Image();
+    img.onload  = () => {
+      imgCache.set(name, url);
+      // Only swap if still the same card hovered
+      if (preview.dataset.current === name) {
+        preview.innerHTML = '<img src="' + url + '" alt="">';
+      }
+    };
+    img.onerror = () => {
+      imgCache.set(name, 'fail');
+      if (preview.dataset.current === name) {
+        preview.innerHTML = '<div class="loading">no preview</div>';
+      }
+    };
+    preview.dataset.current = name;
+    img.src = url;
+  }
+
+  document.addEventListener('mouseover', (e) => {
+    const name = getCardName(e.target);
+    if (name) showPreview(e, name);
+  });
+  document.addEventListener('mousemove', (e) => {
+    if (preview.style.display !== 'block') return;
+    const w = 252, h = 350;
+    let x = e.clientX + 18;
+    let y = e.clientY + 18;
+    if (x + w > window.innerWidth)  x = e.clientX - w - 18;
+    if (y + h > window.innerHeight) y = e.clientY - h - 18;
+    preview.style.left = x + 'px';
+    preview.style.top  = y + 'px';
+  });
+  document.addEventListener('mouseout', (e) => {
+    const name = getCardName(e.target);
+    if (name) preview.style.display = 'none';
+  });
+})();
 </script>
 </body>
 </html>

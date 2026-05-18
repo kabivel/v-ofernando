@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<title>Akroma + Kraum &mdash; Agent Dossier (regenerated)</title>
+<style>
+:root { --bg:#0f1419;--panel:#1a1f2e;--panel-2:#232a3d;--border:#2d3548;--text:#e6e8ec;--muted:#8a93a6;--accent:#7dd3fc;--good:#86efac;--warn:#fbbf24;--bad:#fca5a5; }
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);padding:16px}
+.container{max-width:1200px;margin:0 auto}h1{margin:0 0 4px;font-size:24px}h2{margin:0 0 12px;font-size:18px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:6px}h3{margin:16px 0 6px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}h4{margin:12px 0 6px;font-size:13px;color:var(--accent)}
+.meta{color:var(--muted);margin-bottom:16px;font-size:13px}.meta strong{color:var(--text)}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);flex-wrap:wrap}.tab{padding:8px 14px;cursor:pointer;background:var(--panel);border:1px solid var(--border);border-bottom:none;border-radius:4px 4px 0 0;font-size:13px;color:var(--muted)}.tab.active{background:var(--panel-2);color:var(--accent);font-weight:600}.tab:hover{color:var(--text)}
+.panel{background:var(--panel-2);border:1px solid var(--border);border-top:none;padding:18px;min-height:400px}.panel section{display:none}.panel section.active{display:block}
+.stat-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.stat{background:var(--panel);border-radius:6px;padding:8px 14px}.stat-label{color:var(--muted);font-size:11px;text-transform:uppercase}.stat-value{font-size:22px;font-weight:600}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card-panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:14px}
+.bar{background:var(--panel);height:22px;border-radius:4px;position:relative;margin:4px 0;overflow:hidden}.bar-fill{background:linear-gradient(90deg,#4f46e5,var(--accent));height:100%}.bar-val{position:absolute;right:8px;top:2px;font-size:12px;font-weight:600}
+.bar-row{display:grid;grid-template-columns:50px 1fr;align-items:center;gap:8px;font-size:13px}.bar-row .lbl{color:var(--muted);text-align:right}
+.mp{display:inline-block;padding:1px 6px;border-radius:50%;font-weight:700;color:#111;font-size:11px;min-width:14px;text-align:center}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}th,td{text-align:left;padding:4px 8px;border-bottom:1px solid var(--border)}th{color:var(--muted);font-weight:500;font-size:11px;text-transform:uppercase}td.qty{color:var(--muted);width:30px}td.cmc{color:var(--muted);text-align:right;width:40px}
+.combo{background:var(--panel);border-left:3px solid var(--good);padding:10px 14px;margin-bottom:10px;border-radius:4px}.combo.near{border-left-color:var(--warn)}.combo-title{font-weight:600;margin-bottom:4px;font-size:14px}.combo-meta{color:var(--muted);font-size:12px;margin-bottom:4px}.combo-prod{color:var(--good);font-size:12px}.card-in{color:var(--text)}.card-out{color:var(--warn);text-decoration:underline dashed}
+.empty{color:var(--muted);font-style:italic}.hint-text{font-size:12px;color:var(--muted);margin:4px 0 12px}
+.analysis{background:linear-gradient(180deg,var(--panel),var(--bg));border-left:4px solid var(--accent);border-radius:4px;padding:14px 18px;margin:16px 0}.analysis .agent-name{display:inline-block;background:var(--accent);color:#000;font-weight:700;font-size:11px;padding:2px 8px;border-radius:3px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}.analysis h4{margin:12px 0 6px;font-size:13px;color:var(--accent)}.analysis ul{margin:6px 0;padding-left:22px;line-height:1.55}.analysis li{margin-bottom:4px}.analysis strong{color:var(--text)}.analysis .verdict{margin-top:10px;padding:8px 12px;background:var(--panel-2);border-left:3px solid var(--good);border-radius:3px;font-style:italic}.analysis.flag-warn{border-left-color:var(--warn)}.analysis.flag-bad{border-left-color:var(--bad)}.analysis.flag-good{border-left-color:var(--good)}.analysis .check-ok{color:var(--good)}.analysis .check-warn{color:var(--warn)}.analysis .check-bad{color:var(--bad)}
+.combos-split{display:grid;gap:18px}.combos-section{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:14px}.sec-head{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.5px;padding-bottom:6px;border-bottom:1px solid var(--border)}.sec-head.sec-in{color:var(--good);border-bottom-color:var(--good)}.sec-head.sec-out{color:var(--warn);border-bottom-color:var(--warn)}
+.alert-banner{border-radius:6px;padding:12px 16px;margin:0 0 16px}.alert-banner.alert-warn{background:rgba(252,191,36,.12);border:1px solid var(--warn);color:var(--warn)}.alert-banner strong{color:#fff}
+.footer{text-align:center;color:var(--muted);font-size:11px;margin-top:20px}.footer a{color:var(--accent)}
+#card-preview{position:fixed;z-index:9999;display:none;pointer-events:none;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:4px;box-shadow:0 8px 24px rgba(0,0,0,.6)}#card-preview img{display:block;width:244px;height:340px;border-radius:6px;object-fit:contain;background:#1a1f2e}#card-preview .loading{width:244px;height:340px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+<div class='container'>
+
+<h1>Akroma + Kraum (URW partner)</h1>
+<div class='meta'>
+  <strong>Kraum, Ludevic's Opus + Akroma, Vision of Ixidor</strong> &middot; URW identity &middot; 93/100 cards &middot;
+  18 unique lands (32 total) &middot;
+  0 combos &middot; 15 near-combos &middot;
+  imported from <a href='https://archidekt.com/decks/21510458/copy_of_akroma_kraum_soldier' style='color:var(--accent)'>Archidekt</a> &middot;
+  regenerated 2026-05-18 17:40
+</div>
+
+<div class='alert-banner alert-warn'><strong>&#9888; Deck incompleto:</strong> 93/100 cards &mdash; faltam 7 slots.</div>
+
+<div class='tabs'>
+  <div class='tab active' data-tab='overview'>Overview</div>
+  <div class='tab' data-tab='validate'>Validate</div>
+  <div class='tab' data-tab='manabase'>Manabase</div>
+  <div class='tab' data-tab='ramp'>Ramp</div>
+  <div class='tab' data-tab='draw'>Draw</div>
+  <div class='tab' data-tab='removal'>Removal</div>
+  <div class='tab' data-tab='synergies'>Synergies</div>
+  <div class='tab' data-tab='combos'>Combos</div>
+  <div class='tab' data-tab='strategy'>Strategy</div>
+  <div class='tab' data-tab='pod'>Pod</div>
+  <div class='tab' data-tab='keywords'>Keywords</div>
+  <div class='tab' data-tab='devotion'>Devotion</div>
+  <div class='tab' data-tab='anthems'>★ Anthems &amp; Equipment</div>
+  <div class='tab' data-tab='review'>&#9733; Review</div>
+</div>
+
+<div class='panel'>
+
+<section id='overview' class='active'>
+<h2>Overview</h2>
+<div class='stat-row'>
+  <div class='stat'><div class='stat-label'>Total</div><div class='stat-value'>93</div></div>
+  <div class='stat'><div class='stat-label'>Lands</div><div class='stat-value'>32</div></div>
+  <div class='stat'><div class='stat-label'>Rocks</div><div class='stat-value'>11</div></div>
+  <div class='stat'><div class='stat-label'>Cost reducers</div><div class='stat-value'>6</div></div>
+  <div class='stat'><div class='stat-label'>Draw</div><div class='stat-value'>10</div></div>
+  <div class='stat'><div class='stat-label'>Counters</div><div class='stat-value'>1</div></div>
+  <div class='stat'><div class='stat-label'>Removal</div><div class='stat-value'>2</div></div>
+  <div class='stat'><div class='stat-label'>Wipes</div><div class='stat-value'>2</div></div>
+  <div class='stat'><div class='stat-label'>Tutors</div><div class='stat-value'>4</div></div>
+  <div class='stat'><div class='stat-label'>Combos</div><div class='stat-value' style='color:var(--good)'>0</div></div>
+  <div class='stat'><div class='stat-label'>Near</div><div class='stat-value' style='color:var(--warn)'>15</div></div>
+</div>
+
+<div class='grid-3'>
+  <div class='card-panel'><h3>Mana Curve (non-land)</h3><div class='bar-row'><span class='lbl'>0</span><div class='bar'><div class='bar-fill' style='width:4%'></div><span class='bar-val'>1</span></div></div><div class='bar-row'><span class='lbl'>1</span><div class='bar'><div class='bar-fill' style='width:9%'></div><span class='bar-val'>2</span></div></div><div class='bar-row'><span class='lbl'>2</span><div class='bar'><div class='bar-fill' style='width:70%'></div><span class='bar-val'>16</span></div></div><div class='bar-row'><span class='lbl'>3</span><div class='bar'><div class='bar-fill' style='width:100%'></div><span class='bar-val'>23</span></div></div><div class='bar-row'><span class='lbl'>4</span><div class='bar'><div class='bar-fill' style='width:39%'></div><span class='bar-val'>9</span></div></div><div class='bar-row'><span class='lbl'>5</span><div class='bar'><div class='bar-fill' style='width:17%'></div><span class='bar-val'>4</span></div></div><div class='bar-row'><span class='lbl'>6</span><div class='bar'><div class='bar-fill' style='width:13%'></div><span class='bar-val'>3</span></div></div><div class='bar-row'><span class='lbl'>7+</span><div class='bar'><div class='bar-fill' style='width:13%'></div><span class='bar-val'>3</span></div></div></div>
+  <div class='card-panel'><h3>Type Distribution</h3><div class='bar-row'><span class='lbl'>Crea</span><div class='bar'><div class='bar-fill' style='width:56%'></div><span class='bar-val'>18</span></div></div><div class='bar-row'><span class='lbl'>Inst</span><div class='bar'><div class='bar-fill' style='width:25%'></div><span class='bar-val'>8</span></div></div><div class='bar-row'><span class='lbl'>Sorc</span><div class='bar'><div class='bar-fill' style='width:31%'></div><span class='bar-val'>10</span></div></div><div class='bar-row'><span class='lbl'>Arti</span><div class='bar'><div class='bar-fill' style='width:44%'></div><span class='bar-val'>14</span></div></div><div class='bar-row'><span class='lbl'>Ench</span><div class='bar'><div class='bar-fill' style='width:28%'></div><span class='bar-val'>9</span></div></div><div class='bar-row'><span class='lbl'>Land</span><div class='bar'><div class='bar-fill' style='width:100%'></div><span class='bar-val'>32</span></div></div></div>
+  <div class='card-panel'><h3>Color Pips (in costs)</h3><div class='bar-row'><span class='lbl'>W</span><div class='bar'><div class='bar-fill' style='width:100%'></div><span class='bar-val'>40</span></div></div><div class='bar-row'><span class='lbl'>U</span><div class='bar'><div class='bar-fill' style='width:42%'></div><span class='bar-val'>17</span></div></div><div class='bar-row'><span class='lbl'>R</span><div class='bar'><div class='bar-fill' style='width:22%'></div><span class='bar-val'>9</span></div></div></div>
+</div>
+
+<div class='analysis flag-good'>
+<div class='agent-name'>orchestrator summary</div>
+<p>Angel/soldier tribal beatdown WUR com pano de fundo stax-tax. <strong>Kraum</strong> &eacute; CA engine passiva (draw on opp cast 2+); <strong>Akroma</strong> &eacute; payoff per-keyword. Manabase URW corrigida (32 lands com fixing real). Combos: <strong>0 confirmados</strong>, 15 near. Bracket atual <strong>B2-B3</strong>; ramp efetivo: 11 rocks + 6 cost reducers.</p>
+<div class='verdict'>Faltam 7 cards pra completar. Pr&oacute;ximo: preencher slots com Counterspell, Swords to Plowshares, Oketra's Monument, Helm of the Host.</div>
+</div>
+</section>
+
+<section id='validate'>
+<h2>Validation</h2>
+<div class='analysis flag-warn'>
+<div class='agent-name'>mtg-validate</div>
+<ul>
+<li class='check-warn'>&#9888; <strong>Card count</strong>: 93/100</li>
+<li class='check-ok'>&#10003; Singleton: ok</li>
+<li class='check-ok'>&#10003; Color identity: URW (todos cards &sube; URW)</li>
+<li class='check-ok'>&#10003; Commander legality: partner pair</li>
+<li class='check-ok'>&#10003; Banlist: nenhum banido</li>
+<li class='check-ok'>&#10003; Manabase: 32 lands URW funcional</li>
+<li class='check-ok'>&#10003; Format: Commander</li>
+</ul>
+<h4>Bracket assessment</h4>
+<ul>
+<li>Game-changers (heur&iacute;stica): <strong>Smothering Tithe</strong>, <strong>Rhystic Study</strong> = 2 detectados</li>
+<li>Fast mana: 1 (Sol Ring)</li>
+<li>2-card infinite combos: 0</li>
+<li><strong>Recommended bracket</strong>: B2 (Core) flertando B3</li>
+</ul>
+</div>
+</section>
+
+<section id='manabase'>
+<h2>Manabase (32 lands)</h2>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1&times;</td><td>Battlefield Forge</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1&times;</td><td>Clifftop Retreat</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1&times;</td><td>Command Tower</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1&times;</td><td>Exotic Orchard</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1&times;</td><td>Glacial Fortress</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1&times;</td><td>Hallowed Fountain</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>5&times;</td><td>Island</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>5&times;</td><td>Mountain</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1&times;</td><td>Mystic Monastery</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>7&times;</td><td>Plains</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1&times;</td><td>Reflecting Pool</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1&times;</td><td>Sacred Foundry</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1&times;</td><td>Shivan Reef</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1&times;</td><td>Skycloud Expanse</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1&times;</td><td>Sulfur Falls</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1&times;</td><td>Sunscorched Divide</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1&times;</td><td>Temple of Enlightenment</td><td></td><td class='cmc'>0</td><td>Land</td></tr><tr><td class='qty'>1&times;</td><td>Temple of Epiphany</td><td></td><td class='cmc'>0</td><td>Land</td></tr></tbody></table>
+<div class='analysis flag-good'>
+<div class='agent-name'>mtg-manabase</div>
+<p>18 lands &uacute;nicas, 32 total. Mix WUR fixing real com 2 shocks (Hallowed Fountain, Sacred Foundry), 3 check lands, 2 pain lands, 2 scry tap lands, 1 tri-land. Sem fast lands (sem Ancient Tomb/City of Traitors).</p>
+<div class='verdict'>Karsten target OK pra B2/B3. Pra B3+ adicionar 1-2 fetches + utility lands.</div>
+</div>
+</section>
+
+<section id='ramp'>
+<h2>Ramp &amp; Cost Reduction</h2>
+<h3>Rocks / mana producers (11)</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1&times;</td><td>Sol Ring</td><td><span class='mp' style='background:#dcdcdc'>1</span></td><td class='cmc'>1</td><td>Artifact</td></tr><tr><td class='qty'>1&times;</td><td>Arcane Signet</td><td><span class='mp' style='background:#dcdcdc'>2</span></td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1&times;</td><td>Azorius Signet</td><td><span class='mp' style='background:#dcdcdc'>2</span></td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1&times;</td><td>Boros Signet</td><td><span class='mp' style='background:#dcdcdc'>2</span></td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1&times;</td><td>Fellwar Stone</td><td><span class='mp' style='background:#dcdcdc'>2</span></td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1&times;</td><td>Izzet Signet</td><td><span class='mp' style='background:#dcdcdc'>2</span></td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1&times;</td><td>Talisman of Conviction</td><td><span class='mp' style='background:#dcdcdc'>2</span></td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1&times;</td><td>Talisman of Creativity</td><td><span class='mp' style='background:#dcdcdc'>2</span></td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1&times;</td><td>Talisman of Progress</td><td><span class='mp' style='background:#dcdcdc'>2</span></td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1&times;</td><td>Midnight Clock</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#aad8f5'>U</span></td><td class='cmc'>3</td><td>Artifact</td></tr><tr><td class='qty'>1&times;</td><td>Nyx Lotus</td><td><span class='mp' style='background:#dcdcdc'>4</span></td><td class='cmc'>4</td><td>Artifact</td></tr></tbody></table>
+<h3>Mana dorks (0)</h3>
+<p class='empty'>Nenhum dork.</p>
+<h3>Rituais (0)</h3>
+<p class='empty'>Nenhum ritual.</p>
+<h3>Treasure generators (1)</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1&times;</td><td>Smothering Tithe</td><td><span class='mp' style='background:#dcdcdc'>3</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>4</td><td>Enchantment</td></tr></tbody></table>
+<h3>Cost reducers (6) &mdash; ramp efetivo</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1&times;</td><td>Pearl Medallion</td><td><span class='mp' style='background:#dcdcdc'>2</span></td><td class='cmc'>2</td><td>Artifact</td></tr><tr><td class='qty'>1&times;</td><td>Stormscape Familiar</td><td><span class='mp' style='background:#dcdcdc'>1</span><span class='mp' style='background:#aad8f5'>U</span></td><td class='cmc'>2</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>Watcher of the Spheres</td><td><span class='mp' style='background:#fff8d6'>W</span><span class='mp' style='background:#aad8f5'>U</span></td><td class='cmc'>2</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>Warden of Evos Isle</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#aad8f5'>U</span></td><td class='cmc'>3</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>The Wind Crystal</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>4</td><td>Artifact</td></tr><tr><td class='qty'>1&times;</td><td>The Immortal Sun</td><td><span class='mp' style='background:#dcdcdc'>6</span></td><td class='cmc'>6</td><td>Artifact</td></tr></tbody></table>
+<div class='analysis flag-good'>
+<div class='agent-name'>mtg-ramp (verified)</div>
+<p>Total ramp efetivo: <strong>11 rocks + 6 cost reducers = 17 sources</strong>. Inclui cards multi-fun&ccedil;&atilde;o cross-listed: <strong>Midnight Clock</strong> (rock + wheel), <strong>Smothering Tithe</strong> (treasures), <strong>The Wind Crystal</strong> (anthem ativ&aacute;vel + cost reducer W), <strong>The Immortal Sun</strong> (anthem + draw + cost reducer universal).</p>
+<div class='verdict'><strong>Nyx Lotus</strong> ainda &eacute; trap em 3-color (devotion W ~28 total, ~6 em play esperado = mana l&iacute;quida marginal). Substituir por <strong>Worn Powerstone</strong>.</div>
+</div>
+</section>
+
+<section id='draw'>
+<h2>Draw Engines (10 cards)</h2>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1&times;</td><td>Mystic Remora</td><td><span class='mp' style='background:#aad8f5'>U</span></td><td class='cmc'>1</td><td>Enchantment</td></tr><tr><td class='qty'>1&times;</td><td>Cut a Deal</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Sorcery</td></tr><tr><td class='qty'>1&times;</td><td>Frostcliff Siege</td><td><span class='mp' style='background:#dcdcdc'>1</span><span class='mp' style='background:#aad8f5'>U</span><span class='mp' style='background:#f6b7a3'>R</span></td><td class='cmc'>3</td><td>Enchantment</td></tr><tr><td class='qty'>1&times;</td><td>Loran of the Third Path</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>Midnight Clock</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#aad8f5'>U</span></td><td class='cmc'>3</td><td>Artifact</td></tr><tr><td class='qty'>1&times;</td><td>Rhystic Study</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#aad8f5'>U</span></td><td class='cmc'>3</td><td>Enchantment</td></tr><tr><td class='qty'>1&times;</td><td>Your Temple Is Under Attack</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Instant</td></tr><tr><td class='qty'>1&times;</td><td>Kraum, Ludevic's Opus</td><td><span class='mp' style='background:#dcdcdc'>3</span><span class='mp' style='background:#aad8f5'>U</span><span class='mp' style='background:#f6b7a3'>R</span></td><td class='cmc'>5</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>Parallel Thoughts</td><td><span class='mp' style='background:#dcdcdc'>3</span><span class='mp' style='background:#aad8f5'>U</span><span class='mp' style='background:#aad8f5'>U</span></td><td class='cmc'>5</td><td>Enchantment</td></tr><tr><td class='qty'>1&times;</td><td>The Immortal Sun</td><td><span class='mp' style='background:#dcdcdc'>6</span></td><td class='cmc'>6</td><td>Artifact</td></tr></tbody></table>
+<h3>Wheels detectadas (4)</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1&times;</td><td>Wheel of Fate</td><td></td><td class='cmc'>0</td><td>Sorcery</td></tr><tr><td class='qty'>1&times;</td><td>Day's Undoing</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#aad8f5'>U</span></td><td class='cmc'>3</td><td>Sorcery</td></tr><tr><td class='qty'>1&times;</td><td>Step Between Worlds</td><td><span class='mp' style='background:#dcdcdc'>3</span><span class='mp' style='background:#aad8f5'>U</span><span class='mp' style='background:#aad8f5'>U</span></td><td class='cmc'>5</td><td>Sorcery</td></tr><tr><td class='qty'>1&times;</td><td>Time Reversal</td><td><span class='mp' style='background:#dcdcdc'>3</span><span class='mp' style='background:#aad8f5'>U</span><span class='mp' style='background:#aad8f5'>U</span></td><td class='cmc'>5</td><td>Sorcery</td></tr></tbody></table>
+<h3>Tutores (4)</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1&times;</td><td>Idyllic Tutor</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Sorcery</td></tr><tr><td class='qty'>1&times;</td><td>Long-Term Plans</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#aad8f5'>U</span></td><td class='cmc'>3</td><td>Instant</td></tr><tr><td class='qty'>1&times;</td><td>Moon-Blessed Cleric</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>Parallel Thoughts</td><td><span class='mp' style='background:#dcdcdc'>3</span><span class='mp' style='background:#aad8f5'>U</span><span class='mp' style='background:#aad8f5'>U</span></td><td class='cmc'>5</td><td>Enchantment</td></tr></tbody></table>
+<div class='analysis flag-good'>
+<div class='agent-name'>mtg-draw (verified)</div>
+<p>10 cards com "draw card" no Oracle text. Inclui cross-listed: <strong>Midnight Clock</strong> (rock + wheel), <strong>The Immortal Sun</strong> (anthem + draw + cost reducer), <strong>Frostcliff Siege</strong> (Jeskai mode draws on combat damage), <strong>Smothering Tithe</strong> indireto via treasures.</p>
+<div class='verdict'>Draw stack <strong>elite</strong> pra B2/B3. Kraum trigger amplifica draws de oponentes.</div>
+</div>
+</section>
+
+<section id='removal'>
+<h2>Removal &amp; Interaction</h2>
+<h3>Counterspells (1)</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1&times;</td><td>Boromir, Warden of the Tower</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Creature</td></tr></tbody></table>
+<h3>Targeted removal (2)</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1&times;</td><td>Generous Gift</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Instant</td></tr><tr><td class='qty'>1&times;</td><td>Stroke of Midnight</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Instant</td></tr></tbody></table>
+<h3>Wipes (2)</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1&times;</td><td>Vanquish the Horde</td><td><span class='mp' style='background:#dcdcdc'>6</span><span class='mp' style='background:#fff8d6'>W</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>8</td><td>Sorcery</td></tr><tr><td class='qty'>1&times;</td><td>Blasphemous Act</td><td><span class='mp' style='background:#dcdcdc'>8</span><span class='mp' style='background:#f6b7a3'>R</span></td><td class='cmc'>9</td><td>Sorcery</td></tr></tbody></table>
+<h3>Protection (10)</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1&times;</td><td>Boros Charm</td><td><span class='mp' style='background:#f6b7a3'>R</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>2</td><td>Instant</td></tr><tr><td class='qty'>1&times;</td><td>Selfless Spirit</td><td><span class='mp' style='background:#dcdcdc'>1</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>2</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>Bastion Protector</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>Boromir, Warden of the Tower</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>Make a Stand</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Instant</td></tr><tr><td class='qty'>1&times;</td><td>Unbreakable Formation</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Instant</td></tr><tr><td class='qty'>1&times;</td><td>Your Temple Is Under Attack</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Instant</td></tr><tr><td class='qty'>1&times;</td><td>Akroma's Will</td><td><span class='mp' style='background:#dcdcdc'>3</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>4</td><td>Instant</td></tr><tr><td class='qty'>1&times;</td><td>Odric, Lunarch Marshal</td><td><span class='mp' style='background:#dcdcdc'>3</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>Akroma, Vision of Ixidor</td><td><span class='mp' style='background:#dcdcdc'>5</span><span class='mp' style='background:#fff8d6'>W</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>7</td><td>Creature</td></tr></tbody></table>
+<h3>Stax/hate (1)</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1&times;</td><td>Archon of Emeria</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Creature</td></tr></tbody></table>
+<div class='analysis flag-warn'>
+<div class='agent-name'>mtg-removal (verified)</div>
+<p>Counters: 1 (s&oacute; Boromir trigger). Removal targeted: 2. Wipes: 2. Protection: 10.</p>
+<div class='verdict'>Gap: <strong>0 hard counters</strong>. Upgrade priorit&aacute;rio: <strong>Counterspell</strong>, <strong>Mana Drain</strong>, <strong>Swords to Plowshares</strong>.</div>
+</div>
+</section>
+
+<section id='synergies'>
+<h2>Synergies</h2>
+<h3>Anthems / team-wide buffs (16)</h3>
+<table><thead><tr><th></th><th>Name</th><th>Cost</th><th>CMC</th><th>Type</th></tr></thead><tbody><tr><td class='qty'>1&times;</td><td>Brave the Sands</td><td><span class='mp' style='background:#dcdcdc'>1</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>2</td><td>Enchantment</td></tr><tr><td class='qty'>1&times;</td><td>Selfless Spirit</td><td><span class='mp' style='background:#dcdcdc'>1</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>2</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>Bastion Protector</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>Boromir, Warden of the Tower</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>Frostcliff Siege</td><td><span class='mp' style='background:#dcdcdc'>1</span><span class='mp' style='background:#aad8f5'>U</span><span class='mp' style='background:#f6b7a3'>R</span></td><td class='cmc'>3</td><td>Enchantment</td></tr><tr><td class='qty'>1&times;</td><td>Make a Stand</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Instant</td></tr><tr><td class='qty'>1&times;</td><td>Unbreakable Formation</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Instant</td></tr><tr><td class='qty'>1&times;</td><td>Your Temple Is Under Attack</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>3</td><td>Instant</td></tr><tr><td class='qty'>1&times;</td><td>Akroma's Will</td><td><span class='mp' style='background:#dcdcdc'>3</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>4</td><td>Instant</td></tr><tr><td class='qty'>1&times;</td><td>Angelic Field Marshal</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>Bloodsworn Steward</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#f6b7a3'>R</span><span class='mp' style='background:#f6b7a3'>R</span></td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>Concerted Effort</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>4</td><td>Enchantment</td></tr><tr><td class='qty'>1&times;</td><td>Odric, Lunarch Marshal</td><td><span class='mp' style='background:#dcdcdc'>3</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>4</td><td>Creature</td></tr><tr><td class='qty'>1&times;</td><td>The Wind Crystal</td><td><span class='mp' style='background:#dcdcdc'>2</span><span class='mp' style='background:#fff8d6'>W</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>4</td><td>Artifact</td></tr><tr><td class='qty'>1&times;</td><td>The Immortal Sun</td><td><span class='mp' style='background:#dcdcdc'>6</span></td><td class='cmc'>6</td><td>Artifact</td></tr><tr><td class='qty'>1&times;</td><td>True Conviction</td><td><span class='mp' style='background:#dcdcdc'>3</span><span class='mp' style='background:#fff8d6'>W</span><span class='mp' style='background:#fff8d6'>W</span><span class='mp' style='background:#fff8d6'>W</span></td><td class='cmc'>6</td><td>Enchantment</td></tr></tbody></table>
+<h3>Recursion (0)</h3>
+<p class='empty'>Nenhuma recurs&atilde;o detectada.</p>
+<div class='analysis'>
+<div class='agent-name'>mtg-synergies (verified)</div>
+<p>Tema dominante: <strong>Angel/Soldier tribal double-strike + stax-lite</strong>. Anthems cobrem flying, vigilance, double strike, lifelink, haste, trample. Cross-list importante: <strong>Frostcliff Siege</strong> tem modo Jeskai (draw on combat) E Temur (anthem +1/+0 trample haste) &mdash; ambos on-theme; <strong>The Immortal Sun</strong> &eacute; anthem + draw + cost reducer.</p>
+<div class='verdict'>Tema claro. Cortes recomendados: <strong>Nyx Lotus</strong> (devotion ruim), <strong>Time Reversal</strong> (wheel redundante), <strong>Parallel Thoughts</strong> (setup lento).</div>
+</div>
+</section>
+
+<section id='combos'>
+<h2>Combos &amp; Win Conditions</h2>
+<div class='combos-split'>
+<div class='combos-section'><h3 class='sec-head sec-in'>&#10003; Combos in deck (0)</h3><p class='empty'>Nenhum combo confirmado.</p></div>
+<div class='combos-section'><h3 class='sec-head sec-out'>&#10005; Combos NOT in deck (top 15)</h3><div class='combo near'><div class='combo-title'><span class='card-out'>Hullbreaker Horror</span> + <span class='card-in'>Sol Ring</span></div><div class='combo-meta'>B2 &middot; pop 312202 &middot; missing: <strong>Hullbreaker Horror</strong></div><div class='combo-prod'>&rarr; Infinite colorless mana &amp;middot; Infinite storm count</div></div><div class='combo near'><div class='combo-title'><span class='card-out'>Tidespout Tyrant</span> + <span class='card-in'>Sol Ring</span></div><div class='combo-meta'>B4 &middot; pop 34660 &middot; missing: <strong>Tidespout Tyrant</strong></div><div class='combo-prod'>&rarr; Infinite colorless mana &amp;middot; Infinite storm count</div></div><div class='combo near'><div class='combo-title'><span class='card-in'>Blasphemous Act</span> + <span class='card-out'>Repercussion</span></div><div class='combo-meta'>C &middot; pop 33232 &middot; missing: <strong>Repercussion</strong></div><div class='combo-prod'>&rarr; Near-infinite damage to all players</div></div><div class='combo near'><div class='combo-title'><span class='card-in'>Aurelia, the Warleader</span> + <span class='card-out'>Helm of the Host</span></div><div class='combo-meta'>B4 &middot; pop 28404 &middot; missing: <strong>Helm of the Host</strong></div><div class='combo-prod'>&rarr; Infinite combat phases &amp;middot; Infinite creature tokens with haste &amp;middot; Infinite ETB</div></div><div class='combo near'><div class='combo-title'><span class='card-out'>Approach of the Second Sun</span> + <span class='card-in'>Windfall</span></div><div class='combo-meta'>B2 &middot; pop 21546 &middot; missing: <strong>Approach of the Second Sun</strong></div><div class='combo-prod'>&rarr; Win the game</div></div><div class='combo near'><div class='combo-title'><span class='card-out'>Toralf, God of Fury // Toralf's Hammer</span> + <span class='card-in'>Blasphemous Act</span></div><div class='combo-meta'>cEDH B5 &middot; pop 20085 &middot; missing: <strong>Toralf, God of Fury // Toralf's Hammer</strong></div><div class='combo-prod'>&rarr; Near-infinite damage</div></div><div class='combo near'><div class='combo-title'><span class='card-out'>Boros Reckoner</span> + <span class='card-in'>Boros Charm</span></div><div class='combo-meta'>B4 &middot; pop 12570 &middot; missing: <strong>Boros Reckoner</strong></div><div class='combo-prod'>&rarr; Infinite lifegain &amp;middot; Infinite lifegain triggers</div></div><div class='combo near'><div class='combo-title'><span class='card-out'>Fall of Cair Andros</span> + <span class='card-in'>Blasphemous Act</span></div><div class='combo-meta'>O &middot; pop 11723 &middot; missing: <strong>Fall of Cair Andros</strong></div><div class='combo-prod'>&rarr; Infinite +1/+1 counters on a creature &amp;middot; Near-infinite damage to creatures</div></div><div class='combo near'><div class='combo-title'><span class='card-in'>Aurelia, the Warleader</span> + <span class='card-out'>Sword of Hearth and Home</span></div><div class='combo-meta'>B4 &middot; pop 11336 &middot; missing: <strong>Sword of Hearth and Home</strong></div><div class='combo-prod'>&rarr; Infinite combat damage &amp;middot; Infinite combat phases &amp;middot; Infinite ETB</div></div><div class='combo near'><div class='combo-title'><span class='card-in'>Smothering Tithe</span> + <span class='card-out'>Underworld Breach</span> + <span class='card-in'>Windfall</span></div><div class='combo-meta'>cEDH B5 &middot; pop 8463 &middot; missing: <strong>Underworld Breach</strong></div><div class='combo-prod'>&rarr; Infinite draw triggers for all players &amp;middot; Infinite looting for all players &amp;middot; Infinite self-discard triggers for all players</div></div><div class='combo near'><div class='combo-title'><span class='card-out'>Stasis</span> + <span class='card-in'>Smothering Tithe</span></div><div class='combo-meta'>B3 &middot; pop 7332 &middot; missing: <strong>Stasis</strong></div><div class='combo-prod'>&rarr; Players skip their untap steps &amp;middot; Lock</div></div><div class='combo near'><div class='combo-title'><span class='card-in'>Archon of Emeria</span> + <span class='card-out'>Knowledge Pool</span></div><div class='combo-meta'>B4 &middot; pop 3192 &middot; missing: <strong>Knowledge Pool</strong></div><div class='combo-prod'>&rarr; Exile all spells players cast from their hand &amp;middot; Players can only cast one spell per turn &amp;middot; Lock</div></div><div class='combo near'><div class='combo-title'><span class='card-out'>Expedited Inheritance</span> + <span class='card-in'>Blasphemous Act</span></div><div class='combo-meta'>O &middot; pop 3189 &middot; missing: <strong>Expedited Inheritance</strong></div><div class='combo-prod'>&rarr; Each player may exile a portion of their library with the ability to play the exiled cards until the end of their next turn &amp;middot; Exile your library with the ability to play the exiled cards until the end of your next turn</div></div><div class='combo near'><div class='combo-title'><span class='card-out'>Soulfire Grand Master</span> + <span class='card-in'>Blasphemous Act</span></div><div class='combo-meta'>cEDH B5 &middot; pop 1991 &middot; missing: <strong>Soulfire Grand Master</strong></div><div class='combo-prod'>&rarr; Near-infinite lifegain &amp;middot; Near-infinite damage to creatures</div></div><div class='combo near'><div class='combo-title'><span class='card-out'>Brago, King Eternal</span> + <span class='card-in'>Aurelia, the Warleader</span></div><div class='combo-meta'>B4 &middot; pop 1546 &middot; missing: <strong>Brago, King Eternal</strong></div><div class='combo-prod'>&rarr; Infinite blinking &amp;middot; Infinite combat damage &amp;middot; Infinite combat phases</div></div></div>
+</div>
+</section>
+
+<section id='strategy'>
+<h2>Strategy &amp; Archetype</h2>
+<div class='analysis'>
+<div class='agent-name'>mtg-strategy</div>
+<ul>
+<li><strong>Archetype</strong>: Tribal Midrange/Beatdown com stax-tax (Hushbringer, Archon of Emeria, Aven Mindcensor)</li>
+<li><strong>Win plan</strong>: estabelecer board de angels/soldiers &rarr; double strike via True Conviction ou Akroma's Will &rarr; ataque massivo com Aurelia double combat</li>
+<li><strong>Realistic win turn</strong>: T8-T10</li>
+<li><strong>Bracket</strong>: <strong>B2 (Core)</strong> firme</li>
+<li><strong>Role in pod</strong>: PROATIVO TARDIO &mdash; deploy stax T3-T5, swing T7+</li>
+</ul>
+</div>
+</section>
+
+<section id='pod'>
+<h2>Pod Dynamics</h2>
+<div class='analysis flag-warn'>
+<div class='agent-name'>mtg-pod</div>
+<ul>
+<li>Threat <strong>moderado-alto</strong>: Aurelia + Smothering Tithe + Rhystic Study = engine target</li>
+<li>Hushbringer + Archon + Mindcensor v&atilde;o fazer pod te odiar</li>
+<li>Sem extra-turns, sem combos r&aacute;pidos &rarr; kingmaking risk baixo</li>
+<li>Melhor em seat 2-3</li>
+</ul>
+</div>
+</section>
+
+<section id='keywords'>
+<h2>Creature Keywords (20 creatures)</h2>
+<table>
+<thead><tr><th>Keyword</th><th>Has</th><th>Missing</th></tr></thead>
+<tbody><tr><td>flying</td><td>14</td><td>6</td></tr><tr><td>vigilance</td><td>6</td><td>14</td></tr><tr><td>double strike</td><td>2</td><td>18</td></tr><tr><td>first strike</td><td>3</td><td>17</td></tr><tr><td>lifelink</td><td>4</td><td>16</td></tr><tr><td>trample</td><td>3</td><td>17</td></tr><tr><td>haste</td><td>5</td><td>15</td></tr><tr><td>deathtouch</td><td>2</td><td>18</td></tr><tr><td>hexproof</td><td>2</td><td>18</td></tr><tr><td>indestructible</td><td>5</td><td>15</td></tr><tr><td>menace</td><td>2</td><td>18</td></tr><tr><td>reach</td><td>2</td><td>18</td></tr><tr><td>prowess</td><td>0</td><td>20</td></tr><tr><td>flash</td><td>1</td><td>19</td></tr><tr><td>ward</td><td>0</td><td>20</td></tr></tbody>
+</table>
+<div class='analysis'>
+<div class='agent-name'>keyword analyzer</div>
+<p>Maioria de keywords cobertas via <strong>Odric, Lunarch Marshal</strong> (combat trigger) + <strong>Concerted Effort</strong> (upkeep) + <strong>Akroma, Vision of Ixidor</strong>. Gaps reais: <strong>deathtouch</strong>, <strong>hexproof</strong>, <strong>menace</strong> (s&oacute; via Odric, fora de combat o time est&aacute; nu).</p>
+<div class='verdict'>Pick top: <strong>Eldrazi Monument</strong> (flying + indestructible + sac 1/upkeep) para indestructible fora de combat. Alternativa: <strong>Akroma's Memorial</strong> (5 keywords + protection from B/R).</div>
+</div>
+</section>
+
+<section id='devotion'>
+<h2>Devotion (pra Nyx Lotus)</h2>
+<table>
+<thead><tr><th>Color</th><th>Pips totais em permanents</th><th>Em play esperado (T6-T7)</th></tr></thead>
+<tbody><tr><td>U</td><td>10</td><td>~2</td></tr><tr><td>R</td><td>7</td><td>~1.4</td></tr><tr><td>W</td><td>28</td><td>~5.6</td></tr></tbody>
+</table>
+<div class='analysis flag-warn'>
+<div class='agent-name'>devotion analyzer</div>
+<p><strong>Nyx Lotus</strong> {4} ETB tapped &mdash; usable T6+. No melhor turno (~5W em play), tap escolhendo W = <strong>~5 mana</strong>. Net (custo 4 + setup 1 turno) = ~+1 mana/turno a partir de T7.</p>
+<div class='verdict'>Em mono-W tribal seria excelente. Aqui (3-color, devotion W = 28 total) &eacute; <strong>marginal</strong>. <strong>Worn Powerstone</strong> {3} ETB tapped &rarr; +2 colorless T4 &eacute; estritamente melhor.</div>
+</div>
+</section>
+
+<section id='anthems'>
+<h2>★ Anthems &amp; Equipment — keyword grants missing from your deck</h2>
+<p class='hint-text'>Comparado com a <a href='https://edhrec.com/average-decks/akroma-vision-of-ixidor-rograkh-son-of-rohgahh' style='color:var(--accent)'>average deck Akroma EDHRec</a> + análise de keyword gaps deste deck. Cards já no mainboard: <strong>Brave the Sands</strong>, <strong>Concerted Effort</strong>, <strong>True Conviction</strong>, <strong>The Wind Crystal</strong>, <strong>Odric Lunarch Marshal</strong>, <strong>Akroma Vision of Ixidor</strong>. <strong>Picks abaixo verificados via scan do JSON</strong> — só lista cards que NÃO estão no mainboard. Percentuais EDHRec são <em>aproximações</em> (a fetch retornou a decklist média mas não % específico por card).</p>
+
+<div class='analysis flag-good'>
+<div class='agent-name'>★ Already in sideboard — promover ao main</div>
+<table>
+<thead><tr><th>Card</th><th>CMC</th><th>Type</th><th>Grants</th><th>Por que subir</th></tr></thead>
+<tbody>
+<tr><td><strong>Avacyn, Angel of Hope</strong></td><td>8</td><td>Creature Angel</td><td>indestructible to <em>all permanents you control</em> + flying + vigilance + indestructible própria</td><td>Top anthem indestructible no formato; protege contra wipes (incluindo Blasphemous Act do próprio deck). Já está na sua sideboard.</td></tr>
+<tr><td><strong>Archetype of Courage</strong></td><td>3</td><td>W Enchantment-Creature</td><td>first strike pra você + <em>denies FS aos opps</em></td><td>Asymmetric FS lock. Já está na sua sideboard, marcada com Anthem categoria.</td></tr>
+</tbody>
+</table>
+<div class='verdict'>Promover <strong>2 cards</strong> da sideboard pro main resolve 2 dos 7 slots faltantes imediatamente, sem custo extra.</div>
+</div>
+
+<div class='analysis'>
+<div class='agent-name'>Tier 1 — top picks (verified missing)</div>
+<table>
+<thead><tr><th>Card</th><th>CMC</th><th>Type</th><th>Grants</th><th>$</th></tr></thead>
+<tbody>
+<tr><td><strong>Akroma's Memorial</strong></td><td>7</td><td>Artifact</td><td>flying · FS · vigilance · trample · haste + <em>protection from black and red</em></td><td>~$30</td></tr>
+<tr><td><strong>Iroas, God of Victory</strong></td><td>4</td><td>Enchantment-Creature (RW)</td><td>menace + <em>prevent all damage to attacking creatures you control</em></td><td>~$5</td></tr>
+<tr><td><strong>Eldrazi Monument</strong></td><td>5</td><td>Artifact</td><td>+1/+1 + flying + indestructible (sacrifice 1 creature at upkeep)</td><td>~$6</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class='analysis'>
+<div class='agent-name'>Tier 2 — equipment package</div>
+<table>
+<thead><tr><th>Card</th><th>CMC / Equip</th><th>Verified text</th><th>$</th></tr></thead>
+<tbody>
+<tr><td><strong>Lightning Greaves</strong></td><td>2 / 0</td><td>haste + <em>shroud</em> (você também não pode targetar; equip 0)</td><td>~$4</td></tr>
+<tr><td><strong>Swiftfoot Boots</strong></td><td>2 / 1</td><td>haste + hexproof (você pode targetar)</td><td>~$1</td></tr>
+<tr><td><strong>Haunted Cloak</strong></td><td>3 / 2</td><td>vigilance + trample + haste (3 keywords; sem FS — correção do anterior)</td><td>~$1</td></tr>
+<tr><td><strong>Sword of Vengeance</strong></td><td>3 / 3</td><td>+2/+0 + first strike + vigilance + trample + haste (5 effects)</td><td>~$2</td></tr>
+<tr><td><strong>Basilisk Collar</strong></td><td>1 / 2</td><td>deathtouch + lifelink (cobre gap deathtouch identificado)</td><td>~$10</td></tr>
+<tr><td><strong>Eater of Virtue</strong></td><td>1 / 1</td><td>copia keywords da última creature que morreu com Eater equipped — combat trigger</td><td>~$3</td></tr>
+<tr><td><strong>Sword of the Animist</strong></td><td>2 / 2</td><td>+1/+1 + landfall ramp (não keyword anthem; util na curva)</td><td>~$6</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class='analysis'>
+<div class='agent-name'>Tier 3 — enchantments alternativas</div>
+<table>
+<thead><tr><th>Card</th><th>CMC</th><th>Type</th><th>Grants (verified)</th><th>$</th></tr></thead>
+<tbody>
+<tr><td><strong>Rising of the Day</strong></td><td>3</td><td>W Enchantment</td><td>creatures you control have haste + creatures you cast ETB com +1/+1 counter</td><td>~$2</td></tr>
+<tr><td><strong>Daybreak Coronet</strong></td><td>1</td><td>W Aura</td><td>+3/+3 + first strike + vigilance + lifelink — <em>requires</em> target creature já enchanted ou com +1/+1 counter</td><td>~$2</td></tr>
+<tr><td><strong>Indrik Umbra</strong></td><td>5</td><td>W Aura</td><td>+3/+3 + totem armor (re-attack survival vs destroy)</td><td>~$0.50</td></tr>
+<tr><td><strong>Commander's Insignia</strong></td><td>4</td><td>W Enchantment</td><td>+1/+1 anthem por commander cast (~+2/+2 esperado com 2 partners)</td><td>~$2</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class='analysis flag-good'>
+<div class='agent-name'>Recommendation — 7 slots faltantes</div>
+<p>Prioridade revisada (incluindo promoção de sideboard):</p>
+<ol>
+<li><strong>Avacyn, Angel of Hope</strong> ← promover de sideboard (free upgrade)</li>
+<li><strong>Archetype of Courage</strong> ← promover de sideboard (free upgrade)</li>
+<li><strong>Counterspell</strong> {U}{U} — gap crítico de hard counter</li>
+<li><strong>Swords to Plowshares</strong> {W} — removal staple</li>
+<li><strong>Lightning Greaves</strong> {2} — proteção + haste em commander drops</li>
+<li><strong>Iroas, God of Victory</strong> {2}{R}{W} — preenche gap de menace + attacker protection</li>
+<li><strong>Eldrazi Monument</strong> {5} — indestructible team (sac fodder via Court of Grace tokens)</li>
+</ol>
+<div class='verdict'>Budget total ~$15 (Avacyn + Archetype são free se já tem no sideboard). Promove 2 do sideboard + adiciona 5 cards novos = 7 slots preenchidos. Cobre: indestructible (Avacyn + Eldrazi Monument), FS asymmetric (Archetype of Courage), counters (Counterspell), removal (Swords), menace (Iroas), proteção commander (Lightning Greaves).</div>
+</div>
+
+<div class='analysis'>
+<div class='agent-name'>📋 Audit trail desta tab</div>
+<ul>
+<li class='check-bad'>✗ <strong>Erro detectado</strong>: lista inicial dizia "Avacyn, Angel of Hope" e "Archetype of Courage" missing. Scan JSON revelou que <strong>ambos estão na sideboard</strong>. Corrigido: movidos pra seção "promover ao main".</li>
+<li class='check-bad'>✗ <strong>Erro detectado</strong>: descrição de <strong>Haunted Cloak</strong> incluía "FS · can't be countered" — incorreto. Oracle text é "vigilance + trample + haste" só.</li>
+<li class='check-warn'>⚠ Percentuais EDHRec eram estimativas, não dados reais (fetch_webpage retornou só a decklist média, não % por card). Removido números falsos; lista agora ordenada por valor pra este deck específico.</li>
+<li class='check-ok'>✓ Verificação JSON: cards Tier 1/2/3 restantes confirmados ausentes do deck (mainboard + side + maybe).</li>
+<li class='check-ok'>✓ Identidade URW verificada para todos (sem verdes, sem pretos exclusivos).</li>
+</ul>
+</div>
+</section>
+
+<section id='review'>
+<h2>&#9733; Final Review</h2>
+<div class='analysis flag-warn'>
+<div class='agent-name'>mtg-review</div>
+<h4>Verdict</h4>
+<p>Tribal beatdown angel/soldier WUR com stax-lite. <strong>Manabase corrigida</strong> (32 lands URW funcional). Ramp efetivo: 17 sources entre rocks e cost reducers. Draw elite (10 cards). Gap real em counters (0 hard) e card count (faltam 7). B2-B3 confort&aacute;vel; sobe pra B3+ com fast mana e free interaction.</p>
+
+<h4>Rating: 7/10 &middot; Bracket: B2-B3 &middot; Pilot: Medium</h4>
+
+<table>
+<thead><tr><th>Metric</th><th>Value</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>Power level</td><td>B2-B3</td><td>2 game-changers, 1 fast mana</td></tr>
+<tr><td>Consistency</td><td>Med</td><td>4 tutors gen&eacute;ricos</td></tr>
+<tr><td>Resilience</td><td>Med</td><td>2 wipes + 10 protection</td></tr>
+<tr><td>Speed</td><td>T8-T10</td><td>Commanders pesados (5+7)</td></tr>
+<tr><td>Complexity</td><td>Med</td><td>Linear beatdown + stax decisions</td></tr>
+</tbody>
+</table>
+
+<h4 style='color:var(--good)'>&#10003; Top 3 strengths</h4>
+<ol>
+<li>Tema coeso (angel/soldier double-strike + Akroma payoff)</li>
+<li>Ramp efetivo 17 sources (rocks + cost reducers)</li>
+<li>Draw 10 cards incluindo Kraum trigger</li>
+</ol>
+
+<h4 style='color:var(--bad)'>&#10005; Top 3 weaknesses</h4>
+<ol>
+<li><strong>Card count</strong>: 93/100 (faltam 7)</li>
+<li><strong>Zero hard counters</strong> em deck com U</li>
+<li><strong>Velocidade lenta</strong>: T8+ wins, sem fast mana real</li>
+</ol>
+
+<div style='display:grid;grid-template-columns:1fr 1fr;gap:14px'>
+<div><h4 style='color:var(--warn)'>&#8595; Top 5 cuts</h4><ol>
+<li><strong>Nyx Lotus</strong> &mdash; devotion ruim em 3-color</li>
+<li><strong>Time Reversal</strong> &mdash; wheel redundante</li>
+<li><strong>Parallel Thoughts</strong> &mdash; setup ineficiente</li>
+<li><strong>Midnight Clock</strong> &mdash; chega tarde</li>
+<li><strong>Bloodsworn Steward</strong> &mdash; must-attack vs stax posture</li>
+</ol></div>
+<div><h4 style='color:var(--good)'>&#8593; Top 7 adds (preencher 7 slots)</h4><ol>
+<li><strong>Counterspell</strong> {U}{U} &mdash; gap cr&iacute;tico</li>
+<li><strong>Swords to Plowshares</strong> {W}</li>
+<li><strong>Oketra's Monument</strong> {3} &mdash; cost reducer + token</li>
+<li><strong>Eldrazi Monument</strong> &mdash; indestructible team</li>
+<li><strong>Helm of the Host</strong> &mdash; combo Aurelia</li>
+<li><strong>Resplendent Angel</strong> {2}{W}</li>
+<li><strong>Worn Powerstone</strong> {3} (substitui Nyx Lotus)</li>
+</ol></div>
+</div>
+</div>
+</section>
+
+</div>
+
+<div class='footer'>
+  Self-contained dossier (verified Oracle text scan) &middot; combo data from <a href='https://commanderspellbook.com'>Commander Spellbook</a> &middot; deck from <a href='https://archidekt.com/decks/21510458/copy_of_akroma_kraum_soldier'>Archidekt</a> &middot; regenerated by Build-Dossier-Akroma.ps1
+</div>
+</div>
+
+<script>
+const deckContext = "# Akroma + Kraum\nCmd: Kraum, Ludevic's Opus + Akroma, Vision of Ixidor\nIdentity: URW | Total: 93\n\n- 1x Battlefield Forge  (CMC 0)\n- 1x Clifftop Retreat  (CMC 0)\n- 1x Command Tower  (CMC 0)\n- 1x Exotic Orchard  (CMC 0)\n- 1x Glacial Fortress  (CMC 0)\n- 1x Hallowed Fountain  (CMC 0)\n- 5x Island  (CMC 0)\n- 5x Mountain  (CMC 0)\n- 1x Mystic Monastery  (CMC 0)\n- 7x Plains  (CMC 0)\n- 1x Reflecting Pool  (CMC 0)\n- 1x Sacred Foundry  (CMC 0)\n- 1x Shivan Reef  (CMC 0)\n- 1x Skycloud Expanse  (CMC 0)\n- 1x Sulfur Falls  (CMC 0)\n- 1x Sunscorched Divide  (CMC 0)\n- 1x Temple of Enlightenment  (CMC 0)\n- 1x Temple of Epiphany  (CMC 0)\n- 1x Wheel of Fate  (CMC 0)\n- 1x Mystic Remora {U} (CMC 1)\n- 1x Sol Ring {1} (CMC 1)\n- 1x Arcane Signet {2} (CMC 2)\n- 1x Azorius Signet {2} (CMC 2)\n- 1x Boros Charm {R}{W} (CMC 2)\n- 1x Boros Signet {2} (CMC 2)\n- 1x Brave the Sands {1}{W} (CMC 2)\n- 1x Fellwar Stone {2} (CMC 2)\n- 1x Hushbringer {1}{W} (CMC 2)\n- 1x Izzet Signet {2} (CMC 2)\n- 1x Pearl Medallion {2} (CMC 2)\n- 1x Selfless Spirit {1}{W} (CMC 2)\n- 1x Spider-Woman, Stunning Savior {1}{W/U} (CMC 2)\n- 1x Stormscape Familiar {1}{U} (CMC 2)\n- 1x Talisman of Conviction {2} (CMC 2)\n- 1x Talisman of Creativity {2} (CMC 2)\n- 1x Talisman of Progress {2} (CMC 2)\n- 1x Watcher of the Spheres {W}{U} (CMC 2)\n- 1x Archon of Emeria {2}{W} (CMC 3)\n- 1x Aven Mindcensor {2}{W} (CMC 3)\n- 1x Bastion Protector {2}{W} (CMC 3)\n- 1x Boromir, Warden of the Tower {2}{W} (CMC 3)\n- 1x Cut a Deal {2}{W} (CMC 3)\n- 1x Day's Undoing {2}{U} (CMC 3)\n- 1x Frostcliff Siege {1}{U}{R} (CMC 3)\n- 1x Generous Gift {2}{W} (CMC 3)\n- 1x Idyllic Tutor {2}{W} (CMC 3)\n- 1x Lightning, Army of One {1}{R}{W} (CMC 3)\n- 1x Long-Term Plans {2}{U} (CMC 3)\n- 1x Loran of the Third Path {2}{W} (CMC 3)\n- 1x Make a Stand {2}{W} (CMC 3)\n- 1x Midnight Clock {2}{U} (CMC 3)\n- 1x Moon-Blessed Cleric {2}{W} (CMC 3)\n- 1x Raph & Leo, Sibling Rivals {1}{R/W}{R/W} (CMC 3)\n- 1x Rhystic Study {2}{U} (CMC 3)\n- 1x Sevinne's Reclamation {2}{W} (CMC 3)\n- 1x Stroke of Midnight {2}{W} (CMC 3)\n- 1x Unbreakable Formation {2}{W} (CMC 3)\n- 1x Warden of Evos Isle {2}{U} (CMC 3)\n- 1x Windfall {2}{U} (CMC 3)\n- 1x Your Temple Is Under Attack {2}{W} (CMC 3)\n- 1x Akroma's Will {3}{W} (CMC 4)\n- 1x Angelic Field Marshal {2}{W}{W} (CMC 4)\n- 1x Bloodsworn Steward {2}{R}{R} (CMC 4)\n- 1x Concerted Effort {2}{W}{W} (CMC 4)\n- 1x Court of Grace {2}{W}{W} (CMC 4)\n- 1x Nyx Lotus {4} (CMC 4)\n- 1x Odric, Lunarch Marshal {3}{W} (CMC 4)\n- 1x Smothering Tithe {3}{W} (CMC 4)\n- 1x The Wind Crystal {2}{W}{W} (CMC 4)\n- 1x Parallel Thoughts {3}{U}{U} (CMC 5)\n- 1x Step Between Worlds {3}{U}{U} (CMC 5)\n- 1x Time Reversal {3}{U}{U} (CMC 5)\n- 1x Aurelia, the Warleader {2}{R}{R}{W}{W} (CMC 6)\n- 1x The Immortal Sun {6} (CMC 6)\n- 1x True Conviction {3}{W}{W}{W} (CMC 6)\n- 1x Vanquish the Horde {6}{W}{W} (CMC 8)\n- 1x Blasphemous Act {8}{R} (CMC 9)\n- 1x Kraum, Ludevic's Opus {3}{U}{R} (CMC 5)\n- 1x Akroma, Vision of Ixidor {5}{W}{W} (CMC 7)";
+const combosContext = "Hullbreaker Horror + Sol Ring &rarr; Infinite colorless mana, Infinite storm count\nTidespout Tyrant + Sol Ring &rarr; Infinite colorless mana, Infinite storm count\nBlasphemous Act + Repercussion &rarr; Near-infinite damage to all players\nAurelia, the Warleader + Helm of the Host &rarr; Infinite combat phases, Infinite creature tokens with haste, Infinite ETB, Infinite mana creatures you control can produce, Infinite untap of creatures you control\nApproach of the Second Sun + Windfall &rarr; Win the game\nToralf, God of Fury // Toralf's Hammer + Blasphemous Act &rarr; Near-infinite damage\nBoros Reckoner + Boros Charm &rarr; Infinite lifegain, Infinite lifegain triggers\nFall of Cair Andros + Blasphemous Act &rarr; Infinite +1/+1 counters on a creature, Near-infinite damage to creatures\nAurelia, the Warleader + Sword of Hearth and Home &rarr; Infinite combat damage, Infinite combat phases, Infinite ETB, Infinite LTB, Put all basic lands from your library onto the battlefield\nSmothering Tithe + Underworld Breach + Windfall &rarr; Infinite draw triggers for all players, Infinite looting for all players, Infinite self-discard triggers for all players, Near-infinite colored mana, Near-infinite Treasure tokens\nStasis + Smothering Tithe &rarr; Players skip their untap steps, Lock\nArchon of Emeria + Knowledge Pool &rarr; Exile all spells players cast from their hand, Players can only cast one spell per turn, Lock\nExpedited Inheritance + Blasphemous Act &rarr; Each player may exile a portion of their library with the ability to play the exiled cards until the end of their next turn, Exile your library with the ability to play the exiled cards until the end of your next turn\nSoulfire Grand Master + Blasphemous Act &rarr; Near-infinite lifegain, Near-infinite damage to creatures\nBrago, King Eternal + Aurelia, the Warleader &rarr; Infinite blinking, Infinite combat damage, Infinite combat phases, Infinite ETB, Infinite LTB, Infinite mana creatures you control can produce, Infinite untap of creatures you control";
+(function () {
+  const preview = document.createElement('div');
+  preview.id = 'card-preview';
+  preview.innerHTML = '<div class="loading">…</div>';
+  document.body.appendChild(preview);
+  const imgCache = new Map();
+  function urlFor(n) { return 'https://api.scryfall.com/cards/named?exact=' + encodeURIComponent(n) + '&format=image&version=normal'; }
+  function isCardName(s) {
+    if (!s) return false; s = s.trim();
+    if (s.length < 3 || s.length > 60 || !/^[A-Z]/.test(s)) return false;
+    return !/^(Top|Combos|Near|Bracket|Identity|Mana|Verdict|None|cEDH|EDH|Premium|Standard|Exhibition|Rare|MISSING|Total|Lands|Ramp|Draw|Removal|Interaction|Tutors|Pilot|Power|Consistency|Resilience|Speed|Complexity|Tema|Hard|Med|Low|High|Easy|Medium|Hard|Expert|Tier|Build|Becomes|Add|Cut|Risk|Color|Has|Missing|Karsten|Singleton|Format|Commander|Game|Fast|All|Self|None|Sem|Pra|Em)$/i.test(s);
+  }
+  function getName(t) {
+    if (t.tagName === 'TD' && t.previousElementSibling && t.previousElementSibling.classList.contains('qty')) return t.textContent.trim();
+    if (t.tagName === 'STRONG' && t.closest('.analysis, .combo, .combo-title')) return t.textContent.trim();
+    if (t.classList && (t.classList.contains('card-in') || t.classList.contains('card-out'))) return t.textContent.trim();
+    return null;
+  }
+  function show(e, name) {
+    if (!isCardName(name)) return;
+    const w = 252, h = 350;
+    let x = e.clientX + 18, y = e.clientY + 18;
+    if (x+w > window.innerWidth) x = e.clientX - w - 18;
+    if (y+h > window.innerHeight) y = e.clientY - h - 18;
+    preview.style.left = x+'px'; preview.style.top = y+'px'; preview.style.display = 'block';
+    const c = imgCache.get(name);
+    if (c === 'fail') { preview.innerHTML = '<div class="loading">no preview</div>'; return; }
+    if (c) { preview.innerHTML = '<img src="' + c + '" alt="">'; return; }
+    preview.innerHTML = '<div class="loading">loading ' + name + '…</div>';
+    const u = urlFor(name); const img = new Image();
+    img.onload = () => { imgCache.set(name, u); if (preview.dataset.current === name) preview.innerHTML = '<img src="' + u + '" alt="">'; };
+    img.onerror = () => { imgCache.set(name, 'fail'); if (preview.dataset.current === name) preview.innerHTML = '<div class="loading">no preview</div>'; };
+    preview.dataset.current = name; img.src = u;
+  }
+  document.addEventListener('mouseover', e => { const n = getName(e.target); if (n) show(e, n); });
+  document.addEventListener('mousemove', e => { if (preview.style.display !== 'block') return; const w=252,h=350; let x=e.clientX+18, y=e.clientY+18; if (x+w>window.innerWidth) x=e.clientX-w-18; if (y+h>window.innerHeight) y=e.clientY-h-18; preview.style.left=x+'px'; preview.style.top=y+'px'; });
+  document.addEventListener('mouseout', e => { if (getName(e.target)) preview.style.display = 'none'; });
+})();
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.panel section').forEach(x => x.classList.remove('active'));
+    t.classList.add('active'); document.getElementById(t.dataset.tab).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
