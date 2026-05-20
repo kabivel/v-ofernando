@@ -1,0 +1,21 @@
+Wendy's says its drive-thru AI gets 86% of orders right without human help.
+
+Sounds great. But that's exactly where the next wave of enterprise AI goes wrong.
+
+86% means 14% of orders required employee intervention — not necessarily a catastrophic error, but friction. And every friction costs time, patience, and (in the restaurant's case) revenue. McDonald's started in 10 Chicago locations in 2021. Checkers, Wendy's, and Taco Bell followed with their own platforms (Presto, Google FreshAI, custom voice). Five years later, the metric that rarely makes headlines is the 𝗿𝗲𝘄𝗼𝗿𝗸 𝗿𝗮𝘁𝗲.
+
+We're living the exact same "is 86% good enough?" in every enterprise generative AI rollout. When an email draft comes out 86% right, who absorbs the cost of the other 14%? The user. And if the user doesn't trust it, they turn it off — regardless of the aggregate number.
+
+Three things I've seen work in AI rollouts that actually stick:
+
+𝟭. Define use cases where 86% delivers value even when a human reviews (drafts, summaries, brainstorming)
+
+𝟮. Avoid use cases where 86% creates debt (irreversible decisions, unsupervised external communication)
+
+𝟯. Measure 𝘁𝗿𝘂𝘀𝘁 𝘀𝗰𝗼𝗿𝗲, not just model accuracy
+
+AI didn't fail at the drive-thru — the 𝘄𝗿𝗼𝗻𝗴 𝘀𝘂𝗰𝗰𝗲𝘀𝘀 𝗺𝗲𝘁𝗿𝗶𝗰 did.
+
+Where have you seen this same pattern in your AI rollout?
+
+#EnterpriseAI #GenAI #ChangeManagement #AIAdoption #DriveThruAI

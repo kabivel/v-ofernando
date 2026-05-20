@@ -1,0 +1,21 @@
+Microsoft just opened the public preview of the 𝗪𝗼𝗿𝗸 𝗜𝗤 𝗔𝗣𝗜 with 𝗔𝗴𝗲𝗻𝘁-𝘁𝗼-𝗔𝗴𝗲𝗻𝘁 (𝗔𝟮𝗔) protocol support.
+
+In practice: your custom agent can now delegate tasks directly to Copilot and receive responses grounded in organizational data — emails, meetings, files, chats — without building RAG pipelines, managing permissions, or orchestrating Graph API calls.
+
+This changes three things I see blocking agent projects at clients every week:
+
+𝟭. 𝗕𝘂𝗶𝗹𝗱 𝘃𝘀. 𝗯𝘂𝘆 for RAG over M365 — the pipeline already exists. What was 𝟰-𝟴 weeks of infra becomes a protocol integration.
+
+𝟮. 𝗜𝗻𝗳𝗼𝗦𝗲𝗰 𝗰𝗼𝗻𝘃𝗲𝗿𝘀𝗮𝘁𝗶𝗼𝗻 — the API exposes intelligence, not raw data. Permissions, sensitivity labels, and DLP are inherited automatically. The agent can't see what the user can't see.
+
+𝟯. 𝗠𝘂𝗹𝘁𝗶-𝗮𝗴𝗲𝗻𝘁 𝗮𝗿𝗰𝗵𝗶𝘁𝗲𝗰𝘁𝘂𝗿𝗲 — A2A isn't "another way to call Copilot." It's a collaboration protocol where specialized agents delegate to each other. The roadmap includes more M365 Agents via A2A, remote MCP, and expanded grounding.
+
+The code? Surprisingly simple. An A2AClient in .NET, one message, and Copilot handles context, permissions, and grounding.
+
+Samples in C#, Rust, and Swift are already on GitHub. GA planned for summer 𝟮𝟬𝟮𝟲.
+
+If you already have Copilot licenses and are planning extensibility: explore the samples, re-evaluate your RAG pipelines over M365, and align with InfoSec now — the security conversation changes with Work IQ.
+
+Official blog link in the comments.
+
+#MicrosoftCopilot #WorkIQ #A2A #AgentToAgent #EnterpriseAI #CopilotStudio #MultiAgent #MCP

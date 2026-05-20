@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>86% Isn't "Good Enough" — LinkedIn Article</title>
+<style>
+body { max-width: 720px; margin: 40px auto; padding: 0 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 17px; line-height: 1.7; color: #1a1a1a; }
+h1 { font-size: 28px; line-height: 1.3; margin-bottom: 4px; }
+h2 { font-size: 22px; margin-top: 36px; margin-bottom: 12px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+h3 { font-size: 18px; margin-top: 24px; }
+blockquote { border-left: 3px solid #0a66c2; padding: 12px 18px; background: #f3f6f8; margin: 16px 0; font-style: italic; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; } th, td { text-align: left; padding: 8px 12px; border: 1px solid #ddd; } th { background: #f3f6f8; font-weight: 600; }
+ul, ol { padding-left: 24px; } li { margin-bottom: 6px; }
+a { color: #0a66c2; }
+.checklist { background: #f9fafb; border: 1px solid #e0e0e0; border-radius: 6px; padding: 16px 20px; margin: 16px 0; font-family: 'Consolas', 'Monaco', monospace; font-size: 15px; line-height: 2; }
+.sources { margin-top: 36px; padding-top: 12px; border-top: 1px solid #ddd; font-size: 15px; }
+.bio { margin-top: 24px; font-size: 15px; color: #666; font-style: italic; }
+.instructions { background: #fff3cd; border: 1px solid #ffc107; padding: 12px 16px; border-radius: 6px; margin: 24px 0; font-size: 14px; color: #664d03; }
+</style>
+</head>
+<body>
+
+<div class="instructions">
+<strong>Usage:</strong> Select all content below (Ctrl+A), copy (Ctrl+C), and paste (Ctrl+V) into the LinkedIn article editor ("Write Article"). Formatting (bold, headers, lists, links, blockquote) will mostly be preserved. Tables may paste as plain text — reformat manually if needed. Delete this yellow box after pasting.
+</div>
+
+<h1>86% Isn't "Good Enough": What AI Drive-Thrus Teach Us About Enterprise AI Rollouts</h1>
+
+<blockquote>
+<strong>TL;DR</strong> — Wendy's reports 86% order accuracy without human intervention via AI. McDonald's, Checkers, and Taco Bell have been on the same journey since 2021. The metric sounds great but hides the real problem with enterprise AI: who absorbs the cost of the remaining 14%? Three patterns that separate successful AI rollouts from those that stall — all derived from lessons the drive-thru has already learned.
+</blockquote>
+
+<h2>Why This Matters Now</h2>
+
+<p>This week's <a href="https://www.theverge.com/column/928096/chatbots-ai-drive-thru-mcdonalds-wendys">Stepback column in The Verge</a> traces five years of conversational AI evolution in fast food. McDonald's tested voice ordering in 10 Chicago locations in 2021, after acquiring Apprente in 2019 and scaling with IBM. Checkers and Rally's did a full corporate rollout via Presto in 2022. Wendy's launched FreshAI with Google in Columbus in 2023 and expanded months later, reporting the now-famous 86%. Taco Bell announced hundreds of locations by the end of 2024.</p>
+
+<p>Five years. Four major chains. Heavy investment in voice AI and order-system integration. And the headline metric is always the same: <strong>percentage of orders completed without a human</strong>.</p>
+
+<p>The parallel with enterprise AI is direct. When buyers compare AI assistant vendors — Google, OpenAI, Anthropic, and others — the first question is "what's the accuracy?". The vendor responds with a number between 80% and 90%. Accepted. Contract signed. Rollout begins. Six months later, a significant portion of enabled users are no longer using the assistant regularly (a pattern observed across multiple client rollouts — not public data from any vendor).</p>
+
+<p>The problem isn't the number. The problem is that <strong>model accuracy is not the same as value delivered to the user</strong>.</p>
+
+<h2>The Difference Between Accuracy and Trust</h2>
+
+<p>The drive-thru teaches this the hard way. When the AI gets the order wrong, three things happen in sequence:</p>
+
+<ol>
+<li>The customer repeats the order (cost: 15–30 extra seconds).</li>
+<li>If it fails again, the customer asks to speak to a human (cost: the system's dignity).</li>
+<li>The customer tells a friend that "Wendy's AI is broken" (cost: brand equity, duration unknown).</li>
+</ol>
+
+<p>The 86% metric treats all 14% of failures as equivalent. But the customer who ordered a Frosty and got a burger leaves with a story. The customer who waited 4 extra minutes for a Big Mac without cheese leaves with a story. Each error has a different blast radius — and not all of them are captured by the aggregate metric.</p>
+
+<p>In enterprise AI rollouts — email summarization, slide translation, spreadsheet analysis — the anatomy of the error is the same. A meeting summary that <em>invented</em> a commitment. A slide translation that lost the legal nuance. A column analysis that confused similarly named fields. Each isolated case is "normal 14%," but each user who hits one forms an opinion that outlasts the statistic.</p>
+
+<h2>Framework: Three Decisions That Separate Successful Rollouts</h2>
+
+<p>Organizations that are succeeding with enterprise AI assistants are doing three things differently from the generic playbook.</p>
+
+<h3>1. Map Use Cases by Error Blast Radius, Not Frequency</h3>
+
+<p>The classic question is "where will the AI add the most value?". The right question is "where do the remaining 14% generate debt that the user can absorb?".</p>
+
+<p><strong>Cases where 86% is genuinely good:</strong></p>
+<ul>
+<li>Drafting internal communications (human reviews before sending).</li>
+<li>Meeting summaries (human uses as a starting point).</li>
+<li>Slide brainstorming (human edits).</li>
+<li>Generating testable Excel formulas (result is verifiable in seconds).</li>
+</ul>
+
+<p><strong>Cases where 86% is a trap:</strong></p>
+<ul>
+<li>Automated responses to external customers without review.</li>
+<li>Pricing decisions based on unverified analysis.</li>
+<li>Regulated communications (DPO, legal, compliance) without human sign-off.</li>
+<li>New employee onboarding with operational instructions.</li>
+</ul>
+
+<p>It's not the use case that defines ROI. It's the <strong>blast radius and reversibility of the error</strong>.</p>
+
+<h3>2. Measure Trust, Not Just Accuracy</h3>
+
+<p>Most AI ROI dashboards we've seen at clients measure:</p>
+<ul>
+<li>Number of interactions/user/week.</li>
+<li>Self-reported time saved.</li>
+<li>Task-specific accuracy via spot-check.</li>
+</ul>
+
+<p>They're missing the most important metric: <strong>net trust score</strong> — how much the user believes the output won't create extra work. Trust determines whether someone comes back next week. Without trust, 95% accuracy doesn't matter.</p>
+
+<p>A real case (anonymized): at a financial services client, trust score dropped 40% by T+30 when the AI started hallucinating counterparty names in email summaries. Overall pilot accuracy was 91%. It didn't matter — compliance users simply stopped using it. The aggregate number didn't capture the concentrated damage in one specific team.</p>
+
+<p>A simple survey we recommend running monthly for the first 6 months (internal framework — not an industry standard; inspired by NPS adapted for AI):</p>
+
+<table>
+<thead><tr><th>Question</th><th>Scale</th></tr></thead>
+<tbody>
+<tr><td>When I use the AI assistant, I expect the output to be correct.</td><td>1–5</td></tr>
+<tr><td>When I review the output, I find errors that would require rework.</td><td>1–5</td></tr>
+<tr><td>Today, I would recommend the AI assistant to a colleague who does the same kind of work.</td><td>1–5</td></tr>
+</tbody>
+</table>
+
+<p>The trajectory of question 3 over time is the best predictor of real adoption.</p>
+
+<h3>3. Design an Explicit Human Handoff</h3>
+
+<p>Wendy's solved this physically: there's always an employee on the headset who can take over the call with one click. The 14% that fail aren't abandoned — they're escalated immediately.</p>
+
+<p>In enterprise AI, the equivalent is the <strong>fallback path</strong>:</p>
+<ul>
+<li>A "this output isn't right" button that opens a structured feedback form.</li>
+<li>Logging prompt + output + feedback in telemetry for the adoption team to iterate on.</li>
+<li>Easy access to a human (champion, support agent) when the user gets stuck.</li>
+<li>Explicit reuse of prompts that worked (team-curated prompt gallery).</li>
+</ul>
+
+<p>Rollouts where the fallback is "open a service desk ticket" kill adoption. Rollouts where the fallback is "one click to report and one click to see an alternative prompt" maintain trust even when the AI gets it wrong.</p>
+
+<h2>Pre-Launch Checklist</h2>
+
+<div class="checklist">
+&#9744; We've defined 3–5 primary use cases with error blast radius mapped<br>
+&#9744; Each use case has an explicit human fallback ("if this fails, do X")<br>
+&#9744; Champions trained in each team (1 per 20 users minimum)<br>
+&#9744; Curated and versioned prompt gallery<br>
+&#9744; Structured feedback telemetry (not just "thumbs up/down")<br>
+&#9744; Trust survey scheduled for T+30, T+60, T+90 days<br>
+&#9744; Communication aligned: "The assistant gets it right most of the time, but not always. Here's how to give feedback."<br>
+&#9744; Executive sponsor visibly using it publicly (not just endorsing)
+</div>
+
+<p>If 3 or more items are blank, delay the wave. The cost of a wave that destroys trust outweighs the gain of meeting the original timeline.</p>
+
+<h2>Common Pitfalls</h2>
+
+<p><strong>Confusing a successful pilot with a scaled rollout.</strong> Pilots run with self-selected users — early adopters who already like technology. These users tolerate the 14%. Wave 2 and Wave 3 won't. The pilot playbook doesn't scale without adjustment.</p>
+
+<p><strong>Raising the accuracy bar to hide a trust problem.</strong> When trust drops, the typical reaction is "let's fine-tune to improve accuracy." It doesn't work. The user who lost confidence doesn't come back because the number went from 86% to 89%. They come back when the handoff is honest and the error is easy to capture.</p>
+
+<p><strong>Measuring what's easy, not what matters.</strong> Login count, interactions/day, self-reported "minutes saved" — all increase in the first 60 days even when trust is declining. Net trust score and week-over-week return rate are harder to measure but predictive.</p>
+
+<p><strong>Expecting technology to fix communication.</strong> Wendy's spent a lot to explain to customers "if the AI gets it wrong, just ask to speak to me." In enterprise it's the same: the most important sign reads "The assistant is an assistant, not a replacement. Here's how to use it."</p>
+
+<h2>Takeaways</h2>
+
+<ol>
+<li><strong>86% accuracy is not a success metric</strong> — it's a starting point. The question is "who pays for the 14%?".</li>
+<li><strong>Error blast radius > error frequency</strong> — map use cases by reversibility of the error, not by volume.</li>
+<li><strong>Trust score predicts adoption</strong> — accuracy explains the model; trust explains the user. Measure both.</li>
+<li><strong>Explicit human fallback</strong> is what separates a drive-thru that works from one that gets abandoned. Even in enterprise.</li>
+<li><strong>Champion ratio matters</strong> — 1:20 minimum in early waves. Without champions, telemetry doesn't become action.</li>
+</ol>
+
+<div class="sources">
+<strong>Sources:</strong>
+<ul>
+<li><a href="https://www.theverge.com/column/928096/chatbots-ai-drive-thru-mcdonalds-wendys">The Verge — Chatbots at the drive-thru are just the beginning (Emma Roth, May 2026)</a></li>
+<li><a href="https://newsroom.ibm.com/Joint-Statement-from-McDonalds-and-IBM">McDonald's + IBM joint statement</a></li>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-enablement-resources">Microsoft Learn — Microsoft 365 Copilot Enablement Resources</a> — official rollout playbook</li>
+<li><a href="https://adoption.microsoft.com/en-us/copilot/success-kit/">Microsoft Adoption Hub — Copilot Success Kit</a> — change management modules</li>
+</ul>
+</div>
+
+<p class="bio"><em>I work with clients on generative AI rollouts across financial services, healthcare, and retail in Brazil and LATAM. The patterns above come from observing 30+ implementations over the past 18 months.</em></p>
+
+</body>
+</html>

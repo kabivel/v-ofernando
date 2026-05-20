@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Work IQ API Public Preview: What Changes for Agent Builders — LinkedIn Article</title>
+<style>
+body { max-width: 720px; margin: 40px auto; padding: 0 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 17px; line-height: 1.7; color: #1a1a1a; }
+h1 { font-size: 28px; line-height: 1.3; margin-bottom: 4px; }
+h2 { font-size: 22px; margin-top: 36px; margin-bottom: 12px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+h3 { font-size: 18px; margin-top: 24px; }
+blockquote { border-left: 3px solid #0a66c2; padding: 12px 18px; background: #f3f6f8; margin: 16px 0; font-style: italic; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; } th, td { text-align: left; padding: 8px 12px; border: 1px solid #ddd; } th { background: #f3f6f8; font-weight: 600; }
+ul, ol { padding-left: 24px; } li { margin-bottom: 6px; }
+a { color: #0a66c2; }
+pre { background: #f3f6f8; border: 1px solid #e0e0e0; border-radius: 6px; padding: 16px 20px; font-family: 'Consolas', 'Monaco', monospace; font-size: 14px; line-height: 1.6; overflow-x: auto; }
+code { font-family: 'Consolas', 'Monaco', monospace; font-size: 15px; background: #f3f6f8; padding: 2px 5px; border-radius: 3px; }
+.sources { margin-top: 36px; padding-top: 12px; border-top: 1px solid #ddd; font-size: 15px; }
+.bio { margin-top: 24px; font-size: 15px; color: #666; font-style: italic; }
+.instructions { background: #fff3cd; border: 1px solid #ffc107; padding: 12px 16px; border-radius: 6px; margin: 24px 0; font-size: 14px; color: #664d03; }
+</style>
+</head>
+<body>
+
+<div class="instructions">
+<strong>Usage:</strong> Select all content below (Ctrl+A), copy (Ctrl+C), and paste (Ctrl+V) into the LinkedIn article editor ("Write Article"). Formatting (bold, headers, lists, links, blockquote) will mostly be preserved. Code blocks may paste as plain text — reformat manually if needed. Delete this yellow box after pasting.
+</div>
+
+<h1>Work IQ API in Public Preview: What Changes for Those Building Agents in the Microsoft Ecosystem</h1>
+
+<blockquote>
+<strong>TL;DR</strong> — Microsoft launched the Work IQ API in public preview with Agent-to-Agent (A2A) protocol support. Developers can now build agents that delegate tasks to Copilot and receive responses grounded in organizational data — without building RAG pipelines, managing permissions, or orchestrating individual M365 API calls. GA planned for summer 2026. Three practical implications for those already in the middle of Copilot rollouts and extensibility strategies.
+</blockquote>
+
+<h2>What Happened</h2>
+
+<p>Microsoft announced the <a href="https://techcommunity.microsoft.com/blog/copilot-studio-blog/work-iq-api-public-preview-build-copilot-powered-agents-with-a2a/4516286">public preview of the Work IQ API</a>, opening programmatic access to the intelligence layer that powers Microsoft 365 Copilot. Work IQ is not a new data API — it's an <strong>intelligence API</strong>: context, reasoning, grounding, and skills, all operating within the tenant's permissions and compliance policies.</p>
+
+<p>The API is available in four formats:</p>
+
+<ol>
+<li><strong>Agent-to-Agent (A2A)</strong> — new in this preview. Cloud-hosted protocol where custom agents interact with Copilot as peers.</li>
+<li><strong>MCP local</strong> — already available. Works with GitHub Copilot via CLI, exposing organizational context as tools and resources in the IDE.</li>
+<li><strong>REST</strong> — coming May 2026. Standard request/response access for apps that don't need streaming.</li>
+<li><strong>Remote MCP</strong> — coming May 2026. Hosted MCP server for any MCP-aware surface.</li>
+</ol>
+
+<p>The key point: all four surfaces share the same intelligence runtime. Behavior, grounding, and response quality stay consistent regardless of protocol.</p>
+
+<p><img src="2026-05-19-work-iq-api-a2a-agents_files/workiq-protocols-overview.png" alt="Work IQ API architecture: protocol heads (REST, A2A, MCP) on top of the Work IQ API layer, core orchestration, and data/memory/tools/agents underneath" style="max-width:100%;"></p>
+<p><em>Work IQ architecture: applications and agents connect via REST, A2A, or MCP protocol heads, all sharing the same intelligence runtime. Source: Microsoft Tech Community.</em></p>
+
+<h2>Why A2A Is What Matters Now</h2>
+
+<p>Until now, anyone who wanted to build agents that accessed M365 organizational data had two options:</p>
+
+<ol>
+<li><strong>Microsoft Graph API directly</strong> — granular access to emails, calendars, files, chats. It works, but the developer has to build the entire orchestration: which endpoints to call, how to assemble context, how to enforce permissions, how to do grounding. Full RAG pipeline.</li>
+<li><strong>Copilot Studio / declarative agents</strong> — works well within the Copilot ecosystem, but limited to scenarios where the agent runs inside Copilot itself.</li>
+</ol>
+
+<p>A2A opens a third path: the external agent <strong>delegates work</strong> to Copilot and receives responses that are already grounded in organizational data, with permissions applied automatically. It's not an API call — it's a conversation between agents.</p>
+
+<p>In practice, the code is surprisingly simple. Using the A2A SDK in .NET:</p>
+
+<pre>
+var client = new A2AClient(
+    new Uri("https://workiq.svc.cloud.microsoft/a2a/"), 
+    httpClient);
+
+var response = await client.SendMessageAsync(new SendMessageRequest
+{
+    Message = new Message
+    {
+        MessageId = Guid.NewGuid().ToString("N"),
+        Role = Role.User,
+        Parts = [Part.FromText("What meetings do I have tomorrow that I need to prepare for?")]
+    }
+});
+</pre>
+
+<p>Copilot handles the rest: searches emails, calendars, shared files, meeting transcripts — all filtered by the user's permissions.</p>
+
+<h2>Three Implications for Those in the Field</h2>
+
+<h3>1. The "Build vs. Buy" Argument for RAG over M365 Just Changed</h3>
+
+<p>Until last week, the conversation with clients was: "if you want an agent that understands organizational context, you need to build a RAG pipeline with Graph API + Azure AI Search + orchestration." Not trivial. Estimates of 4–8 weeks for a working MVP, not counting relevance tuning and governance.</p>
+
+<p>With Work IQ via A2A, that pipeline <strong>already exists</strong>. The developer doesn't access raw data — they access intelligence. Copilot handles grounding, applies permissions, selects skills, and delivers contextualized responses. What was an infrastructure project becomes a protocol integration.</p>
+
+<p>This doesn't eliminate custom RAG — there are scenarios where granular control over embeddings, ranking, and sources is necessary. But for the most common use case ("agent that needs to understand what's happening in the organization"), the path just got dramatically shorter.</p>
+
+<h3>2. Security by Default Changes the InfoSec Conversation</h3>
+
+<p>One of the biggest friction points in enterprise agent projects is the security review. "What data does the agent access?" "How are permissions applied?" "Where is data processed?" "Is there exfiltration risk?"</p>
+
+<p>The Work IQ API solves this at the architecture level:</p>
+
+<ul>
+<li><strong>Permissions:</strong> user and tenant permissions, conditional access, sensitivity labels — applied automatically.</li>
+<li><strong>Responses:</strong> permission-trimmed by design. The agent can't see what the user can't see.</li>
+<li><strong>Compliance:</strong> M365 audit, DLP, and governance boundaries are inherited automatically.</li>
+</ul>
+
+<p>Because the API exposes <strong>intelligence rather than raw data</strong>, it's impossible to accidentally bypass tenant security. This fundamentally changes InfoSec posture: instead of auditing every data endpoint the agent accesses, the security team validates that the agent uses Work IQ — and the guarantees are inherited.</p>
+
+<h3>3. Multi-Agent Is the Pattern, Not the Exception</h3>
+
+<p>A2A isn't "another way to call Copilot." It's an agent collaboration protocol. Microsoft's roadmap for Work IQ includes:</p>
+
+<ul>
+<li><strong>M365 Agent access:</strong> more agents in the M365 ecosystem available for collaboration via A2A.</li>
+<li><strong>Remote MCP in preview:</strong> any MCP-aware surface will be able to connect to Work IQ.</li>
+<li><strong>Deeper intelligence:</strong> expanded grounding, more skills and tools.</li>
+</ul>
+
+<p>The emerging pattern: specialized agents (sales, HR, engineering, compliance) that delegate tasks to each other and to Copilot when they need organizational context. It's not a monolithic agent that does everything — it's an ecosystem of agents that collaborate.</p>
+
+<p><img src="2026-05-19-work-iq-api-a2a-agents_files/workiq-developer-scenarios.png" alt="Agentic Application diagram showing agent with sub-agents connecting to Blackbox Agents via A2A protocol and to MCP Server for resources and tools" style="max-width:100%;"></p>
+<p><em>Multi-agent pattern: an agentic application uses A2A to collaborate with external agents and MCP for tools and resources. Source: Microsoft Tech Community.</em></p>
+
+<p>For those already building agents in Copilot Studio or Azure AI Agent Service, the implication is clear: <strong>plan multi-agent architecture from the start</strong>, even if the first release is a single agent. The A2A and MCP surface will be the connective tissue.</p>
+
+<h2>What to Do Now</h2>
+
+<p>If you already have Microsoft 365 Copilot licenses and are planning extensibility:</p>
+
+<ol>
+<li><strong>Explore the samples</strong> — <a href="https://github.com/microsoft/work-iq-samples">github.com/microsoft/work-iq-samples</a> has examples in C#, Rust, and Swift. The .NET A2A client is straightforward — you can have a working prototype in an afternoon.</li>
+<li><strong>Re-evaluate RAG pipelines over M365</strong> — if the goal is "agent that understands organizational context," Work IQ can eliminate 60–70% of infrastructure complexity. Don't discard custom RAG, but question whether it's necessary.</li>
+<li><strong>Align with InfoSec now</strong> — the security conversation for agents changes with Work IQ. Start the architecture review before you need it, not after.</li>
+<li><strong>Map multi-agent scenarios</strong> — identify the 3–5 specialized agents that would make the most sense in your context and how they'd benefit from organizational context via A2A.</li>
+</ol>
+
+<div class="sources">
+<strong>Resources:</strong>
+<ul>
+<li><a href="https://techcommunity.microsoft.com/blog/copilot-studio-blog/work-iq-api-public-preview-build-copilot-powered-agents-with-a2a/4516286">Official blog: Work IQ API public preview</a></li>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/work-iq-api-overview">Documentation: Microsoft Work IQ API (preview)</a></li>
+<li><a href="https://github.com/microsoft/work-iq-samples">GitHub: Work IQ samples (C#, Rust, Swift)</a></li>
+<li><a href="https://github.com/microsoft/work-iq">GitHub: Work IQ — MCP Server and CLI</a></li>
+<li><a href="https://a2a-protocol.org/latest/">A2A Protocol specification</a></li>
+</ul>
+</div>
+
+<p class="bio"><em>I work with clients on generative AI rollouts and Copilot extensibility across Brazil and LATAM. If you're evaluating the Work IQ API or planning multi-agent architecture, let's talk — this conversation is getting interesting.</em></p>
+
+</body>
+</html>
