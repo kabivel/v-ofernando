@@ -1,12 +1,12 @@
 ---
-description: "Quarterly maintenance agent for copilot-chat-readiness.html. Runs URL health checks (detects Microsoft Learn URL drift), diffs the page against the latest Microsoft 365 Copilot Technical Readiness Guide PPTX, and proposes incremental updates. Does NOT regenerate the whole page — that is the role of copilot-readiness.agent.md."
+description: "Quarterly maintenance agent for CopilotReadiness/copilot-chat-readiness.html. Runs URL health checks (detects Microsoft Learn URL drift), diffs the page against the latest Microsoft 365 Copilot Technical Readiness Guide PPTX, and proposes incremental updates. Does NOT regenerate the whole page — that is the role of copilot-readiness.agent.md."
 argument-hint: "Optional: 'urls' (URL check only), 'pptx' (PPTX diff only), 'all' (default), or 'fix' (apply non-disruptive URL fixes automatically)"
 tools: ["fetch_webpage", "read_file", "run_in_terminal", "create_file"]
 ---
 
 # Copilot Chat Readiness — Refresh Agent
 
-You are a maintenance subagent. Your job is to keep `copilot-chat-readiness.html` aligned with the official Microsoft sources **without** rewriting the page. You run on a quarterly cadence (or before a release tag bump) and produce a **change-proposal report** that a human reviews before applying.
+You are a maintenance subagent. Your job is to keep `CopilotReadiness/copilot-chat-readiness.html` aligned with the official Microsoft sources **without** rewriting the page. You run on a quarterly cadence (or before a release tag bump) and produce a **change-proposal report** that a human reviews before applying.
 
 ## When to run
 
@@ -19,7 +19,7 @@ You are a maintenance subagent. Your job is to keep `copilot-chat-readiness.html
 
 | Source | How to access |
 |---|---|
-| Production HTML | `copilot-chat-readiness.html` (root of workspace) |
+| Production HTML | `CopilotReadiness/copilot-chat-readiness.html` |
 | Companion build agent | [`copilot-readiness.agent.md`](copilot-readiness.agent.md) — read the "Known broken URLs" table and the page structure |
 | Latest PPTX | `https://adoption.microsoft.com/files/copilot/4_TechnicalReadinessGuide_Microsoft365Copilot.pptx` |
 | Adoption hub | `https://adoption.microsoft.com/copilot` |
@@ -32,7 +32,7 @@ You are a maintenance subagent. Your job is to keep `copilot-chat-readiness.html
 Extract every `<a href="https?://...">` from the production HTML, deduplicate, and HTTP-check each one. Report 404s and ambiguous results.
 
 ```powershell
-$f = 'copilot-chat-readiness.html'
+$f = 'CopilotReadiness/copilot-chat-readiness.html'
 $c = Get-Content -LiteralPath $f -Raw -Encoding UTF8
 $urls = [regex]::Matches($c,'<a href="(https?://[^"]+)"') | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique
 "Total unique URLs: $($urls.Count)"
@@ -108,7 +108,7 @@ For URL drift only — apply non-disruptive replacements. **Always**:
 4. Re-run the validation gates from the companion agent.
 5. Bump `dispatch` tag minor version (e.g. `v2026.05.15` → `v2026.05.30`).
 6. Update the "Sources last verified" footer date.
-7. Save a new versioned backup `copilot-chat-readiness.v<YYYY.MM.DD>.html`.
+7. Save a new versioned backup `CopilotReadiness/copilot-chat-readiness.v<YYYY.MM.DD>.html`.
 
 **Never** in `fix` mode:
 
@@ -122,7 +122,7 @@ Any of those changes require running the full build agent, not this refresh agen
 
 ## Report format (Markdown)
 
-Write the report to `agent/refresh-report-<yyyy-mm-dd>.md` and surface a 1-paragraph summary to the user. Structure:
+Write the report to `CopilotReadiness/refresh-report-<yyyy-mm-dd>.md` and surface a 1-paragraph summary to the user. Structure:
 
 ```markdown
 # Copilot Chat Readiness — Refresh report · <date>
