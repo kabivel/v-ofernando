@@ -1,0 +1,260 @@
+{
+    "type": "AdaptiveCard",
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.4",
+    "body": [
+        {
+            "type": "TextBlock",
+            "text": "Check the links below",
+            "wrap": true
+        },
+        {
+            "type": "ActionSet",
+            "actions": [
+                {
+                    "type": "Action.OpenUrl",
+                    "title": "Check Google",
+                    "url": "https://www.google.com",
+                    "iconUrl": "icon:NumberCircle1",
+                    "id": "idURLGoogle"
+                }
+            ]
+        },
+        {
+            "type": "ActionSet",
+            "actions": [
+                {
+                    "type": "Action.OpenUrl",
+                    "title": "Check Facebook",
+                    "url": "https://www.facebook.com",
+                    "iconUrl": "icon:NumberCircle2",
+                    "id": "idURLFacebook"
+                }
+            ]
+        },
+        {
+            "type": "ActionSet",
+            "actions": [
+                {
+                    "type": "Action.OpenUrl",
+                    "title": "Check Yahoo",
+                    "url": "https://www.yahoo.com",
+                    "tooltip": "Yahoo",
+                    "iconUrl": "icon:NumberCircle3",
+                    "id": "idURLYahoo"
+                }
+            ]
+        },
+        {
+            "type": "Container",
+            "items": [
+                {
+                    "type": "ColumnSet",
+                    "columns": [
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": [
+                                {
+                                    "type": "TextBlock",
+                                    "text": "Text: ",
+                                    "wrap": true
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": [
+                                {
+                                    "type": "Input.Text",
+                                    "placeholder": "Your text here",
+                                    "id": "idNome"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "ColumnSet",
+                    "columns": [
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": [
+                                {
+                                    "type": "TextBlock",
+                                    "text": "Data",
+                                    "wrap": true
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": [
+                                {
+                                    "type": "Input.Date",
+                                    "id": "idData"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "ColumnSet",
+                    "columns": [
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": [
+                                {
+                                    "type": "TextBlock",
+                                    "text": "Choice",
+                                    "wrap": true
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": [
+                                {
+                                    "type": "Input.ChoiceSet",
+                                    "choices": [
+                                        {
+                                            "title": "Choice1",
+                                            "value": "Choice 1"
+                                        },
+                                        {
+                                            "title": "Choice2",
+                                            "value": "Choice 2"
+                                        },
+                                        {
+                                            "title": "Choice3",
+                                            "value": "Choice 3"
+                                        },
+                                        {
+                                            "title": "Choice4",
+                                            "value": "Choice 4"
+                                        },
+                                        {
+                                            "title": "Choice5",
+                                            "value": "Choice 5"
+                                        }
+                                    ],
+                                    "placeholder": "Select an option",
+                                    "id": "idChoice"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "ColumnSet",
+                    "columns": [
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": [
+                                {
+                                    "type": "TextBlock",
+                                    "text": "Time",
+                                    "wrap": true
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": [
+                                {
+                                    "type": "Input.Time",
+                                    "id": "idTime"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "ColumnSet",
+                    "columns": [
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": [
+                                {
+                                    "type": "TextBlock",
+                                    "text": "Number",
+                                    "wrap": true
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": [
+                                {
+                                    "type": "Input.Number",
+                                    "placeholder": "Number",
+                                    "min": -5,
+                                    "max": 9990,
+                                    "id": "idNumber"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "ColumnSet",
+                    "columns": [
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": [
+                                {
+                                    "type": "TextBlock",
+                                    "text": "Toogle",
+                                    "wrap": true
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": [
+                                {
+                                    "type": "Input.Toggle",
+                                    "title": "Yes or No?",
+                                    "id": "idToogle"
+                                }
+                            ],
+                            "id": "idColumnToogle"
+                        }
+                    ],
+                    "id": "idColumnSetToogle"
+                }
+            ],
+            "id": "idContainer"
+        },
+        {
+            "type": "ActionSet",
+            "actions": [
+                {
+                    "type": "Action.Submit",
+                    "title": "Done",
+                    "associatedInputs": "auto",
+                    "role": "Button",
+                    "data": {},
+                    "id": "idSubmit"
+                }
+            ],
+            "id": "idActionSetSubmit"
+        }
+    ],
+    "selectAction": {
+        "type": "Action.Submit",
+        "title": "Done",
+        "associatedInputs": "auto"
+    }
+}

@@ -6,9 +6,9 @@ tools: ["fetch_webpage", "read_file", "create_file", "run_in_terminal"]
 
 # Copilot Chat Readiness — Implementation Guide Generator
 
-You are a subagent that builds a single self-contained HTML page, `copilot-chat-readiness.html`, at the **root** of the workspace. The page is a Microsoft-branded **hands-on implementation guide** for Microsoft 365 Copilot Chat, organised as 8 sequential steps with Foundational vs. Optimized path scoping. Built on top of `Template/Workshop Template.html`. Generated content is **always en-US** with Microsoft official voice (first-person plural — *we*, *our customers*).
+You are a subagent that builds a single self-contained HTML page, `CopilotReadiness/copilot-chat-readiness.html`, inside the `CopilotReadiness/` folder of the workspace. The page is a Microsoft-branded **hands-on implementation guide** for Microsoft 365 Copilot Chat, organised as 8 sequential steps with Foundational vs. Optimized path scoping. Built on top of `Template/Workshop Template.html`. Generated content is **always en-US** with Microsoft official voice (first-person plural — *we*, *our customers*).
 
-> **Production baseline:** version `v2026.05.15` is the current production build. Backup file: `copilot-chat-readiness.v2026.05.15.html` (~600 KB, ~11.250 lines, 76 unique URLs all verified 200 OK).
+> **Production baseline:** version `v2026.05.15` is the current production build. Backup file: `CopilotReadiness/copilot-chat-readiness.v2026.05.15.html` (~600 KB, ~11.250 lines, 76 unique URLs all verified 200 OK).
 
 ## Sources (official Microsoft only)
 
@@ -119,13 +119,13 @@ Append CSS rules for `.bottomnav .pill[data-slide="c1..c8"]` hover/active so pil
 
 ## Build procedure
 
-1. **Fetch / refresh sources.** If argument is `refresh` or version tag, refetch the 5 web sources and re-download the PPTX. Otherwise rely on the cached `.tmp-techguide.md` extract.
+1. **Fetch / refresh sources.** If argument is `refresh` or version tag, refetch the 5 web sources and re-download the PPTX. Otherwise rely on the cached `CopilotReadiness/.tmp-techguide.md` extract.
 2. **Read the template** (`Template/Workshop Template.html`). Re-locate head/body/script line numbers if shifted.
 3. **Draft body content** at `.tmp-impl-body.html` containing the 11 sections in order.
 4. **Stitch the file**:
 
    ```powershell
-   $src='Template\Workshop Template.html'; $body='.tmp-impl-body.html'; $dst='copilot-chat-readiness.html'
+   $src='Template\Workshop Template.html'; $body='CopilotReadiness\.tmp-impl-body.html'; $dst='CopilotReadiness\copilot-chat-readiness.html'
    $lines = Get-Content -LiteralPath $src -Encoding UTF8
    $head  = $lines[0..9682]
    $tail  = $lines[19583..($lines.Count-1)]
@@ -146,7 +146,7 @@ Append CSS rules for `.bottomnav .pill[data-slide="c1..c8"]` hover/active so pil
 
 ## Output contract
 
-- Single file: `copilot-chat-readiness.html` at the workspace root.
+- Single file: `CopilotReadiness/copilot-chat-readiness.html` inside the `CopilotReadiness/` folder.
 - UTF-8, no BOM, ~11,000 lines, ~600 KB.
 - 100% self-contained except for the icons8 product-bubble images (CDN).
 - `<title>` = `Copilot Chat Readiness — Hands-on implementation guide`.
@@ -157,7 +157,7 @@ Append CSS rules for `.bottomnav .pill[data-slide="c1..c8"]` hover/active so pil
 ## Validation gates (every build must pass all)
 
 ```powershell
-$f = 'copilot-chat-readiness.html'
+$f = 'CopilotReadiness/copilot-chat-readiness.html'
 $c = [System.IO.File]::ReadAllText((Resolve-Path $f), [System.Text.UTF8Encoding]::new($false))
 
 # Structural
@@ -184,7 +184,7 @@ $ids = [regex]::Matches($sm,"'([^']+)'") | ForEach-Object { $_.Groups[1].Value }
 Run periodically — and **always** after a refresh build — to detect Microsoft docs URL drift. Microsoft Learn paths change every 6–12 months.
 
 ```powershell
-$f = 'copilot-chat-readiness.html'
+$f = 'CopilotReadiness/copilot-chat-readiness.html'
 $c = Get-Content -LiteralPath $f -Raw -Encoding UTF8
 $urls = [regex]::Matches($c,'<a href="(https?://[^"]+)"') | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique
 "Total unique URLs: $($urls.Count)"
@@ -236,5 +236,5 @@ $bad
 ## Versioning
 
 - Update `dispatch` tag and the "Sources last verified" footer date on every build.
-- After a clean build that passes all validation gates, copy the file to `copilot-chat-readiness.v<YYYY.MM.DD>.html` and record the SHA256 hash here.
+- After a clean build that passes all validation gates, copy the file to `CopilotReadiness/copilot-chat-readiness.v<YYYY.MM.DD>.html` and record the SHA256 hash here.
 - Companion refresh agent: [`copilot-readiness-refresh.agent.md`](copilot-readiness-refresh.agent.md) — runs the URL health check, diff vs. PPTX and proposes incremental updates (does not regenerate the whole page).
