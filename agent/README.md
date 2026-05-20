@@ -10,6 +10,7 @@ Custom VS Code Copilot **subagents** shareable via this repo.
 | [m365-roadmap-page.agent.md](m365-roadmap-page.agent.md) | Gera a página HTML mensal do M365 Roadmap a partir do template e do JSON do coletor. |
 | [copilot-readiness.agent.md](copilot-readiness.agent.md) | Builds the Copilot Chat Readiness HTML — a hands-on, 8-step implementation guide for Microsoft 365 Copilot Chat (Foundational vs. Optimized paths, deliverables, PowerShell verification). Sourced from the official Microsoft Tech Readiness Guide PPTX + Adoption hub + Microsoft Learn. |
 | [copilot-readiness-refresh.agent.md](copilot-readiness-refresh.agent.md) | Quarterly maintenance for `copilot-chat-readiness.html`: URL health check (detects Microsoft Learn URL drift), PPTX content diff, and non-destructive `fix` mode for URL replacements. Read-only by default. |
+| [coach.agent.md](coach.agent.md) | Personal coaching agent: career advisory, LinkedIn engagement expert, audience growth strategist. Reviews posts/articles in `linkedin/`, suggests hooks/CTAs/hashtags, builds weekly content plans. Bilingual pt-BR / en-US. |
 
 ## Install (per teammate)
 
