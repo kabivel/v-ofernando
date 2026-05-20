@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exchange On-Premises → Exchange Online Migration — Q&A + Impact Guide</title>
+<style>
+  :root {
+    --bg:#f4f6fa; --panel:#fff; --border:#d8dee9; --primary:#0078d4;
+    --text:#1f2937; --muted:#5a6675; --accent:#5C2D91;
+    --warn-bg:#fff8e1; --warn-border:#f9a825; --warn-text:#6d4c00;
+    --danger-bg:#fdecea; --danger-border:#d32f2f; --danger-text:#7f1d1d;
+    --ok-bg:#e8f5e9; --ok-border:#388e3c; --ok-text:#1b5e20;
+    --note-bg:#eef5ff; --note-border:#0078d4;
+    --shadow:0 2px 8px rgba(0,0,0,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI",system-ui,sans-serif;line-height:1.6}
+
+  .app-header{background:linear-gradient(135deg,#0078d4,#5C2D91);color:#fff;padding:32px 24px;text-align:center}
+  .app-header h1{margin:0 0 6px;font-size:28px;font-weight:700}
+  .app-header p{margin:0;opacity:.9;font-size:14px;max-width:760px;margin:0 auto}
+  .app-header .badge{display:inline-block;background:rgba(255,255,255,.18);padding:4px 14px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.1em;margin-bottom:12px;text-transform:uppercase}
+  .scope{display:inline-block;margin-top:10px;background:rgba(0,0,0,.18);padding:4px 12px;border-radius:6px;font-size:12px}
+
+  .container{max-width:980px;margin:0 auto;padding:24px 20px 80px}
+  .toc{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:28px;box-shadow:var(--shadow)}
+  .toc h2{margin:0 0 10px;font-size:16px;color:var(--primary)}
+  .toc ol{margin:0;padding-left:20px}
+  .toc li{margin:4px 0}
+  .toc a{color:var(--primary);text-decoration:none;font-weight:500}
+  .toc a:hover{text-decoration:underline}
+
+  .section{margin-bottom:36px}
+  .section h2{font-size:22px;margin:0 0 16px;padding-bottom:8px;border-bottom:2px solid var(--primary);color:var(--primary)}
+  .section h3{font-size:17px;margin:20px 0 8px;color:var(--accent)}
+
+  .qa{background:var(--panel);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;box-shadow:var(--shadow);overflow:hidden}
+  .qa summary{cursor:pointer;padding:14px 20px;font-weight:600;font-size:15px;display:flex;align-items:center;gap:10px;list-style:none}
+  .qa summary::-webkit-details-marker{display:none}
+  .qa summary::before{content:'▸';color:var(--primary);font-size:18px;transition:transform .2s}
+  .qa[open] summary::before{transform:rotate(90deg)}
+  .qa summary:hover{background:rgba(0,120,212,.04)}
+  .qa .answer{padding:0 20px 16px;font-size:14px;color:var(--text);border-top:1px solid var(--border);margin-top:0}
+  .qa .answer p{margin:10px 0}
+  .qa .answer ul,.qa .answer ol{margin:8px 0;padding-left:22px}
+  .qa .answer li{margin:4px 0}
+
+  .tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;letter-spacing:.05em;text-transform:uppercase;margin-left:auto}
+  .planning{background:#e3f2fd;color:#0d47a1}
+  .technical{background:#ede7f6;color:#4527a0}
+  .impact{background:#fff3e0;color:#e65100}
+  .risk{background:#fdecea;color:#b71c1c}
+
+  .callout{border-left:4px solid;padding:10px 14px;margin:12px 0;border-radius:6px;font-size:13.5px}
+  .callout.note{background:var(--note-bg);border-color:var(--note-border)}
+  .callout.warn{background:var(--warn-bg);border-color:var(--warn-border);color:var(--warn-text)}
+  .callout.danger{background:var(--danger-bg);border-color:var(--danger-border);color:var(--danger-text)}
+  .callout.ok{background:var(--ok-bg);border-color:var(--ok-border);color:var(--ok-text)}
+
+  /* Lifecycle flow */
+  .flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:18px 0}
+  .stage{background:var(--panel);border:1px solid var(--border);border-left:5px solid var(--primary);border-radius:10px;padding:14px;box-shadow:var(--shadow);position:relative}
+  .stage .num{position:absolute;top:-10px;left:-10px;background:var(--primary);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+  .stage h4{margin:2px 0 6px;font-size:14px;color:var(--accent)}
+  .stage p{margin:0;font-size:12.5px;color:var(--muted)}
+  .stage.s-onprem{border-left-color:#5C2D91}
+  .stage.s-prep{border-left-color:#0288d1}
+  .stage.s-move{border-left-color:#f9a825}
+  .stage.s-cutover{border-left-color:#d84315}
+  .stage.s-cloud{border-left-color:#388e3c}
+  .stage .speech{margin-top:10px;padding:8px 10px;background:#f5f7fb;border:1px dashed #c5cdd9;border-radius:6px;font-size:12px;color:#3a4150;font-style:italic;position:relative}
+  .stage .speech::before{content:'\1F3A4';margin-right:6px;font-style:normal}
+  .speech{margin:12px 0;padding:10px 12px;background:#f5f7fb;border:1px dashed #c5cdd9;border-radius:6px;font-size:13px;color:#3a4150;font-style:italic}
+  .speech::before{content:'\1F3A4 \00a0 Say:';margin-right:6px;font-style:normal;font-weight:700;color:#0078d4}
+  .stage .speech::before{content:'\1F3A4';font-weight:400;color:inherit}
+
+  table.life{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;background:var(--panel);box-shadow:var(--shadow);border-radius:8px;overflow:hidden}
+  table.life th,table.life td{border:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top}
+  table.life th{background:#f0f4fa;color:var(--primary);font-weight:600}
+  table.life tr:nth-child(even) td{background:#fafbfd}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px}
+  .pill.on{background:#ede7f6;color:#4527a0}
+  .pill.mid{background:#fff8e1;color:#6d4c00}
+  .pill.cloud{background:#e8f5e9;color:#1b5e20}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <span class="badge">Migration Playbook</span>
+  <h1>Exchange On-Premises → Exchange Online</h1>
+  <p>Q&A, impact guide, and end-to-end mailbox lifecycle for a hybrid migration project.</p>
+  <div class="scope">Scope: on-premises source only — does not cover tenant-to-tenant, IMAP, or Google Workspace migrations.</div>
+</header>
+
+<div class="container">
+
+  <nav class="toc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#planning">Planning &amp; Methods</a></li>
+      <li><a href="#lifecycle">Mailbox Lifecycle: On-Prem → Online</a></li>
+      <li><a href="#technical">Technical Prerequisites</a></li>
+    </ol>
+  </nav>
+
+  <!-- ─────────────── PLANNING ─────────────── -->
+  <section class="section" id="planning">
+    <h2>1. Planning &amp; Methods</h2>
+
+    <details class="qa" open>
+      <summary>What migration methods are available for Exchange on-prem to Exchange Online? <span class="tag planning">Planning</span></summary>
+      <div class="answer">
+        <ul>
+          <li><strong>Cutover migration</strong> — All mailboxes moved at once. Limit ~150 mailboxes. Exchange 2003–2016.</li>
+          <li><strong>Staged migration</strong> — Batches over time. Exchange 2003/2007 only (legacy).</li>
+          <li><strong>Hybrid migration (minimal or full)</strong> — Coexistence between on-prem and online. Supports Exchange 2010+. Recommended for most enterprises. Allows gradual moves with shared calendar/free-busy.</li>
+          <li><strong>Third-party tools</strong> — BitTitan MigrationWiz, Quest On Demand Migration, etc. Useful when no hybrid is desired or for cross-forest/IMAP sources.</li>
+        </ul>
+        <p>For organizations with 150+ mailboxes, <strong>hybrid is the standard recommendation</strong>.</p>
+        <div class="speech">"There are basically four ways to get from Exchange Server to Exchange Online. Cutover is the fastest but caps at 150 mailboxes. Staged is legacy. Third-party tools are great for messy sources. But for any real enterprise, hybrid is the standard — it gives us coexistence, free/busy, and a controlled wave-based move."</div>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary>What's the difference between Minimal Hybrid and Full Hybrid? <span class="tag planning">Planning</span></summary>
+      <div class="answer">
+        <ul>
+          <li><strong>Minimal Hybrid (Express)</strong> — Simplified wizard, fewer prerequisites. Mailbox migration + basic mail flow. No long-term coexistence. Best for "get out of on-prem fast" scenarios.</li>
+          <li><strong>Full Hybrid</strong> — Complete coexistence: shared free/busy, cross-premises mail flow, unified GAL, OAuth-based calendar sharing, MailTips across orgs. Best for phased, enterprise-grade migrations.</li>
+        </ul>
+        <div class="speech">"Think of Minimal Hybrid as a one-way door — it's a fast track to move mailboxes and walk away from on-prem. Full Hybrid is what we use when the migration takes months and users on both sides need to share calendars, mail tips, and a single global address list while we move them in waves."</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ─────────────── LIFECYCLE ─────────────── -->
+  <section class="section" id="lifecycle">
+    <h2>2. Mailbox Lifecycle: On-Prem → Online</h2>
+    <p>End-to-end view of what happens to a single mailbox from the moment it lives on Exchange Server until it is fully cloud-native in Exchange Online. Use this as the operational reference during migration waves.</p>
+    <div class="speech">"Let's walk a single mailbox through the entire journey — from sitting quietly on an Exchange Server in our datacenter, all the way to being fully cloud-native in Exchange Online. Each stage has a clear definition, a clear owner, and a clear exit criterion."</div>
+
+    <div class="flow">
+      <div class="stage s-onprem"><span class="num">1</span><h4>On-Prem Native</h4><p>Mailbox lives in an on-prem database. No cloud footprint. AD account only.</p><div class="speech">"This is our starting point — every mailbox lives entirely on Exchange Server. No Microsoft 365 dependency yet. Our job here is to take a clean inventory: sizes, rules, delegates, public folder usage."</div></div>
+      <div class="stage s-prep"><span class="num">2</span><h4>Directory Synced</h4><p>Entra Connect syncs user to Entra ID as a <em>MailUser</em>. License optional yet.</p><div class="speech">"Once Entra Connect runs, the user shows up in Entra ID as a MailUser. Nothing changes for the end user — but in the background we now have an identity in the cloud ready to receive a mailbox."</div></div>
+      <div class="stage s-prep"><span class="num">3</span><h4>Hybrid-Ready</h4><p>HCW done, Migration Endpoint (MRS) validated, license assigned, batch staged.</p><div class="speech">"After the Hybrid Configuration Wizard, on-prem and Exchange Online speak the same language. Free/busy works cross-premises, the migration endpoint is healthy, licenses are assigned — the mailbox is now eligible to be moved."</div></div>
+      <div class="stage s-move"><span class="num">4</span><h4>Move In Progress</h4><p>MRS sync of mailbox content to EXO. User keeps using on-prem mailbox.</p><div class="speech">"This is the silent phase. The Mailbox Replication Service copies content to the cloud in the background — sometimes for hours or days. The user keeps working on-prem, completely unaware. We monitor with Get-MoveRequestStatistics."</div></div>
+      <div class="stage s-cutover"><span class="num">5</span><h4>Cutover (Finalize)</h4><p>Final incremental sync, mailbox flipped to EXO, on-prem becomes RemoteMailbox.</p><div class="speech">"This is the only moment the user really feels. Outlook prompts to restart, the profile re-points to Exchange Online, and the on-prem object becomes a stub. We schedule this off-hours so the OST can rebuild without business impact."</div></div>
+      <div class="stage s-cloud"><span class="num">6</span><h4>Online Native</h4><p>Outlook autodiscovers EXO. Mail flow via EOP. On-prem holds stub only.</p><div class="speech">"The mailbox is now native in Exchange Online. The user gets bigger quotas, the in-place archive, and modern features. Mail flows through Exchange Online Protection. The on-prem stub stays only for directory consistency."</div></div>
+      <div class="stage s-cloud"><span class="num">7</span><h4>Post-Migration</h4><p>Archive enabled, retention/MRM applied, hybrid decommissioned when last batch done.</p><div class="speech">"Once the last batch is done, we flip the MX, retire the hybrid connectors, and apply retention, archive, and Purview labels. We keep one Exchange server for attribute management — or move fully to cloud-managed identity."</div></div>
+    </div>
+
+    <h3>Stage-by-Stage Detail</h3>
+    <table class="life">
+      <thead>
+        <tr><th>Stage</th><th>On-Prem Object</th><th>Cloud Object</th><th>Mail Flow</th><th>User Experience</th><th>Admin Actions</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill on">1. On-Prem Native</span></td>
+          <td>UserMailbox in on-prem DB</td>
+          <td>None</td>
+          <td>On-prem MX / Edge / Send connectors</td>
+          <td>Outlook connects to on-prem CAS</td>
+          <td>Baseline inventory, mailbox sizes, rules, delegates</td>
+        </tr>
+        <tr>
+          <td><span class="pill on">2. Directory Synced</span></td>
+          <td>UserMailbox (unchanged)</td>
+          <td>MailUser in Entra ID / EXO</td>
+          <td>Still 100% on-prem</td>
+          <td>No change</td>
+          <td>Entra Connect filtering, UPN matches SMTP, verify ImmutableID</td>
+        </tr>
+        <tr>
+          <td><span class="pill on">3. Hybrid-Ready</span></td>
+          <td>UserMailbox + hybrid attributes set by HCW</td>
+          <td>MailUser, license assigned (Exchange plan)</td>
+          <td>Hybrid connectors (TLS, certificate-based) active</td>
+          <td>No change — free/busy works cross-prem</td>
+          <td>Run HCW, validate Autodiscover, Migration Endpoint test, OAuth</td>
+        </tr>
+        <tr>
+          <td><span class="pill mid">4. Move In Progress</span></td>
+          <td>UserMailbox (source of truth)</td>
+          <td>Mailbox shell receiving sync (MoveRequest)</td>
+          <td>Mail delivered to on-prem; EXO forwards if needed</td>
+          <td>No impact — content syncs in background (95%+ pre-sync)</td>
+          <td>New-MigrationBatch, monitor with Get-MoveRequestStatistics</td>
+        </tr>
+        <tr>
+          <td><span class="pill mid">5. Cutover (Finalize)</span></td>
+          <td>UserMailbox demoted → RemoteMailbox (mail-enabled user)</td>
+          <td>UserMailbox in EXO (primary)</td>
+          <td>EOP becomes primary; centralized mail transport optional</td>
+          <td>Outlook prompts restart; profile re-points to EXO via Autodiscover</td>
+          <td>Complete-MigrationBatch, verify TargetAddress = *.mail.onmicrosoft.com</td>
+        </tr>
+        <tr>
+          <td><span class="pill cloud">6. Online Native</span></td>
+          <td>RemoteMailbox stub (for GAL + provisioning)</td>
+          <td>UserMailbox in EXO</td>
+          <td>EOP / Defender for O365</td>
+          <td>Outlook, OWA, mobile all on EXO; larger quotas, archive available</td>
+          <td>Enable In-Place Archive, apply retention labels, MFA enforced</td>
+        </tr>
+        <tr>
+          <td><span class="pill cloud">7. Post-Migration</span></td>
+          <td>RemoteMailbox until on-prem decommission</td>
+          <td>Fully cloud-managed mailbox</td>
+          <td>MX cut to EXO; on-prem connectors removed</td>
+          <td>Native EXO features (Copilot, Loop, Purview eDiscovery)</td>
+          <td>Decommission Exchange servers (keep one for attribute mgmt, or move to Entra Connect writeback / cloud-only)</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="speech">"This table is the single source of truth during the project. For any mailbox at any moment, we can point to one of these seven rows and tell you exactly where the object lives, how mail is flowing, what the user sees, and what action the admin team owes next."</div>
+
+    <h3>What changes for the user at cutover</h3>
+    <ul>
+      <li>Outlook restarts and recreates the OST against the EXO endpoint (re-download can take hours for large mailboxes — schedule wave on Friday evening when possible).</li>
+      <li>Mobile devices (iOS/Android) usually re-authenticate automatically via Autodiscover; ActiveSync/Modern Auth must be enabled in EXO before cutover.</li>
+      <li>Shared mailboxes and delegates should be migrated <strong>in the same batch</strong> as their owners to preserve permissions and avoid cross-premises delegation gaps.</li>
+      <li>PST imports and personal archives are activated <em>after</em> the move, not during.</li>
+    </ul>
+    <div class="speech">"Cutover is the only moment the user actually feels the migration. Outlook restarts, the OST rebuilds, mobile devices re-authenticate. That's why we batch shared mailboxes with their owners and schedule big mailboxes for Friday evening — so Monday morning everyone just opens Outlook and keeps working."</div>
+
+    <div class="callout warn">
+      <strong>Watch out:</strong> Until the MX record is cut to EXO, mail still hits on-prem first and is forwarded to the cloud mailbox. Keep on-prem transport healthy until the last batch closes.
+    </div>
+    <div class="speech">"Be very careful here — the MX cut is not the first step, it's almost the last. Until then, every inbound email still lands on-prem and gets forwarded to the cloud. If on-prem transport falls over mid-migration, the whole company stops receiving mail."</div>
+    <div class="callout note">
+      <strong>Identity rule:</strong> The on-prem object remains the source of truth for the user (proxyAddresses, displayName, group membership) as long as Entra Connect is in place. All recipient edits stay in on-prem EAC/PowerShell until you fully decommission or enable cloud-managed identity.
+    </div>
+    <div class="speech">"Remember the golden rule of hybrid: as long as Entra Connect is syncing, on-prem wins. Any change made directly in the cloud will be overwritten on the next sync cycle. All mailbox property edits must happen on-prem until we fully decommission."</div>
+    <div class="callout ok">
+      <strong>Done state:</strong> A mailbox is "fully migrated" when (a) UserMailbox exists only in EXO, (b) on-prem holds a RemoteMailbox stub or nothing, (c) MX points to EXO, and (d) Outlook profile, mobile, and delegates all operate against EXO without on-prem dependency.
+    </div>
+    <div class="speech">"This is our exit criterion. We don't call a mailbox 'done' just because it moved — we call it done when all four conditions are true. That's the checklist we hand off to operations to close the ticket."</div>
+  </section>
+
+  <!-- ─────────────── TECHNICAL ─────────────── -->
+  <section class="section" id="technical">
+    <h2>3. Technical Prerequisites</h2>
+    <details class="qa">
+      <summary>What do we need to set up before starting a hybrid migration? <span class="tag technical">Technical</span></summary>
+      <div class="answer">
+        <ul>
+          <li>Entra Connect (or Cloud Sync) syncing all migrating users.</li>
+          <li>Exchange Server build at supported CU level for HCW.</li>
+          <li>Public certificate covering autodiscover/owa/mail endpoints.</li>
+          <li>Inbound TCP 443 from EXO to on-prem hybrid endpoint (for MRS proxy).</li>
+          <li>Verified custom domain in Microsoft 365 + MX/SPF/DKIM/DMARC plan.</li>
+          <li>Exchange Online licenses assigned to target users.</li>
+          <li>Hybrid Configuration Wizard run successfully and OAuth configured.</li>
+        </ul>
+        <div class="speech">"Before we even think about moving a single mailbox, this checklist has to be green. Identity sync, healthy Exchange build, valid certificate, firewall open for MRS proxy on 443, domain verified, licenses assigned, and HCW completed with OAuth. Skip any one of these and the first batch will fail in a way that's painful to debug."</div>
+      </div>
+    </details>
+  </section>
+
+</div>
+</body>
+</html>
