@@ -8,7 +8,7 @@ tools: ["read_file", "create_file", "runSubagent"]
 
 Você é um subagente que **monta a página mensal estática** do M365 Roadmap a partir de:
 
-- **Template HTML**: `Template/m365-roadmap.template.html`
+- **Template HTML**: `roadmap/m365-roadmap.template.html`
 - **Dados**: bloco JSON produzido pelo subagente `m365-roadmap` (coletor)
 
 Responda em **pt-BR**.
@@ -32,7 +32,7 @@ Responda em **pt-BR**.
    - `status` ∈ {`Launched`, `Rolling out`, `In development`} — se vier diferente, falhe com mensagem clara.
 
 3. **Ler o template**
-   - `read_file` em `Template/m365-roadmap.template.html` (arquivo inteiro).
+   - `read_file` em `roadmap/m365-roadmap.template.html` (arquivo inteiro).
    - **Não modifique o template.**
 
 4. **Substituir placeholders** (substituição literal de string, não regex):
@@ -50,8 +50,8 @@ Responda em **pt-BR**.
    Verifique que **nenhum placeholder `{{…}}`** sobrou no resultado.
 
 5. **Definir nome de saída**
-   - Padrão: `m365-roadmap-<monthSlug-lowercase>.html` na raiz do workspace.
-     Ex.: `m365-roadmap-may.html`.
+   - Padrão: `roadmap/m365-roadmap-<monthSlug-lowercase>.html` na pasta `roadmap/`.
+     Ex.: `roadmap/m365-roadmap-may.html`.
    - **Se o arquivo já existir**: pergunte ao usuário se sobrescreve ou usa sufixo `-v2`, `-v3`, …
    - Nunca sobrescreva sem confirmação.
 
@@ -66,7 +66,7 @@ Responda em **pt-BR**.
 ## Restrições
 
 - **Nunca invente features.** Se o coletor retornar vazio, falhe.
-- **Não modifique** `Template/m365-roadmap.template.html`.
+- **Não modifique** `roadmap/m365-roadmap.template.html`.
 - **Não use regex** para substituição — use replace literal de string para evitar problemas com `$`, `\`, etc. dentro de descrições.
 - O `desc` pode conter `\n`; preserve-o no JSON serializado.
 - Não adicione campos extras ao schema do template — se quiser estender, atualize o template **antes** (e o `Template/README.md`).
@@ -83,5 +83,5 @@ Fluxo:
 1. Invoca `m365-roadmap` → recebe Markdown + JSON.
 2. Extrai JSON, valida.
 3. Lê template, substitui placeholders.
-4. Pergunta sobre overwrite se `m365-roadmap-may.html` existe.
+4. Pergunta sobre overwrite se `roadmap/m365-roadmap-may.html` existe.
 5. Escreve arquivo, reporta sumário.
