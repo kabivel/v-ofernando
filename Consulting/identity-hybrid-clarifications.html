@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Identity &amp; Hybrid Join — Clarifications</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+  :root{
+    --bg:#0b1020; --panel:#161e44; --panel2:#1d2659;
+    --txt:#e9ecff; --muted:#9aa3c7; --accent:#5b8def; --accent2:#7b5cff;
+    --good:#3ddc97; --warn:#ffb347; --bad:#ff6b6b;
+    --border:rgba(255,255,255,.10); --border-strong:rgba(255,255,255,.20);
+    --card:linear-gradient(180deg,var(--panel),var(--panel2));
+    --pill-bg:rgba(91,141,239,.18); --pill-border:rgba(91,141,239,.35); --pill-txt:#cfe0ff;
+    --code-bg:rgba(0,0,0,.35); --code-txt:#cfe0ff;
+    --hero:radial-gradient(1200px 800px at 20% 0%,#1b2358 0%,var(--bg) 60%);
+    --header-bg:rgba(11,16,32,.7);
+  }
+  body.light{
+    --bg:#f5f3ee; --panel:#ffffff; --panel2:#fdfcf9;
+    --txt:#1a1a1a; --muted:#5a5a5a; --accent:#0f6cbd; --accent2:#5b3df7;
+    --border:#e5e3df; --border-strong:#d8d5cf;
+    --card:#ffffff;
+    --pill-bg:#e7eef7; --pill-border:#d3dcea; --pill-txt:#1f3a5f;
+    --code-bg:#f0eee8; --code-txt:#2a2a2a;
+    --hero:radial-gradient(1200px 800px at 20% 0%,#e8eef9 0%,#f5f3ee 60%);
+    --header-bg:rgba(255,255,255,.85);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--hero) fixed;color:var(--txt);font-family:Segoe UI,Inter,system-ui,Arial,sans-serif;line-height:1.55}
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);background:var(--header-bg);border-bottom:1px solid var(--border)}
+  .nav{max-width:1100px;margin:auto;display:flex;align-items:center;gap:16px;padding:14px 22px}
+  .brand{font-weight:700}.brand small{color:var(--muted);font-weight:400;margin-left:8px}
+  .nav .spacer{flex:1}
+  .btn{background:transparent;border:1px solid var(--border-strong);color:var(--txt);padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px}
+  main{max-width:1100px;margin:28px auto;padding:0 22px 60px}
+  .hero{padding:24px 0 8px}
+  .hero h1{font-size:32px;margin:0 0 8px;line-height:1.2}
+  .hero .meta{color:var(--muted);font-size:14px;margin-bottom:12px}
+  .pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;background:var(--pill-bg);border:1px solid var(--pill-border);color:var(--pill-txt);margin:0 6px 6px 0}
+  section.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin:18px 0;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+  body.light section.card{box-shadow:0 2px 10px rgba(0,0,0,.05)}
+  section.card h2{margin:0 0 14px;font-size:21px;color:var(--accent)}
+  section.card h3{margin:18px 0 8px;font-size:15px;color:var(--txt);text-transform:uppercase;letter-spacing:.05em}
+  p{margin:8px 0}
+  ul{margin:8px 0;padding-left:22px}
+  li{margin:4px 0}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em;background:rgba(255,255,255,.03)}
+  body.light th{background:rgba(0,0,0,.03)}
+  tr:last-child td{border-bottom:none}
+  code,pre{font-family:Cascadia Code,Consolas,monospace;background:var(--code-bg);color:var(--code-txt);border-radius:6px}
+  code{padding:1px 6px;font-size:.9em}
+  pre{padding:12px 14px;overflow-x:auto;font-size:13px;border:1px solid var(--border)}
+  pre code{background:transparent;padding:0}
+  blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--accent);background:rgba(91,141,239,.08);border-radius:0 8px 8px 0;color:var(--txt)}
+  .yes{color:var(--good);font-weight:600}
+  .no{color:var(--bad);font-weight:600}
+  .warn{color:var(--warn);font-weight:600}
+  .summary td:first-child{width:42%}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:30px;padding-top:18px;border-top:1px solid var(--border)}
+  @media (max-width:700px){.hero h1{font-size:24px}section.card{padding:16px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="brand">Identity &amp; Hybrid Join <small>Clarifications</small></div>
+    <div class="spacer"></div>
+    <button class="btn" onclick="document.body.classList.toggle('light')">Toggle theme</button>
+    <button class="btn" onclick="window.print()">Print / PDF</button>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <h1>Identity &amp; Hybrid Join — Clarifications</h1>
+    <div class="meta">Author: Fernando A. da Silva · Date: 2026-05-20 · Status: Draft for review</div>
+    <div>
+      <span class="pill">Okta + Entra coexistence</span>
+      <span class="pill">.local domain</span>
+      <span class="pill">macOS login (PSSO)</span>
+      <span class="pill">Hybrid Azure AD Join</span>
+    </div>
+  </div>
+
+  <section class="card">
+    <h2>Executive summary</h2>
+    <table class="summary">
+      <thead><tr><th>Question</th><th>Short answer</th></tr></thead>
+      <tbody>
+        <tr><td>Need Entra Connect alongside Okta?</td><td><span class="yes">Yes</span> — for hybrid identity, HAADJ, Intune compliance.</td></tr>
+        <tr><td><code>.local</code> domain a blocker?</td><td><span class="no">No</span> — if UPN is routable and domain verified.</td></tr>
+        <tr><td>macOS login with Entra credentials?</td><td><strong>Platform SSO via Intune</strong> is the native path.</td></tr>
+        <tr><td>Hybrid Azure AD Join feasible?</td><td><span class="yes">Yes</span>, contingent on Entra Connect + identity matching done first.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>1. Do we still need Microsoft Entra Connect if Okta is already provisioning?</h2>
+    <p><strong>Yes — in most hybrid scenarios Okta does not replace Entra Connect.</strong></p>
+    <table>
+      <thead><tr><th>Capability</th><th>Okta Provisioning (SCIM / AD Agent)</th><th>Entra Connect (Sync / Cloud Sync)</th></tr></thead>
+      <tbody>
+        <tr><td>Creates user in Entra ID</td><td>Yes</td><td>Yes</td></tr>
+        <tr><td>Links on-prem AD object ↔ Entra (same identity)</td><td><span class="no">No</span> (separate identity)</td><td><span class="yes">Yes</span> (via <code>ImmutableID</code> / <code>sourceAnchor</code>)</td></tr>
+        <tr><td>Hybrid Azure AD Join</td><td>Not supported standalone</td><td><strong>Required</strong></td></tr>
+        <tr><td>Intune device compliance tied to hybrid identity</td><td>Breaks without sync</td><td>Works</td></tr>
+        <tr><td>Password Hash Sync / Pass-through Auth</td><td>No</td><td>Yes</td></tr>
+        <tr><td>Write-back (password, groups, devices)</td><td>No</td><td>Yes</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Identity matching</h3>
+    <ul>
+      <li><strong>Soft match</strong> — by <code>userPrincipalName</code> or <code>primarySMTPAddress</code>. Useful when the cloud object already exists (created by Okta) and sync is enabled afterward.</li>
+      <li><strong>Hard match</strong> — by <code>ImmutableID</code> (Base64 of AD <code>objectGUID</code>). Definitive method; plan for this to avoid duplicates.</li>
+    </ul>
+
+    <h3>Recommendation — ID mapping audit before enabling Entra Connect</h3>
+    <ol>
+      <li>Export <code>objectGUID</code> + UPN from on-prem AD.</li>
+      <li>Export <code>ImmutableID</code> + UPN from cloud objects created by Okta.</li>
+      <li>Where <code>ImmutableID</code> is empty, perform a hard match via Microsoft Graph PowerShell <strong>before</strong> the first sync — otherwise duplicates require manual merge:
+        <pre><code>Update-MgUser -UserId &lt;cloudUserId&gt; -OnPremisesImmutableId &lt;base64objectGuid&gt;</code></pre>
+        (The legacy <code>Set-MsolUser</code> / MSOnline module was retired in 2024.)
+      </li>
+    </ol>
+
+    <h3>Connect Sync vs Cloud Sync</h3>
+    <p>For greenfield or simple topologies, <strong>Entra Cloud Sync</strong> (lightweight agent, no SQL, multi-agent HA) is now Microsoft's recommended path over the legacy <strong>Entra Connect Sync</strong>. Use Connect Sync only when you need features Cloud Sync still lacks (e.g., device write-back for HAADJ in some topologies, Exchange hybrid writeback, pass-through auth at scale).</p>
+
+    <blockquote>If the long-term goal is to retire Okta as IdP, Entra Connect (or Cloud Sync) is a prerequisite for transitioning without re-provisioning devices.</blockquote>
+  </section>
+
+  <section class="card">
+    <h2>2. Does the non-routable <code>.local</code> domain affect Azure / Entra?</h2>
+    <p><strong>No impact on sync or Azure, provided the UPN is routable.</strong></p>
+    <h3>Validation checklist</h3>
+    <ul>
+      <li><strong>UPN suffix</strong> <code>allvuesystems.com</code> added in <em>AD Domains and Trusts</em> and applied to every synced user (no leftover <code>user@corp.local</code> UPNs).</li>
+      <li><strong>Domain verified in Entra</strong> (<code>allvuesystems.com</code> via TXT record).</li>
+      <li><strong>Primary SMTP</strong> aligned with UPN (best practice for Teams / OneDrive / SSO).</li>
+      <li><strong>Hybrid Azure AD Join</strong> with <code>.local</code>: works, but the <strong>Service Connection Point (SCP)</strong> published in AD must point to the correct Entra tenant; device certificate is issued against the routable UPN, not the <code>.local</code> suffix.</li>
+      <li><strong>DNS</strong>: split-brain DNS for <code>allvuesystems.com</code> (internal zone overriding public records) is a common blocker — ensure internal resolvers either forward correctly or host the records needed for Autodiscover / SCP / device registration endpoints.</li>
+      <li><strong>Autodiscover / Exchange Hybrid</strong> (if applicable): use public names only, never <code>.local</code>.</li>
+    </ul>
+    <p><span class="warn">Residual risk:</span> internal AD CS certificates issued for <code>*.corp.local</code> are not externally trusted — irrelevant to Entra, but matters for clients validating SAN.</p>
+  </section>
+
+  <section class="card">
+    <h2>3. macOS login with O365 / Entra credentials post-enrollment</h2>
+    <p><strong>Current state:</strong> Intune enrollment works, but local macOS login still uses a local account (no login-screen SSO).</p>
+    <table>
+      <thead><tr><th>Solution</th><th>How it works</th><th>Requirements</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Platform SSO (PSSO)</strong> — recommended, native</td><td>Company Portal + SSO Extension profile binds the local macOS account to Entra; lock-screen login uses Entra password / Passkey</td><td>Intune <strong>SSO Extension</strong> configuration profile (not just Company Portal install), Company Portal 5.2402+, macOS 13+ for <code>Password</code> mode, <strong>macOS 14+ for <code>Secure Enclave</code> / <code>SmartCard</code></strong> modes</td></tr>
+        <tr><td>Enterprise SSO plug-in (Microsoft)</td><td>SSO for Microsoft apps after login; machine login stays local</td><td>Simpler; does not solve the request</td></tr>
+        <tr><td>Jamf Connect / XCreds</td><td>Replaces macOS login window with OIDC flow against Entra</td><td>Extra license (Jamf) or open-source (XCreds); more flexible, more to manage</td></tr>
+        <tr><td>Okta Device Trust + Okta Verify</td><td>If Okta remains the IdP, use Okta FastPass</td><td>Keeps Okta dependency</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Recommended:</strong> <strong>Platform SSO</strong> in <em>Secure Enclave Key</em> or <em>Password</em> mode, delivered via Intune SSO Extension profile. Meets the requirement without third-party tooling.</p>
+
+    <h3>PSSO modes</h3>
+    <ul>
+      <li><code>Password</code> — local account password is synchronized to match the Entra password on next sign-in (closest to "login with O365 credentials").</li>
+      <li><code>Secure Enclave</code> — hardware-bound key on the chip; passwordless. <strong>Requires macOS 14+.</strong></li>
+      <li><code>SmartCard</code> — for CAC / PIV scenarios. <strong>Requires macOS 14+.</strong></li>
+    </ul>
+
+    <blockquote><strong>FileVault caveat:</strong> the pre-boot FileVault unlock screen does <strong>not</strong> use PSSO — it uses the local account password set at enrollment. PSSO kicks in on the macOS login screen after the disk is unlocked. Plan user comms accordingly.</blockquote>
+
+    <p><strong>Practical prerequisites:</strong> user must already exist in Entra (see section 1), MDM enrollment with user affinity, Company Portal signed in at least once.</p>
+  </section>
+
+  <section class="card">
+    <h2>4. Hybrid Azure AD Join — discussion points</h2>
+    <ul>
+      <li><strong>Rollout path:</strong> pilot by AD OU, SCP pointing to tenant, registration triggered by the built-in scheduled task <code>\Microsoft\Windows\Workplace Join\Automatic-Device-Join</code> (use <code>dsregcmd /status</code> to verify state).</li>
+      <li><strong>OS baseline:</strong> Windows 10 1809+ / Windows 11 / Server 2019+ for full HAADJ + Intune co-management.</li>
+      <li><strong>Critical prereq:</strong> healthy Entra Connect (or Cloud Sync with device options) + resolved identity matching (back to section 1).</li>
+      <li><strong>Co-management vs cloud-native:</strong> worth discussing whether new machines should target <strong>Entra Join + Intune (cloud-native)</strong>, keeping hybrid only for legacy. Reduces complexity mid-term.</li>
+      <li><strong>Conditional Access:</strong> device-compliance policies only work after hybrid join + Intune enrollment is complete (<code>dsregcmd /status</code> shows <code>AzureAdJoined: YES</code>, <code>DomainJoined: YES</code>, <code>MDM Url</code> populated).</li>
+      <li><strong>Common blockers:</strong> proxy intercepting <code>login.microsoftonline.com</code>, <code>enterpriseregistration.windows.net</code>, <code>device.login.microsoftonline.com</code>; clock skew; UPN mismatch between AD and Entra.</li>
+    </ul>
+  </section>
+
+  <footer>
+    Identity &amp; Hybrid Join — Clarifications · Draft for review · 2026-05-20
+  </footer>
+</main>
+
+<script>
+  // Respect OS theme on first load
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+    document.body.classList.add('light');
+  }
+</script>
+</body>
+</html>
