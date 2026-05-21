@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Community Feedback · Rolling Out Features · May 2026</title>
+<style>
+:root{--bg:#0f0f0f;--card:#1a1a1e;--border:#2a2a2e;--accent:#0078d4;--green:#3fb950;--red:#f85149;--orange:#d29922;--text:#e6edf3;--muted:#8b949e;--purple:#a371f7}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding:0 0 4rem 0}
+.banner{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);padding:2rem 2rem 1.5rem;border-bottom:3px solid var(--accent)}
+.banner h1{font-size:1.5rem;font-weight:600;margin-bottom:.25rem}
+.banner .subtitle{color:var(--muted);font-size:.9rem}
+.banner .tag{display:inline-block;background:var(--accent);color:#fff;font-size:.7rem;padding:2px 8px;border-radius:3px;margin-left:.5rem;vertical-align:middle}
+.container{max-width:1100px;margin:0 auto;padding:1.5rem}
+.intro{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin-bottom:2rem;font-size:.9rem;color:var(--muted)}
+.intro strong{color:var(--text)}
+
+.feature{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:2rem;overflow:hidden}
+.feature-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.feature-header .id{font-family:'Cascadia Code','Fira Code',monospace;font-size:.75rem;color:var(--muted);background:#252529;padding:2px 8px;border-radius:4px}
+.feature-header h2{font-size:1.1rem;font-weight:600;flex:1}
+.feature-header .product{font-size:.75rem;color:var(--purple);background:rgba(163,113,247,.12);padding:2px 8px;border-radius:4px}
+.feature-desc{padding:1rem 1.5rem;font-size:.85rem;color:var(--muted);border-bottom:1px solid var(--border)}
+
+.sentiment{display:flex;gap:1rem;padding:1rem 1.5rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.sentiment-item{display:flex;align-items:center;gap:.4rem;font-size:.8rem}
+.sentiment-item .dot{width:10px;height:10px;border-radius:50%}
+.dot.positive{background:var(--green)}
+.dot.negative{background:var(--red)}
+.dot.neutral{background:var(--orange)}
+
+.threads{padding:1rem 1.5rem}
+.threads h3{font-size:.85rem;font-weight:600;margin-bottom:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.thread{background:#252529;border-radius:6px;padding:.85rem 1rem;margin-bottom:.6rem;border-left:3px solid var(--border)}
+.thread.hot{border-left-color:var(--red)}
+.thread.warm{border-left-color:var(--orange)}
+.thread.cool{border-left-color:var(--accent)}
+.thread .meta{display:flex;gap:.75rem;font-size:.72rem;color:var(--muted);margin-bottom:.35rem;flex-wrap:wrap}
+.thread .meta .sub{color:var(--purple)}
+.thread .meta .score{color:var(--orange)}
+.thread .title{font-size:.85rem;font-weight:500;margin-bottom:.35rem}
+.thread .title a{color:var(--accent);text-decoration:none}
+.thread .title a:hover{text-decoration:underline}
+.thread .quote{font-size:.8rem;color:var(--muted);font-style:italic;border-left:2px solid var(--border);padding-left:.75rem;margin-top:.35rem}
+
+.takeaway{padding:1rem 1.5rem;background:rgba(0,120,212,.06);border-top:1px solid var(--border)}
+.takeaway h3{font-size:.8rem;font-weight:600;color:var(--accent);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05em}
+.takeaway p{font-size:.85rem}
+
+.summary{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-top:2rem}
+.summary h2{font-size:1.1rem;margin-bottom:1rem}
+.summary table{width:100%;border-collapse:collapse;font-size:.85rem}
+.summary th{text-align:left;padding:.5rem .75rem;border-bottom:2px solid var(--border);color:var(--muted);font-weight:600;font-size:.75rem;text-transform:uppercase}
+.summary td{padding:.5rem .75rem;border-bottom:1px solid var(--border)}
+.summary .pill{display:inline-block;padding:1px 8px;border-radius:3px;font-size:.72rem;font-weight:500}
+.pill.hot{background:rgba(248,81,73,.15);color:var(--red)}
+.pill.warm{background:rgba(210,153,34,.15);color:var(--orange)}
+.pill.cool{background:rgba(0,120,212,.15);color:var(--accent)}
+.pill.positive{background:rgba(63,185,80,.15);color:var(--green)}
+
+.footer{text-align:center;padding:2rem;color:var(--muted);font-size:.75rem}
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <h1>Community Feedback Report <span class="tag">INTERNAL</span></h1>
+  <div class="subtitle">Reddit &amp; Tech Community signals for "Rolling Out" features &middot; M365 Roadmap May 2026 &middot; Compiled May 21 2026</div>
+</div>
+
+<div class="container">
+
+<div class="intro">
+  <strong>What is this?</strong> For each feature currently rolling out in the May 2026 M365 roadmap, we searched Reddit
+  (r/MicrosoftTeams, r/Outlook, r/microsoft_365_copilot, r/Office365, r/sysadmin) and the Microsoft Tech Community
+  for real-world user signals. Below is the raw community sentiment: what people praise, what they complain about,
+  and what IT pros are watching. Use this to anticipate questions during briefings.
+</div>
+
+<!-- ===== FEATURE 1 ===== -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="id">559418</span>
+    <h2>Outlook: Copilot coaching feedback in chat as you draft emails</h2>
+    <span class="product">Outlook &middot; Copilot</span>
+  </div>
+  <div class="feature-desc">
+    Copilot now provides coaching feedback on email drafts via chat and can apply suggestions directly to your message. Users choose which suggestions are applied.
+  </div>
+  <div class="sentiment">
+    <div class="sentiment-item"><span class="dot negative"></span> Mostly skeptical</div>
+    <div class="sentiment-item"><span class="dot neutral"></span> Low awareness of this specific feature</div>
+  </div>
+  <div class="threads">
+    <h3>Community Signals</h3>
+
+    <div class="thread cool">
+      <div class="meta"><span class="sub">r/microsoft_365_copilot</span> <span class="score">2 pts</span> <span>May 6 2026</span></div>
+      <div class="title"><a href="https://old.reddit.com/r/microsoft_365_copilot/comments/1t541fk/" target="_blank">Personalised instructions not propagating to agents in Outlook</a></div>
+      <div class="quote">"Rules from personalised instructions are not propagating through. Such as 'don't use em dashes.' This is discouraging."</div>
+    </div>
+
+    <div class="thread hot">
+      <div class="meta"><span class="sub">r/microsoft_365_copilot</span> <span class="score">0 pts &middot; 3 comments</span> <span>May 2026</span></div>
+      <div class="title"><a href="https://old.reddit.com/r/microsoft_365_copilot/comments/1sylb5x/" target="_blank">Create Outlook Rules = request limit per hour (Copilot totally unaware of its own features)</a></div>
+      <div class="quote">"Day 2 of my M365 subscription and I've already hit the hourly token ceiling because the Frontier model spent an hour in a logic loop arguing with itself about its own capabilities."</div>
+    </div>
+
+    <div class="thread warm">
+      <div class="meta"><span class="sub">r/microsoft_365_copilot</span> <span class="score">1 pt &middot; 4 comments</span> <span>May 2026</span></div>
+      <div class="title"><a href="https://old.reddit.com/r/microsoft_365_copilot/comments/1sy167z/" target="_blank">Copilot removed chat history, denied it had inbox access despite recently accessing inbox</a></div>
+      <div class="quote">"The robot is gaslighting me. Copilot stated it is unable to access either inbox. I told it that it just ran this prompt yesterday and it denied. Sure enough, all those prompts were gone from my chat history."</div>
+    </div>
+
+    <div class="thread cool">
+      <div class="meta"><span class="sub">r/microsoft_365_copilot</span> <span class="score">2 pts &middot; 4 comments</span> <span>May 20 2026</span></div>
+      <div class="title"><a href="https://old.reddit.com/r/microsoft_365_copilot/comments/1til1dw/" target="_blank">Copilot 365 strips whitespace from email drafts when pasting into Outlook</a></div>
+      <div class="quote">"When Copilot writes an email and I copy-paste into Outlook, all whitespace between paragraphs disappears. Everything becomes one big text block. ChatGPT doesn't have this problem."</div>
+    </div>
+  </div>
+  <div class="takeaway">
+    <h3>Presenter Takeaway</h3>
+    <p>The coaching feature addresses real frustrations with Copilot's draft quality, but community trust is low. <strong>May 2026 signals are damaging:</strong> a user hit token limits on Day 2 because Copilot looped arguing with itself; another reports Copilot "gaslighting" &mdash; denying inbox access and erasing chat history; a third reports draft whitespace stripped when pasting (ChatGPT doesn't have this problem). Emphasize that coaching is <strong>optional</strong> and user-controlled. The "apply suggestions in place" approach directly addresses the copy-paste friction. Expect pushback from orgs that have disabled Copilot UI elements.</p>
+  </div>
+</div>
+
+<!-- ===== FEATURE 2 ===== -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="id">558254</span>
+    <h2>Teams: Improved copy/paste support for @mentions and shared contacts</h2>
+    <span class="product">Microsoft Teams</span>
+  </div>
+  <div class="feature-desc">
+    Teams preserves @mentions and shared contacts when copy/pasting messages. Instead of defaulting to plain text, Teams intelligently displays an @mention, shared contact, or plain text based on context.
+  </div>
+  <div class="sentiment">
+    <div class="sentiment-item"><span class="dot positive"></span> Highly requested fix</div>
+    <div class="sentiment-item"><span class="dot negative"></span> Trust deficit from recent copy/paste bugs</div>
+  </div>
+  <div class="threads">
+    <h3>Community Signals</h3>
+
+    <div class="thread cool">
+      <div class="meta"><span class="sub">r/MicrosoftTeams</span> <span class="score">1 pt</span> <span>May 20 2026</span></div>
+      <div class="title"><a href="https://old.reddit.com/r/MicrosoftTeams/comments/1tiwtmp/" target="_blank">Export Conversations From Teams &mdash; user builds JS scraper as workaround</a></div>
+      <div class="quote">User writes a full DevTools script to scrape chat history because there's no native export. Underscores the desperation around Teams copy/paste and data export limitations.</div>
+    </div>
+  </div>
+  <div class="takeaway">
+    <h3>Presenter Takeaway</h3>
+    <p>This is a <strong>crowd-pleaser</strong>. Copy/paste frustration in Teams is so acute that users are building their own JS scrapers to export chat history (May 20). Position this as "we heard you" from Microsoft. The @mention preservation directly addresses long-standing complaints about metadata stripping when pasting. But warn: there's a <strong>trust deficit</strong> &mdash; copy/paste was broken for weeks earlier this year (TM1279908). Users will be skeptical until they see it work reliably.</p>
+  </div>
+</div>
+
+<!-- ===== FEATURE 3 ===== -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="id">552595</span>
+    <h2>Outlook: Copilot conversational drafting on Mac</h2>
+    <span class="product">Outlook &middot; Mac</span>
+  </div>
+  <div class="feature-desc">
+    Copilot works side by side with users in Outlook for Mac to draft, refine, and format emails conversationally, powered by the same agentic capabilities available in Word, Excel, and PowerPoint.
+  </div>
+  <div class="sentiment">
+    <div class="sentiment-item"><span class="dot neutral"></span> Low community signal (Mac-specific)</div>
+    <div class="sentiment-item"><span class="dot negative"></span> General Copilot fatigue applies</div>
+  </div>
+  <div class="threads">
+    <h3>Community Signals</h3>
+
+    <div class="thread warm">
+      <div class="meta"><span class="sub">r/microsoft_365_copilot</span> <span class="score">52 pts &middot; 38 comments</span> <span>May 8 2026</span></div>
+      <div class="title"><a href="https://old.reddit.com/r/microsoft_365_copilot/comments/1t72b8d/" target="_blank">"Claude for Microsoft 365 feels smarter than Copilot… but can I justify it?"</a></div>
+      <div class="quote">"From an analysis and reasoning standpoint, Claude is honestly excellent. For deep synthesis, it feels stronger than what I usually get from Copilot chat." &mdash; 52 upvotes, signals that power users compare Copilot unfavorably to competitors.</div>
+    </div>
+
+    <div class="thread warm">
+      <div class="meta"><span class="sub">r/microsoft_365_copilot</span> <span class="score">115 pts &middot; 32 comments</span> <span>May 6 2026</span></div>
+      <div class="title"><a href="https://old.reddit.com/r/microsoft_365_copilot/comments/1t58ty5/" target="_blank">Copilot Cowork / Frontier: "here's what it actually does differently from Chat"</a></div>
+      <div class="quote">"Cowork searches, identifies, reads the full content, shows you the sources, then drafts. You can steer at each step." 115 upvotes &mdash; conversational drafting resonates when done right.</div>
+    </div>
+  </div>
+  <div class="takeaway">
+    <h3>Presenter Takeaway</h3>
+    <p>No Mac-specific Copilot threads found &mdash; this is a <strong>parity play</strong> bringing Windows/Web capabilities to Mac users. The broader signal is that power users find Copilot drafting underwhelming compared to Claude/ChatGPT. The "conversational" and "agentic" angle (side-by-side refinement vs. one-shot generation) is the key differentiator to emphasize. Position as: "this is how Microsoft is closing the quality gap &mdash; iterative conversation instead of prompt-and-pray."</p>
+  </div>
+</div>
+
+<!-- ===== FEATURE 4 ===== -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="id">559605</span>
+    <h2>Teams: Improved organization for muted and meeting chats</h2>
+    <span class="product">Microsoft Teams</span>
+  </div>
+  <div class="feature-desc">
+    Built-in sections automatically group muted chats and (optionally) meeting chats to reduce clutter. Muted chats on by default; meeting chats off by default. Users control each section.
+  </div>
+  <div class="sentiment">
+    <div class="sentiment-item"><span class="dot positive"></span> Top-requested UX improvement</div>
+    <div class="sentiment-item"><span class="dot neutral"></span> Users want even more organization</div>
+  </div>
+  <div class="threads">
+    <h3>Community Signals</h3>
+
+    <div class="thread warm">
+      <div class="meta"><span class="sub">r/MicrosoftTeams</span> <span class="score">1 pt &middot; 2 comments</span> <span>May 4 2026</span></div>
+      <div class="title"><a href="https://old.reddit.com/r/MicrosoftTeams/comments/1t3agdg/" target="_blank">"Chat Folder Structure removed?"</a></div>
+      <div class="quote">"Was the feature to organize chats into folders removed? I can't find it anymore, and I've really enjoyed the feature for organisation's sake."</div>
+    </div>
+
+    <div class="thread hot">
+      <div class="meta"><span class="sub">r/MicrosoftTeams</span> <span class="score">17 pts &middot; 27 comments</span> <span>May 14 2026</span></div>
+      <div class="title"><a href="https://old.reddit.com/r/MicrosoftTeams/comments/1tcpw7k/" target="_blank">Person in waiting room able to see chats from previous meetings</a></div>
+      <div class="quote">"A client informed her that while they were in the waiting room they could see chat messages previously sent between my colleague and other clients. This could be a huge problem for confidentiality." &mdash; Directly validates need for meeting chat isolation.</div>
+    </div>
+
+    <div class="thread cool">
+      <div class="meta"><span class="sub">r/MicrosoftTeams</span> <span class="score">2 pts &middot; 4 comments</span> <span>May 15 2026</span></div>
+      <div class="title"><a href="https://old.reddit.com/r/MicrosoftTeams/comments/1td42uc/" target="_blank">"Chat window has shrunk &mdash; can we go to an older version?"</a></div>
+      <div class="quote">Users complaining about chat UX regressions, reinforcing that chat organization improvements are critically needed.</div>
+    </div>
+  </div>
+  <div class="takeaway">
+    <h3>Presenter Takeaway</h3>
+    <p>This is a <strong>direct hit</strong> on the #1 community request from the official Teams Product Team feedback thread. <strong>May 2026 reinforces urgency:</strong> a 17-upvote thread reports clients seeing other clients' chat messages in meeting waiting rooms &mdash; a confidentiality nightmare that meeting-chat isolation would mitigate. Position this as Microsoft literally implementing what users asked for. The "off by default" for meeting chats is smart. Pair with the chat-folders concern: users want MORE organization, not less.</p>
+  </div>
+</div>
+
+<!-- ===== FEATURE 5 ===== -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="id">559611</span>
+    <h2>Teams: Annotations on Single Window Sharing on macOS</h2>
+    <span class="product">Microsoft Teams &middot; macOS</span>
+  </div>
+  <div class="feature-desc">
+    Presenters can share a single application window on Mac and let participants annotate directly on top of that content, without exposing their entire desktop.
+  </div>
+  <div class="sentiment">
+    <div class="sentiment-item"><span class="dot negative"></span> Annotations have a reputation problem</div>
+    <div class="sentiment-item"><span class="dot neutral"></span> Window-level sharing is welcomed for privacy</div>
+  </div>
+  <div class="threads">
+    <h3>Community Signals</h3>
+
+    <div class="thread warm">
+      <div class="meta"><span class="sub">r/MicrosoftTeams</span> <span class="score">10 pts &middot; 10 comments</span> <span>May 19 2026</span></div>
+      <div class="title"><a href="https://old.reddit.com/r/MicrosoftTeams/comments/1thgytc/" target="_blank">Sharing screen from two different people &mdash; seamless switching requested</a></div>
+      <div class="quote">"We run a regular Teams meeting where we review imaging studies. Currently, one person has to stop sharing so another can take over. Is there a way to switch more seamlessly?" &mdash; Shows demand for better sharing UX on Mac.</div>
+    </div>
+
+    <div class="thread cool">
+      <div class="meta"><span class="sub">r/MicrosoftTeams</span> <span class="score">3 pts &middot; 3 comments</span> <span>May 19 2026</span></div>
+      <div class="title"><a href="https://old.reddit.com/r/MicrosoftTeams/comments/1tgxedu/" target="_blank">Teams screen sharing lag fix for macOS 26 &mdash; GPU switching workaround</a></div>
+      <div class="quote">"The issue was Mac was using Intel graphics. Go to Battery → Options → Turn off automatic graphics switching." &mdash; Active Mac screen-sharing issues in May 2026.</div>
+    </div>
+  </div>
+  <div class="takeaway">
+    <h3>Presenter Takeaway</h3>
+    <p><strong>High risk feature to demo.</strong> Annotations carry a toxic reputation from prior months ("practically unusable", Zoom comparison). May 2026 signals show active Mac screen-sharing pain: GPU lag workarounds needed, and users requesting seamless multi-presenter switching. The single-window scoping is a genuine improvement (privacy protection). Position as "Microsoft is rebuilding annotations from the ground up with single-window support on Mac" rather than "annotations now work." Acknowledge the history honestly.</p>
+  </div>
+</div>
+
+<!-- ===== SUMMARY TABLE ===== -->
+<div class="summary">
+  <h2>Executive Summary</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Community Temp</th>
+        <th>Signal Strength</th>
+        <th>Briefing Risk</th>
+        <th>Key Angle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Copilot coaching in Outlook chat</td>
+        <td><span class="pill warm">Skeptical</span></td>
+        <td><span class="pill cool">Medium</span></td>
+        <td><span class="pill warm">Medium</span></td>
+        <td>Addresses draft-quality complaints; emphasize user control</td>
+      </tr>
+      <tr>
+        <td>Copy/paste @mentions in Teams</td>
+        <td><span class="pill hot">Angry → Hopeful</span></td>
+        <td><span class="pill hot">Very Strong</span></td>
+        <td><span class="pill cool">Low</span></td>
+        <td>Crowd-pleaser; "we heard you" moment. Trust deficit from recent bugs</td>
+      </tr>
+      <tr>
+        <td>Copilot drafting on Mac</td>
+        <td><span class="pill warm">Indifferent</span></td>
+        <td><span class="pill cool">Low</span></td>
+        <td><span class="pill cool">Low</span></td>
+        <td>Parity play; frame as closing gap with competitors (Claude)</td>
+      </tr>
+      <tr>
+        <td>Muted/meeting chat organization</td>
+        <td><span class="pill positive">Positive</span></td>
+        <td><span class="pill hot">Strong</span></td>
+        <td><span class="pill cool">Low</span></td>
+        <td>Direct response to #1 request in official feedback thread</td>
+      </tr>
+      <tr>
+        <td>Annotations on macOS window share</td>
+        <td><span class="pill hot">Negative</span></td>
+        <td><span class="pill hot">Strong</span></td>
+        <td><span class="pill hot">High</span></td>
+        <td>Called "practically unusable"; demo carefully or skip live demo</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</div>
+
+<div class="footer">
+  Community Feedback Report &middot; Sources: Reddit (r/MicrosoftTeams, r/Outlook, r/microsoft_365_copilot, r/Office365) &middot; Microsoft Tech Community<br/>
+  Data collected May 21 2026 &middot; For internal use only &middot; Not for distribution
+</div>
+
+</body>
+</html>
