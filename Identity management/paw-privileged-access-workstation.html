@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAW — Privileged Access Workstation | Practical Guideline</title>
+<style>
+  :root{
+    --bg:#f4f6fa;--panel:#fff;--border:#d8dee9;--primary:#0078d4;--accent:#5C2D91;
+    --teal:#008272;--green:#107C10;--orange:#D83B01;--text:#1f2937;--muted:#5a6675;
+    --soft:#eef5ff;--warn-bg:#fff8e1;--warn-border:#f9a825;--ok-bg:#e8f5e9;
+    --danger-bg:#fdecea;--danger-border:#d32f2f;--danger-text:#7f1d1d;
+    --shadow:0 2px 8px rgba(0,0,0,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;line-height:1.6;scroll-behavior:smooth}
+  a{color:var(--primary);text-decoration:none}a:hover{text-decoration:underline}
+  code{background:#eef2f7;border:1px solid #dbe3ee;border-radius:5px;padding:1px 5px;font-family:Consolas,"Courier New",monospace;font-size:.95em}
+
+  .app-header{background:linear-gradient(135deg,#0078d4,#5C2D91);color:#fff;padding:34px 24px;text-align:center}
+  .app-header .badge{display:inline-block;background:rgba(255,255,255,.18);padding:4px 14px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.1em;margin-bottom:12px;text-transform:uppercase}
+  .app-header h1{margin:0 0 8px;font-size:30px;font-weight:700;letter-spacing:-.2px}
+  .app-header p{margin:0 auto;max-width:890px;opacity:.92;font-size:14.5px}
+  .scope{display:inline-block;margin-top:12px;background:rgba(0,0,0,.18);padding:5px 12px;border-radius:6px;font-size:12px}
+
+  .container{max-width:1120px;margin:0 auto;padding:24px 20px 80px}
+  .tabs{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:26px;box-shadow:var(--shadow);position:sticky;top:0;z-index:10}
+  .tabs h2{margin:0 0 10px;font-size:16px;color:var(--primary)}
+  .tab-list{display:flex;gap:8px;flex-wrap:wrap}
+  .tab-button{border:1px solid var(--border);background:#fff;color:var(--text);border-radius:6px;padding:8px 11px;font:600 12.5px "Segoe UI",system-ui,sans-serif;cursor:pointer;transition:all .15s ease}
+  .tab-button:hover{border-color:var(--primary);color:var(--primary);background:#f8fbff}
+  .tab-button.active{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(0,120,212,.22)}
+
+  .section{margin-bottom:34px}.tab-panel{display:none}.tab-panel.active{display:block}
+  .section h2{font-size:22px;margin:0 0 16px;padding-bottom:8px;border-bottom:2px solid var(--primary);color:var(--primary)}
+  .section h3{font-size:17px;margin:20px 0 8px;color:var(--accent)}
+  .lead{font-size:15px;color:var(--muted);margin:0 0 18px}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:16px 0}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:16px 18px;box-shadow:var(--shadow)}
+  .card h3,.card h4{margin:0 0 8px;font-size:15px;color:var(--accent)}
+  .card p{margin:8px 0;color:var(--text);font-size:14px}
+  .card ul,.card ol{margin:8px 0;padding-left:22px;font-size:14px}.card li{margin:5px 0}
+
+  .flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:18px 0}
+  .stage{background:var(--panel);border:1px solid var(--border);border-left:5px solid var(--primary);border-radius:8px;padding:14px;box-shadow:var(--shadow);position:relative}
+  .stage .num{position:absolute;top:-10px;left:-10px;background:var(--primary);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+  .stage h4{margin:2px 0 6px;font-size:14px;color:var(--accent)}
+  .stage p{margin:0;font-size:12.8px;color:var(--muted)}
+  .stage.t0{border-left-color:#b71c1c}.stage.t1{border-left-color:#D83B01}.stage.t2{border-left-color:#107C10}
+
+  .diagram{background:#0f172a;color:#e5eefc;border-radius:8px;padding:18px 20px;margin:14px 0;overflow:auto;box-shadow:var(--shadow)}
+  .diagram pre{margin:0;font-family:Consolas,"Courier New",monospace;font-size:13px;line-height:1.55}
+
+  .callout{border-left:4px solid var(--primary);background:var(--soft);padding:11px 14px;margin:12px 0;border-radius:6px;font-size:13.5px}
+  .callout.warn{background:var(--warn-bg);border-color:var(--warn-border)}
+  .callout.ok{background:var(--ok-bg);border-color:var(--green)}
+  .callout.danger{background:var(--danger-bg);border-color:var(--danger-border);color:var(--danger-text)}
+
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;background:var(--panel);box-shadow:var(--shadow);border-radius:8px;overflow:hidden}
+  th,td{border:1px solid var(--border);padding:9px 10px;text-align:left;vertical-align:top}
+  th{background:#f0f4fa;color:var(--primary);font-weight:600}
+  tr:nth-child(even) td{background:#fafbfd}
+
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.04em}
+  .pill.t0{background:#fdecea;color:#b71c1c}.pill.t1{background:#fff3e0;color:#e65100}.pill.t2{background:#e8f5e9;color:#1b5e20}
+  .pill.must{background:#fdecea;color:#b71c1c}.pill.rec{background:#fff8e1;color:#6d4c00}.pill.opt{background:#e3f2fd;color:#0d47a1}
+
+  .qa{background:var(--panel);border:1px solid var(--border);border-radius:8px;margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden}
+  .qa summary{cursor:pointer;padding:13px 18px;font-weight:600;font-size:14.5px;display:flex;align-items:center;gap:10px;list-style:none}
+  .qa summary::-webkit-details-marker{display:none}
+  .qa summary::before{content:'>';color:var(--primary);font-size:16px;transition:transform .2s;font-family:Consolas,"Courier New",monospace}
+  .qa[open] summary::before{transform:rotate(90deg)}
+  .qa summary:hover{background:rgba(0,120,212,.04)}
+  .qa .answer{padding:0 18px 15px;font-size:14px;border-top:1px solid var(--border)}
+  .qa .answer p{margin:10px 0}.qa .answer ul{margin:8px 0;padding-left:22px}
+
+  footer{font-size:12px;color:var(--muted);text-align:center;margin-top:38px;padding-top:18px;border-top:1px solid var(--border)}
+  @media(max-width:820px){.tabs{position:static}.tab-list{display:grid;grid-template-columns:1fr 1fr}.app-header h1{font-size:25px}}
+  @media(max-width:520px){.tab-list{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <span class="badge">Privileged Access · Microsoft Security</span>
+  <h1>PAW — Privileged Access Workstation</h1>
+  <p>A hardened, dedicated device used <strong>only</strong> for sensitive administrative tasks. Built on the Microsoft <em>Clean Source Principle</em> and the Enterprise Access Model. Complements (does not replace) PIM and Conditional Access.</p>
+  <div class="scope">Audience: Identity / Security / EUC architects · Tiers 0 &amp; 1 administrators</div>
+</header>
+
+<div class="container">
+
+<nav class="tabs">
+  <h2>Sections</h2>
+  <div class="tab-list">
+    <button class="tab-button active" data-tab="t-concept">1. Concept</button>
+    <button class="tab-button" data-tab="t-model">2. Access Model &amp; Tiers</button>
+    <button class="tab-button" data-tab="t-tiers">3. Tier 0 / 1 / 2 Deep Dive</button>
+    <button class="tab-button" data-tab="t-pim">4. PAW vs PIM</button>
+    <button class="tab-button" data-tab="t-tech">5. Technical Controls</button>
+    <button class="tab-button" data-tab="t-arch">6. Architectures</button>
+    <button class="tab-button" data-tab="t-plan">7. Implementation Plan</button>
+    <button class="tab-button" data-tab="t-ops">8. Operations &amp; Pitfalls</button>
+    <button class="tab-button" data-tab="t-flow">9. End-to-End Flow</button>
+    <button class="tab-button" data-tab="t-direction">10. Direction of Access</button>
+    <button class="tab-button" data-tab="t-qa">11. Q&amp;A</button>
+  </div>
+</nav>
+
+<!-- ============ 1. CONCEPT ============ -->
+<section class="section tab-panel active" id="t-concept">
+  <h2>1. What is a PAW?</h2>
+  <p class="lead">A PAW is a workstation that is <strong>physically or logically separated</strong> from a user's productivity device and is used exclusively to administer high-value systems (Tier 0 / Tier 1). The device itself becomes a security boundary.</p>
+
+  <div class="cards">
+    <div class="card">
+      <h3>Why it exists</h3>
+      <p>Most identity breaches start on a compromised user endpoint (phishing, malicious browser, infected USB). If a Global Admin uses the same laptop as their mailbox and Chrome, one bad click hands the attacker the keys to the kingdom.</p>
+    </div>
+    <div class="card">
+      <h3>Clean Source Principle</h3>
+      <p>A privileged credential can only be used from a device whose <strong>trust level is equal to or higher</strong> than the resource it administers. A Tier 0 admin must therefore log on from a Tier 0 device.</p>
+    </div>
+    <div class="card">
+      <h3>What a PAW is NOT</h3>
+      <ul>
+        <li>It is <strong>not</strong> just a laptop with BitLocker.</li>
+        <li>It is <strong>not</strong> a jump server (those still get RDP'd into from a dirty endpoint).</li>
+        <li>It is <strong>not</strong> a replacement for MFA, PIM, or Conditional Access — it works <em>with</em> them.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout danger">
+    <strong>The core risk PAW solves:</strong> credential theft from a productivity endpoint. Without PAW, every Global Admin's daily laptop is effectively a Tier 0 asset — and most are not protected as such.
+  </div>
+</section>
+
+<!-- ============ 2. MODEL ============ -->
+<section class="section tab-panel" id="t-model">
+  <h2>2. Enterprise Access Model &amp; Tiering</h2>
+  <p class="lead">Microsoft replaced the legacy AD "Red Forest / ESAE" tier model with the <strong>Enterprise Access Model</strong>, which extends tiering to cloud (Entra ID), data, and apps.</p>
+
+  <div class="flow">
+    <div class="stage t0"><div class="num">0</div><h4>Privileged Plane</h4><p>Control of identity systems. Global Admin, Domain Admin, ADCS, AD FS, tenant root, key vaults that protect identities.</p></div>
+    <div class="stage t1"><div class="num">1</div><h4>Control Plane / Specialized</h4><p>Servers, hypervisors, Azure subscriptions, DevOps, finance, executive accounts. Sensitive but not identity-root.</p></div>
+    <div class="stage t2"><div class="num">2</div><h4>User Plane / Enterprise</h4><p>Standard productivity — Office, Teams, browsing, line-of-business apps. The "dirty" but managed endpoint.</p></div>
+  </div>
+
+  <table>
+    <thead><tr><th>Profile</th><th>Who uses it</th><th>Device strategy</th><th>Internet?</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill t0">Privileged (PAW)</span></td><td>Global Admin, Privileged Role Admin, Domain Admin, AD Connect sync accounts</td><td>Dedicated hardware or hardened Cloud PC, app-allowlisted</td><td>Admin URLs only</td></tr>
+      <tr><td><span class="pill t1">Specialized</span></td><td>DevOps engineers, server admins, finance, execs</td><td>Hardened Intune baseline, restricted apps</td><td>Filtered</td></tr>
+      <tr><td><span class="pill t2">Enterprise</span></td><td>All standard users</td><td>Intune-managed, MDE, baseline policies</td><td>Yes (with web filtering)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">Reference: Microsoft Enterprise Access Model — <code>aka.ms/SPA</code> (Securing Privileged Access).</div>
+</section>
+
+<!-- ============ 3. TIERS DEEP DIVE ============ -->
+<section class="section tab-panel" id="t-tiers">
+  <h2>3. Tier 0 / 1 / 2 — Deep Dive</h2>
+  <p class="lead">The three device profiles are not "more or less secure" — each one protects a <strong>different class of identity</strong> with different hardware, software, and network rules.</p>
+
+  <h3><span class="pill t0">Tier 0</span> Privileged (true PAW)</h3>
+  <div class="card">
+    <p><strong>Protects:</strong> identities that control the identity system itself. Compromise = attacker owns the tenant / forest.</p>
+    <p><strong>Typical identities:</strong></p>
+    <ul>
+      <li><strong>Entra ID:</strong> Global Administrator, Privileged Role Administrator, Privileged Authentication Administrator, Partner Tier-2 Support</li>
+      <li><strong>On-prem AD:</strong> Domain Admins, Enterprise Admins, Schema Admins, Account Operators</li>
+      <li><strong>Identity infra:</strong> AD FS service accounts, AD Connect / Entra Cloud Sync, ADCS (CAs), KDC, DC computer accounts</li>
+      <li><strong>Key Vaults</strong> that store identity keys / signing certs</li>
+    </ul>
+    <table>
+      <thead><tr><th>Item</th><th>Rule</th></tr></thead>
+      <tbody>
+        <tr><td>Hardware</td><td>Dedicated laptop, Secured-core PC preferred</td></tr>
+        <tr><td>OS</td><td>Windows 11 Enterprise + Autopatch</td></tr>
+        <tr><td>Local admin for user</td><td><strong>None</strong>; LAPS for break-glass</td></tr>
+        <tr><td>Apps</td><td><strong>WDAC allowlist</strong> — admin portals, RSAT, PowerShell admin modules, Bastion client</td></tr>
+        <tr><td>Email / Office / Teams</td><td><strong>Forbidden</strong></td></tr>
+        <tr><td>Browser</td><td>Edge with strict URL allowlist (portal.azure.com, entra.microsoft.com, …)</td></tr>
+        <tr><td>General internet</td><td><strong>Blocked</strong></td></tr>
+        <tr><td>USB storage</td><td>Blocked</td></tr>
+        <tr><td>MFA</td><td><strong>FIDO2 mandatory</strong> or Windows Hello for Business — no SMS, no push</td></tr>
+        <tr><td>Conditional Access</td><td>Device filter <code>PAW-T0</code> + compliant + phishing-resistant MFA</td></tr>
+        <tr><td>Network</td><td>Direct to admin endpoints (Private Access for on-prem)</td></tr>
+        <tr><td>Typical count</td><td>10–50 devices in a 5,000-seat org</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Key trait:</strong> admin carries <em>two laptops</em> — the PAW T0 and the productivity device. No shortcut.</p>
+  </div>
+
+  <h3><span class="pill t1">Tier 1</span> Specialized (Privileged Access Device)</h3>
+  <div class="card">
+    <p><strong>Protects:</strong> identities that administer <em>important workloads</em> but not identity itself. Compromise hurts a system; compromising T0 hurts the whole tenant.</p>
+    <p><strong>Typical identities:</strong></p>
+    <ul>
+      <li><strong>Azure:</strong> Subscription Owner, Contributor on production subscriptions</li>
+      <li><strong>Server admins:</strong> VM Contributor, AKS admin, SQL DBA, Storage admin</li>
+      <li><strong>DevOps:</strong> GitHub org owner, Azure DevOps Project Collection Admin, service principals that deploy to prod</li>
+      <li><strong>M365 workloads:</strong> Exchange Admin, SharePoint Admin, Teams Admin, Intune Admin (non-global)</li>
+      <li><strong>Sensitive apps:</strong> ERP admin, HR system admin</li>
+      <li><strong>Executives</strong> (C-level) — high-value spear-phishing targets</li>
+    </ul>
+    <table>
+      <thead><tr><th>Item</th><th>Rule</th></tr></thead>
+      <tbody>
+        <tr><td>Hardware</td><td>Can be <strong>Cloud PC (Windows 365)</strong> or dedicated laptop</td></tr>
+        <tr><td>OS</td><td>Windows 11 Enterprise, Intune-managed</td></tr>
+        <tr><td>Local admin</td><td>None (or JIT via Endpoint Privilege Management)</td></tr>
+        <tr><td>Apps</td><td>Moderate allowlist — Office permitted, Defender + ASR in Block</td></tr>
+        <tr><td>Email / Teams</td><td><strong>Allowed</strong> with maximum protection (Safe Links/Attachments, Defender for O365 P2)</td></tr>
+        <tr><td>Browser</td><td>Edge with SmartScreen + organization indicators</td></tr>
+        <tr><td>Internet</td><td>Filtered (category blocks, Defender for Cloud Apps)</td></tr>
+        <tr><td>USB</td><td>Blocked by default, exception via Intune</td></tr>
+        <tr><td>MFA</td><td><strong>FIDO2 recommended</strong>; phishing-resistant Authenticator accepted</td></tr>
+        <tr><td>Conditional Access</td><td>Device filter <code>PAW-T1</code> + compliant + strong MFA</td></tr>
+        <tr><td>Network</td><td>Broad, via Global Secure Access / Private Access for internal resources</td></tr>
+        <tr><td>Typical count</td><td>100–500 in a 5,000-seat org</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Key trait:</strong> admin can use the <em>same device</em> for work and admin, but the device is hardened far beyond standard. Often a <strong>dedicated Cloud PC</strong> accessed from a normal compliant laptop.</p>
+  </div>
+
+  <h3><span class="pill t2">Tier 2</span> Enterprise (Standard Productivity)</h3>
+  <div class="card">
+    <p><strong>Protects:</strong> everyone. This is the corporate baseline.</p>
+    <p><strong>Typical identities:</strong> end users, devs without prod access, L1/L2 support, non-privileged admin functions.</p>
+    <table>
+      <thead><tr><th>Item</th><th>Rule</th></tr></thead>
+      <tbody>
+        <tr><td>Hardware</td><td>Standard corporate, BYOD allowed via Intune App Protection</td></tr>
+        <tr><td>OS</td><td>Windows 11 / macOS / iOS / Android, Intune-managed</td></tr>
+        <tr><td>Local admin</td><td>None, but EPM can elevate pointwise</td></tr>
+        <tr><td>Apps</td><td>Corporate catalog + approved apps, soft allowlist</td></tr>
+        <tr><td>Email / Teams / Office</td><td>Yes, normal</td></tr>
+        <tr><td>Browser</td><td>Edge/Chrome with approved extensions</td></tr>
+        <tr><td>Internet</td><td>Open with web filter</td></tr>
+        <tr><td>MFA</td><td>MFA required (push, Authenticator; SMS discouraged)</td></tr>
+        <tr><td>Conditional Access</td><td>Compliant device + MFA + risk-based</td></tr>
+        <tr><td>Network</td><td>Normal access to SaaS, resources via SSO</td></tr>
+        <tr><td>Typical count</td><td>Rest of the company</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Side-by-side comparison</h3>
+  <table>
+    <thead><tr><th>Aspect</th><th><span class="pill t0">T0</span></th><th><span class="pill t1">T1</span></th><th><span class="pill t2">T2</span></th></tr></thead>
+    <tbody>
+      <tr><td>Protects</td><td>Identity systems</td><td>Sensitive workloads</td><td>Productivity</td></tr>
+      <tr><td>Compromise =</td><td>Tenant / forest lost</td><td>System / app lost</td><td>Single user impact</td></tr>
+      <tr><td>Device</td><td>Dedicated physical</td><td>Cloud PC / dedicated</td><td>Any corporate</td></tr>
+      <tr><td>Can read email?</td><td><strong>No</strong></td><td>Yes (protected)</td><td>Yes</td></tr>
+      <tr><td>Can browse web?</td><td>Admin portals only</td><td>Filtered</td><td>Normal</td></tr>
+      <tr><td>Office installed?</td><td><strong>No</strong></td><td>Optional</td><td>Yes</td></tr>
+      <tr><td>MFA</td><td>FIDO2 mandatory</td><td>FIDO2 recommended</td><td>Standard MFA</td></tr>
+      <tr><td>PIM</td><td>Required, approval</td><td>Recommended, JIT</td><td>N/A</td></tr>
+      <tr><td>WDAC</td><td>Strict allowlist</td><td>Moderate allowlist</td><td>Intune default</td></tr>
+      <tr><td>Internet</td><td>Blocked (allowlist)</td><td>Filtered</td><td>Filtered open</td></tr>
+      <tr><td>App store / free EXE</td><td>No</td><td>No</td><td>Corporate catalog</td></tr>
+      <tr><td>Cost per user</td><td>High (HW + ops)</td><td>Medium (Cloud PC)</td><td>Low</td></tr>
+      <tr><td>Quantity</td><td>Dozens</td><td>Hundreds</td><td>Thousands</td></tr>
+    </tbody>
+  </table>
+
+  <h3>How to decide the tier of an identity</h3>
+  <p>Ask one question: <strong>"if this account is compromised, what is the blast radius?"</strong></p>
+  <div class="diagram"><pre>
+Can it create/grant permissions to other privileged accounts?  → TIER 0
+Can it read/write identity credentials or signing keys?        → TIER 0
+Can it administer a production workload (VM/SQL/Storage)?      → TIER 1
+Can it deploy to production?                                   → TIER 1
+Is it an executive / high-value spear-phishing target?         → TIER 1
+Is it a standard user with no elevated privilege?              → TIER 2
+  </pre></div>
+
+  <div class="callout danger">
+    <strong>Containment rule:</strong> a Tier N identity can only be administered by a Tier N (or higher) identity, <em>from a Tier N (or higher) device</em>. <strong>Never the inverse.</strong>
+    <ul style="margin-top:8px">
+      <li>✅ T0 admin resets a T1 admin's password → OK</li>
+      <li>❌ T1 admin resets a T0 admin's password → <strong>forbidden</strong> (T1 becomes a path to T0)</li>
+      <li>❌ Helpdesk (T2) resets MFA on a Global Admin → <strong>forbidden</strong> (classic escalation)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 4. PIM ============ -->
+<section class="section tab-panel" id="t-pim">
+  <h2>4. PAW vs PIM — Complementary, Not Competing</h2>
+  <p class="lead">You already understand PIM. The simplest way to frame PAW alongside it:</p>
+
+  <table>
+    <thead><tr><th>Question</th><th>PIM answers</th><th>PAW answers</th></tr></thead>
+    <tbody>
+      <tr><td>When can the identity be privileged?</td><td>Just-in-time, time-bound activation</td><td>—</td></tr>
+      <tr><td>For how long?</td><td>Configurable max duration + approval</td><td>—</td></tr>
+      <tr><td>From <em>where</em> can the privilege be used?</td><td>—</td><td>Only from a trusted, hardened device</td></tr>
+      <tr><td>On what device class?</td><td>—</td><td>Compliant + filter-tagged as PAW</td></tr>
+      <tr><td>With what authenticator?</td><td>Can require MFA on activation</td><td>Enforces phishing-resistant (FIDO2 / WHfB) at sign-in</td></tr>
+    </tbody>
+  </table>
+
+  <div class="diagram"><pre>
+   ┌──────────────┐    PIM activation     ┌──────────────────────┐
+   │  Admin user  │ ───── (JIT + MFA) ──► │  Eligible → Active   │
+   └──────┬───────┘                       │   Role assignment    │
+          │                               └──────────┬───────────┘
+          │ must originate from                      │
+          ▼                                          ▼
+   ┌──────────────┐  Conditional Access   ┌──────────────────────┐
+   │     PAW      │ ─── device filter ──► │  Resource (Tier 0)   │
+   │ (clean src)  │      + FIDO2 MFA      │  Entra / AD / Azure  │
+   └──────────────┘                       └──────────────────────┘
+  </pre></div>
+
+  <div class="callout ok"><strong>Golden rule:</strong> PIM without PAW = a powerful credential being typed on a malware-friendly device. PAW without PIM = standing privilege that doesn't expire. You want both.</div>
+</section>
+
+<!-- ============ 4. TECH ============ -->
+<section class="section tab-panel" id="t-tech">
+  <h2>5. Technical Controls (Baseline)</h2>
+  <p class="lead">Minimum hardening for a Tier 0 PAW. Anything weaker is a "secure workstation", not a PAW.</p>
+
+  <h3>Hardware &amp; OS</h3>
+  <div class="cards">
+    <div class="card"><h4><span class="pill must">Must</span> Windows 11 Enterprise</h4><p>Latest cumulative updates. Autopatch-enrolled. No Home/Pro.</p></div>
+    <div class="card"><h4><span class="pill must">Must</span> TPM 2.0 + Secure Boot + UEFI</h4><p>Modern Standby capable. Secured-core PC strongly preferred.</p></div>
+    <div class="card"><h4><span class="pill must">Must</span> BitLocker (XTS-AES 256)</h4><p>Pre-boot PIN for Tier 0. Recovery keys escrowed to Entra ID.</p></div>
+    <div class="card"><h4><span class="pill must">Must</span> VBS + HVCI + Credential Guard</h4><p>Virtualization-based security. Blocks pass-the-hash / pass-the-ticket.</p></div>
+  </div>
+
+  <h3>Identity &amp; Sign-in</h3>
+  <div class="cards">
+    <div class="card"><h4><span class="pill must">Must</span> FIDO2 security key or WHfB</h4><p>Phishing-resistant MFA. No SMS, no voice, no Authenticator push for Tier 0.</p></div>
+    <div class="card"><h4><span class="pill must">Must</span> No local admin for the user</h4><p>Separate break-glass local admin, vaulted password, LAPS-managed.</p></div>
+    <div class="card"><h4><span class="pill must">Must</span> Conditional Access — device filter</h4><p>Privileged roles only sign in from devices tagged <code>extensionAttribute</code> = <code>PAW</code>.</p></div>
+  </div>
+
+  <h3>Application &amp; Network</h3>
+  <div class="cards">
+    <div class="card"><h4><span class="pill must">Must</span> WDAC or AppLocker allowlist</h4><p>Only signed, approved binaries run. Default-deny.</p></div>
+    <div class="card"><h4><span class="pill must">Must</span> No Office / mail / Teams / general browsing</h4><p>Edge with allowlist of admin portals only.</p></div>
+    <div class="card"><h4><span class="pill must">Must</span> Defender for Endpoint (EDR)</h4><p>Plan 2, ASR rules in Block mode, tamper protection on.</p></div>
+    <div class="card"><h4><span class="pill rec">Recommended</span> Outbound URL allowlist</h4><p>portal.azure.com, admin.microsoft.com, entra.microsoft.com, intune, etc. Block all else.</p></div>
+    <div class="card"><h4><span class="pill rec">Recommended</span> No removable media</h4><p>USB storage disabled via policy; print disabled for Tier 0.</p></div>
+    <div class="card"><h4><span class="pill opt">Optional</span> Always-On VPN / Private Access</h4><p>For accessing on-prem Tier 0 systems.</p></div>
+  </div>
+
+  <h3>Allowed admin URL set (starter)</h3>
+  <div class="diagram"><pre>
+portal.azure.com               entra.microsoft.com
+admin.microsoft.com            intune.microsoft.com
+security.microsoft.com         compliance.microsoft.com
+admin.exchange.microsoft.com   admin.teams.microsoft.com
+*.azure.com  *.windowsazure.com  *.office.com (admin paths only)
+login.microsoftonline.com      device.login.microsoftonline.com
+  </pre></div>
+</section>
+
+<!-- ============ 5. ARCH ============ -->
+<section class="section tab-panel" id="t-arch">
+  <h2>6. Implementation Architectures</h2>
+  <p class="lead">Pick one based on user count, budget, and operational maturity.</p>
+
+  <table>
+    <thead><tr><th>Pattern</th><th>How</th><th>Pros</th><th>Cons</th><th>Best for</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>A. Dedicated hardware PAW</strong></td>
+        <td>Physical laptop, AutoPilot, Intune baseline, FIDO2 key</td>
+        <td>Strongest isolation, no shared kernel with productivity</td>
+        <td>Capex, logistics, admin carries 2 laptops</td>
+        <td>Tier 0 admins, regulated industries</td>
+      </tr>
+      <tr>
+        <td><strong>B. Cloud PAW (AVD)</strong></td>
+        <td>Azure Virtual Desktop hardened host pool, accessed from a compliant device</td>
+        <td>Centrally managed, no hardware shipping, fast onboarding</td>
+        <td>Requires strong endpoint posture; network dependency</td>
+        <td>Distributed teams, MSPs</td>
+      </tr>
+      <tr>
+        <td><strong>C. Windows 365 Cloud PC as PAW</strong></td>
+        <td>Dedicated Cloud PC SKU + Intune baseline + Zero Trust filter</td>
+        <td>Per-user provisioning, simpler than AVD, Intune-native</td>
+        <td>Cost per user/month; still needs clean source endpoint</td>
+        <td>Modern hybrid orgs, Tier 1 admins</td>
+      </tr>
+      <tr>
+        <td><strong>D. PAW + User VM (legacy)</strong></td>
+        <td>Host = PAW, Hyper-V guest = productivity</td>
+        <td>Single device for admin</td>
+        <td>Microsoft no longer recommends — host attack surface is high</td>
+        <td>Avoid for new deployments</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn"><strong>Modern default:</strong> A = Tier 0 admins, C (Cloud PC) = Tier 1 / specialized. Pattern D should be retired.</div>
+</section>
+
+<!-- ============ 6. PLAN ============ -->
+<section class="section tab-panel" id="t-plan">
+  <h2>7. Implementation Plan (PAW + PIM Integrated)</h2>
+  <p class="lead">A phased rollout that gets a small Tier 0 population protected fast, then expands.</p>
+
+  <h3>Phase 0 — Discovery (Week 1–2)</h3>
+  <div class="card">
+    <ul>
+      <li>Enumerate all <strong>Tier 0 identities</strong>: Global Admin, Privileged Role Admin, Privileged Auth Admin, AD DS Domain/Enterprise Admins, AAD Connect / Entra Cloud Sync accounts, ADCS, AD FS service accounts.</li>
+      <li>Map current sign-in devices for those identities (Entra sign-in logs).</li>
+      <li>Inventory existing MFA methods — flag any non-phishing-resistant on Tier 0.</li>
+      <li>Define naming: <code>PAW-T0-*</code>, <code>PAW-T1-*</code>, dynamic Entra groups by device extension attribute.</li>
+    </ul>
+  </div>
+
+  <h3>Phase 1 — Foundation (Week 3–5)</h3>
+  <div class="card">
+    <ul>
+      <li>Create Intune <strong>Security Baseline</strong> profile for PAW (Defender, BitLocker, Credential Guard, ASR in Block).</li>
+      <li>Build <strong>AutoPilot profile</strong> (self-deploy, no user, no local admin).</li>
+      <li>Deploy <strong>WDAC policy</strong> in Audit → then Enforce.</li>
+      <li>Configure <strong>FIDO2 security key</strong> sign-in in Entra (Authentication methods policy).</li>
+      <li>Procure / assign FIDO2 keys (2 per admin: primary + backup).</li>
+    </ul>
+  </div>
+
+  <h3>Phase 2 — Conditional Access &amp; PIM (Week 5–6)</h3>
+  <div class="card">
+    <ul>
+      <li>Create CA policy <strong>"CA-T0-PrivilegedRoles-RequirePAW"</strong>:
+        <ul>
+          <li><em>Assignments:</em> Directory roles = all privileged roles</li>
+          <li><em>Conditions:</em> Device filter = <code>device.extensionAttribute1 -eq "PAW-T0"</code></li>
+          <li><em>Grant:</em> Require compliant device + phishing-resistant MFA + Hybrid join (if applicable)</li>
+        </ul>
+      </li>
+      <li>Configure <strong>PIM</strong> for the same roles: eligible-only, max 4h activation, justification + approval for Global Admin, ticket integration optional.</li>
+      <li>Define <strong>2 break-glass accounts</strong> excluded from CA (FIDO2 only, vaulted, monitored).</li>
+    </ul>
+  </div>
+
+  <h3>Phase 3 — Pilot (Week 6–8)</h3>
+  <div class="card">
+    <ul>
+      <li>Onboard 3–5 Tier 0 admins to physical PAW hardware.</li>
+      <li>Validate admin journeys: portal.azure.com, AD DS RSAT, Exchange Online, Intune, GitHub Enterprise admin, etc.</li>
+      <li>Test break-glass procedure end-to-end (and rotate keys after).</li>
+      <li>Capture friction points; tune URL allowlist and WDAC exceptions.</li>
+    </ul>
+  </div>
+
+  <h3>Phase 4 — Rollout (Week 9–14)</h3>
+  <div class="card">
+    <ul>
+      <li>Expand to remaining Tier 0 population.</li>
+      <li>Begin Tier 1 rollout using <strong>Windows 365 Cloud PC</strong> + lighter baseline.</li>
+      <li>Enforce: CA policy now <em>blocks</em> privileged sign-in from non-PAW devices.</li>
+      <li>Decommission standing admin rights on productivity laptops.</li>
+    </ul>
+  </div>
+
+  <h3>Phase 5 — Operate &amp; Monitor (ongoing)</h3>
+  <div class="card">
+    <ul>
+      <li>Sentinel / Defender XDR rules: privileged sign-in from non-PAW, FIDO2 registration changes, PIM activation anomalies, WDAC block events.</li>
+      <li>Quarterly access review of Tier 0 eligibility (via PIM).</li>
+      <li>Semi-annual PAW image rebuild + WDAC policy refresh.</li>
+      <li>Tabletop exercise: lost FIDO2 key, lost PAW laptop, break-glass invocation.</li>
+    </ul>
+  </div>
+
+  <div class="callout ok"><strong>Quick win sequence (if you only have 30 days):</strong> Tier 0 inventory → FIDO2 keys → Intune-managed dedicated laptops → CA device filter → PIM JIT on Global Admin. Everything else is iteration.</div>
+</section>
+
+<!-- ============ 7. OPS ============ -->
+<section class="section tab-panel" id="t-ops">
+  <h2>8. Operations &amp; Common Pitfalls</h2>
+
+  <h3>Operational must-haves</h3>
+  <div class="cards">
+    <div class="card"><h4>Break-glass</h4><p>2 cloud-only Global Admin accounts, FIDO2, excluded from CA, sealed credentials in a physical safe. Sign-in alerts to SOC.</p></div>
+    <div class="card"><h4>Backup FIDO2 key</h4><p>Every admin gets 2 keys. Loss of single key must not block emergency access.</p></div>
+    <div class="card"><h4>PAW lifecycle</h4><p>Wipe + rebuild on role change. Never reassign a PAW between users without full reimage.</p></div>
+    <div class="card"><h4>Monitoring</h4><p>Defender XDR + Sentinel workbook for "privileged sign-in from non-compliant or non-PAW device" — should be 0.</p></div>
+  </div>
+
+  <h3>Top pitfalls</h3>
+  <table>
+    <thead><tr><th>Pitfall</th><th>Why it breaks PAW</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td>Admins RDP from their productivity laptop into the "PAW"</td><td>Clean source violated — credentials enter on a dirty endpoint</td><td>Block RDP-in; require local sign-in or AVD client from a compliant device</td></tr>
+      <tr><td>Allowing Office / Teams "just for convenience"</td><td>Reintroduces phishing &amp; macro attack surface</td><td>Hold the line. Use a second device for chat.</td></tr>
+      <tr><td>Sharing FIDO2 keys</td><td>Destroys non-repudiation</td><td>1 key per identity; serial-number tracked</td></tr>
+      <tr><td>No CA device filter</td><td>PAW exists but isn't enforced — admins still sign in from anywhere</td><td>Enforce device filter on all privileged roles</td></tr>
+      <tr><td>Forgetting AAD Connect / sync accounts</td><td>Hybrid identity sync accounts are Tier 0 — often missed</td><td>Add them to PAW-required CA scope</td></tr>
+      <tr><td>Hyper-V host = productivity, guest = PAW</td><td>Host compromise = PAW compromise</td><td>Invert it (host = PAW) or use separate hardware</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout danger"><strong>Anti-pattern:</strong> "We'll just give admins a second login on the same laptop." Same kernel, same browser cache, same attack surface. That is not a PAW.</div>
+</section>
+
+<!-- ============ 8. END-TO-END FLOW ============ -->
+<section class="section tab-panel" id="t-flow">
+  <h2>9. End-to-End Flow — Account, PIM, PAW, Target</h2>
+  <p class="lead">A common admin question: <em>"I have a PIM-eligible account — do I just elevate and connect to a machine on the network?"</em> Yes, but the device you elevate <strong>from</strong> matters as much as the role itself.</p>
+
+  <div class="diagram"><pre>
+ [You + FIDO2 key] ──► sign in to PAW ──► activate PIM ──► access target
+     identity            clean device       time-bound        Tier 0 system
+                                            elevation
+  </pre></div>
+
+  <h3>Step by step</h3>
+
+  <div class="cards">
+    <div class="card">
+      <h4>1. The account</h4>
+      <ul>
+        <li>One dedicated <strong>admin identity</strong> (e.g. <code>adm-ofernando@tenant</code>), separate from your daily user account.</li>
+        <li>It is <strong>PIM-eligible</strong> for a role — assigned but <em>not active</em>. Zero standing privilege.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>2. The device (PAW)</h4>
+      <ul>
+        <li>Sign in to the PAW with the admin account + <strong>FIDO2 key</strong>.</li>
+        <li>PAW is Intune-compliant and tagged (e.g. <code>extensionAttribute1 = PAW-T0</code>).</li>
+        <li>Conditional Access enforces: privileged roles usable <strong>only</strong> from this device class.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>3. The elevation (PIM activation)</h4>
+      <ul>
+        <li>From the PAW, open Entra → PIM → <strong>Activate</strong> the role.</li>
+        <li>Provide justification, optional ticket, optional approval.</li>
+        <li>Role becomes <strong>active for a limited window</strong> (e.g. 4 h).</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>4. The access</h4>
+      <ul>
+        <li>With the role active AND signed in from PAW, reach the target:</li>
+        <li>Azure portal, Entra admin, Intune, Exchange admin</li>
+        <li>RDP/SSH via <strong>Azure Bastion</strong> or a hardened jump host into a restricted-network server</li>
+        <li>Admin PowerShell (Graph, Az, ExchangeOnline) <em>from the PAW itself</em></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>5. Timer expires</h4>
+      <ul>
+        <li>Role auto-deactivates. You're back to a standard user.</li>
+        <li>Sign-in logs + PIM audit log record every action.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Two valid target-access models</h3>
+  <table>
+    <thead><tr><th>Model</th><th>Shape</th><th>When to use</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>A. PAW as the admin endpoint</strong></td>
+        <td>Admin tools (browser, PowerShell, RSAT, Bastion client) run <em>directly on the PAW</em>. PAW has network paths (VPN / Private Access) to reach management endpoints.</td>
+        <td>Cloud-first admin (Entra, Azure, M365). <strong>Preferred modern model.</strong></td>
+      </tr>
+      <tr>
+        <td><strong>B. PAW → jump host → target</strong></td>
+        <td>From the PAW, open RDP/SSH (via Azure Bastion or hardened jump server) into a management VM inside the restricted network; from there reach Tier 0 systems.</td>
+        <td>On-prem AD DS, legacy systems, segmented datacenter networks.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout danger"><strong>Critical:</strong> the jump host is <em>not</em> a substitute for the PAW. RDP/SSH must be opened <strong>from the PAW to the jump host</strong> — never from a daily laptop. Otherwise the credential touches a dirty device and Clean Source is broken.</div>
+
+  <h3>Minimum ingredients checklist</h3>
+  <div class="card">
+    <ul>
+      <li>Separate admin account (<code>adm-*</code>), cloud-only when possible</li>
+      <li>FIDO2 security key (×2 — primary + backup)</li>
+      <li>PIM-eligible assignment (not active / not permanent)</li>
+      <li>PAW device — Intune-managed, tagged, compliant</li>
+      <li>Conditional Access policy: privileged roles → require PAW device filter + phishing-resistant MFA</li>
+      <li>(If on-prem targets) Azure Bastion or hardened jump host in the management subnet</li>
+      <li>2 break-glass Global Admin accounts excluded from CA, vaulted, monitored</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 9. DIRECTION ============ -->
+<section class="section tab-panel" id="t-direction">
+  <h2>10. Direction of Access — You go TO the PAW</h2>
+  <p class="lead">A frequent point of confusion: <em>"Do I access the PAW to elevate, or do I use a jump host to access the PAW?"</em> The PAW is the <strong>destination</strong>, not a stop along the way.</p>
+
+  <div class="callout ok">
+    <strong>Correct direction:</strong>
+    <div class="diagram" style="margin-top:8px"><pre>
+[You + FIDO2] ──sign in──► [PAW] ──activate PIM──► [Target / Bastion / Jump host]
+    </pre></div>
+    The PAW is where the admin credential lives and is typed. Nothing should sit <em>in front of</em> the PAW between you and the keyboard, because that "something in front" would be a dirty device handling your credential — Clean Source violated.
+  </div>
+
+  <div class="callout danger">
+    <strong>Wrong pattern — jump host → PAW:</strong>
+    <div class="diagram" style="margin-top:8px"><pre>
+[Daily laptop] ──RDP──► [Jump host] ──RDP──► [PAW]   ✗ BROKEN
+    </pre></div>
+    Your admin password / FIDO2 PIN / session token would be processed by the daily laptop's keyboard, clipboard, and screen-capture surface. The PAW becomes pointless.
+  </div>
+
+  <h3>The two valid access shapes</h3>
+
+  <h3>Shape 1 — PAW is the physical thing in front of you</h3>
+  <div class="diagram"><pre>
+You ──► PAW (laptop on your desk) ──► Azure portal / Bastion / admin tools
+  </pre></div>
+  <p>You literally sit at the PAW. FIDO2 key plugged into the PAW. Best for Tier 0.</p>
+
+  <h3>Shape 2 — Cloud PAW (Windows 365 / AVD)</h3>
+  <div class="diagram"><pre>
+You ──► Compliant endpoint ──► PAW Cloud PC ──► Azure portal / Bastion / admin tools
+        (Intune-managed,           (the real
+         hardened, no admin)        "clean" device)
+  </pre></div>
+  <p>The "compliant endpoint" used to launch the Cloud PC must itself be hardened and Intune-compliant — not a random laptop. The Cloud PC <strong>is</strong> the PAW; the endpoint is just a screen/keyboard.</p>
+
+  <h3>Where the jump host fits</h3>
+  <p>The jump host (or <strong>Azure Bastion</strong>) comes <strong>after</strong> the PAW, not before:</p>
+  <div class="diagram"><pre>
+You ──► PAW ──► PIM activate ──► Bastion / jump host ──► Tier 0 server
+                                  (only reachable
+                                   from PAW)
+  </pre></div>
+  <p>Use a jump host when the target lives on a restricted management network that the PAW can't reach directly. The jump host's RDP/SSH session is <em>initiated from the PAW</em>.</p>
+
+  <h3>TL;DR</h3>
+  <table>
+    <thead><tr><th>Question</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>Do I go to the PAW first?</td><td><strong>Yes.</strong> PAW is the trusted device where you sign in and activate PIM.</td></tr>
+      <tr><td>Do I use a jump host to reach the PAW?</td><td><strong>No.</strong> That defeats the purpose.</td></tr>
+      <tr><td>When do I use a jump host?</td><td><strong>After</strong> the PAW, to reach segregated networks.</td></tr>
+      <tr><td>Where do I plug the FIDO2 key?</td><td>Into the PAW (or the endpoint launching the Cloud PC PAW).</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 10. Q&A ============ -->
+<section class="section tab-panel" id="t-qa">
+  <h2>11. Q&amp;A — Common Client Questions</h2>
+
+  <details class="qa"><summary>Do we really need separate hardware? Can't a VM be enough?</summary>
+  <div class="answer"><p>For Tier 0, separate hardware (or a properly isolated Cloud PC accessed from a compliant device) is the defensible answer. A productivity-host VM-guest split puts the host kernel — the most exposed surface — in the trust path of your most privileged identity.</p></div></details>
+
+  <details class="qa"><summary>How does PAW interact with Zero Trust?</summary>
+  <div class="answer"><p>PAW <em>is</em> the device-identity pillar of Zero Trust for privileged scenarios. Conditional Access verifies user + device + signal; PAW guarantees the device signal is trustworthy enough for the resource being accessed.</p></div></details>
+
+  <details class="qa"><summary>What about MacOS / Linux admins?</summary>
+  <div class="answer"><p>Microsoft's PAW guidance is Windows-centric because the controls (Credential Guard, WDAC, HVCI) are Windows features. For non-Windows admins, the equivalent is a dedicated, hardened, Intune/Jamf-managed device with the same isolation principles — but tooling parity is weaker.</p></div></details>
+
+  <details class="qa"><summary>Cost — is this viable for a 5,000-seat org?</summary>
+  <div class="answer"><p>You don't PAW everyone. A typical org has 10–50 Tier 0 identities. That's 10–50 dedicated laptops or Cloud PCs — small spend compared to the cost of a Global Admin compromise. Tier 1 (a few hundred) usually goes to Cloud PC.</p></div></details>
+
+  <details class="qa"><summary>Does PAW remove the need for PIM?</summary>
+  <div class="answer"><p>No. PAW controls the <em>device</em>; PIM controls the <em>time and scope</em> of the privilege. Use both. Together with FIDO2 and Conditional Access they form the "Securing Privileged Access" roadmap.</p></div></details>
+
+  <details class="qa"><summary>How do admins do their regular email / Teams?</summary>
+  <div class="answer"><p>From their normal Enterprise-tier device, with a separate, non-privileged user account. Admin identity stays exclusively on the PAW. Two accounts, two devices, one human.</p></div></details>
+
+  <details class="qa"><summary>What if the FIDO2 key is lost?</summary>
+  <div class="answer"><p>Use the backup key. If both are lost, the admin loses access until re-enrolled in person (or via verified video) by the identity team. Break-glass accounts cover catastrophic scenarios.</p></div></details>
+
+  <details class="qa"><summary>Microsoft references to read next</summary>
+  <div class="answer">
+    <ul>
+      <li>Securing Privileged Access (SPA) — <code>aka.ms/SPA</code></li>
+      <li>Privileged access deployment — learn.microsoft.com/security/privileged-access-workstations/</li>
+      <li>Enterprise Access Model — learn.microsoft.com/security/privileged-access-workstations/privileged-access-access-model</li>
+      <li>FIDO2 in Entra ID — learn.microsoft.com/entra/identity/authentication/concept-authentication-passwordless</li>
+    </ul>
+  </div></details>
+</section>
+
+<footer>
+  PAW Practical Guideline · Built in the Identity Management workspace · Companion to PIM, Conditional Access &amp; the Enterprise Access Model
+</footer>
+
+</div>
+
+<script>
+  const buttons = document.querySelectorAll('.tab-button');
+  const panels = document.querySelectorAll('.tab-panel');
+  buttons.forEach(btn => btn.addEventListener('click', () => {
+    buttons.forEach(b => b.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }));
+</script>
+</body>
+</html>
