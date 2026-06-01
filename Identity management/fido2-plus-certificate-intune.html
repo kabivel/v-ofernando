@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIDO2 + Certificate (Intune) — Two Phishing-Resistant Factors in Entra ID</title>
+<style>
+  :root{
+    --bg:#f4f6fa;--panel:#fff;--border:#d8dee9;--primary:#0078d4;--accent:#5C2D91;
+    --teal:#008272;--green:#107C10;--orange:#D83B01;--text:#1f2937;--muted:#5a6675;
+    --soft:#eef5ff;--warn-bg:#fff8e1;--warn-border:#f9a825;--ok-bg:#e8f5e9;
+    --danger-bg:#fdecea;--danger-border:#d32f2f;--danger-text:#7f1d1d;
+    --shadow:0 2px 8px rgba(0,0,0,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;line-height:1.6;scroll-behavior:smooth}
+  a{color:var(--primary);text-decoration:none}a:hover{text-decoration:underline}
+  code{background:#eef2f7;border:1px solid #dbe3ee;border-radius:5px;padding:1px 5px;font-family:Consolas,"Courier New",monospace;font-size:.95em}
+
+  .app-header{background:linear-gradient(135deg,#0078d4,#5C2D91);color:#fff;padding:34px 24px;text-align:center}
+  .app-header .badge{display:inline-block;background:rgba(255,255,255,.18);padding:4px 14px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.1em;margin-bottom:12px;text-transform:uppercase}
+  .app-header h1{margin:0 0 8px;font-size:30px;font-weight:700;letter-spacing:-.2px}
+  .app-header p{margin:0 auto;max-width:920px;opacity:.92;font-size:14.5px}
+  .scope{display:inline-block;margin-top:12px;background:rgba(0,0,0,.18);padding:5px 12px;border-radius:6px;font-size:12px}
+
+  .container{max-width:1120px;margin:0 auto;padding:24px 20px 80px}
+  .tabs{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:26px;box-shadow:var(--shadow);position:sticky;top:0;z-index:10}
+  .tabs h2{margin:0 0 10px;font-size:16px;color:var(--primary)}
+  .tab-list{display:flex;gap:8px;flex-wrap:wrap}
+  .tab-button{border:1px solid var(--border);background:#fff;color:var(--text);border-radius:6px;padding:8px 11px;font:600 12.5px "Segoe UI",system-ui,sans-serif;cursor:pointer;transition:all .15s ease}
+  .tab-button:hover{border-color:var(--primary);color:var(--primary);background:#f8fbff}
+  .tab-button.active{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(0,120,212,.22)}
+
+  .section{margin-bottom:34px}.tab-panel{display:none}.tab-panel.active{display:block}
+  .section h2{font-size:22px;margin:0 0 16px;padding-bottom:8px;border-bottom:2px solid var(--primary);color:var(--primary)}
+  .section h3{font-size:17px;margin:20px 0 8px;color:var(--accent)}
+  .lead{font-size:15px;color:var(--muted);margin:0 0 18px}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:16px 0}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:16px 18px;box-shadow:var(--shadow)}
+  .card h3,.card h4{margin:0 0 8px;font-size:15px;color:var(--accent)}
+  .card p{margin:8px 0;color:var(--text);font-size:14px}
+  .card ul,.card ol{margin:8px 0;padding-left:22px;font-size:14px}.card li{margin:5px 0}
+
+  .flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:18px 0}
+  .stage{background:var(--panel);border:1px solid var(--border);border-left:5px solid var(--primary);border-radius:8px;padding:14px 14px 14px 18px;box-shadow:var(--shadow);position:relative}
+  .stage .num{position:absolute;top:-10px;left:-10px;background:var(--primary);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+  .stage h4{margin:2px 0 6px;font-size:14px;color:var(--accent)}
+  .stage p{margin:0;font-size:12.8px;color:var(--muted)}
+
+  .diagram{background:#0f172a;color:#e5eefc;border-radius:8px;padding:18px 20px;margin:14px 0;overflow:auto;box-shadow:var(--shadow)}
+  .diagram pre{margin:0;font-family:Consolas,"Courier New",monospace;font-size:13px;line-height:1.55}
+
+  .callout{border-left:4px solid var(--primary);background:var(--soft);padding:11px 14px;margin:12px 0;border-radius:6px;font-size:13.5px}
+  .callout.warn{background:var(--warn-bg);border-color:var(--warn-border)}
+  .callout.ok{background:var(--ok-bg);border-color:var(--green)}
+  .callout.danger{background:var(--danger-bg);border-color:var(--danger-border);color:var(--danger-text)}
+
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;background:var(--panel);box-shadow:var(--shadow);border-radius:8px;overflow:hidden}
+  th,td{border:1px solid var(--border);padding:9px 10px;text-align:left;vertical-align:top}
+  th{background:#f0f4fa;color:var(--primary);font-weight:600}
+  tr:nth-child(even) td{background:#fafbfd}
+
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.04em}
+  .pill.must{background:#fdecea;color:#b71c1c}.pill.rec{background:#fff8e1;color:#6d4c00}.pill.opt{background:#e3f2fd;color:#0d47a1}
+  .pill.ok{background:#e8f5e9;color:#1b5e20}
+
+  pre.code{background:#0f172a;color:#e5eefc;border-radius:8px;padding:16px 18px;margin:14px 0;overflow:auto;box-shadow:var(--shadow);font-family:Consolas,"Courier New",monospace;font-size:12.8px;line-height:1.55}
+  pre.code .c{color:#7d8aa3}
+  pre.code .k{color:#7cc7ff}
+  pre.code .s{color:#a7e0a0}
+
+  ol.steps{counter-reset:step;list-style:none;padding-left:0;margin:14px 0}
+  ol.steps>li{position:relative;background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:8px;padding:12px 16px 12px 50px;margin-bottom:10px;box-shadow:var(--shadow);font-size:14px}
+  ol.steps>li::before{counter-increment:step;content:counter(step);position:absolute;left:12px;top:12px;background:var(--primary);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+
+  .qa{background:var(--panel);border:1px solid var(--border);border-radius:8px;margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden}
+  .qa summary{cursor:pointer;padding:13px 18px;font-weight:600;font-size:14.5px;display:flex;align-items:center;gap:10px;list-style:none}
+  .qa summary::-webkit-details-marker{display:none}
+  .qa summary::before{content:'>';color:var(--primary);font-size:16px;transition:transform .2s;font-family:Consolas,"Courier New",monospace}
+  .qa[open] summary::before{transform:rotate(90deg)}
+  .qa summary:hover{background:rgba(0,120,212,.04)}
+  .qa .answer{padding:0 18px 15px;font-size:14px;border-top:1px solid var(--border)}
+  .qa .answer p{margin:10px 0}.qa .answer ul{margin:8px 0;padding-left:22px}
+
+  footer{font-size:12px;color:var(--muted);text-align:center;margin-top:38px;padding-top:18px;border-top:1px solid var(--border)}
+  @media(max-width:820px){.tabs{position:static}.tab-list{display:grid;grid-template-columns:1fr 1fr}.app-header h1{font-size:25px}}
+  @media(max-width:520px){.tab-list{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <span class="badge">Microsoft Entra ID · Phishing-Resistant MFA</span>
+  <h1>FIDO2 + Certificate (Intune) at the Same Time</h1>
+  <p>How to require <strong>two phishing-resistant credentials together</strong> — a FIDO2 security key (the user) plus a certificate that Microsoft Intune delivers to the device (device trust). The honest truth about what Entra supports, plus the exact configuration that actually works.</p>
+  <div class="scope">Audience: Identity / Security / EUC architects · High-assurance and Tier-0 admin scenarios</div>
+</header>
+
+<div class="container">
+  <nav class="tabs">
+    <h2>Jump to a section</h2>
+    <div class="tab-list">
+      <button class="tab-button active" data-tab="overview">1 · Concept</button>
+      <button class="tab-button" data-tab="reality">2 · What Entra Allows</button>
+      <button class="tab-button" data-tab="cba-intune">3 · Certificate via Intune</button>
+      <button class="tab-button" data-tab="entra-cba">4 · Cert as User (opt.)</button>
+      <button class="tab-button" data-tab="fido2">5 · FIDO2 Setup</button>
+      <button class="tab-button" data-tab="strength">6 · Auth Strength</button>
+      <button class="tab-button" data-tab="ca">7 · CA (the AND)</button>
+      <button class="tab-button" data-tab="graph">8 · PowerShell / Graph</button>
+      <button class="tab-button" data-tab="ux">9 · User Experience</button>
+      <button class="tab-button" data-tab="faq">10 · FAQ</button>
+    </div>
+  </nav>
+
+  <!-- 1 CONCEPT -->
+  <section class="section tab-panel active" id="overview">
+    <h2>1 · The Concept</h2>
+    <p class="lead">You want a sign-in that demands <strong>two independent strong credentials together</strong>: a FIDO2 security key (the user) and proof that the session runs on a <strong>managed device</strong> trusted via the certificate Intune deployed (the device). This is "defense in depth" applied to authentication.</p>
+
+    <div class="cards">
+      <div class="card">
+        <h3>🔑 FIDO2 Security Key</h3>
+        <p>A hardware authenticator (e.g. YubiKey, Feitian) using WebAuthn. Public/private key pair bound to the Entra account; the private key never leaves the device. Unlocked by PIN or biometric.</p>
+        <p><span class="pill ok">Phishing-resistant</span> <span class="pill ok">MFA on its own</span></p>
+      </div>
+      <div class="card">
+        <h3>📜 Certificate via Intune</h3>
+        <p>An X.509 certificate provisioned by <strong>Intune</strong> (device registration for compliance/hybrid join, or a SCEP/PKCS user cert). In this design it primarily anchors <strong>device trust</strong> so Conditional Access can require a managed device.</p>
+        <p><span class="pill ok">Phishing-resistant</span> <span class="pill ok">Device or user</span></p>
+      </div>
+      <div class="card">
+        <h3>🎯 The Goal</h3>
+        <p>Force <strong>both</strong> together, not "either/or". The certificate proves the <strong>device</strong>; the FIDO2 key proves the <strong>user</strong>. Two grant controls ANDed in Conditional Access = two credentials in one access decision.</p>
+        <p><span class="pill must">High assurance</span></p>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <strong>Key reality first:</strong> Entra <em>cannot</em> require two user credentials (FIDO2 <em>and</em> a user certificate) together inside a single authentication strength — not even with a "single-factor certificate" trick. The only AND-combinations Entra offers pair a password / federated sign-in with "something the user has" (SMS, voice, push, OATH) — never FIDO2 or a certificate. The <strong>supported way</strong> to demand two credentials at once is to AND <em>two Conditional Access grant controls</em>: a phishing-resistant authentication strength (FIDO2 = the user) <strong>and</strong> a managed/compliant device whose trust is anchored by the Intune-deployed certificate (the device). Section 2 proves this with the docs.
+    </div>
+
+    <h3>Where this fits</h3>
+    <div class="flow">
+      <div class="stage"><span class="num">A</span><h4>Intune</h4><p>Deploys the certificate that anchors device trust / compliance.</p></div>
+      <div class="stage"><span class="num">B</span><h4>Device trust</h4><p>Entra marks the device compliant / hybrid joined using that cert.</p></div>
+      <div class="stage"><span class="num">C</span><h4>FIDO2</h4><p>Enabled in Authentication methods; user registers a key.</p></div>
+      <div class="stage"><span class="num">D</span><h4>Auth Strength</h4><p>Phishing-resistant strength requires FIDO2 (the user factor).</p></div>
+      <div class="stage"><span class="num">E</span><h4>Conditional Access</h4><p>ANDs both controls: FIDO2 strength + compliant device.</p></div>
+    </div>
+  </section>
+
+  <!-- 2 REALITY -->
+  <section class="section tab-panel" id="reality">
+    <h2>2 · What Entra Actually Allows (the honest part)</h2>
+    <p class="lead">Authentication Strengths are built from <strong>combinations of methods</strong>. Each entry in a strength is a complete, alternative way to sign in — the entries are joined by <strong>OR</strong>, not AND. The user satisfies the strength with <em>any one</em> allowed combination.</p>
+
+    <div class="callout danger">
+      <strong>You cannot require FIDO2 + a certificate together in one authentication strength.</strong> This is the most common misconception. Neither "two multifactor methods" nor a "single-factor cert + FIDO2" combination exists for this purpose. The Microsoft docs are explicit (see below).
+    </div>
+
+    <h3>The only AND-combinations Entra offers</h3>
+    <p>Entra <em>does</em> have combinations that require two methods together — but they all follow one shape: a <strong>primary single-factor sign-in</strong> (password or federated) plus <strong>"something the user has"</strong>. And per Microsoft Learn, "something the user has" is defined precisely as:</p>
+    <div class="callout">
+      <em>"Something the user has refers to one of the following methods: text message, voice, push notification, software OATH token, or hardware OATH token."</em>
+    </div>
+    <p><strong>FIDO2 and certificate are not on that list.</strong> They are never part of an AND-combination — they only ever appear as standalone combinations (joined by OR with everything else).</p>
+
+    <table>
+      <thead><tr><th>Combination type</th><th>Example</th><th>Pairs with FIDO2 / cert?</th></tr></thead>
+      <tbody>
+        <tr><td>Primary + something you have</td><td>Password + push, Federated SF + OATH</td><td>❌ No</td></tr>
+        <tr><td>FIDO2 security key</td><td>Standalone (MF on its own)</td><td>— standalone only</td></tr>
+        <tr><td>Certificate (single- or multifactor)</td><td>Standalone</td><td>— standalone only</td></tr>
+      </tbody>
+    </table>
+
+    <h3>So how do you require BOTH at once?</h3>
+    <p>You split the two credentials across <strong>two Conditional Access grant controls</strong> and join them with <strong>AND</strong> ("Require all the selected controls"):</p>
+
+    <div class="callout ok">
+      <strong>Grant control 1 — Require authentication strength = Phishing-resistant MFA</strong> → forces the <em>FIDO2 security key</em> (the user).<br>
+      <strong>Grant control 2 — Require device to be compliant</strong> (or Hybrid Entra joined) → only satisfied by a managed device, whose trust is anchored by the <em>Intune-deployed certificate</em> (the device).<br>
+      <strong>Operator = AND.</strong> Result: the user must present a FIDO2 key <em>and</em> be on the certificate-bearing managed device, in the same access decision.
+    </div>
+
+    <table>
+      <thead><tr><th>What you want</th><th>Supported?</th><th>How</th></tr></thead>
+      <tbody>
+        <tr><td>FIDO2 <strong>OR</strong> Certificate (either is fine)</td><td><span class="pill ok">Yes</span></td><td>One custom strength listing both standalone combinations</td></tr>
+        <tr><td>FIDO2 <strong>AND</strong> user-certificate in one auth strength</td><td><span class="pill must">No</span></td><td>Not expressible — Entra has no such combination</td></tr>
+        <tr><td>FIDO2 (user) <strong>AND</strong> Intune cert (device trust)</td><td><span class="pill ok">Yes</span></td><td>Two CA grant controls ANDed — <strong>this guide</strong></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <strong>Why this is the right model:</strong> the certificate's natural job is to prove the <em>device</em> (compliance / Entra hybrid join), while FIDO2 proves the <em>user</em>. ANDing them gives genuine two-credential assurance — a stolen FIDO2 key is useless off a managed device, and a managed device is useless without the key.
+    </div>
+  </section>
+
+  <!-- 3 CBA INTUNE -->
+  <section class="section tab-panel" id="cba-intune">
+    <h2>3 · Deploy the Certificate with Intune</h2>
+    <p class="lead">The Intune-managed device is what supplies the <strong>device factor</strong>. For the supported AND model this comes from <strong>Intune enrollment + compliance</strong> (and/or hybrid join), not from a hand-built user certificate. A user certificate (SCEP/PKCS) is only needed for the optional CBA sign-in path.</p>
+
+    <div class="callout">
+      <strong>Two roles a certificate can play — know which you need:</strong>
+      <ul>
+        <li><strong>Device trust (this guide's AND):</strong> achieved by <em>Intune enrollment + a compliance policy</em> and/or <em>Microsoft Entra hybrid join</em>. The device registration certificate is provisioned automatically by that process — you do not hand-build a user SCEP cert for this. This is what satisfies the "Require compliant device" control.</li>
+        <li><strong>User sign-in (CBA, optional):</strong> a user certificate the person presents at sign-in, built with the SCEP/PKCS profile below and mapped by UPN. This is an <em>OR</em> alternative to FIDO2 — it cannot be ANDed with it (Section 4).</li>
+      </ul>
+    </div>
+
+    <div class="callout ok">
+      <strong>For the two-credential AND, you usually don't need the SCEP user cert at all.</strong> Enroll the device in Intune, apply a compliance policy (and/or hybrid join), and the "compliant device" control is satisfied. The SCEP/PKCS profile below is only required if you <em>also</em> want the certificate usable as a user sign-in method (Section 4).
+    </div>
+
+    <h3>If you need the user certificate (CBA path) — profile options</h3>
+    <table>
+      <thead><tr><th>Profile</th><th>Best for</th><th>Key requirement</th></tr></thead>
+      <tbody>
+        <tr><td><strong>SCEP</strong></td><td>Scale; per-device key generation on TPM</td><td>NDES + Intune Certificate Connector + AD CS</td></tr>
+        <tr><td><strong>PKCS</strong></td><td>Simpler issuance; cert tied to user</td><td>Intune Certificate Connector + AD CS template</td></tr>
+        <tr><td><strong>PKCS imported</strong></td><td>S/MIME-style pre-generated certs</td><td>PFX import via Graph</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Prerequisites</h3>
+    <ul>
+      <li>Enterprise PKI (AD Certificate Services) with a certificate template for <strong>Client Authentication</strong> EKU (<code>1.3.6.1.5.5.7.3.2</code>).</li>
+      <li><strong>Trusted Root certificate profile</strong> in Intune that pushes your Root (and Issuing) CA chain to devices.</li>
+      <li>Intune <strong>Certificate Connector</strong> installed and healthy.</li>
+      <li>The Subject / SAN must carry an attribute Entra can map to the user (commonly <strong>SAN → Principal Name = userPrincipalName</strong>, or <strong>RFC822Name = email</strong>).</li>
+    </ul>
+
+    <h3>Build the SCEP profile (Intune admin center)</h3>
+    <ol class="steps">
+      <li>Push the CA chain first: <strong>Devices → Configuration → Create → Templates → Trusted certificate</strong> (one for Root, one for Issuing CA).</li>
+      <li>Create <strong>Devices → Configuration → Create → Templates → SCEP certificate</strong>.</li>
+      <li><strong>Certificate type:</strong> <em>User</em> (so it maps to the signing-in identity).</li>
+      <li><strong>Subject name format:</strong> <code>CN={{UserPrincipalName}}</code>.</li>
+      <li><strong>Subject alternative name:</strong> add <em>User principal name (UPN)</em> = <code>{{UserPrincipalName}}</code>. <span class="pill rec">critical for Entra mapping</span></li>
+      <li><strong>Key usage:</strong> Digital signature + Key encipherment. <strong>Key storage provider:</strong> Enroll to TPM if present.</li>
+      <li><strong>Extended key usage:</strong> Client Authentication (<code>1.3.6.1.5.5.7.3.2</code>).</li>
+      <li><strong>Root Certificate:</strong> reference the Trusted certificate profile from step 1.</li>
+      <li><strong>SCEP Server URLs:</strong> your NDES endpoint. Save and assign to your pilot group.</li>
+    </ol>
+
+    <div class="callout warn">
+      <strong>Mapping must match Entra.</strong> Whatever attribute you place in the SAN (UPN, email/RFC822, or the cert serial/issuer) has to line up with the username binding you configure in Entra CBA (Section 4). A mismatch = "certificate cannot be mapped to a user".
+    </div>
+  </section>
+
+  <!-- 4 ENTRA CBA -->
+  <section class="section tab-panel" id="entra-cba">
+    <h2>4 · Optional — Certificate as a User Credential (CBA)</h2>
+    <p class="lead">This section is <strong>only</strong> needed if you also want users to be able to sign in <em>with the certificate itself</em> (e.g. as an OR alternative to FIDO2, or for smartcard scenarios). It is <strong>not</strong> what creates the AND with FIDO2 — that lives in Conditional Access (Section 7).</p>
+
+    <div class="callout danger">
+      <strong>Do not expect CBA to combine with FIDO2.</strong> Whether you set the CBA binding to single-factor or multifactor, Entra treats a presented user certificate as its own standalone combination. There is no authentication-strength combination that requires "certificate AND FIDO2" in one sign-in. If your goal is purely the two-credential AND, you can skip this section and rely on device trust (Section 3) + FIDO2 (Section 5).
+    </div>
+
+    <h3>Step 1 — Upload your CA chain</h3>
+    <ol class="steps">
+      <li><strong>Entra admin center → Protection → Show more → Security → Certificate authorities</strong> (or the PKI blade under Authentication methods).</li>
+      <li>Upload Root CA and Issuing CA <code>.cer</code> files; provide the CRL Distribution Point URL for each.</li>
+      <li>Mark the issuing CA appropriately and save.</li>
+    </ol>
+
+    <h3>Step 2 — Enable & tune CBA</h3>
+    <ol class="steps">
+      <li><strong>Protection → Authentication methods → Policies → Certificate-based authentication.</strong></li>
+      <li><strong>Enable</strong> = Yes. Target your pilot group.</li>
+      <li>Open the <strong>Configure</strong> tab.</li>
+      <li><strong>Authentication binding</strong> → choose single-factor or multifactor protection level per issuer / policy OID, depending on how strong you want a cert-only sign-in to count.</li>
+      <li><strong>Username binding</strong> → choose the field that matches your Intune SAN, e.g. <code>PrincipalName → userPrincipalName</code>.</li>
+      <li>Save.</li>
+    </ol>
+
+    <div class="callout">
+      You can use <strong>certificate issuer / policy OID rules</strong> in the authentication binding and in the custom authentication strength advanced options to restrict which certificates qualify. Useful when reserving a specific Intune-issued cert for a high-assurance app.
+    </div>
+  </section>
+
+  <!-- 5 FIDO2 -->
+  <section class="section tab-panel" id="fido2">
+    <h2>5 · Enable FIDO2 Security Keys</h2>
+    <p class="lead">Turn on FIDO2 in the same Authentication methods policy and let pilot users register a key.</p>
+
+    <ol class="steps">
+      <li><strong>Protection → Authentication methods → Policies → FIDO2 security key.</strong></li>
+      <li><strong>Enable</strong> = Yes. <strong>Target</strong> = pilot group.</li>
+      <li><strong>Configure</strong> tab → <strong>Allow self-service set up</strong> = Yes.</li>
+      <li><strong>Enforce attestation</strong> = Yes (only keys with valid vendor attestation).</li>
+      <li><strong>Enforce key restrictions</strong> = optional — add allowed <strong>AAGUIDs</strong> to permit only approved key models (e.g. corporate-issued YubiKeys).</li>
+      <li>Save.</li>
+    </ol>
+
+    <h3>User registration</h3>
+    <ul>
+      <li>Users go to <a href="https://aka.ms/mysecurityinfo" target="_blank" rel="noopener">https://aka.ms/mysecurityinfo</a> → <strong>Add sign-in method → Security key</strong>.</li>
+      <li>First registration needs an existing strong credential. If the user has none, issue a <strong>Temporary Access Pass (TAP)</strong> from <em>Users → Authentication methods → Add → Temporary Access Pass</em> to bootstrap.</li>
+    </ul>
+
+    <div class="callout ok">
+      Pair the registration carefully: the same physical key flow should be tested end-to-end against the auth strength before broad rollout.
+    </div>
+  </section>
+
+  <!-- 6 STRENGTH -->
+  <section class="section tab-panel" id="strength">
+    <h2>6 · Create the Phishing-Resistant Authentication Strength</h2>
+    <p class="lead">This strength enforces the <strong>user factor: FIDO2</strong>. The device factor (Intune certificate) is enforced separately in Conditional Access (Section 7). You can use the built-in <em>Phishing-resistant MFA</em> strength or build a custom one scoped to just FIDO2.</p>
+
+    <ol class="steps">
+      <li><strong>Protection → Authentication methods → Authentication strengths → New authentication strength.</strong></li>
+      <li>Name it e.g. <code>FIDO2 only — phishing-resistant</code>.</li>
+      <li>Under <strong>Phishing-resistant MFA</strong>, select <strong>Passkeys (FIDO2)</strong>. Optionally also allow <em>Windows Hello for Business</em> and <em>Certificate-based authentication (multifactor)</em> if you want those as <strong>OR</strong> alternatives.</li>
+      <li>(Optional) Open <strong>Passkeys (FIDO2) → Advanced options</strong> and add allowed <strong>AAGUIDs</strong> to permit only corporate key models.</li>
+      <li>Review and create.</li>
+    </ol>
+
+    <div class="callout warn">
+      <strong>There is no "FIDO2 + certificate" combination to select here.</strong> Everything you tick in a strength is an <em>alternative</em> (OR). To require a second credential you must add a second grant control in Conditional Access — that is the next section.
+    </div>
+
+    <table>
+      <thead><tr><th>If you select…</th><th>Sign-in is satisfied by…</th></tr></thead>
+      <tbody>
+        <tr><td>Only Passkeys (FIDO2)</td><td>A FIDO2 key (then CA still requires a compliant device — the AND)</td></tr>
+        <tr><td>FIDO2 + CBA (MF)</td><td>A FIDO2 key <strong>or</strong> a multifactor certificate — user's choice</td></tr>
+        <tr><td>FIDO2 + Windows Hello</td><td>A FIDO2 key <strong>or</strong> Windows Hello for Business</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 7 CA -->
+  <section class="section tab-panel" id="ca">
+    <h2>7 · Enforce Both Credentials with Conditional Access</h2>
+    <p class="lead">This is where "both at once" actually happens. You combine <strong>two grant controls with AND</strong>: the FIDO2 authentication strength and a managed-device requirement satisfied by the Intune certificate.</p>
+
+    <ol class="steps">
+      <li><strong>Protection → Conditional Access → Create new policy.</strong></li>
+      <li><strong>Users:</strong> your pilot group / Tier-0 admins. Always exclude break-glass accounts.</li>
+      <li><strong>Target resources:</strong> the sensitive app(s), or "All resources" for admin roles.</li>
+      <li><strong>Grant → Grant access</strong>, then select <strong>both</strong>:
+        <ul>
+          <li>✅ <strong>Require authentication strength</strong> → your FIDO2 strength (the user).</li>
+          <li>✅ <strong>Require device to be marked as compliant</strong> (and/or <strong>Require Microsoft Entra hybrid joined device</strong>) — satisfied via the Intune-deployed certificate (the device).</li>
+        </ul>
+      </li>
+      <li>Set <strong>"Require all the selected controls"</strong> (this is the <strong>AND</strong>).</li>
+      <li>Start in <strong>Report-only</strong>, validate sign-in logs, then switch to <strong>On</strong>.</li>
+    </ol>
+
+    <div class="callout ok">
+      <strong>The result:</strong> a user can only get in if they (1) authenticate with a FIDO2 key <em>and</em> (2) are on a managed device carrying the Intune certificate. Two independent credentials, enforced in a single access decision.
+    </div>
+
+    <div class="callout danger">
+      <strong>Break-glass:</strong> always exclude at least two emergency-access accounts from this policy, and verify they can still sign in. A misconfigured AND policy can lock everyone out.
+    </div>
+
+    <div class="callout warn">
+      <strong>If you truly need the certificate as a presented user credential</strong> (not device trust) <em>together</em> with FIDO2 in the same sign-in, Entra cannot do it. Re-evaluate whether device trust (above) meets the requirement — in almost all cases it does, and more securely.
+    </div>
+  </section>
+
+  <!-- 8 GRAPH -->
+  <section class="section tab-panel" id="graph">
+    <h2>8 · PowerShell / Microsoft Graph</h2>
+    <p class="lead">Reference snippets to enable methods, create the strength, and bind it in Conditional Access. Validate in a test tenant first.</p>
+
+    <h3>Connect</h3>
+    <pre class="code"><span class="c"># Microsoft Graph PowerShell SDK</span>
+Connect-MgGraph -Scopes <span class="s">"Policy.ReadWrite.AuthenticationMethod"</span>,`
+  <span class="s">"Policy.ReadWrite.ConditionalAccess"</span>,`
+  <span class="s">"Policy.Read.All"</span></pre>
+
+    <h3>Enable FIDO2 for a group</h3>
+    <pre class="code"><span class="k">$fido2</span> = @{
+  id    = <span class="s">"Fido2"</span>
+  state = <span class="s">"enabled"</span>
+  includeTargets = @(@{ targetType=<span class="s">"group"</span>; id=<span class="s">"&lt;pilotGroupId&gt;"</span> })
+  isAttestationEnforced = <span class="k">$true</span>
+  isSelfServiceRegistrationAllowed = <span class="k">$true</span>
+}
+Update-MgPolicyAuthenticationMethodPolicyAuthenticationMethodConfiguration `
+  -AuthenticationMethodConfigurationId <span class="s">"Fido2"</span> -BodyParameter <span class="k">$fido2</span></pre>
+
+    <h3>Enable CBA (optional — only if cert is also a user sign-in method)</h3>
+    <pre class="code"><span class="c"># Optional. CBA lets users sign in WITH the certificate (an OR alternative to FIDO2).</span>
+<span class="c"># It does NOT create an AND with FIDO2 - that is done in Conditional Access.</span>
+<span class="k">$cba</span> = @{
+  <span class="s">"@odata.type"</span> = <span class="s">"#microsoft.graph.x509CertificateAuthenticationMethodConfiguration"</span>
+  id    = <span class="s">"X509Certificate"</span>
+  state = <span class="s">"enabled"</span>
+  includeTargets = @(@{ targetType=<span class="s">"group"</span>; id=<span class="s">"&lt;pilotGroupId&gt;"</span> })
+  certificateUserBindings = @(
+    @{ x509CertificateField=<span class="s">"PrincipalName"</span>; userProperty=<span class="s">"userPrincipalName"</span>; priority=1 }
+  )
+  authenticationModeConfiguration = @{
+    x509CertificateAuthenticationDefaultMode = <span class="s">"x509CertificateSingleFactor"</span>
+  }
+}
+Update-MgPolicyAuthenticationMethodPolicyAuthenticationMethodConfiguration `
+  -AuthenticationMethodConfigurationId <span class="s">"X509Certificate"</span> -BodyParameter <span class="k">$cba</span></pre>
+
+    <h3>Create the FIDO2 authentication strength</h3>
+    <pre class="code"><span class="c"># allowedCombinations are joined by OR. Each entry is one complete way to sign in.</span>
+<span class="c"># There is NO "x509 + fido2" combined token - that does not exist in Entra.</span>
+<span class="k">$body</span> = @{
+  displayName = <span class="s">"FIDO2 only - phishing-resistant"</span>
+  description = <span class="s">"Requires a FIDO2 security key (the user factor)"</span>
+  allowedCombinations = @( <span class="s">"fido2"</span> )   <span class="c"># optionally add "windowsHelloForBusiness","x509CertificateMultiFactor"</span>
+}
+New-MgPolicyAuthenticationStrengthPolicy -BodyParameter <span class="k">$body</span></pre>
+
+    <div class="callout warn">
+      Each string in <code>allowedCombinations</code> is a single combination. Comma-separated tokens (e.g. <code>"password,sms"</code>) only exist for the documented "primary + something you have" pairs. <strong>FIDO2 and certificate have no comma-paired form</strong> — confirm with <code>Get-MgPolicyAuthenticationStrengthPolicy</code> on your tenant.
+    </div>
+
+    <h3>Conditional Access — AND two grant controls</h3>
+    <pre class="code"><span class="c"># The "both at once" is here: authenticationStrength (FIDO2) AND compliantDevice,</span>
+<span class="c"># joined by operator AND.</span>
+grantControls = @{
+  operator = <span class="s">"AND"</span>                              <span class="c"># Require ALL selected controls</span>
+  builtInControls = @( <span class="s">"compliantDevice"</span> )      <span class="c"># device trust via Intune cert</span>
+  authenticationStrength = @{ id = <span class="s">"&lt;fido2StrengthPolicyId&gt;"</span> }
+}</pre>
+
+    <div class="callout ok">
+      <code>operator = "AND"</code> plus both a <code>builtInControls</code> entry and an <code>authenticationStrength</code> is exactly the two-credential requirement: FIDO2 (user) and a managed device carrying the Intune certificate (device).
+    </div>
+  </section>
+
+  <!-- 9 UX -->
+  <section class="section tab-panel" id="ux">
+    <h2>9 · The User Experience</h2>
+    <p class="lead">What the person actually does when both factors are required.</p>
+
+    <div class="flow">
+      <div class="stage"><span class="num">1</span><h4>Open app</h4><p>User navigates to the protected resource; Entra evaluates the CA policy.</p></div>
+      <div class="stage"><span class="num">2</span><h4>Device check</h4><p>Entra confirms the device is compliant / hybrid joined via the Intune certificate — usually silent.</p></div>
+      <div class="stage"><span class="num">3</span><h4>FIDO2 prompt</h4><p>User inserts/taps the security key and enters PIN or uses biometric.</p></div>
+      <div class="stage"><span class="num">4</span><h4>Access granted</h4><p>Both controls satisfied (AND) → token issued for the session.</p></div>
+    </div>
+
+    <table>
+      <thead><tr><th>Surface</th><th>Device trust (Intune cert)</th><th>FIDO2</th></tr></thead>
+      <tbody>
+        <tr><td>Edge / Chrome on managed Windows</td><td>Silent — device already compliant</td><td>WebAuthn prompt for key + PIN</td></tr>
+        <tr><td>Mobile (managed)</td><td>Silent if enrolled & compliant</td><td>NFC/USB-C key or platform passkey</td></tr>
+        <tr><td>Unmanaged / non-compliant device</td><td>❌ Blocked by the compliant-device control</td><td>n/a — access denied</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      If you also enabled <strong>CBA</strong> as a user sign-in method (Section 4), the user may instead see a <em>certificate picker</em> as an alternative to FIDO2 — but remember that path is an OR, not part of the AND.
+    </div>
+  </section>
+
+  <!-- 10 FAQ -->
+  <section class="section tab-panel" id="faq">
+    <h2>10 · FAQ &amp; Gotchas</h2>
+
+    <details class="qa"><summary>Why can't I just require FIDO2 AND a certificate in one authentication strength?</summary>
+      <div class="answer"><p>Because Entra has no such combination. Authentication-strength combinations are joined by OR, and the only AND-combinations are "password / federated single-factor + something the user has" — where "something the user has" is strictly SMS, voice, push, software OATH, or hardware OATH. FIDO2 and certificate are never AND-paired. To require two credentials, AND two Conditional Access grant controls instead.</p></div>
+    </details>
+
+    <details class="qa"><summary>So how do I get "two credentials at once"?</summary>
+      <div class="answer"><p>Use Conditional Access with <strong>Require authentication strength (FIDO2)</strong> AND <strong>Require device to be compliant / hybrid joined</strong>, set to "Require all the selected controls". The Intune certificate anchors device trust (the device factor); FIDO2 is the user factor.</p></div>
+    </details>
+
+    <details class="qa"><summary>Does a single-factor certificate help here?</summary>
+      <div class="answer"><p>Not for ANDing with FIDO2 — single-factor vs multifactor only changes how a cert-only sign-in is counted, it never makes the cert combinable with FIDO2 in a strength. The certificate's real value in this design is anchoring device compliance/trust.</p></div>
+    </details>
+
+    <details class="qa"><summary>"Certificate cannot be mapped to a user." (if using CBA)</summary>
+      <div class="answer"><p>The SAN/Subject attribute in the Intune profile doesn't match the Entra username binding. Align them — e.g. SAN UPN <code>{{UserPrincipalName}}</code> in Intune ↔ <code>PrincipalName → userPrincipalName</code> in Entra CBA.</p></div>
+    </details>
+
+    <details class="qa"><summary>Do I need devices to be Intune-compliant?</summary>
+      <div class="answer"><p>Yes — for this design the <strong>Require compliant device</strong> (or hybrid joined) control is what enforces the second credential. The Intune-deployed certificate is what lets the device prove that trust.</p></div>
+    </details>
+
+    <details class="qa"><summary>What about break-glass accounts?</summary>
+      <div class="answer"><p>Always exclude two emergency-access accounts from this Conditional Access policy and keep their credentials secured offline. Test their sign-in before enforcing.</p></div>
+    </details>
+
+    <details class="qa"><summary>Can I do this for only one critical app?</summary>
+      <div class="answer"><p>Yes. Scope the Conditional Access policy's <em>Target resources</em> to that single app. Other apps keep a lighter policy. Use Sign-in frequency for step-up re-authentication.</p></div>
+    </details>
+
+    <details class="qa"><summary>Roll-out order recommendation?</summary>
+      <div class="answer"><ol>
+        <li>Stand up PKI + Intune cert profiles → verify devices show as compliant / hybrid joined.</li>
+        <li>Enable FIDO2 → register a pilot key.</li>
+        <li>Build the FIDO2 authentication strength (or use built-in Phishing-resistant MFA).</li>
+        <li>Create the CA policy ANDing the strength + compliant device.</li>
+        <li>Run in <strong>report-only</strong>, inspect logs, then enforce.</li>
+      </ol></div>
+    </details>
+  </section>
+
+  <footer>
+    Reference guide · Microsoft Entra ID Authentication Methods, Conditional Access, Authentication Strengths &amp; Intune SCEP/PKCS · Validate every step in a non-production tenant before enforcing. Configuration details evolve — confirm against current Microsoft Learn documentation.
+  </footer>
+</div>
+
+<script>
+  document.querySelectorAll('.tab-button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var tab = btn.getAttribute('data-tab');
+      document.querySelectorAll('.tab-button').forEach(function(b){b.classList.remove('active');});
+      document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+      btn.classList.add('active');
+      document.getElementById(tab).classList.add('active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+</script>
+</body>
+</html>
