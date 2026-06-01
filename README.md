@@ -26,6 +26,7 @@ GitHub Pages root: https://kabivel.github.io/v-ofernando/
 - Exchange Mailflow report: https://kabivel.github.io/v-ofernando/Exchange/Mailflow.html
 - Okta, Active Directory, and Entra ID guideline: https://kabivel.github.io/v-ofernando/Identity%20management/
 - PAW — Privileged Access Workstation guideline: https://kabivel.github.io/v-ofernando/Identity%20management/paw-privileged-access-workstation.html
+- FIDO2 + Certificate (Intune) two-factor guide: https://kabivel.github.io/v-ofernando/Identity%20management/fido2-plus-certificate-intune.html
 - SharePoint Version History — Deployment Plan (static): https://kabivel.github.io/v-ofernando/Sharepoint/version-history-deployment-plan.html
 
 > **Note:** GitHub Pages must be enabled — repo **Settings → Pages → Source: Deploy from a branch → Branch: `main` / folder: `/ (root)`**.
