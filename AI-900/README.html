@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI-900 Study Kit — Index</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e;--ok:#3fb950;--err:#f85149;--warn:#d29922}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76;--ok:#1a7f37;--err:#cf222e;--warn:#9a6700}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+button{background:var(--accent);color:var(--bg);border:0;padding:.4rem .8rem;border-radius:6px;cursor:pointer;font:inherit}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;padding:.2rem .5rem}
+main{max-width:1000px;margin:0 auto;padding:1.5rem}
+h1,h2,h3{line-height:1.25}h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}
+a{color:var(--accent)}code{font-family:Consolas,Monaco,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .3rem}
+table{border-collapse:collapse;width:100%;margin:1rem 0}th,td{border:1px solid var(--border);padding:.5rem;text-align:left}th{background:var(--card)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;margin:.5rem 0;text-decoration:none;color:var(--fg);display:block;transition:border-color .15s}
+.card:hover{border-color:var(--accent)}.card h3{margin:.2rem 0;color:var(--accent)}.card p{margin:.3rem 0;color:var(--muted);font-size:.9rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.8rem}
+.warn-box{background:rgba(210,153,34,.1);border-left:4px solid var(--warn);padding:.8rem 1rem;border-radius:4px;margin:1rem 0}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style>
+</head>
+<body>
+<header>
+<div><strong>🎓 AI-900 Kit</strong> <span style="color:var(--muted)">· 7 days × 3h+ · beginner+</span></div>
+<button id="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">🌙</button>
+</header>
+<main>
+<h1>AI-900: Azure AI Fundamentals — Study Kit</h1>
+
+<div class="warn-box">
+<strong>⚠️ Time-sensitive:</strong> AI-900 retires <strong>June 30, 2026</strong>. Schedule your exam before then or plan to take the replacement AI-901.
+<a href="https://learn.microsoft.com/en-us/credentials/certifications/exams/ai-900/" target="_blank" rel="noopener">Official exam page</a>
+</div>
+
+<h2 id="overview">Exam overview</h2>
+<table>
+<tr><th>Cost</th><td>$99 USD</td></tr>
+<tr><th>Passing score</th><td>700 / 1000</td></tr>
+<tr><th>Questions</th><td>~40–60 (not publicly fixed) · this kit uses 50 in <code>simulado.html</code></td></tr>
+<tr><th>Languages</th><td>EN, JA, ZH, KO, DE, FR, ES, PT-BR, RU, ID, AR, IT</td></tr>
+<tr><th>Prerequisites</th><td>None — non-technical OK</td></tr>
+<tr><th>Validity</th><td>Lifetime (no renewal required for fundamentals)</td></tr>
+</table>
+
+<h2 id="domains">5 domains (skills measured)</h2>
+<table>
+<tr><th>#</th><th>Domain</th><th>Weight</th></tr>
+<tr><td>1</td><td><a href="domains/01-ai-workloads.html">AI workloads & considerations</a></td><td>15–20%</td></tr>
+<tr><td>2</td><td><a href="domains/02-machine-learning.html">Machine learning on Azure</a></td><td>15–20%</td></tr>
+<tr><td>3</td><td><a href="domains/03-computer-vision.html">Computer vision</a></td><td>15–20%</td></tr>
+<tr><td>4</td><td><a href="domains/04-nlp.html">Natural language processing</a></td><td>15–20%</td></tr>
+<tr><td>5</td><td><a href="domains/05-generative-ai.html">Generative AI</a></td><td><strong>20–25%</strong></td></tr>
+</table>
+
+<h2 id="day0">🚨 Day 0 — start here (mandatory)</h2>
+<ol>
+<li>Open <a href="diagnostic.html">diagnostic.html</a> and answer all questions honestly (~30 min). Click <strong>✅ Score diagnostic</strong>.</li>
+<li>If your pre-requisites score is &lt; 30%, read <a href="fundamentals.html">fundamentals.html</a> before the study plan.</li>
+<li>Open <a href="study-plan.html">study-plan.html</a> and adjust the 7-day schedule to your weak domains.</li>
+<li>Import <a href="flashcards.csv">flashcards.csv</a> into Anki — review 15 min/day starting Day 1.</li>
+</ol>
+
+<h2 id="all-files">All files</h2>
+
+<h3>Core study materials</h3>
+<div class="grid">
+<a class="card" href="diagnostic.html"><h3>🧪 diagnostic</h3><p>20 calibration questions — interactive auto-score</p></a>
+<a class="card" href="fundamentals.html"><h3>📚 fundamentals</h3><p>Pre-requisite primer (cloud, AI vocabulary)</p></a>
+<a class="card" href="glossary.html"><h3>📖 glossary</h3><p>~60 AI/Azure terms A–Z</p></a>
+<a class="card" href="concept-map.html"><h3>🗺️ concept-map</h3><p>Mermaid diagrams of service relationships</p></a>
+<a class="card" href="study-plan.html"><h3>🗓️ study-plan</h3><p>7-day × 3h schedule</p></a>
+<a class="card" href="cheatsheet.html"><h3>📋 cheatsheet</h3><p>Service-to-use-case quick tables</p></a>
+<a class="card" href="pegadinhas.html"><h3>⚠️ pegadinhas</h3><p>Top 20 exam traps + heuristics</p></a>
+<a class="card" href="exam-strategy.html"><h3>🎯 exam-strategy</h3><p>3-pass strategy + time management</p></a>
+<a class="card" href="mock-exam-plan.html"><h3>📅 mock-exam-plan</h3><p>Practice runs schedule</p></a>
+<a class="card" href="simulado.html"><h3>🧠 simulado (50 Q)</h3><p>Full interactive practice exam — timer + scoring</p></a>
+<a class="card" href="real-exam-questions.html"><h3>📚 real exam Q&A</h3><p>Consolidated real-style questions (parts 1, 2, 3, …) — filterable by part/domain</p></a>
+<a class="card" href="flashcards.html"><h3>🎴 flashcards</h3><p>Top 50 Q&A — see also <code>flashcards.csv</code></p></a>
+<a class="card" href="mistake-log.html"><h3>📝 mistake-log</h3><p>Track and review errors after every simulado</p></a>
+</div>
+
+<h3>Domain guides</h3>
+<div class="grid">
+<a class="card" href="domains/01-ai-workloads.html"><h3>D1 · AI workloads</h3><p>Anomaly detection, CV, NLP, doc intelligence, knowledge mining, generative AI · Responsible AI principles</p></a>
+<a class="card" href="domains/02-machine-learning.html"><h3>D2 · Machine learning</h3><p>Regression, classification, clustering · Azure ML Studio · AutoML</p></a>
+<a class="card" href="domains/03-computer-vision.html"><h3>D3 · Computer vision</h3><p>Azure AI Vision, Face, Document Intelligence, Video Indexer</p></a>
+<a class="card" href="domains/04-nlp.html"><h3>D4 · NLP</h3><p>Azure AI Language, Speech, Translator, Q&A, conversational language</p></a>
+<a class="card" href="domains/05-generative-ai.html"><h3>D5 · Generative AI ⭐</h3><p>Azure OpenAI, Foundry, prompt engineering, Copilot, RAG</p></a>
+</div>
+
+<h3>Hands-on labs</h3>
+<div class="grid">
+<a class="card" href="labs/01-azure-ai-vision/README-guided.html"><h3>Lab 1 · Azure AI Vision</h3><p>Image analysis · guided + speedrun · Python</p></a>
+<a class="card" href="labs/02-language-service/README-guided.html"><h3>Lab 2 · Language Service</h3><p>Sentiment + entity extraction · guided + speedrun</p></a>
+<a class="card" href="labs/03-azure-openai/README-guided.html"><h3>Lab 3 · Azure OpenAI</h3><p>Prompt + completion via Foundry · guided + speedrun</p></a>
+</div>
+
+<h2 id="how">How to use this kit (beginner flow)</h2>
+<ol>
+<li><strong>Day 0:</strong> diagnostic → study-plan → glossary skim</li>
+<li><strong>Days 1–5:</strong> one domain per day → guided lab → 15 min flashcards</li>
+<li><strong>Day 6:</strong> all 3 labs in speedrun mode → cheatsheet + pegadinhas</li>
+<li><strong>Day 7:</strong> full simulado (50 Q, 60 min) → review mistake-log → rest before exam</li>
+</ol>
+
+<h2 id="official">Official Microsoft resources</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/credentials/certifications/exams/ai-900/" target="_blank" rel="noopener">Exam AI-900 page</a></li>
+<li><a href="https://aka.ms/AI900-StudyGuide" target="_blank" rel="noopener">Official AI-900 study guide</a></li>
+<li><a href="https://learn.microsoft.com/credentials/certifications/exams/ai-900/practice/assessment?assessment-type=practice&amp;assessmentId=26" target="_blank" rel="noopener">Free Microsoft practice assessment</a></li>
+<li><a href="https://learn.microsoft.com/en-us/training/courses/ai-900t00" target="_blank" rel="noopener">AI-900T00 instructor-led training</a></li>
+<li><a href="https://go.microsoft.com/fwlink/?linkid=2226877" target="_blank" rel="noopener">Exam sandbox (UI demo)</a></li>
+</ul>
+
+<h2 id="ethics">📜 Source ethics</h2>
+<p>Every link in this kit points to <code>learn.microsoft.com</code>, <code>aka.ms</code>, or another official Microsoft domain. <strong>Zero third-party sources</strong> — no exam dumps, paid courses, or community Q&amp;A. This material complements (does not replace) the official Microsoft Learn path.</p>
+</main>
+<footer>AI-900 Study Kit · Generated 2026-05-29 · 100% sourced from <a href="https://learn.microsoft.com" target="_blank" rel="noopener">learn.microsoft.com</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pegadinhas — AI-900 Kit</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e;--warn:#d29922;--ok:#3fb950}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76;--warn:#9a6700;--ok:#1a7f37}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:900px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}h2{color:var(--accent);margin-top:1.5rem}
+a{color:var(--accent)}code{font-family:Consolas,Monaco,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .3rem}
+.trap{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--warn);border-radius:6px;padding:.8rem 1rem;margin:.8rem 0}
+.trap strong{color:var(--warn)}.trap .ok{color:var(--ok)}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style></head><body>
+<header><div><a href="README.html">← Index</a><span style="color:var(--muted)">AI-900 · Pegadinhas (exam traps)</span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>Top 20 exam traps + 10 elimination heuristics</h1>
+<p>Each trap: <strong>seems-true</strong> → <span class="ok">actually-true</span> → why.</p>
+
+<h2>Traps</h2>
+
+<div class="trap"><strong>1.</strong> "Inclusiveness means using diverse training data."<br><span class="ok">→</span> Inclusiveness = AI serves people of <strong>all abilities and backgrounds</strong> (accessibility focus). Diverse data relates to <strong>Fairness</strong>.</div>
+
+<div class="trap"><strong>2.</strong> "If a model explains its decisions, that's Accountability."<br><span class="ok">→</span> That's <strong>Transparency</strong>. Accountability = humans remain responsible for AI outcomes (governance).</div>
+
+<div class="trap"><strong>3.</strong> "Form Recognizer is the right service for invoices."<br><span class="ok">→</span> Form Recognizer was <strong>renamed to Azure AI Document Intelligence</strong>. Pick the new name.</div>
+
+<div class="trap"><strong>4.</strong> "Cognitive Search" is on the exam.<br><span class="ok">→</span> Renamed <strong>Azure AI Search</strong>. Both names may still appear; both refer to the same service.</div>
+
+<div class="trap"><strong>5.</strong> "LUIS is the right service for chatbot intent detection."<br><span class="ok">→</span> LUIS is retired (deprecated). Use <strong>Conversational Language Understanding (CLU)</strong> in Azure AI Language.</div>
+
+<div class="trap"><strong>6.</strong> "QnA Maker"<br><span class="ok">→</span> Replaced by <strong>Question answering</strong> feature in Azure AI Language.</div>
+
+<div class="trap"><strong>7.</strong> "Azure AI Studio"<br><span class="ok">→</span> Renamed <strong>Azure AI Foundry</strong> portal (<a href="https://ai.azure.com" target="_blank" rel="noopener">ai.azure.com</a>).</div>
+
+<div class="trap"><strong>8.</strong> Confusing <strong>accuracy</strong> vs <strong>F1</strong> for imbalanced classes.<br><span class="ok">→</span> Accuracy is misleading when one class dominates (e.g., 99% non-fraud). Use <strong>F1</strong> or precision/recall.</div>
+
+<div class="trap"><strong>9.</strong> "Use accuracy to evaluate a regression model."<br><span class="ok">→</span> Accuracy is a <strong>classification</strong> metric. Regression uses <strong>RMSE / MAE / R²</strong>.</div>
+
+<div class="trap"><strong>10.</strong> "Clustering needs labeled data."<br><span class="ok">→</span> Clustering is <strong>unsupervised</strong> — no labels required.</div>
+
+<div class="trap"><strong>11.</strong> "Designer in Azure ML requires Python code."<br><span class="ok">→</span> Designer is <strong>drag-and-drop, no-code</strong>. Notebooks are code-first.</div>
+
+<div class="trap"><strong>12.</strong> "Computer Vision can identify specific people."<br><span class="ok">→</span> Generic Computer Vision returns face <strong>bounding boxes only</strong>. Identification/verification needs the <strong>Face API</strong> (Limited Access — requires approval).</div>
+
+<div class="trap"><strong>13.</strong> "OCR and image classification are the same."<br><span class="ok">→</span> OCR <strong>extracts text</strong>. Image classification <strong>assigns a label</strong> to the whole image.</div>
+
+<div class="trap"><strong>14.</strong> "Object detection returns one label per image."<br><span class="ok">→</span> Object detection returns <strong>multiple objects with bounding boxes</strong>; image classification returns one (or top-N) label(s) for the whole image.</div>
+
+<div class="trap"><strong>15.</strong> "Speech translation = Translator service."<br><span class="ok">→</span> <strong>Azure AI Speech</strong> handles speech translation (audio in, transcript out in target language). <strong>Translator</strong> is text-only.</div>
+
+<div class="trap"><strong>16.</strong> "Azure OpenAI and OpenAI direct are identical."<br><span class="ok">→</span> Azure OpenAI adds <strong>enterprise security, regional hosting, RBAC, private networking, SLA, content filters</strong>. Same models, different governance.</div>
+
+<div class="trap"><strong>17.</strong> "RAG = fine-tuning."<br><span class="ok">→</span> Not the same. <strong>RAG</strong> retrieves docs at runtime to ground responses. <strong>Fine-tuning</strong> permanently adjusts model weights via training.</div>
+
+<div class="trap"><strong>18.</strong> "A higher temperature makes the model more accurate."<br><span class="ok">→</span> Higher temperature = <strong>more creative / random</strong>. For factual answers, use <strong>low temperature (0–0.3)</strong>.</div>
+
+<div class="trap"><strong>19.</strong> "Content filter in Azure OpenAI is optional."<br><span class="ok">→</span> Content filter is <strong>on by default</strong> for both prompts and completions. You can request modifications but cannot trivially disable it.</div>
+
+<div class="trap"><strong>20.</strong> "Microsoft 365 Copilot uses public ChatGPT data."<br><span class="ok">→</span> M365 Copilot is <strong>grounded on Microsoft Graph</strong> (your org's emails, files, chats) with enterprise data boundary — not public ChatGPT.</div>
+
+<h2>10 elimination heuristics</h2>
+<ol>
+<li>If the question mentions <strong>"unlabeled data"</strong> → answer is clustering / unsupervised / anomaly detection. Never regression/classification.</li>
+<li>If the question is about <strong>extracting text from a document</strong> → OCR (general images) or Document Intelligence (forms/invoices).</li>
+<li>If the question mentions <strong>specific person identification</strong> → Face API (not generic Computer Vision).</li>
+<li>If the question mentions <strong>chatbot</strong>, <strong>intent</strong>, <strong>utterance</strong> → CLU (Conversational Language Understanding).</li>
+<li>If two answers describe the same Responsible AI principle in different words, look for keyword anchors: <em>accessibility</em>=Inclusiveness, <em>explain</em>=Transparency, <em>responsible humans</em>=Accountability.</li>
+<li>If the question asks about <strong>creative writing</strong> or <strong>image generation</strong> → generative AI / Azure OpenAI.</li>
+<li>If the question asks about <strong>grounding</strong> or <strong>company data</strong> with an LLM → RAG (not fine-tuning).</li>
+<li>If a service name sounds <em>old</em> (Form Recognizer, LUIS, QnA Maker, Cognitive Search, AI Studio) — check whether it was renamed. Modern names are usually the right answer.</li>
+<li>If the question asks for a <strong>no-code</strong> ML solution → Azure ML Designer or AutoML (not Notebooks).</li>
+<li>Words like <strong>"always"</strong>, <strong>"never"</strong>, <strong>"only"</strong> in an answer are usually wrong on AI-900.</li>
+</ol>
+</main>
+<footer>← <a href="README.html">Back to index</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

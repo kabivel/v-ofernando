@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>D2: Machine Learning — AI-900 Kit</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:900px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}h2{color:var(--accent);margin-top:1.5rem}
+a{color:var(--accent)}code{font-family:Consolas,Monaco,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .3rem}
+table{border-collapse:collapse;width:100%;margin:.8rem 0}th,td{border:1px solid var(--border);padding:.5rem;text-align:left;vertical-align:top}th{background:var(--card)}
+nav.toc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.8rem;margin:1rem 0}
+nav.toc a{margin-right:.8rem}
+.check{background:var(--card);border-left:4px solid var(--accent);padding:.6rem 1rem;border-radius:4px;margin:1rem 0}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style></head><body>
+<header><div><a href="../README.html">← Index</a><span style="color:var(--muted)">AI-900 · D2 — Machine Learning (15–20%)</span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>Domain 2 — Machine learning on Azure</h1>
+<p><strong>Weight:</strong> 15–20% · <strong>Skill focus:</strong> identify ML task types, describe Azure ML capabilities, interpret evaluation metrics.</p>
+<nav class="toc"><strong>Sections:</strong> <a href="#tasks">Task types</a> · <a href="#metrics">Metrics</a> · <a href="#azureml">Azure ML</a> · <a href="#workflow">ML workflow</a> · <a href="#check">Self-check</a></nav>
+
+<h2 id="tasks">1. ML task types</h2>
+<table>
+<tr><th>Task</th><th>Type</th><th>Output</th><th>Real example</th></tr>
+<tr><td><strong>Regression</strong></td><td>Supervised</td><td>Continuous number</td><td>Predict house price ($USD), temperature, sales next quarter</td></tr>
+<tr><td><strong>Binary classification</strong></td><td>Supervised</td><td>1 of 2 classes</td><td>Spam / not spam, churn / no churn</td></tr>
+<tr><td><strong>Multi-class classification</strong></td><td>Supervised</td><td>1 of N classes</td><td>Iris species, news category</td></tr>
+<tr><td><strong>Clustering</strong></td><td>Unsupervised</td><td>Group ID</td><td>Customer segmentation</td></tr>
+<tr><td><strong>Anomaly detection</strong></td><td>Unsup. or semi-sup.</td><td>Normal / outlier</td><td>Fraud, IoT sensor faults</td></tr>
+</table>
+<p>Reference: <a href="https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/" target="_blank" rel="noopener">ML fundamentals module</a></p>
+
+<h2 id="metrics">2. Evaluation metrics</h2>
+
+<h3>Regression</h3>
+<table>
+<tr><th>Metric</th><th>Meaning</th><th>Range</th></tr>
+<tr><td>MAE (Mean Absolute Error)</td><td>Average |actual − predicted|</td><td>0 → ∞ (lower better)</td></tr>
+<tr><td>RMSE (Root Mean Square Error)</td><td>√(avg squared error); penalizes large errors</td><td>0 → ∞ (lower better)</td></tr>
+<tr><td>R² (coefficient of determination)</td><td>Fraction of variance explained</td><td>0 → 1 (higher better)</td></tr>
+</table>
+
+<h3>Classification</h3>
+<table>
+<tr><th>Metric</th><th>Formula</th><th>When critical</th></tr>
+<tr><td>Accuracy</td><td>(TP+TN) / total</td><td>Balanced classes only</td></tr>
+<tr><td>Precision</td><td>TP / (TP+FP)</td><td>False positives expensive (spam filter)</td></tr>
+<tr><td>Recall (sensitivity)</td><td>TP / (TP+FN)</td><td>False negatives expensive (cancer screen)</td></tr>
+<tr><td>F1</td><td>2·P·R / (P+R)</td><td>Imbalanced classes</td></tr>
+<tr><td>AUC (ROC)</td><td>Area under ROC curve</td><td>Threshold-independent ranking</td></tr>
+</table>
+<p>Reference: <a href="https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/8-classification" target="_blank" rel="noopener">Classification unit</a></p>
+
+<h2 id="azureml">3. Azure Machine Learning features</h2>
+<p>Portal: <a href="https://ml.azure.com" target="_blank" rel="noopener">ml.azure.com</a></p>
+<table>
+<tr><th>Feature</th><th>What it does</th><th>Code level</th></tr>
+<tr><td>Notebooks</td><td>Hosted Jupyter on managed compute</td><td>Full code (Python)</td></tr>
+<tr><td>Automated ML (AutoML)</td><td>Tries algorithms + hyperparameters automatically</td><td>Low-code / no-code</td></tr>
+<tr><td>Designer</td><td>Drag-and-drop pipeline builder</td><td>No-code</td></tr>
+<tr><td>Pipelines</td><td>Reusable multi-step ML workflows</td><td>Code or designer</td></tr>
+<tr><td>Compute instance</td><td>Single dev VM (for notebooks)</td><td>—</td></tr>
+<tr><td>Compute cluster</td><td>Auto-scaling VMs for training</td><td>—</td></tr>
+<tr><td>Registered model</td><td>Versioned model artifact</td><td>—</td></tr>
+<tr><td>Online endpoint</td><td>REST endpoint for real-time inference</td><td>—</td></tr>
+<tr><td>Batch endpoint</td><td>Score large datasets in bulk</td><td>—</td></tr>
+<tr><td>Responsible AI dashboard</td><td>Fairness, error analysis, interpretability</td><td>—</td></tr>
+</table>
+<p>Reference: <a href="https://learn.microsoft.com/en-us/azure/machine-learning/overview-what-is-azure-machine-learning" target="_blank" rel="noopener">Azure ML overview</a></p>
+
+<h2 id="workflow">4. Typical ML workflow</h2>
+<ol>
+<li><strong>Data prep</strong> — collect, clean, label, split into train / validation / test (~70/15/15)</li>
+<li><strong>Train</strong> — fit an algorithm to training data</li>
+<li><strong>Evaluate</strong> — compute metrics on validation set; iterate</li>
+<li><strong>Test</strong> — final unbiased estimate on test set (use once!)</li>
+<li><strong>Deploy</strong> — register model + create endpoint</li>
+<li><strong>Monitor</strong> — watch for data drift / accuracy decay; retrain if needed</li>
+</ol>
+
+<h2 id="check">5. Self-check</h2>
+<div class="check">
+<ol>
+<li>You want to predict tomorrow's temperature in °C. Which task type?</li>
+<li>You group 10,000 customers by purchasing behavior without labels. Which task type?</li>
+<li>Your fraud-detection classifier shows 99% accuracy but catches only 10% of frauds. Which metric should you prioritize instead?</li>
+<li>You want to train an ML model without writing code. Which Azure ML feature?</li>
+<li>What does RMSE measure?</li>
+</ol>
+<p><em>Answers:</em> 1. Regression · 2. Clustering (unsupervised) · 3. Recall (or F1) · 4. Designer or AutoML · 5. Root mean square error of regression predictions (lower is better)</p>
+</div>
+<p>Related: <a href="../cheatsheet.html#ml-task-types">Cheatsheet — ML metrics</a> · <a href="../flashcards.html">Flashcards D2</a></p>
+</main>
+<footer>← <a href="../README.html">Back to index</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

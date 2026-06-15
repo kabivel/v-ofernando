@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab 1 Guided — Azure AI Vision</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e;--warn:#d29922}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76;--warn:#9a6700}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:900px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}h2{color:var(--accent);margin-top:1.5rem}
+a{color:var(--accent)}code{font-family:Consolas,Monaco,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .3rem}
+pre{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.8rem;overflow:auto}
+.warn{background:rgba(210,153,34,.1);border-left:4px solid var(--warn);padding:.6rem 1rem;border-radius:4px;margin:.8rem 0}
+table{border-collapse:collapse;width:100%;margin:.8rem 0}th,td{border:1px solid var(--border);padding:.5rem;text-align:left;vertical-align:top}th{background:var(--card)}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style></head><body>
+<header><div><a href="../../README.html">← Index</a><span style="color:var(--muted)">Lab 1 · Azure AI Vision · Guided (45–60 min)</span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>Lab 1 — Analyze an image with Azure AI Vision (Guided)</h1>
+
+<h2>Objective</h2>
+<p>Call <a href="https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview" target="_blank" rel="noopener">Azure AI Vision</a> from Python to <strong>caption</strong>, <strong>tag</strong>, and <strong>detect objects</strong> in an image. By the end you'll understand the request/response shape and which features cost extra calls.</p>
+
+<h2>Why it matters for AI-900</h2>
+<p>Domain 3 expects you to distinguish Computer Vision from Custom Vision and from Document Intelligence. Doing the call once removes the abstraction and makes the trade-offs obvious.</p>
+
+<h2>Prerequisites</h2>
+<ul>
+<li>Azure subscription (free tier works — <a href="https://azure.microsoft.com/free/" target="_blank" rel="noopener">free account</a>)</li>
+<li>Python 3.9+ installed (<code>python --version</code>)</li>
+<li>Azure CLI (<code>az --version</code>) — <a href="https://learn.microsoft.com/en-us/cli/azure/install-azure-cli" target="_blank" rel="noopener">install</a></li>
+<li>Review prereqs in <a href="../../fundamentals.html#cloud">fundamentals.html</a> if "endpoint", "key", or "resource group" feel unfamiliar</li>
+</ul>
+
+<h2>Step 1 — Create the resource</h2>
+<p><strong>Why:</strong> Every Azure AI service is provisioned as a resource that gives you an endpoint URL and an authentication key.</p>
+<pre><code># sign in
+az login
+
+# create a resource group (region near you)
+az group create --name rg-ai900-vision --location eastus
+
+# create an Azure AI Vision (Computer Vision) resource
+az cognitiveservices account create \
+  --name ai900-vision-demo \
+  --resource-group rg-ai900-vision \
+  --kind ComputerVision \
+  --sku F0 \
+  --location eastus \
+  --yes</code></pre>
+<div class="warn">⚠️ <strong>F0</strong> is the <strong>free tier</strong>: 5,000 transactions / month, 20 calls / min. Plenty for this lab. Limit one free resource per subscription per region.</div>
+
+<h2>Step 2 — Get endpoint and key</h2>
+<p><strong>Why:</strong> Your Python script needs both to authenticate REST calls.</p>
+<pre><code>az cognitiveservices account show \
+  --name ai900-vision-demo --resource-group rg-ai900-vision \
+  --query "properties.endpoint" --output tsv
+
+az cognitiveservices account keys list \
+  --name ai900-vision-demo --resource-group rg-ai900-vision \
+  --query "key1" --output tsv</code></pre>
+<p>Copy both values into a <code>.env</code> file (see <code>.env.example</code>).</p>
+
+<h2>Step 3 — Set up Python environment</h2>
+<pre><code>cd labs/01-azure-ai-vision
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1   # PowerShell on Windows
+# or: source .venv/bin/activate   # bash
+pip install -r requirements.txt</code></pre>
+
+<h2>Step 4 — Run the analysis</h2>
+<p><strong>Why:</strong> A single REST call can return tags, caption, objects, dense captions, people, smart crops, and OCR (Read). Choose features carefully — each is billed separately.</p>
+<pre><code>python analyze.py https://learn.microsoft.com/azure/ai-services/computer-vision/media/quickstarts/presentation.png</code></pre>
+<p>Expected output: JSON-formatted caption + list of tags + bounding boxes per detected object.</p>
+
+<h2>Step 5 — Read the code</h2>
+<p>Open <code>analyze.py</code>. Key elements:</p>
+<ul>
+<li><code>ImageAnalysisClient</code> — official SDK (<a href="https://learn.microsoft.com/en-us/python/api/overview/azure/ai-vision-imageanalysis-readme" target="_blank" rel="noopener">docs</a>)</li>
+<li><code>visual_features=[CAPTION, TAGS, OBJECTS]</code> — every feature is a separate billable analysis</li>
+<li><code>AzureKeyCredential</code> — auth header; could be swapped for <code>DefaultAzureCredential</code> for managed-identity scenarios (Responsible AI principle: Privacy &amp; Security)</li>
+</ul>
+
+<h2>Success criteria</h2>
+<ul>
+<li>Script runs without exceptions</li>
+<li>Caption text matches the image content meaningfully</li>
+<li>You can name 3 visual features you DID NOT request (e.g., READ for OCR, PEOPLE, DENSE_CAPTIONS, SMART_CROPS)</li>
+<li>You understand why you'd pick this service over <strong>Custom Vision</strong> (no training needed) and over <strong>Document Intelligence</strong> (not optimized for forms)</li>
+</ul>
+
+<h2>Troubleshooting</h2>
+<table>
+<tr><th>Error</th><th>Likely cause</th><th>Fix</th></tr>
+<tr><td><code>401 PermissionDenied</code></td><td>Wrong key or endpoint mismatch</td><td>Re-copy <code>key1</code>; check endpoint trailing slash</td></tr>
+<tr><td><code>InvalidImageUrl</code></td><td>Image needs to be publicly accessible HTTPS</td><td>Use the sample URL or upload to a public blob</td></tr>
+<tr><td><code>UnsupportedRegion</code></td><td>Feature not in that region</td><td>Use <code>eastus</code>, <code>westus2</code>, <code>westeurope</code></td></tr>
+<tr><td><code>429 TooManyRequests</code></td><td>F0 rate limit hit</td><td>Wait 60s or upgrade to S1</td></tr>
+<tr><td><code>ModuleNotFoundError</code></td><td>Wrong venv active</td><td><code>pip install -r requirements.txt</code> in the right venv</td></tr>
+</table>
+
+<h2>What this teaches about the exam</h2>
+<ul>
+<li>You can now <strong>distinguish capabilities</strong> (caption / tags / objects / OCR) — high-frequency exam content for D3</li>
+<li>The <strong>F0 free tier</strong> exists for fundamentals — useful trivia</li>
+<li><strong>Pre-built models</strong> require no training data, unlike Custom Vision</li>
+<li>The same SDK pattern (resource → endpoint → key → client → call) repeats across every Azure AI service</li>
+</ul>
+
+<h2>Clean up</h2>
+<pre><code>az group delete --name rg-ai900-vision --yes --no-wait</code></pre>
+
+<h2>Next</h2>
+<p>Run the same scenario in <a href="README-speedrun.html">speedrun mode</a> — see if you can finish in &lt; 20 min.</p>
+</main>
+<footer>← <a href="../../README.html">Back to index</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

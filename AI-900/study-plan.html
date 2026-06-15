@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Study Plan — AI-900 Kit</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e;--warn:#d29922}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76;--warn:#9a6700}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:1000px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}
+a{color:var(--accent)}code{font-family:Consolas,Monaco,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .3rem}
+table{border-collapse:collapse;width:100%;margin:1rem 0}th,td{border:1px solid var(--border);padding:.5rem;text-align:left;vertical-align:top}th{background:var(--card)}
+.warn-box{background:rgba(210,153,34,.1);border-left:4px solid var(--warn);padding:.8rem 1rem;border-radius:4px;margin:1rem 0}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style></head><body>
+<header><div><a href="README.html">← Index</a><span style="color:var(--muted)">AI-900 · Study Plan (7 days × 3h)</span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>7-day intensive study plan</h1>
+<p>Designed for a candidate with technical base, ≥3 hours/day available. <strong>Calibrate this plan with your <a href="diagnostic.html">diagnostic</a> result first.</strong></p>
+
+<div class="warn-box">
+<strong>Adaptive rules:</strong>
+<ul style="margin:.3rem 0">
+<li>Any domain with diagnostic score &lt; 40% → spend <strong>1.5×</strong> the time below on that day</li>
+<li>Any domain &gt; 70% → compress to <strong>1h</strong>, use saved time on weak areas</li>
+<li>Pre-req score &lt; 30% → insert <a href="fundamentals.html">fundamentals.html</a> in Day 0 (+2h)</li>
+</ul>
+</div>
+
+<table>
+<tr><th>Day</th><th>3h breakdown</th><th>Deliverable</th></tr>
+<tr><td><strong>Day 0</strong><br>(prep)</td>
+<td>
+• 30 min — <a href="diagnostic.html">diagnostic.html</a> (honest, no notes)<br>
+• 30 min — read result; if pre-req &lt; 30%, queue fundamentals<br>
+• 60 min — <a href="README.html">README.html</a> + <a href="glossary.html">glossary.html</a> skim<br>
+• 60 min — <a href="concept-map.html">concept-map.html</a> + <a href="domains/01-ai-workloads.html">D1</a> intro
+</td>
+<td>score_per_domain noted; plan adjusted</td></tr>
+
+<tr><td><strong>Day 1</strong><br>(D1 · 15–20%)</td>
+<td>
+• 90 min — <a href="domains/01-ai-workloads.html">D1: AI workloads</a> full read<br>
+• 30 min — Responsible AI principles deep dive<br>
+• 45 min — flashcards (D1 tag)<br>
+• 15 min — write 3 questions you still don't get → <a href="mistake-log.html">mistake-log</a>
+</td>
+<td>D1 done · 10 flashcards reviewed</td></tr>
+
+<tr><td><strong>Day 2</strong><br>(D2 · 15–20%)</td>
+<td>
+• 90 min — <a href="domains/02-machine-learning.html">D2: ML on Azure</a> read<br>
+• 60 min — <strong>Azure ML Studio</strong> walkthrough (no code): <a href="https://ml.azure.com" target="_blank" rel="noopener">ml.azure.com</a> + AutoML demo<br>
+• 30 min — flashcards (D2)
+</td>
+<td>D2 done · understand AutoML, designer, endpoints</td></tr>
+
+<tr><td><strong>Day 3</strong><br>(D3 · 15–20%)</td>
+<td>
+• 60 min — <a href="domains/03-computer-vision.html">D3: Computer Vision</a> read<br>
+• 75 min — <a href="labs/01-azure-ai-vision/README-guided.html">Lab 1 (guided)</a><br>
+• 45 min — flashcards (D3) + <a href="cheatsheet.html">cheatsheet</a> CV section
+</td>
+<td>Lab 1 guided complete · know Vision vs Face vs Doc Intel</td></tr>
+
+<tr><td><strong>Day 4</strong><br>(D4 · 15–20%)</td>
+<td>
+• 60 min — <a href="domains/04-nlp.html">D4: NLP</a> read<br>
+• 75 min — <a href="labs/02-language-service/README-guided.html">Lab 2 (guided)</a><br>
+• 45 min — flashcards (D4) + glossary NLP terms
+</td>
+<td>Lab 2 guided complete · know Language vs Speech vs Translator</td></tr>
+
+<tr><td><strong>Day 5</strong><br>(D5 · 20–25% ⭐)</td>
+<td>
+• 90 min — <a href="domains/05-generative-ai.html">D5: Generative AI</a> read (heaviest domain)<br>
+• 75 min — <a href="labs/03-azure-openai/README-guided.html">Lab 3 (guided)</a><br>
+• 15 min — flashcards (D5)
+</td>
+<td>Lab 3 guided complete · understand Azure OpenAI vs Foundry vs Copilot</td></tr>
+
+<tr><td><strong>Day 6</strong><br>(review)</td>
+<td>
+• 60 min — All 3 labs in <strong>speedrun</strong> mode<br>
+• 30 min — <a href="cheatsheet.html">cheatsheet.html</a> full<br>
+• 30 min — <a href="pegadinhas.html">pegadinhas.html</a> (top 20 traps)<br>
+• 60 min — <a href="simulado.html">simulado.html</a> first attempt (target ≥ 70%)
+</td>
+<td>simulado #1 done · mistake-log populated</td></tr>
+
+<tr><td><strong>Day 7</strong><br>(exam-eve)</td>
+<td>
+• 45 min — review <a href="mistake-log.html">mistake-log</a> + missed flashcards<br>
+• 60 min — <a href="https://learn.microsoft.com/credentials/certifications/exams/ai-900/practice/assessment?assessment-type=practice&amp;assessmentId=26" target="_blank" rel="noopener">Official Microsoft practice assessment</a><br>
+• 45 min — simulado #2 (target ≥ 80%)<br>
+• 30 min — <a href="exam-strategy.html">exam-strategy.html</a> + relax<br>
+• <strong>Sleep early.</strong> Do not study the morning of exam.
+</td>
+<td>Two ≥80% practice runs · ready for exam</td></tr>
+</table>
+
+<h2>Daily ritual (regardless of day)</h2>
+<ul>
+<li><strong>Morning (5 min):</strong> review 10 flashcards from <a href="flashcards.csv">flashcards.csv</a> in Anki</li>
+<li><strong>End of session (5 min):</strong> 1-line journal — "today I struggled with X" → mistake-log</li>
+<li><strong>Evening (5 min):</strong> review 10 new flashcards before sleep (consolidation)</li>
+</ul>
+
+<h2>Compression tactics if you fall behind</h2>
+<ol>
+<li>Skip <a href="labs/01-azure-ai-vision/README-guided.html">Lab 1 guided</a> → jump straight to speedrun</li>
+<li>Skim domain pages, focus only on tables (skip narrative)</li>
+<li>Replace second simulado attempt with focused flashcard sprint on weakest domain</li>
+<li>Never skip Day 7 mistake-log review — highest ROI</li>
+</ol>
+</main>
+<footer>← <a href="README.html">Back to index</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

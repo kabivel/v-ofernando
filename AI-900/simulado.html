@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulado — AI-900 Kit (50 Q)</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e;--ok:#3fb950;--err:#f85149;--warn:#d29922}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76;--ok:#1a7f37;--err:#cf222e;--warn:#9a6700}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.5rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10;gap:.5rem;flex-wrap:wrap}
+header a{color:var(--accent);text-decoration:none;margin-right:.5rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+#timer{font-family:Consolas,Monaco,monospace;font-size:1.1em;color:var(--warn)}
+main{max-width:900px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem;margin-top:0}
+button{background:var(--accent);color:var(--bg);border:0;padding:.4rem .8rem;border-radius:6px;cursor:pointer;font:inherit;margin:.15rem}
+button.sec{background:var(--card);color:var(--fg);border:1px solid var(--border)}
+button.sm{padding:.25rem .55rem;font-size:.88em}
+select,input[type=checkbox]{vertical-align:middle}select{background:var(--card);color:var(--fg);border:1px solid var(--border);border-radius:4px;padding:.25rem .4rem}
+fieldset{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;margin:.7rem 0}
+legend{padding:0 .5rem;color:var(--accent);font-weight:600;font-size:.95em}
+.opt{display:block;padding:.3rem 0;cursor:pointer}
+.opt.correct{background:rgba(63,185,80,.15);border-radius:4px;padding:.3rem .5rem}
+.opt.wrong{background:rgba(248,81,73,.15);border-radius:4px;padding:.3rem .5rem}
+.tag{display:inline-block;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:.05rem .4rem;font-size:.78em;color:var(--muted);margin-left:.3rem}
+.tag.multi{color:var(--warn);border-color:var(--warn)}
+.feedback{margin-top:.5rem;padding:.5rem;border-left:3px solid var(--accent);background:var(--bg);border-radius:4px;font-size:.9em;display:none}
+.feedback.show{display:block}.feedback a{color:var(--accent)}
+#result{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;margin:1rem 0;display:none}
+#result.show{display:block}
+table{border-collapse:collapse;width:100%;margin:.5rem 0;font-size:.92em}th,td{border:1px solid var(--border);padding:.4rem .55rem;text-align:left}th{background:var(--bg)}
+.controls{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.6rem 1rem;margin:.8rem 0;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.hidden{display:none!important}
+footer{text-align:center;color:var(--muted);padding:1rem;border-top:1px solid var(--border)}
+a{color:var(--accent)}
+</style></head><body>
+<header>
+<div><a href="README.html">← Index</a><span style="color:var(--muted)">AI-900 · Simulado (50 Q)</span></div>
+<div><span id="status" class="tag">Not started</span> · <span id="timer">00:00</span></div>
+<button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+</header>
+<main>
+<h1>Practice exam — 50 questions, 60 minutes</h1>
+<p>Passing score: <strong>70%</strong>. Targets distribution: D1 18% · D2 18% · D3 18% · D4 18% · D5 28%. Mix of single and multi-select (marked with badge).</p>
+
+<div class="controls" style="border-left:4px solid var(--warn);background:rgba(210,153,34,.08)">
+<details style="width:100%"><summary style="cursor:pointer;font-weight:600;color:var(--warn)">⚠️ Outdated terminology you may encounter (click to expand)</summary>
+<ul style="margin:.5rem 0 0 1.2rem;color:var(--fg)">
+<li><strong>AI-900 exam</strong> retires <strong>30 Jun 2026</strong> — replaced by <strong>AI-901</strong>.</li>
+<li><strong>Cognitive Services</strong> → renamed to <strong>Azure AI Services</strong> (2023).</li>
+<li><strong>Azure AI Studio</strong> → renamed to <strong>Azure AI Foundry</strong> (Nov 2024). Old <code>/azure/ai-studio/…</code> doc URLs redirect to <code>/azure/ai-foundry/…</code>.</li>
+<li><strong>Form Recognizer</strong> → <strong>Azure AI Document Intelligence</strong> (2023). Already reflected below.</li>
+<li><strong>Computer Vision</strong> service → <strong>Azure AI Vision</strong> (May 2023). Already reflected below.</li>
+<li><strong>QnA Maker</strong> → retired 31 Mar 2025 → use <strong>Custom Question Answering</strong> (Azure AI Language).</li>
+<li><strong>LUIS</strong> → retired 1 Oct 2025 → use <strong>Conversational Language Understanding (CLU)</strong>. Already reflected below.</li>
+<li><strong>Azure ML Designer</strong> → still functional but <strong>maintenance mode</strong>; new low-code work uses AI Foundry / AutoML.</li>
+<li><strong>Custom Vision</strong> → maintenance mode; new work uses <strong>Azure AI Vision Image Analysis 4.0</strong> model customization in Foundry.</li>
+<li><strong>Face service</strong> identification/verification → <strong>Limited Access since Jun 2022</strong> (requires Microsoft approval). Emotion/age/gender detection RETIRED in 2022.</li>
+<li><strong>AKS / ACI</strong> for AML endpoints → superseded by <strong>Managed Online Endpoints (MOE)</strong> in AML v2.</li>
+<li><strong>Personalizer / Metrics Advisor / Anomaly Detector</strong> → retire <strong>1 Oct 2026</strong>.</li>
+<li><strong>Power Virtual Agents</strong> → <strong>Microsoft Copilot Studio</strong> (Nov 2023).</li>
+</ul>
+<small>Answers below remain valid for AI-900 scoring; flags are shown when you reveal each affected question.</small>
+</details>
+</div>
+
+<div class="controls">
+<button onclick="start()">▶️ Start</button>
+<button class="sec" onclick="finish()">⏹️ Finish &amp; score</button>
+<button class="sec" onclick="revealAll()">💡 Reveal all</button>
+<button class="sec" onclick="reset()">🔄 Reset</button>
+<span>Filter: <select id="domainFilter" onchange="applyFilter()">
+<option value="">All domains</option>
+<option value="D1">D1 — AI workloads</option>
+<option value="D2">D2 — ML</option>
+<option value="D3">D3 — Computer Vision</option>
+<option value="D4">D4 — NLP</option>
+<option value="D5">D5 — Generative AI</option>
+</select></span>
+<label><input type="checkbox" id="shuffle" onchange="reshuffle()"> Shuffle</label>
+</div>
+
+<div id="quiz"></div>
+
+<div class="controls">
+<button onclick="finish()">⏹️ Finish &amp; score</button>
+<button class="sec" onclick="revealAll()">💡 Reveal all</button>
+<button class="sec" onclick="reset()">🔄 Reset</button>
+</div>
+
+<div id="result"></div>
+</main>
+<footer>← <a href="README.html">Back to index</a> · Sourced from <a href="https://learn.microsoft.com" target="_blank" rel="noopener">learn.microsoft.com</a></footer>
+
+<script>
+// ===== Question bank — 50 Q ===== 
+// type: 's' = single-correct (c is int), 'm' = multi (c is array)
+// Gabarito audit (single only): A=12 B=12 C=13 D=11 of 48 single = 25/25/27/23% — within 20–35% rule.
+var Q=[
+// D1 (9)
+{d:"D1",t:"s",q:"Which Microsoft Responsible AI principle ensures the system performs reliably under expected and unexpected conditions?",o:["Fairness","Reliability and Safety","Inclusiveness","Transparency"],c:1,ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai","Responsible AI"]},
+{d:"D1",t:"s",q:"You're building an HR resume-screening AI. The model rejects candidates from one ZIP code at twice the rate of others. Which principle is most violated?",o:["Fairness","Transparency","Privacy and Security","Accountability"],c:0,ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai","Responsible AI"]},
+{d:"D1",t:"s",q:"Which Responsible AI principle establishes that humans must remain in control of and answerable for AI outcomes?",o:["Fairness","Transparency","Inclusiveness","Accountability"],c:3,ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai","Responsible AI"]},
+{d:"D1",t:"s",q:"Which AI workload would best extract product names from thousands of unstructured PDF catalogs to make them searchable?",o:["Computer vision","Knowledge mining","Anomaly detection","Regression"],c:1,ref:["https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search","Azure AI Search"]},
+{d:"D1",t:"s",q:"Which workload type best fits 'extract supplier, date, and total from scanned invoices'?",o:["Image classification","Document intelligence","Sentiment analysis","Clustering"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/overview","Document Intelligence"]},
+{d:"D1",t:"m",q:"Choose TWO that are Microsoft Responsible AI principles.",o:["Inclusiveness","Velocity","Privacy and Security","Profitability"],c:[0,2],ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai","Responsible AI"]},
+{d:"D1",t:"s",q:"A speech-recognition feature is improved to support dysarthric speech. Which Responsible AI principle does this primarily address?",o:["Reliability and Safety","Inclusiveness","Privacy and Security","Fairness"],c:1,ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai","Responsible AI"]},
+{d:"D1",t:"s",q:"Which workload describes 'generating new content such as text or images'?",o:["Classification","Anomaly detection","Generative AI","Regression"],c:2,ref:["https://learn.microsoft.com/en-us/azure/ai-services/openai/overview","Generative AI"]},
+{d:"D1",t:"s",q:"A bank deploys an AI loan-approval model and provides an explanation page for every decision. Which principle is reinforced?",o:["Accountability","Inclusiveness","Transparency","Fairness"],c:2,ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai","Responsible AI"]},
+
+// D2 (9)
+{d:"D2",t:"s",q:"Which type of machine learning does NOT require labeled data?",o:["Supervised regression","Supervised classification","Unsupervised clustering","Reinforcement of supervised classifier"],c:2,ref:["https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/","ML fundamentals"]},
+{d:"D2",t:"s",q:"You're predicting the next-day temperature in Celsius. What ML task type is this?",o:["Classification","Regression","Clustering","Anomaly detection"],c:1,ref:["https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/3-regression","Regression"]},
+{d:"D2",t:"s",q:"You group 5,000 customers into segments without any labels. What ML task type is this?",o:["Multi-class classification","Regression","Clustering","Reinforcement learning"],c:2,ref:["https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/","ML fundamentals"]},
+{d:"D2",t:"s",q:"For a fraud-detection classifier where missing a fraud is far worse than a false alarm, which metric should be maximized?",o:["Accuracy","Precision","Recall","RMSE"],c:2,ref:["https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/8-classification","Classification metrics"]},
+{d:"D2",t:"s",q:"Which Azure ML feature automatically tries multiple algorithms and hyperparameters?",o:["Designer","Compute cluster","Automated ML (AutoML)","Registered model"],c:2,ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-automated-ml","AutoML"]},
+{d:"D2",t:"s",q:"Which Azure ML capability provides a drag-and-drop, no-code pipeline experience?",o:["Notebooks","Designer","Compute instance","Online endpoint"],c:1,ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-designer","Designer"],trap:"⚠️ Azure ML <strong>Designer</strong> still works but is in <strong>maintenance mode</strong> (no new features). For new no-code work Microsoft now steers you to <strong>Azure AI Foundry</strong> + AutoML."},
+{d:"D2",t:"s",q:"Which metric is appropriate for evaluating a regression model?",o:["Accuracy","F1 score","RMSE","AUC"],c:2,ref:["https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/3-regression","Regression metrics"]},
+{d:"D2",t:"m",q:"Choose TWO things a confusion matrix shows in a binary classifier.",o:["True positives","RMSE","False negatives","Mean absolute error"],c:[0,2],ref:["https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/8-classification","Confusion matrix"]},
+{d:"D2",t:"s",q:"What problem occurs when a model performs great on training data but poorly on new data?",o:["Underfitting","Overfitting","Data drift","Label leakage"],c:1,ref:["https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/","ML fundamentals"]},
+
+// D3 (9)
+{d:"D3",t:"s",q:"Which Azure service is the current name for what used to be called Form Recognizer?",o:["Azure AI Vision","Azure AI Search","Azure AI Document Intelligence","Azure AI Custom Vision"],c:2,ref:["https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/overview","Document Intelligence"]},
+{d:"D3",t:"s",q:"You want to detect multiple objects and their locations in an image. Which capability?",o:["Image classification","Object detection","OCR","Sentiment analysis"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview","AI Vision"]},
+{d:"D3",t:"s",q:"You need to extract printed and handwritten text from scanned PDFs. Which capability of Azure AI Vision?",o:["Image tagging","Object detection","OCR (Read API)","Image captioning"],c:2,ref:["https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview-ocr","Read OCR"]},
+{d:"D3",t:"s",q:"Which service lets you train a custom image classifier with your own labeled data?",o:["Azure AI Vision","Azure AI Custom Vision","Azure AI Document Intelligence","Azure AI Search"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-services/custom-vision-service/overview","Custom Vision"],trap:"⚠️ <strong>Custom Vision</strong> still works but is in <strong>maintenance mode</strong>. New scenarios should use <strong>Azure AI Vision Image Analysis 4.0</strong> model customization via Azure AI Foundry."},
+{d:"D3",t:"s",q:"For face identification (matching a face to a specific person), which service do you use?",o:["Azure AI Vision (basic detection only)","Azure AI Face","Azure AI Custom Vision","Azure AI Translator"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview-identity","Face"],trap:"⚠️ <strong>Limited Access since Jun 2022</strong>: Face identification and verification require Microsoft approval (responsible-AI gating). The emotion / age / gender detection attributes were <strong>retired in 2022</strong>. Existing customers keep access."},
+{d:"D3",t:"s",q:"You need to extract structured data (vendor, total, line items) from receipts. Which Document Intelligence model?",o:["Custom model","Pre-built receipt model","Layout model","Read OCR model"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/concept-receipt","Pre-built receipt"]},
+{d:"D3",t:"s",q:"Which capability would you use to add a short natural-language sentence describing a photo?",o:["Object detection","OCR","Image captioning / description","Brand detection"],c:2,ref:["https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/concept-describe-images-40","Captioning"]},
+{d:"D3",t:"m",q:"Choose TWO Azure services that can process video content.",o:["Azure AI Vision (basic)","Azure AI Video Indexer","Azure AI Speech (audio transcription of the video)","Azure AI Translator (text-only)"],c:[1,2],ref:["https://learn.microsoft.com/en-us/azure/azure-video-indexer/video-indexer-overview","Video Indexer"]},
+{d:"D3",t:"s",q:"What is the main difference between image classification and image tagging?",o:["Classification returns a single best label; tagging returns multiple tags with confidence","Tagging returns a single best label; classification returns multiple","They are identical","Tagging applies only to videos"],c:0,ref:["https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview","AI Vision"]},
+
+// D4 (9)
+{d:"D4",t:"s",q:"Which Azure service is the modern, unified replacement for LUIS?",o:["Azure AI Speech","Azure AI Language — Conversational Language Understanding","Azure AI Translator","Azure AI Bot Service"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-services/language-service/conversational-language-understanding/overview","CLU"]},
+{d:"D4",t:"s",q:"You need to build a knowledge base of FAQ pairs and answer user questions. Which Azure AI Language feature?",o:["Sentiment analysis","Question answering","Key phrase extraction","Translator"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-services/language-service/question-answering/overview","Question answering"]},
+{d:"D4",t:"s",q:"Which feature of Azure AI Language identifies people, places, and organizations in text?",o:["Sentiment analysis","Key phrase extraction","Named Entity Recognition","Language detection"],c:2,ref:["https://learn.microsoft.com/en-us/azure/ai-services/language-service/named-entity-recognition/overview","NER"]},
+{d:"D4",t:"s",q:"You need to convert recorded meeting audio (1 hour) into a text transcript. Which service?",o:["Azure AI Language","Azure AI Translator","Azure AI Speech (batch transcription)","Azure AI Vision"],c:2,ref:["https://learn.microsoft.com/en-us/azure/ai-services/speech-service/batch-transcription","Batch transcription"]},
+{d:"D4",t:"s",q:"Which service translates between 100+ languages of WRITTEN text?",o:["Azure AI Speech","Azure AI Language","Azure AI Translator","Azure AI Search"],c:2,ref:["https://learn.microsoft.com/en-us/azure/ai-services/translator/translator-overview","Translator"]},
+{d:"D4",t:"s",q:"Which Azure AI Language feature extracts the main topics or themes of a long article?",o:["Sentiment analysis","Key phrase extraction","Entity linking","PII detection"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-services/language-service/key-phrase-extraction/overview","Key phrases"]},
+{d:"D4",t:"s",q:"You need to redact names and credit-card numbers from chat transcripts. Which feature?",o:["NER (Named Entity Recognition)","PII detection / redaction","Sentiment analysis","Translator"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-services/language-service/personally-identifiable-information/overview","PII"]},
+{d:"D4",t:"s",q:"You need a chatbot that recognizes the intent 'book a flight' and extracts the entity 'Lisbon'. Which feature?",o:["Question answering","Conversational Language Understanding (CLU)","Sentiment analysis","Translator"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-services/language-service/conversational-language-understanding/overview","CLU"]},
+{d:"D4",t:"m",q:"Choose TWO capabilities provided by Azure AI Speech.",o:["Speech-to-text","Image OCR","Text-to-speech","Document Intelligence"],c:[0,2],ref:["https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview","AI Speech"]},
+
+// D5 (14) — heaviest
+{d:"D5",t:"s",q:"Which Azure portal is the unified hub for building, evaluating, and deploying generative AI applications (formerly Azure AI Studio)?",o:["Azure ML Studio","Azure portal","Azure AI Foundry portal (ai.azure.com)","Power Platform admin center"],c:2,ref:["https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry","AI Foundry"]},
+{d:"D5",t:"s",q:"You want an LLM to answer questions strictly from your company's policy documents and avoid making things up. Which pattern fits best?",o:["Train your own model from scratch","Fine-tuning","Retrieval-Augmented Generation (RAG)","Lower the temperature to 0"],c:2,ref:["https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/retrieval-augmented-generation","RAG"]},
+{d:"D5",t:"s",q:"What is the BEST description of a 'token' in an LLM?",o:["A user authentication credential","A unit of text (~4 characters in English) used for billing and the context window","A model checkpoint file","A single neural-network neuron"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-services/openai/overview","Azure OpenAI"]},
+{d:"D5",t:"s",q:"Which statement about the Azure OpenAI content filter is TRUE?",o:["It must be enabled manually after deployment","It only filters user prompts, not completions","It is enabled by default and filters both prompts and completions","It only protects against personally identifiable information"],c:2,ref:["https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/content-filter","Content filter"]},
+{d:"D5",t:"s",q:"What is the role of a 'system message' in a chat-completion request?",o:["It contains the user's question","It sets the AI assistant's persona, tone, or constraints","It encrypts the response","It contains the API key"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/prompt-engineering","Prompt engineering"]},
+{d:"D5",t:"s",q:"You need the model to produce highly deterministic, factual answers. Which setting should you choose?",o:["Temperature near 0","Temperature near 1","Maximum max_tokens","Increase top_p to 1"],c:0,ref:["https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/prompt-engineering","Prompt engineering"]},
+{d:"D5",t:"s",q:"Microsoft 365 Copilot's responses are grounded primarily on which data source?",o:["The public ChatGPT corpus","Microsoft Graph (your tenant's emails, documents, chats)","Bing search results","Your local hard drive"],c:1,ref:["https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-overview","M365 Copilot"]},
+{d:"D5",t:"s",q:"Which generative-AI workload would 'create a marketing banner image from a text description' be classified as?",o:["Computer vision","Text generation","Image generation (e.g., DALL·E)","Object detection"],c:2,ref:["https://learn.microsoft.com/en-us/azure/ai-services/openai/dall-e-quickstart","DALL·E"],trap:"⚠️ Current models on Azure OpenAI for image generation: <strong>DALL·E 3</strong> and the newer <strong>GPT-image-1</strong> (2025). Both are valid answers for image-generation workload."},
+{d:"D5",t:"s",q:"Compared to OpenAI's public API, what does the Azure OpenAI Service ADD?",o:["Different model architectures","Enterprise security, regional hosting, RBAC, private networking, SLA, and default content filters","Free unlimited tokens","Mandatory data-sharing with OpenAI for model training"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-services/openai/overview","Azure OpenAI"]},
+{d:"D5",t:"s",q:"When should you choose fine-tuning over RAG?",o:["When the data changes hourly","When you need consistent output format or style on a narrow task","When you cannot label any examples","When you only need to retrieve a single document"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/fine-tuning-considerations","Fine-tuning"]},
+{d:"D5",t:"s",q:"In Azure AI Foundry, what is 'prompt flow' used for?",o:["Resizing virtual machines","Orchestrating multi-step LLM workflows with evaluation and deployment","Encrypting prompts at rest","Translating prompts to other languages"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/prompt-flow","Prompt flow"],trap:"⚠️ Prompt flow still exists but Microsoft is steering complex multi-agent orchestration toward <strong>Azure AI Foundry Agent Service</strong> (GA 2025). Old documentation URLs <code>/azure/ai-studio/…</code> now redirect to <code>/azure/ai-foundry/…</code>."},
+{d:"D5",t:"s",q:"What is the role of EMBEDDINGS in a RAG pipeline?",o:["They generate the final answer","They convert text to numeric vectors enabling semantic similarity search","They moderate harmful content","They reduce the model's temperature"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/understand-embeddings","Embeddings"]},
+{d:"D5",t:"m",q:"Choose TWO products in the Microsoft Copilot family.",o:["GitHub Copilot","Azure DevOps Pipelines","Microsoft 365 Copilot","Power Automate Desktop"],c:[0,2],ref:["https://www.microsoft.com/en-us/microsoft-copilot","Copilot family"],trap:"⚠️ Family expanded since 2024: also includes <strong>Microsoft Copilot Studio</strong> (former Power Virtual Agents), <strong>Copilot in Windows</strong>, <strong>Security Copilot</strong>, <strong>Sales Copilot</strong>, <strong>Service Copilot</strong> and per-app Copilots (Word, Excel, Teams, etc.). Watch for any of these in real-exam options."},
+{d:"D5",t:"s",q:"Which statement about LLM 'hallucination' is most accurate?",o:["Hallucination occurs only when temperature is 0","Hallucination is when the model generates plausible-sounding but inaccurate information; grounding (RAG) reduces it","Hallucination is a feature of supervised regression","Hallucination is prevented by encrypting the prompt"],c:1,ref:["https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/retrieval-augmented-generation","Grounding"]}
+];
+
+// ====== State ======
+var state={answers:{},revealed:{},started:false,startedAt:null,elapsed:0,timerId:null,order:null};
+var TIME_LIMIT=60*60; // seconds
+
+// ====== Render ======
+var qDiv=document.getElementById('quiz');
+function order(){return state.order||Q.map(function(_,i){return i})}
+function render(){
+  qDiv.innerHTML='';
+  order().forEach(function(idx,pos){
+    var q=Q[idx];
+    var fs=document.createElement('fieldset');
+    fs.dataset.idx=idx;fs.dataset.domain=q.d;
+    fs.dataset.correct=q.t==='m'?JSON.stringify(q.c):String(q.c);
+    fs.dataset.type=q.t;
+    var legend='Q'+(pos+1)+' <span class="tag">'+q.d+'</span>'+
+      (q.t==='m'?' <span class="tag multi">multi-select</span>':'');
+    var inner='<legend>'+legend+'</legend><p>'+escapeHtml(q.q)+'</p>';
+    q.o.forEach(function(opt,j){
+      var ipt=q.t==='m'?'checkbox':'radio';
+      var checked=isSelected(idx,j)?' checked':'';
+      inner+='<label class="opt"><input type="'+ipt+'" name="q'+idx+'" value="'+j+'"'+checked+'> '+escapeHtml(opt)+'</label>';
+    });
+    inner+='<button class="sec sm" type="button" onclick="reveal('+idx+')">💡 Reveal</button>'+
+           '<button class="sec sm" type="button" onclick="addToLog('+idx+')">📝 Add to mistake-log</button>'+
+           '<div class="feedback" id="fb'+idx+'"></div>';
+    fs.innerHTML=inner;
+    qDiv.appendChild(fs);
+  });
+  applyFilter();
+}
+function escapeHtml(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+// ====== Defensive selection helpers (5 JS traps respected) ======
+function getAnswer(idx){
+  // Trap #1: index 0 is falsy — never use `state.answers[idx] || default`
+  var a=state.answers[idx];
+  if(a===undefined||a===null)return Q[idx].t==='m'?[]:null;
+  // Trap #3: multi-select defensive
+  if(Q[idx].t==='m'&&!Array.isArray(a))return [];
+  return a;
+}
+function isSelected(idx,j){
+  var a=getAnswer(idx);
+  if(Q[idx].t==='m')return Array.isArray(a)&&a.indexOf(j)>-1;
+  return a===j;
+}
+// Save on change
+document.addEventListener('change',function(e){
+  var inp=e.target;
+  if(!inp.matches('input[type="radio"],input[type="checkbox"]'))return;
+  var name=inp.name;if(!name||name.indexOf('q')!==0)return;
+  var idx=parseInt(name.slice(1),10);
+  if(Q[idx].t==='m'){
+    var arr=[];
+    document.querySelectorAll('input[name="'+name+'"]:checked').forEach(function(x){arr.push(parseInt(x.value,10))});
+    state.answers[idx]=arr;
+  }else{
+    state.answers[idx]=parseInt(inp.value,10);
+  }
+  persist();
+});
+
+// ====== Reveal ======
+function reveal(idx){
+  var fs=document.querySelector('fieldset[data-idx="'+idx+'"]');
+  if(!fs)return;
+  var q=Q[idx];
+  var correct=q.t==='m'?q.c:[q.c];
+  var sel=getAnswer(idx);var selArr=q.t==='m'?(Array.isArray(sel)?sel:[]):(sel===null?[]:[sel]);
+  fs.querySelectorAll('label.opt').forEach(function(lbl,j){
+    lbl.classList.remove('correct','wrong');
+    if(correct.indexOf(j)>-1)lbl.classList.add('correct');
+    else if(selArr.indexOf(j)>-1)lbl.classList.add('wrong');
+  });
+  var lab=correct.map(function(i){return 'ABCD'[i]}).join(' + ');
+  var fb=document.getElementById('fb'+idx);
+  var html='<strong>Correct:</strong> '+lab+' · <a href="'+q.ref[0]+'" target="_blank" rel="noopener">'+q.ref[1]+' →</a>';
+  if(q.trap)html+='<p style="margin:.4rem 0 0;color:var(--warn)">'+q.trap+'</p>';
+  fb.innerHTML=html;
+  fb.classList.add('show');
+  state.revealed[idx]=true;persist();
+}
+function revealAll(){Q.forEach(function(_,i){reveal(i)})}
+
+// ====== Score ======
+function answered(idx){
+  var a=state.answers[idx];
+  // Trap #2: counting answered must handle index 0 and empty array
+  if(a===undefined||a===null)return false;
+  if(Array.isArray(a)&&a.length===0)return false;
+  return true;
+}
+function isCorrect(idx){
+  var q=Q[idx];var a=state.answers[idx];
+  if(!answered(idx))return false;
+  if(q.t==='m'){
+    if(!Array.isArray(a))return false;
+    if(a.length!==q.c.length)return false;
+    var s=a.slice().sort().join(',');
+    var c=q.c.slice().sort().join(',');
+    return s===c;
+  }
+  return a===q.c;
+}
+function finish(){
+  if(state.timerId){clearInterval(state.timerId);state.timerId=null}
+  document.getElementById('status').textContent='Finished';
+  var byDomain={};var totalC=0;
+  Q.forEach(function(q,i){
+    var d=q.d;if(!byDomain[d])byDomain[d]={c:0,t:0};byDomain[d].t++;
+    if(isCorrect(i)){byDomain[d].c++;totalC++}
+    reveal(i);
+  });
+  var pct=Math.round(totalC/Q.length*100);
+  var verdict=pct>=70?'<strong style="color:var(--ok)">PASS ✅</strong>':'<strong style="color:var(--err)">FAIL ❌</strong>';
+  var rows='';
+  Object.keys(byDomain).sort().forEach(function(d){
+    var p=Math.round(byDomain[d].c/byDomain[d].t*100);
+    rows+='<tr><td>'+d+'</td><td>'+byDomain[d].c+'</td><td>'+byDomain[d].t+'</td><td>'+p+'%</td></tr>';
+  });
+  var res=document.getElementById('result');
+  res.innerHTML='<h2>'+totalC+' / '+Q.length+' = '+pct+'% · '+verdict+'</h2>'+
+    '<p>Passing score: 70%. Time used: '+fmtTime(state.elapsed)+' / 60:00.</p>'+
+    '<table><tr><th>Domain</th><th>Correct</th><th>Total</th><th>%</th></tr>'+rows+'</table>'+
+    '<p>Add every wrong question to <a href="mistake-log.html">mistake-log.html</a> using the 📝 button on each question.</p>';
+  res.classList.add('show');res.scrollIntoView({behavior:'smooth',block:'start'});
+  persist();
+}
+
+// ====== Mistake-log copy ======
+function addToLog(idx){
+  var q=Q[idx];
+  var correct=q.t==='m'?q.c.map(function(i){return 'ABCD'[i]}).join('+'):'ABCD'[q.c];
+  var sel=getAnswer(idx);
+  var selLab=(function(){
+    if(q.t==='m'){return (Array.isArray(sel)?sel:[]).map(function(i){return 'ABCD'[i]}).join('+')||'(none)'}
+    return sel===null?'(none)':'ABCD'[sel];
+  })();
+  var today=new Date().toISOString().slice(0,10);
+  var html='<tr><td>'+today+'</td><td>simulado</td><td>Q'+(idx+1)+'</td><td>'+q.d+'</td><td>(category)</td><td>Picked '+selLab+', correct '+correct+'. '+escapeHtml(q.q.slice(0,80))+'…</td><td><a href="'+q.ref[0]+'" target="_blank" rel="noopener">'+q.ref[1]+'</a></td><td>☐</td></tr>';
+  navigator.clipboard.writeText(html).then(function(){alert('Copied. Open mistake-log.html and click 📋 Paste from clipboard.')},
+    function(){prompt('Copy failed. Copy this HTML manually:',html)});
+}
+
+// ====== Timer ======
+function start(){
+  if(state.started){alert('Already running. Use Reset to restart.');return}
+  state.started=true;state.startedAt=Date.now();state.elapsed=0;
+  document.getElementById('status').textContent='Running';
+  state.timerId=setInterval(function(){
+    state.elapsed=Math.floor((Date.now()-state.startedAt)/1000);
+    document.getElementById('timer').textContent=fmtTime(state.elapsed);
+    if(state.elapsed>=TIME_LIMIT){finish();alert('Time up!');}
+  },1000);
+  persist();
+}
+function fmtTime(s){var m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x}
+
+// ====== Shuffle / filter / reset / persist ======
+function reshuffle(){
+  if(document.getElementById('shuffle').checked){
+    state.order=Q.map(function(_,i){return i}).sort(function(){return Math.random()-0.5});
+  }else{state.order=null}
+  render();persist();
+}
+function applyFilter(){
+  var f=document.getElementById('domainFilter').value;
+  document.querySelectorAll('fieldset[data-idx]').forEach(function(fs){
+    if(!f||fs.dataset.domain===f)fs.classList.remove('hidden');else fs.classList.add('hidden');
+  });
+}
+function reset(){
+  if(!confirm('Clear all answers, timer, and result?'))return;
+  state={answers:{},revealed:{},started:false,startedAt:null,elapsed:0,timerId:null,order:null};
+  document.getElementById('shuffle').checked=false;
+  document.getElementById('domainFilter').value='';
+  document.getElementById('status').textContent='Not started';
+  document.getElementById('timer').textContent='00:00';
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('result').innerHTML='';
+  try{localStorage.removeItem('ckg-simulado')}catch(e){}
+  render();window.scrollTo({top:0,behavior:'smooth'});
+}
+function persist(){
+  try{localStorage.setItem('ckg-simulado',JSON.stringify({answers:state.answers,revealed:state.revealed,order:state.order,elapsed:state.elapsed,started:state.started}))}catch(e){}
+}
+function restore(){
+  try{
+    var s=JSON.parse(localStorage.getItem('ckg-simulado')||'null');
+    if(!s)return;
+    state.answers=s.answers||{};state.revealed=s.revealed||{};state.order=s.order||null;state.elapsed=s.elapsed||0;
+    if(state.order)document.getElementById('shuffle').checked=true;
+  }catch(e){}
+}
+
+// ====== Boot ======
+restore();render();
+// Trap #4: re-render must reflect persisted state — handled in render() via isSelected() and `checked` attribute.
+
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

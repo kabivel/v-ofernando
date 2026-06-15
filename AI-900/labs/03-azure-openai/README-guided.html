@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab 3 Guided — Azure OpenAI</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e;--warn:#d29922}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76;--warn:#9a6700}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:900px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}h2{color:var(--accent);margin-top:1.5rem}
+a{color:var(--accent)}code{font-family:Consolas,Monaco,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .3rem}
+pre{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.8rem;overflow:auto}
+.warn{background:rgba(210,153,34,.1);border-left:4px solid var(--warn);padding:.6rem 1rem;border-radius:4px;margin:.8rem 0}
+table{border-collapse:collapse;width:100%;margin:.8rem 0}th,td{border:1px solid var(--border);padding:.5rem;text-align:left;vertical-align:top}th{background:var(--card)}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style></head><body>
+<header><div><a href="../../README.html">← Index</a><span style="color:var(--muted)">Lab 3 · Azure OpenAI · Guided (45–60 min)</span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>Lab 3 — Chat completion with Azure OpenAI (Guided)</h1>
+
+<h2>Objective</h2>
+<p>Deploy a chat model in <a href="https://ai.azure.com" target="_blank" rel="noopener">Azure AI Foundry</a>, then call it from Python. You'll see <strong>system message</strong>, <strong>user message</strong>, <strong>temperature</strong>, <strong>max_tokens</strong>, and the <strong>content filter</strong> result fields with your own eyes.</p>
+
+<h2>Why it matters for AI-900</h2>
+<p>Domain 5 (Generative AI) is the heaviest at 20–25%. You cannot reason confidently about prompt engineering, tokens, or content filters without running at least one chat call.</p>
+
+<h2>Prerequisites</h2>
+<ul>
+<li>Azure subscription <strong>with access to Azure OpenAI</strong> — some subscription types require <a href="https://aka.ms/oai/access" target="_blank" rel="noopener">application approval</a></li>
+<li>Python 3.9+ &amp; Azure CLI</li>
+<li>~10 min for resource provisioning</li>
+</ul>
+<div class="warn">⚠️ If your subscription does not have Azure OpenAI access, use the <a href="https://ai.azure.com" target="_blank" rel="noopener">Foundry playground</a> only (no code needed). You can skip steps 3–5 and complete this lab using the UI playground; the rest of the exam knowledge transfers.</div>
+
+<h2>Step 1 — Provision Azure OpenAI</h2>
+<p>Recommended: use Foundry portal — it provisions Azure OpenAI + a hub + a project in one flow.</p>
+<ol>
+<li>Open <a href="https://ai.azure.com" target="_blank" rel="noopener">ai.azure.com</a> → <strong>+ New project</strong></li>
+<li>Pick a region with the model you want (e.g., <code>eastus</code> for <code>gpt-4o-mini</code>)</li>
+<li>In your project → <strong>Deployments</strong> → <strong>+ Deploy model</strong> → <code>gpt-4o-mini</code> → default settings → name it <code>chat</code></li>
+</ol>
+<p>Or via CLI:</p>
+<pre><code>az group create -n rg-ai900-oai -l eastus
+az cognitiveservices account create \
+  -n ai900-oai-demo -g rg-ai900-oai \
+  --kind OpenAI --sku S0 -l eastus --yes
+az cognitiveservices account deployment create \
+  -n ai900-oai-demo -g rg-ai900-oai \
+  --deployment-name chat \
+  --model-name gpt-4o-mini --model-version "2024-07-18" \
+  --model-format OpenAI --sku-name Standard --sku-capacity 1</code></pre>
+
+<h2>Step 2 — Get endpoint + key</h2>
+<pre><code>az cognitiveservices account show -n ai900-oai-demo -g rg-ai900-oai \
+  --query properties.endpoint -o tsv
+az cognitiveservices account keys list -n ai900-oai-demo -g rg-ai900-oai \
+  --query key1 -o tsv</code></pre>
+
+<h2>Step 3 — Python environment</h2>
+<pre><code>cd labs/03-azure-openai
+python -m venv .venv && .\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt</code></pre>
+
+<h2>Step 4 — Run the chat</h2>
+<pre><code>python chat.py "What are the 6 Microsoft Responsible AI principles?"</code></pre>
+<p>Expected: model lists Fairness, Reliability &amp; Safety, Privacy &amp; Security, Inclusiveness, Transparency, Accountability — with brief definitions. Token usage printed at the end (prompt_tokens + completion_tokens + total_tokens).</p>
+
+<h2>Step 5 — Experiment</h2>
+<ol>
+<li>Change <code>temperature</code> from 0 → 1.0. Re-run. Compare creativity / consistency.</li>
+<li>Lower <code>max_tokens</code> to 30. Observe truncation.</li>
+<li>Replace the system message with <em>"You are a sarcastic teenager"</em>. Observe persona shift.</li>
+<li>Send a benign question with personal data: <code>"My phone 555-0100, redact PII"</code>. Inspect content-filter results.</li>
+</ol>
+
+<h2>Step 6 — Read the code</h2>
+<p>Open <code>chat.py</code>. Key elements:</p>
+<ul>
+<li><code>AzureOpenAI</code> client takes <code>azure_endpoint</code> + <code>api_key</code> + <code>api_version</code></li>
+<li><code>model="chat"</code> = your <strong>deployment name</strong>, not the model name (common trap!)</li>
+<li>Messages: <code>system</code> (persona) → <code>user</code> (question) → <code>assistant</code> (history if multi-turn)</li>
+<li><code>usage</code> contains token counts — directly useful for cost estimation</li>
+</ul>
+
+<h2>Success criteria</h2>
+<ul>
+<li>Script returns a completion grounded in known facts</li>
+<li>You can explain why <code>model</code> param = deployment name, not model name</li>
+<li>You observed temperature affecting output variability</li>
+<li>You can name the 4 content-filter categories (hate, sexual, violence, self-harm)</li>
+</ul>
+
+<h2>Troubleshooting</h2>
+<table>
+<tr><th>Error</th><th>Cause</th><th>Fix</th></tr>
+<tr><td>404 DeploymentNotFound</td><td>Wrong <code>model</code> param</td><td>Pass deployment name (e.g., <code>chat</code>) — not <code>gpt-4o-mini</code></td></tr>
+<tr><td>401</td><td>Wrong key or endpoint</td><td>Re-copy both</td></tr>
+<tr><td>403 Access denied</td><td>Subscription not approved for Azure OpenAI</td><td>Apply at <a href="https://aka.ms/oai/access" target="_blank" rel="noopener">aka.ms/oai/access</a> or use Foundry playground only</td></tr>
+<tr><td>content_filter_result triggered</td><td>Prompt or completion hit a category threshold</td><td>Rephrase, or adjust filter (requires approval for some categories)</td></tr>
+<tr><td>429</td><td>Tokens-per-minute (TPM) capacity exhausted</td><td>Increase deployment capacity or wait</td></tr>
+</table>
+
+<h2>What this teaches about the exam</h2>
+<ul>
+<li><strong>Deployment name ≠ model name</strong> — a top exam confusion</li>
+<li><strong>System message</strong> shapes behavior; <strong>user message</strong> asks the question</li>
+<li><strong>Tokens are billed for prompt + completion</strong> — context-window includes both</li>
+<li>The <strong>content filter</strong> is on by default for 4 harm categories</li>
+<li>Azure OpenAI = OpenAI models + Microsoft enterprise controls (RBAC, regional, SLA, private networking)</li>
+</ul>
+
+<h2>Clean up</h2>
+<pre><code>az group delete --name rg-ai900-oai --yes --no-wait</code></pre>
+
+<h2>Next</h2>
+<p><a href="README-speedrun.html">Speedrun</a> — repeat in &lt; 20 min using the same deployment.</p>
+</main>
+<footer>← <a href="../../README.html">Back to index</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

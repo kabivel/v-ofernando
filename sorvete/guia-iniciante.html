@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sorvete do Zero — Guia para a Sua Primeira Vez</title>
+<style>
+  :root {
+    --bg: #fdf6f0;
+    --bg-card: #ffffff;
+    --ink: #1f2330;
+    --ink-soft: #5a6072;
+    --accent: #ff6b8a;
+    --accent-deep: #d94668;
+    --mint: #6fcf97;
+    --cream: #fff3e0;
+    --shadow: 0 10px 30px rgba(31, 35, 48, 0.08);
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  header.hero {
+    background: linear-gradient(135deg, #ffb3c6 0%, #ff6b8a 50%, #d94668 100%);
+    color: #fff;
+    padding: 4rem 1.5rem 5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.25), transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.18), transparent 50%);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
+  .hero .scoop { font-size: 4rem; line-height: 1; margin-bottom: 0.5rem; }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    margin: 0.5rem 0;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .hero p.lead {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    opacity: 0.95;
+    max-width: 600px;
+    margin: 1rem auto 0;
+  }
+  main {
+    max-width: 900px;
+    margin: -3rem auto 3rem;
+    padding: 0 1.25rem;
+    position: relative;
+    z-index: 2;
+  }
+  .card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  .card h2 {
+    font-size: 1.5rem;
+    margin: 0 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--accent-deep);
+  }
+  .card h2 .num {
+    display: inline-flex;
+    width: 2rem;
+    height: 2rem;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .card h3 {
+    font-size: 1.1rem;
+    margin: 1.5rem 0 0.5rem;
+    color: var(--ink);
+  }
+  .card p, .card li { color: var(--ink-soft); }
+  .card strong { color: var(--ink); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .mini {
+    background: var(--cream);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+  }
+  .mini .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-deep);
+    font-weight: 700;
+  }
+  .mini .val {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0.2rem 0;
+  }
+  .mini .note { font-size: 0.85rem; color: var(--ink-soft); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+  }
+  th, td {
+    padding: 0.7rem 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  th {
+    background: var(--cream);
+    color: var(--accent-deep);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  tr:last-child td { border-bottom: none; }
+
+  ul.clean { list-style: none; padding: 0; margin: 0.5rem 0; }
+  ul.clean li {
+    padding: 0.6rem 0 0.6rem 1.8rem;
+    position: relative;
+    border-bottom: 1px dashed #f0e6db;
+  }
+  ul.clean li:last-child { border-bottom: none; }
+  ul.clean li::before {
+    content: "🍨";
+    position: absolute;
+    left: 0;
+    top: 0.6rem;
+  }
+
+  .steps { counter-reset: step; padding: 0; list-style: none; margin: 0; }
+  .steps li {
+    counter-increment: step;
+    padding: 1rem 0 1rem 3.2rem;
+    position: relative;
+    border-bottom: 1px solid #f3eee8;
+  }
+  .steps li:last-child { border-bottom: none; }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 1rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    background: var(--mint);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+  }
+  .steps li strong { display: block; color: var(--ink); margin-bottom: 0.25rem; }
+
+  .callout {
+    background: linear-gradient(135deg, #fff3e0, #ffe0e8);
+    border-left: 4px solid var(--accent);
+    padding: 1rem 1.2rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+  }
+  .callout.tip { background: #e8f7ee; border-left-color: var(--mint); }
+  .callout .tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-deep);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .callout.tip .tag { color: #2c8a4f; }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  @media (max-width: 600px) {
+    .two-col { grid-template-columns: 1fr; }
+    .card { padding: 1.4rem; }
+    header.hero { padding: 3rem 1rem 4rem; }
+  }
+  .pill {
+    display: inline-block;
+    background: var(--cream);
+    color: var(--accent-deep);
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 0.15rem 0.2rem 0.15rem 0;
+  }
+  footer {
+    text-align: center;
+    padding: 2rem 1rem 3rem;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+  footer strong { color: var(--accent-deep); }
+
+  .toc {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 1.2rem 1.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+  }
+  .toc h3 { margin: 0 0 0.6rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); }
+  .toc ol { margin: 0; padding-left: 1.2rem; }
+  .toc a { color: var(--ink); text-decoration: none; font-weight: 500; }
+  .toc a:hover { color: var(--accent-deep); }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-content">
+    <div class="scoop">🍦</div>
+    <h1>Sorvete do Zero</h1>
+    <p class="lead">Você nunca fez sorvete na vida. Tudo bem. Esse guia te leva da curiosidade até a primeira bola cremosa — sem misticismo, sem atalho, sem complicação.</p>
+  </div>
+</header>
+
+<main>
+
+  <nav class="toc">
+    <h3>O que você vai aprender</h3>
+    <ol>
+      <li><a href="#mentalidade">A mentalidade certa</a></li>
+      <li><a href="#equipamento">O equipamento mínimo</a></li>
+      <li><a href="#ingredientes">Os ingredientes e o que cada um faz</a></li>
+      <li><a href="#alvos">Os números mágicos (alvos técnicos)</a></li>
+      <li><a href="#creme">Creme de leite: fresco ou caixinha?</a></li>
+      <li><a href="#receita">A primeira receita: creme de baunilha</a></li>
+      <li><a href="#passos">Passo a passo: do leite à bola</a></li>
+      <li><a href="#erros">Erros comuns de quem começa</a></li>
+      <li><a href="#proximo">Seu próximo passo</a></li>
+    </ol>
+  </nav>
+
+  <section class="card" id="mentalidade">
+    <h2><span class="num">1</span> A mentalidade certa</h2>
+    <p>Sorvete artesanal não é mágica nem é "receita de vó". É <strong>química controlada</strong>: você está congelando uma mistura de água, gordura, açúcar e ar de um jeito que o resultado fique cremoso em vez de virar um bloco de gelo.</p>
+    <p>Três ideias para guardar antes de qualquer receita:</p>
+    <ul class="clean">
+      <li><strong>Açúcar não é só sabor</strong> — ele abaixa o ponto de congelamento e impede o sorvete de virar pedra.</li>
+      <li><strong>Gordura é textura</strong> — creme de leite e gema deixam o sorvete macio na boca.</li>
+      <li><strong>Ar é volume</strong> — bater incorpora ar (chamado <em>overrun</em>); sem isso o sorvete fica denso e duro.</li>
+    </ul>
+    <div class="callout tip">
+      <span class="tag">Dica</span>
+      Antes do primeiro lote, leia a receita inteira duas vezes. Sorvete pune improviso, recompensa preparo.
+    </div>
+  </section>
+
+  <section class="card" id="equipamento">
+    <h2><span class="num">2</span> O equipamento mínimo</h2>
+    <p>Você não precisa de nada caro para começar. Esse é o kit honesto:</p>
+    <div class="grid">
+      <div class="mini"><div class="label">Essencial</div><div class="val">Balança</div><div class="note">Digital, em gramas. Xícara é chute.</div></div>
+      <div class="mini"><div class="label">Essencial</div><div class="val">Panela</div><div class="note">Fundo grosso, para não queimar o leite.</div></div>
+      <div class="mini"><div class="label">Essencial</div><div class="val">Termômetro</div><div class="note">Culinário, vai até 100 °C.</div></div>
+      <div class="mini"><div class="label">Essencial</div><div class="val">Pote com tampa</div><div class="note">Plástico ou inox, para o freezer.</div></div>
+      <div class="mini"><div class="label">Muito útil</div><div class="val">Sorveteira</div><div class="note">Doméstica com cuba de pré-congelar serve.</div></div>
+      <div class="mini"><div class="label">Alternativa</div><div class="val">Processador</div><div class="note">Se não tiver sorveteira, dá pra fazer.</div></div>
+    </div>
+    <div class="callout">
+      <span class="tag">Sem sorveteira?</span>
+      Funciona, mas dá mais trabalho: você congela a mistura em um pote raso, e a cada 30 minutos (por 3 horas) tira e bate com fouet ou processador para quebrar os cristais de gelo.
+    </div>
+  </section>
+
+  <section class="card" id="ingredientes">
+    <h2><span class="num">3</span> Os ingredientes e o que cada um faz</h2>
+    <p>Não decore receita. Entenda o papel de cada ingrediente — aí você consegue criar qualquer sabor depois.</p>
+    <table>
+      <thead>
+        <tr><th>Ingrediente</th><th>O que ele faz</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Leite integral</strong></td><td>Base líquida. Traz água, proteína e um pouco de gordura.</td></tr>
+        <tr><td><strong>Creme de leite</strong></td><td>Traz gordura (cremosidade). Fresco 35% é o ideal; caixinha (UHT) também funciona — veja seção 5.</td></tr>
+        <tr><td><strong>Açúcar (sacarose)</strong></td><td>Doçura + abaixa ponto de congelamento.</td></tr>
+        <tr><td><strong>Leite em pó desnatado</strong></td><td>Aumenta sólidos sem aumentar gordura. Deixa mais cremoso e estável.</td></tr>
+        <tr><td><strong>Gema de ovo</strong> (opcional)</td><td>Emulsificante natural. Substitui (ou reforça) o emulsificante industrial em bases tipo creme inglês.</td></tr>
+        <tr><td><strong>Liga neutra (estabilizante)</strong></td><td>Mix de gomas. Segura a água e evita cristais. Você já tem em casa — use!</td></tr>
+        <tr><td><strong>Emulsificante</strong></td><td>Faz o ar entrar melhor (overrun) e o sorvete derreter macio. Você já tem.</td></tr>
+        <tr><td><strong>Dextrose</strong> (opcional)</td><td>Tipo de açúcar que congela menos. Deixa o sorvete mais macio direto do freezer.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card" id="alvos">
+    <h2><span class="num">4</span> Os números mágicos</h2>
+    <p>Toda receita de sorvete de leite bem balanceada cai dentro desses alvos. Decora esses 4 números — você vai usá-los para sempre:</p>
+
+    <div class="callout tip">
+      <span class="tag">Tradução pra humanos — o que é "porcentagem" aqui?</span>
+      Pensa numa <strong>calda de 1000 g (1 kg)</strong>. Cada porcentagem te diz quantos gramas daquele ingrediente estão em 1 kg de calda.<br>
+      Exemplo: <strong>8% de gordura</strong> = <strong>80 g de gordura</strong> em cada 1 kg de calda. <strong>20% de açúcar</strong> = <strong>200 g de açúcar</strong> por kg. É só mover a vírgula uma casa para a esquerda e pensar em gramas.
+    </div>
+
+    <div class="grid">
+      <div class="mini"><div class="label">Sólidos totais</div><div class="val">36–42%</div><div class="note">Tudo que não é água. Em 1 kg de calda: 360 a 420 g.</div></div>
+      <div class="mini"><div class="label">Gordura</div><div class="val">6–12%</div><div class="note">Vem do creme e da gema. Em 1 kg: 60 a 120 g.</div></div>
+      <div class="mini"><div class="label">Açúcares</div><div class="val">16–22%</div><div class="note">Em 1 kg: 160 a 220 g de açúcar.</div></div>
+      <div class="mini"><div class="label">Sólidos do leite (SNGL)</div><div class="val">8–11%</div><div class="note">Leite em pó ajuda aqui. Em 1 kg: 80 a 110 g.</div></div>
+    </div>
+    <div class="callout">
+      <span class="tag">Por que isso importa?</span>
+      Se faltar sólido, vira gelo. Se sobrar açúcar, não congela direito. Se faltar gordura, fica arenoso. Esses 4 números mantêm você dentro da zona segura.
+    </div>
+  </section>
+
+  <section class="card" id="creme">
+    <h2><span class="num">5</span> Creme de leite: fresco ou caixinha?</h2>
+    <p>O creme de leite é o ingrediente que mais define a textura do seu sorvete. Ele faz <strong>4 coisas</strong> ao mesmo tempo:</p>
+    <ul class="clean">
+      <li><strong>Cremosidade</strong> — a gordura cobre a língua e dá a sensação aveludada.</li>
+      <li><strong>Estrutura do ar</strong> — a gordura parcialmente cristalizada segura as bolhas de ar (overrun). Sem ela, o sorvete murcha no freezer.</li>
+      <li><strong>Derretimento elegante</strong> — gordura derrete devagar, o sorvete não vira água na colher.</li>
+      <li><strong>Veículo de sabor</strong> — aromas (baunilha, cacau, pistache) se dissolvem na gordura, não na água. Mais gordura = sabor mais redondo.</li>
+    </ul>
+
+    <h3>Fresco vs. caixinha</h3>
+    <table>
+      <thead>
+        <tr><th>Aspecto</th><th>Fresco (35%)</th><th>Caixinha UHT (17–25%)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Gordura</td><td>35%</td><td>17–25% (leia o rótulo)</td></tr>
+        <tr><td>Sabor</td><td>Neutro, limpo</td><td>Leve gosto cozido</td></tr>
+        <tr><td>Espessante</td><td>Não tem</td><td>Tem (carragena/goma)</td></tr>
+        <tr><td>Resultado</td><td>Referência</td><td>~90% tão bom</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout tip">
+      <span class="tag">Veredito</span>
+      Fresco é melhor, mas <strong>caixinha não estraga</strong> seu sorvete. Não deixe de fazer o primeiro lote por causa disso. Use o que tiver em casa hoje.
+    </div>
+
+    <h3>Se usar creme de caixinha (20%), ajuste assim</h3>
+    <div class="two-col">
+      <div class="callout">
+        <span class="tag">Opção A — simples</span>
+        Mantenha os 200 g de creme de caixinha e aumente o leite em pó de 40 g para <strong>55 g</strong>. Compensa parte da gordura perdida com mais sólidos.
+      </div>
+      <div class="callout">
+        <span class="tag">Opção B — recomendado</span>
+        Use <strong>350 g de creme de caixinha</strong> e reduza o leite integral para <strong>360 g</strong>. Mantém a gordura no alvo de 8%.
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="tag">Atenção</span>
+      Creme de caixinha <strong>já tem espessante</strong>. Para não ficar borrachudo, reduza a liga neutra de 5 g para <strong>4 g</strong> na receita.
+    </div>
+  </section>
+
+  <section class="card" id="receita">
+    <h2><span class="num">6</span> Sua primeira receita: creme de baunilha</h2>
+    <p>Rendimento: <strong>~1 litro</strong> de sorvete. Tempo ativo: ~30 min. Tempo total: ~24 h (com maturação e congelamento).</p>
+    <div class="callout">
+      <span class="tag">Usando creme de caixinha?</span>
+      Esta receita assume creme <strong>fresco 35%</strong>. Se você só tem caixinha, aplique a <strong>Opção B</strong> da seção 5: use 350 g de creme de caixinha + 360 g de leite, e reduza a liga neutra de 5 g para 4 g.
+    </div>
+    <table>
+      <thead>
+        <tr><th>Ingrediente</th><th>Gramas</th><th>% (quanto isso é do total)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Leite integral</td><td>500 g</td><td>57,5% (mais da metade)</td></tr>
+        <tr><td>Creme de leite fresco (35%)</td><td>200 g</td><td>23,0% (cerca de 1/4)</td></tr>
+        <tr><td>Açúcar refinado</td><td>120 g</td><td>13,8% (perto de 1/7)</td></tr>
+        <tr><td>Leite em pó desnatado</td><td>40 g</td><td>4,6% (quase nada, mas crucial)</td></tr>
+        <tr><td>Liga neutra (estabilizante)</td><td>5 g</td><td>0,6% (uma pitada)</td></tr>
+        <tr><td>Emulsificante</td><td>3 g</td><td>0,3% (meia pitada)</td></tr>
+        <tr><td>Fava de baunilha (ou 1 colher de chá de extrato puro)</td><td>1 unidade</td><td>—</td></tr>
+        <tr><td><strong>Total da calda</strong></td><td><strong>868 g</strong></td><td><strong>100%</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="callout tip">
+      <span class="tag">Não se assuste com a coluna "%"</span>
+      Você só precisa olhar a coluna <strong>Gramas</strong> para fazer a receita. O "%" está ali só pra você entender o tamanho de cada coisa em relação ao total — e pra conferir se está dentro dos alvos da seção 4.
+    </div>
+    <div class="callout tip">
+      <span class="tag">Dica de ouro</span>
+      Misture os <strong>secos</strong> (açúcar + leite em pó + liga neutra + emulsificante) em uma tigelinha antes de jogar no leite. Se você jogar a liga direto, ela empelota e não dissolve.
+    </div>
+  </section>
+
+  <section class="card" id="passos">
+    <h2><span class="num">7</span> Passo a passo</h2>
+    <ol class="steps">
+      <li><strong>Pré-congele a cuba da sorveteira</strong> — 24 horas no freezer, no fundo, em pé. Sem isso, a sorveteira não funciona.</li>
+      <li><strong>Misture os secos</strong> — em uma tigela, junte açúcar + leite em pó + liga neutra + emulsificante. Mexa com um garfo.</li>
+      <li><strong>Aqueça o leite e o creme</strong> — em uma panela de fundo grosso, leve o leite + creme a fogo médio até 40 °C (morno, não quente).</li>
+      <li><strong>Adicione os secos aos poucos</strong> — chuvisque a mistura de secos no leite morno mexendo sempre com fouet. Adicione a fava aberta (raspe as sementes).</li>
+      <li><strong>Pasteurize</strong> — continue aquecendo até <strong>85 °C</strong>, mantenha por 15 segundos, mexendo. Isso pasteuriza e ativa o estabilizante.</li>
+      <li><strong>Resfrie rápido</strong> — coloque a panela em uma bacia com água e gelo. Mexa até esfriar a 4 °C (geladinho).</li>
+      <li><strong>Maturação</strong> — tampe e leve à geladeira por <strong>no mínimo 4 horas, ideal 12 horas</strong>. Esse descanso é o que separa amador de profissional. A liga hidrata, o sabor desenvolve.</li>
+      <li><strong>Bata na sorveteira</strong> — despeje a calda gelada na cuba pré-congelada. Bata por 20–40 min (depende da máquina) até ganhar corpo de "soft serve".</li>
+      <li><strong>Endurecimento</strong> — passe para o pote, alise a superfície, cubra com filme em contato e tampe. Freezer a −18 °C por mín. 4 horas.</li>
+      <li><strong>Sirva</strong> — tire do freezer 5 min antes. Bola limpa, textura cremosa. Você fez sorvete.</li>
+    </ol>
+  </section>
+
+  <section class="card" id="erros">
+    <h2><span class="num">8</span> Erros comuns de quem começa</h2>
+    <div class="two-col">
+      <div class="callout">
+        <span class="tag">Erro 1</span>
+        <strong>Pular a maturação.</strong> "Vou bater já." Resultado: textura ruim e sabor chapado. Espere as 12 horas.
+      </div>
+      <div class="callout">
+        <span class="tag">Erro 2</span>
+        <strong>Não pré-congelar a cuba.</strong> A mistura não congela, vira leite frio batido. Sempre 24 h antes.
+      </div>
+      <div class="callout">
+        <span class="tag">Erro 3</span>
+        <strong>Medir em xícara.</strong> Sorvete é química. Sempre balança, sempre gramas.
+      </div>
+      <div class="callout">
+        <span class="tag">Erro 4</span>
+        <strong>Jogar a liga direto no líquido.</strong> Empelota e fica grumo. Misture com os outros secos primeiro.
+      </div>
+      <div class="callout">
+        <span class="tag">Erro 5</span>
+        <strong>Abrir o pote toda hora.</strong> Cada abertura forma cristais novos. Filme em contato + tampa, abra só pra servir.
+      </div>
+      <div class="callout">
+        <span class="tag">Erro 6</span>
+        <strong>Querer fazer pistache no primeiro dia.</strong> Comece pela baunilha. Domine a base antes do sabor complicado.
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="proximo">
+    <h2><span class="num">9</span> Seu próximo passo</h2>
+    <p>Depois que a baunilha sair redonda, sua trilha é essa:</p>
+    <div>
+      <span class="pill">Semana 1 — Sorbet de limão</span>
+      <span class="pill">Semana 2 — Baunilha (essa receita)</span>
+      <span class="pill">Semana 3 — Chocolate 70%</span>
+      <span class="pill">Semana 4 — Pistache</span>
+      <span class="pill">Semana 5 — Sorbet de morango</span>
+      <span class="pill">Semana 6 — Sabor autoral</span>
+    </div>
+    <div class="callout tip" style="margin-top:1.2rem;">
+      <span class="tag">Critério de sucesso</span>
+      Sorvete bom é aquele que, 48 horas depois no freezer a −18 °C, ainda dá pra pegar a bola com a colher sem precisar de força. Se ficou de pedra, ajuste o açúcar. Se ficou mole demais, ajuste os sólidos.
+    </div>
+  </section>
+
+  <footer>
+    Feito para o <strong>Fernando</strong> · Sorvete Coach · 2026<br>
+    Pesa tudo. Espera a maturação. Confia no processo.
+  </footer>
+
+</main>
+
+</body>
+</html>

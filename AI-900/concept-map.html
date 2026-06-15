@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Concept Map — AI-900 Kit</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:1100px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}h2{color:var(--accent);margin-top:1.5rem}
+a{color:var(--accent)}
+.note{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.6rem 1rem;margin:.5rem 0;color:var(--muted);font-size:.92em}
+pre.mermaid{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;text-align:center;overflow:auto}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style></head><body>
+<header><div><a href="README.html">← Index</a><span style="color:var(--muted)">AI-900 · Concept Map</span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>Concept maps</h1>
+<div class="note">⚠️ Mermaid reads the theme on page load. If you toggle dark/light here, <strong>refresh the page</strong> to re-render diagrams.</div>
+
+<h2>1 · AI workloads → Azure services</h2>
+<pre class="mermaid">
+flowchart LR
+  AI[Artificial Intelligence]
+  AI --> ML[Machine Learning]
+  AI --> CV[Computer Vision]
+  AI --> NLP[Natural Language Processing]
+  AI --> KM[Knowledge Mining]
+  AI --> DI[Document Intelligence]
+  AI --> GenAI[Generative AI]
+
+  ML --> AzureML[Azure Machine Learning]
+  CV --> Vision[Azure AI Vision]
+  CV --> Face[Vision · Face]
+  CV --> CustomVision[Azure AI Custom Vision]
+  NLP --> Language[Azure AI Language]
+  NLP --> Speech[Azure AI Speech]
+  NLP --> Translator[Azure AI Translator]
+  KM --> Search[Azure AI Search]
+  DI --> DocInt[Azure AI Document Intelligence]
+  GenAI --> OpenAI[Azure OpenAI Service]
+  GenAI --> Foundry[Azure AI Foundry portal]
+</pre>
+
+<h2>2 · Responsible AI principles</h2>
+<pre class="mermaid">
+flowchart TD
+  R[Responsible AI]
+  R --> F[Fairness]
+  R --> S[Reliability & Safety]
+  R --> P[Privacy & Security]
+  R --> I[Inclusiveness]
+  R --> T[Transparency]
+  R --> A[Accountability]
+  F -.-> example1[Equal accuracy across groups]
+  I -.-> example2[Accessible to all abilities]
+  T -.-> example3[Explainability of decisions]
+  A -.-> example4[Human oversight & governance]
+</pre>
+
+<h2>3 · ML task types</h2>
+<pre class="mermaid">
+flowchart LR
+  ML[Machine Learning]
+  ML --> Sup[Supervised]
+  ML --> Un[Unsupervised]
+  Sup --> Reg[Regression -> numeric]
+  Sup --> Cls[Classification -> category]
+  Un --> Clu[Clustering -> groups]
+  Un --> Ano[Anomaly detection -> outliers]
+  Reg --> RMSE[Metrics: RMSE / MAE / R²]
+  Cls --> CM[Metrics: Accuracy / Precision / Recall / F1]
+</pre>
+
+<h2>4 · Generative AI on Azure</h2>
+<pre class="mermaid">
+flowchart TD
+  User[Developer / Business user]
+  User --> Foundry[Azure AI Foundry portal ai.azure.com]
+  Foundry --> Catalog[Model catalog: OpenAI / Llama / Phi / Mistral]
+  Foundry --> Playground[Playground - test prompts]
+  Foundry --> PromptFlow[Prompt flow - chains + evaluation]
+  Foundry --> Deploy[Deploy endpoint]
+
+  OpenAI[Azure OpenAI Service] --> GPT[GPT-4o]
+  OpenAI --> DALLE[DALL·E]
+  OpenAI --> Whisper[Whisper]
+  OpenAI --> Embed[Embeddings]
+
+  RAG[RAG pattern]
+  RAG --> Search[Azure AI Search retrieval]
+  RAG --> Embed
+  RAG --> GPT
+  Deploy --> Filter[Content filter]
+</pre>
+
+<h2>5 · NLP service decision</h2>
+<pre class="mermaid">
+flowchart TD
+  Need{What do you need?}
+  Need -->|Sentiment / NER / key phrases / summarization| Language[Azure AI Language]
+  Need -->|Speech to text / text to speech| Speech[Azure AI Speech]
+  Need -->|Translate text| Translator[Azure AI Translator]
+  Need -->|Translate speech| Speech
+  Need -->|Build chatbot intent| CLU[Language · Conversational LU]
+  Need -->|Q&A knowledge base| QA[Language · Question answering]
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  var theme=document.documentElement.getAttribute('data-theme')==='light'?'default':'dark';
+  mermaid.initialize({startOnLoad:true,theme:theme});
+</script>
+</main>
+<footer>← <a href="README.html">Back to index</a> · All relations verified against <a href="https://learn.microsoft.com" target="_blank" rel="noopener">learn.microsoft.com</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

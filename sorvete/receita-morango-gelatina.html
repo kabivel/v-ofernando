@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sorvete de Morango com Gelatina — Sem Creme de Leite</title>
+<style>
+  :root {
+    --bg: #fdf6f0;
+    --bg-card: #ffffff;
+    --ink: #1f2330;
+    --ink-soft: #5a6072;
+    --accent: #ff6b8a;
+    --accent-deep: #d94668;
+    --mint: #6fcf97;
+    --cream: #fff3e0;
+    --shadow: 0 10px 30px rgba(31, 35, 48, 0.08);
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  header.hero {
+    background: linear-gradient(135deg, #ffb3c6 0%, #ff6b8a 50%, #d94668 100%);
+    color: #fff;
+    padding: 3.5rem 1.5rem 4.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.25), transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.18), transparent 50%);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
+  .hero .scoop { font-size: 3.5rem; line-height: 1; }
+  .hero h1 {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    margin: 0.5rem 0;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .hero p.lead {
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    opacity: 0.95;
+    max-width: 620px;
+    margin: 0.8rem auto 0;
+  }
+  .hero .meta {
+    display: inline-flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 1.2rem;
+    font-size: 0.9rem;
+  }
+  .hero .meta span { background: rgba(255,255,255,0.2); padding: 0.4rem 0.9rem; border-radius: 20px; }
+  main {
+    max-width: 900px;
+    margin: -3rem auto 3rem;
+    padding: 0 1.25rem;
+    position: relative;
+    z-index: 2;
+  }
+  .card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  .card h2 {
+    font-size: 1.4rem;
+    margin: 0 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--accent-deep);
+  }
+  .card h2 .num {
+    display: inline-flex;
+    width: 2rem;
+    height: 2rem;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .card h3 { font-size: 1.05rem; margin: 1.4rem 0 0.5rem; color: var(--ink); }
+  .card p, .card li { color: var(--ink-soft); }
+  .card strong { color: var(--ink); }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.95rem; }
+  th, td { padding: 0.7rem 0.8rem; text-align: left; border-bottom: 1px solid #eee; }
+  th { background: var(--cream); color: var(--accent-deep); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  tr:last-child td { border-bottom: none; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  .steps { counter-reset: step; padding: 0; list-style: none; margin: 0; }
+  .steps li {
+    counter-increment: step;
+    padding: 1rem 0 1rem 3.2rem;
+    position: relative;
+    border-bottom: 1px solid #f3eee8;
+  }
+  .steps li:last-child { border-bottom: none; }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 1rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    background: var(--mint);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+  }
+  .steps li strong { display: block; color: var(--ink); margin-bottom: 0.25rem; }
+
+  .callout {
+    background: linear-gradient(135deg, #fff3e0, #ffe0e8);
+    border-left: 4px solid var(--accent);
+    padding: 1rem 1.2rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+  }
+  .callout.tip { background: #e8f7ee; border-left-color: var(--mint); }
+  .callout.warn { background: #fff7e0; border-left-color: #e8a32c; }
+  .callout .tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-deep);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .callout.tip .tag { color: #2c8a4f; }
+  .callout.warn .tag { color: #b07118; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .mini { background: var(--cream); border-radius: 12px; padding: 1rem 1.1rem; }
+  .mini .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-deep); font-weight: 700; }
+  .mini .val { font-size: 1.4rem; font-weight: 700; color: var(--ink); margin: 0.2rem 0; }
+  .mini .note { font-size: 0.85rem; color: var(--ink-soft); }
+
+  footer { text-align: center; padding: 2rem 1rem 3rem; color: var(--ink-soft); font-size: 0.9rem; }
+  footer strong { color: var(--accent-deep); }
+
+  @media (max-width: 600px) {
+    .card { padding: 1.4rem; }
+    header.hero { padding: 2.5rem 1rem 3.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-content">
+    <div class="scoop">🍓</div>
+    <h1>Sorvete de Morango com Gelatina</h1>
+    <p class="lead">Receita de emergência: sem creme de leite fresco, sem chantilly. Usa gelatina de caixinha como estabilizante secundário e dá uma textura cremosa surpreendente.</p>
+    <div class="meta">
+      <span>🥛 Rende ~1 L</span>
+      <span>⏱️ 30 min ativo</span>
+      <span>❄️ 24 h total</span>
+      <span>📊 Fácil</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="card">
+    <h2><span class="num">!</span> Antes de começar</h2>
+    <p>Essa receita resolve dois problemas: <strong>você não tem creme de leite fresco</strong> e <strong>quer testar algo diferente</strong>. A gelatina de caixinha (sabor morango) entra com dois papéis:</p>
+    <ul>
+      <li><strong>Cor e sabor</strong> reforçados sem corante separado.</li>
+      <li><strong>Estabilização extra</strong> — a gelatina é uma proteína que retém água e ajuda a evitar cristais grandes de gelo, compensando a falta de gordura do creme fresco.</li>
+    </ul>
+    <div class="callout warn">
+      <span class="tag">Atenção</span>
+      Essa receita usa <strong>gelatina de caixinha já saborizada e adoçada</strong> (Royal, Oetker, Sol). Se você tem <strong>gelatina sem sabor em pó</strong>, dá pra fazer também — veja a variação no final.
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">1</span> Ingredientes</h2>
+
+    <div class="callout tip">
+      <span class="tag">Tradução pra humanos — a coluna "%"</span>
+      A coluna <strong>%</strong> diz <em>quanto cada ingrediente representa do total da calda</em>. Você pode ignorar pra fazer a receita — só olha a coluna <strong>Gramas</strong>. O % serve pra conferir se a mistura está balanceada.<br>
+      Exemplo: leite integral 48,4% significa que quase <strong>metade</strong> da calda é leite. Açúcar 8,6% é menos de <strong>1/10</strong> da calda.
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>Ingrediente</th><th class="num">Gramas</th><th class="num">%</th><th>Função</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Leite integral</td><td class="num">450 g</td><td class="num">48,4%</td><td>Base líquida</td></tr>
+        <tr><td>Creme de leite de caixinha (UHT ~20%)</td><td class="num">300 g</td><td class="num">32,3%</td><td>Gordura e cremosidade</td></tr>
+        <tr><td>Açúcar refinado</td><td class="num">80 g</td><td class="num">8,6%</td><td>Doçura + PAC</td></tr>
+        <tr><td>Leite em pó desnatado</td><td class="num">40 g</td><td class="num">4,3%</td><td>Sólidos do leite (SNGL)</td></tr>
+        <tr><td>Gelatina de caixinha morango (1 caixa de 35 g)</td><td class="num">35 g</td><td class="num">3,8%</td><td>Sabor + cor + estabilização extra</td></tr>
+        <tr><td>Liga neutra (estabilizante)</td><td class="num">4 g</td><td class="num">0,4%</td><td>Estabilizante principal</td></tr>
+        <tr><td>Emulsificante</td><td class="num">3 g</td><td class="num">0,3%</td><td>Overrun + emulsão</td></tr>
+        <tr><td>Suco de meio limão (~10 g)</td><td class="num">10 g</td><td class="num">1,1%</td><td>Equilibra a doçura, realça morango</td></tr>
+        <tr><td>Morangos frescos picados (opcional, no final)</td><td class="num">80 g</td><td class="num">8,6%</td><td>Pedaços reais (não entra no balanço)</td></tr>
+        <tr><td><strong>Total da calda base</strong></td><td class="num"><strong>922 g</strong></td><td class="num"><strong>100%</strong></td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <div class="grid">
+      <div class="mini"><div class="label">Sólidos totais</div><div class="val">~33%</div><div class="note">~330 g em cada kg de calda. Abaixo do alvo, normal para sorvete de fruta.</div></div>
+      <div class="mini"><div class="label">Gordura</div><div class="val">~6,5%</div><div class="note">~65 g em cada kg. No piso do alvo.</div></div>
+      <div class="mini"><div class="label">Açúcares</div><div class="val">~13%</div><div class="note">~130 g em cada kg. Inclui açúcar da gelatina.</div></div>
+      <div class="mini"><div class="label">PAC estimado</div><div class="val">~250</div><div class="note">Textura cremosa a −14 °C</div></div>
+    </div>
+
+    <div class="callout">
+      <span class="tag">O que esses % querem dizer</span>
+      Imagina sua calda como <strong>1 kg (1000 g)</strong>. Cada porcentagem é quantos gramas daquilo tem nesse kg — só anda a vírgula uma casa pra esquerda. Ex: 6,5% de gordura = 65 g de gordura por kg de calda.
+    </div>
+
+    <div class="callout warn">
+      <span class="tag">Por que hidratar a gelatina no leite (e não em água)</span>
+      A bula da gelatina de caixinha pede água, mas isso adicionaria 100 g de água à calda e derrubaria seus sólidos para ~29% (fora do alvo, vira gelo). Usando leite que <em>já estava na receita</em>, você preserva o balanço.
+    </div>
+
+    <div class="callout">
+      <span class="tag">Sobre o açúcar</span>
+      A gelatina de caixinha já vem com bastante açúcar (~80% do peso). Por isso usei só <strong>80 g de açúcar refinado</strong> em vez dos 120 g da receita de baunilha — senão fica enjoativo.
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">2</span> Passo a passo</h2>
+    <ol class="steps">
+      <li><strong>Pré-congele a cuba</strong> — 24 horas antes, cuba da sorveteira no freezer, em pé, no fundo.</li>
+      <li><strong>Hidrate a gelatina</strong> — separe <strong>100 g do leite</strong> (tirados dos 450 g totais) e aqueça no micro-ondas até ~70°C (não ferver). Despeje sobre os 35 g de gelatina de morango em uma tigela. Mexa até dissolver completamente. Reserve.</li>
+      <li><strong>Misture os secos</strong> — em outra tigela, junte o açúcar (80 g) + leite em pó (40 g) + liga neutra (4 g) + emulsificante (3 g). Mexa com garfo.</li>
+      <li><strong>Aqueça leite + creme</strong> — em panela de fundo grosso, leve <strong>os 350 g de leite restantes</strong> + creme de caixinha (300 g) a fogo médio até <strong>40 °C</strong> (morno).</li>
+      <li><strong>Adicione os secos</strong> — chuvisque a mistura de secos no leite morno mexendo com fouet sem parar. Continue aquecendo até <strong>85 °C</strong> por 15 segundos.</li>
+      <li><strong>Junte a gelatina dissolvida</strong> — tire a panela do fogo, despeje a gelatina hidratada e o suco de limão. Mexa bem.</li>
+      <li><strong>Resfrie rápido</strong> — panela em bacia com água e gelo. Mexa até chegar a 4 °C.</li>
+      <li><strong>Maturação</strong> — tampe e leve à geladeira por <strong>mín. 4 h, ideal 12 h</strong>. Aqui a gelatina e a liga terminam de se hidratar.</li>
+      <li><strong>Bata na sorveteira</strong> — despeje a calda gelada na cuba pré-congelada. Bata 20–40 min até ganhar corpo de soft serve.</li>
+      <li><strong>Adicione os morangos frescos</strong> (opcional) — nos últimos 2 minutos de batimento, jogue os morangos picados em cubinhos pequenos.</li>
+      <li><strong>Endurecimento</strong> — pote, filme em contato, tampa, freezer a −18 °C por mín. 4 h.</li>
+      <li><strong>Sirva</strong> — tire 5 min antes de servir. Bola limpa, sabor intenso de morango.</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">3</span> O que esperar</h2>
+    <div class="grid">
+      <div class="mini"><div class="label">Cor</div><div class="val">Rosa vivo</div><div class="note">Da própria gelatina</div></div>
+      <div class="mini"><div class="label">Textura</div><div class="val">Cremosa</div><div class="note">Mais firme que sorvete tradicional</div></div>
+      <div class="mini"><div class="label">Sabor</div><div class="val">Morango doce</div><div class="note">Limão equilibra</div></div>
+      <div class="mini"><div class="label">Validade</div><div class="val">2 semanas</div><div class="note">Pote bem fechado</div></div>
+    </div>
+    <div class="callout tip">
+      <span class="tag">Por que a gelatina funciona aqui</span>
+      A gelatina é uma proteína que, ao se hidratar, forma uma rede tridimensional que <strong>aprisiona água</strong>. Em sorvete, isso significa cristais de gelo menores e textura mais lisa. Não substitui a liga neutra — trabalha junto.
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">4</span> Variação: gelatina sem sabor</h2>
+    <p>Se você tem gelatina <strong>incolor sem sabor</strong> em pó (envelope de 12 g), use assim:</p>
+    <ul>
+      <li><strong>12 g</strong> de gelatina sem sabor (1 envelope) hidratada em 60 g de água fria por 5 min, depois aquecida no microondas por 15 s para derreter.</li>
+      <li>Aumente o açúcar para <strong>110 g</strong> (a gelatina saborizada trazia açúcar; agora você precisa colocar).</li>
+      <li>Adicione <strong>200 g de morango fresco batido</strong> com a calda (substitui o sabor que viria da gelatina).</li>
+      <li>Resto da receita igual.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">5</span> Troubleshooting rápido</h2>
+    <table>
+      <thead>
+        <tr><th>Sintoma</th><th>Causa</th><th>Correção na próxima vez</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Textura borrachuda / elástica</td><td>Gelatina demais</td><td>Use 25 g em vez de 35 g</td></tr>
+        <tr><td>Doce demais</td><td>Açúcar da gelatina + refinado em excesso</td><td>Reduza açúcar refinado para 60 g</td></tr>
+        <tr><td>Cor pálida</td><td>Pouca gelatina ou diluição excessiva</td><td>Use 1 caixa cheia, não dilua além dos 100 g de água</td></tr>
+        <tr><td>Cristais de gelo</td><td>Pouco sólido total</td><td>Aumente leite em pó para 50 g</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    Feito para o <strong>Fernando</strong> · Sorvete Coach · 2026<br>
+    Receita de emergência, resultado de verdade.
+  </footer>
+
+</main>
+
+</body>
+</html>

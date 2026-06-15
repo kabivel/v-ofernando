@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mistake Log — AI-900 Kit</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+button{background:var(--accent);color:var(--bg);border:0;padding:.4rem .8rem;border-radius:6px;cursor:pointer;font:inherit;margin-right:.5rem}
+main{max-width:1200px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}h2{color:var(--accent);margin-top:1.5rem}
+a{color:var(--accent)}code{font-family:Consolas,Monaco,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .3rem}
+table{border-collapse:collapse;width:100%;margin:.8rem 0;font-size:.9em}th,td{border:1px solid var(--border);padding:.4rem .55rem;text-align:left;vertical-align:top}th{background:var(--card)}
+textarea{width:100%;min-height:80px;background:var(--card);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:.5rem;font:inherit}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+.error-cat{display:inline-block;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .4rem;margin:.1rem;font-size:.85em}
+</style></head><body>
+<header><div><a href="README.html">← Index</a><span style="color:var(--muted)">AI-900 · Mistake Log</span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>Mistake log</h1>
+<p>Fill this after every practice run. The <code>simulado.html</code> "📝 Add to mistake-log" button copies a pre-formatted HTML row to your clipboard — paste below into the table body.</p>
+
+<h2>Error categories (use these in the "Category" column)</h2>
+<div>
+<span class="error-cat">forgot-syntax</span>
+<span class="error-cat">misunderstood-concept</span>
+<span class="error-cat">UI-trap</span>
+<span class="error-cat">read-too-fast</span>
+<span class="error-cat">two-plausible</span>
+<span class="error-cat">never-heard</span>
+<span class="error-cat">renamed-service</span>
+</div>
+
+<h2>Log</h2>
+<p><button onclick="addRow()">➕ Add empty row</button> <button onclick="paste()">📋 Paste from clipboard</button> <button onclick="clearAll()">🗑️ Clear all</button></p>
+<table>
+<thead><tr><th>Date</th><th>Source</th><th>Q#</th><th>Domain</th><th>Category</th><th>Root cause</th><th>Action</th><th>Reviewed?</th></tr></thead>
+<tbody id="log">
+<!-- example row -->
+<tr><td>2026-05-29</td><td>simulado #1</td><td>Q7</td><td>D3 — Computer Vision</td><td>renamed-service</td><td>Picked "Form Recognizer", correct was "Document Intelligence"</td><td>Re-read <a href="domains/03-computer-vision.html">D3</a> renaming table</td><td>☐</td></tr>
+</tbody>
+</table>
+
+<h2>Weekly patterns</h2>
+<textarea placeholder="Example: 60% of my errors are in D5 generative AI — specifically distinguishing Azure OpenAI from Azure AI Foundry. Action: re-read domains/05-generative-ai.html and add 5 flashcards."></textarea>
+
+<h2>New flashcard candidates (feed into <a href="flashcards.csv">flashcards.csv</a>)</h2>
+<textarea placeholder="One per line. Format: front | back | tag"></textarea>
+</main>
+<footer>← <a href="README.html">Back to index</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+
+function addRow(){
+  var today=new Date().toISOString().slice(0,10);
+  var html='<tr><td>'+today+'</td><td contenteditable="true">simulado</td><td contenteditable="true">Q?</td><td contenteditable="true">D?</td><td contenteditable="true">category</td><td contenteditable="true">root cause</td><td contenteditable="true">action</td><td>☐</td></tr>';
+  document.getElementById('log').insertAdjacentHTML('beforeend',html);
+}
+async function paste(){
+  try{var t=await navigator.clipboard.readText();document.getElementById('log').insertAdjacentHTML('beforeend',t);}
+  catch(e){alert('Clipboard read failed — paste manually into row.');addRow();}
+}
+function clearAll(){if(confirm('Clear all rows?'))document.getElementById('log').innerHTML='';}
+</script>
+</body></html>
