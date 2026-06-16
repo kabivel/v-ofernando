@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cheatsheet — AI-900 Kit</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:1100px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}h2{color:var(--accent);margin-top:1.8rem}
+a{color:var(--accent)}code{font-family:Consolas,Monaco,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .3rem}
+table{border-collapse:collapse;width:100%;margin:.8rem 0;font-size:.92em}th,td{border:1px solid var(--border);padding:.45rem .6rem;text-align:left;vertical-align:top}th{background:var(--card)}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style></head><body>
+<header><div><a href="README.html">← Index</a><span style="color:var(--muted)">AI-900 · Cheatsheet</span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>Cheatsheet — quick reference tables</h1>
+<p>Pure tables, zero prose. Skim before exam.</p>
+
+<h2>Responsible AI — 6 principles</h2>
+<table><tr><th>Principle</th><th>Test cue</th></tr>
+<tr><td>Fairness</td><td>Equitable treatment across demographic groups</td></tr>
+<tr><td>Reliability &amp; Safety</td><td>Performs as expected, fails safely</td></tr>
+<tr><td>Privacy &amp; Security</td><td>Protect data, consent, encryption</td></tr>
+<tr><td>Inclusiveness</td><td>Accessible to people of all abilities</td></tr>
+<tr><td>Transparency</td><td>Users understand how decisions are made</td></tr>
+<tr><td>Accountability</td><td>Humans remain responsible for AI outcomes</td></tr></table>
+<p><a href="https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai" target="_blank" rel="noopener">Official ref</a></p>
+
+<h2>AI workload → Azure service</h2>
+<table><tr><th>Workload</th><th>Primary service</th></tr>
+<tr><td>Image analysis / OCR / objects</td><td>Azure AI Vision</td></tr>
+<tr><td>Face detection / recognition</td><td>Azure AI Vision — Face</td></tr>
+<tr><td>Form / invoice / receipt extraction</td><td>Azure AI Document Intelligence</td></tr>
+<tr><td>Video search / faces / topics</td><td>Azure AI Video Indexer</td></tr>
+<tr><td>Sentiment / NER / key phrases / PII / summarization</td><td>Azure AI Language</td></tr>
+<tr><td>Intent + entities for chatbots</td><td>Azure AI Language — CLU</td></tr>
+<tr><td>Q&amp;A knowledge base</td><td>Azure AI Language — Question answering</td></tr>
+<tr><td>Speech-to-text / text-to-speech / translation</td><td>Azure AI Speech</td></tr>
+<tr><td>Text translation 100+ languages</td><td>Azure AI Translator</td></tr>
+<tr><td>Knowledge mining / enterprise search</td><td>Azure AI Search</td></tr>
+<tr><td>GPT-4o / DALL·E / embeddings</td><td>Azure OpenAI Service</td></tr>
+<tr><td>Build &amp; deploy generative AI apps</td><td>Azure AI Foundry (ai.azure.com)</td></tr>
+<tr><td>Classical ML (regression, classification, clustering)</td><td>Azure Machine Learning (ml.azure.com)</td></tr>
+<tr><td>Anomaly detection</td><td>Azure AI Anomaly Detector (or AI Metrics Advisor)</td></tr></table>
+
+<h2>ML task types</h2>
+<table><tr><th>Task</th><th>Output</th><th>Example</th><th>Eval metric</th></tr>
+<tr><td>Regression</td><td>Continuous number</td><td>Predict house price</td><td>RMSE, MAE, R²</td></tr>
+<tr><td>Binary classification</td><td>1 of 2 classes</td><td>Spam / not spam</td><td>Accuracy, Precision, Recall, F1, AUC</td></tr>
+<tr><td>Multi-class classification</td><td>1 of N classes</td><td>Iris species</td><td>Accuracy, macro-F1, confusion matrix</td></tr>
+<tr><td>Clustering</td><td>Group ID</td><td>Customer segments</td><td>Silhouette score</td></tr>
+<tr><td>Anomaly detection</td><td>Normal / outlier</td><td>Fraud detection</td><td>Precision @ k</td></tr></table>
+
+<h2>Classification metrics</h2>
+<table><tr><th>Metric</th><th>Formula</th><th>When to use</th></tr>
+<tr><td>Accuracy</td><td>(TP+TN) / total</td><td>Balanced classes</td></tr>
+<tr><td>Precision</td><td>TP / (TP+FP)</td><td>False positives expensive (e.g., spam filter)</td></tr>
+<tr><td>Recall</td><td>TP / (TP+FN)</td><td>False negatives expensive (e.g., cancer screening)</td></tr>
+<tr><td>F1</td><td>2·(P·R)/(P+R)</td><td>Imbalanced classes, both P and R matter</td></tr>
+<tr><td>AUC</td><td>Area under ROC curve</td><td>Threshold-independent ranking</td></tr></table>
+
+<h2>Azure ML features (D2)</h2>
+<table><tr><th>Feature</th><th>What</th></tr>
+<tr><td>Notebooks</td><td>Code-first Jupyter on managed compute</td></tr>
+<tr><td>AutoML</td><td>Tries algorithms + hyperparameters automatically</td></tr>
+<tr><td>Designer</td><td>Drag-and-drop pipeline builder</td></tr>
+<tr><td>Pipelines</td><td>Reusable multi-step ML workflows</td></tr>
+<tr><td>Endpoints (online)</td><td>REST endpoint for real-time inference</td></tr>
+<tr><td>Endpoints (batch)</td><td>Score large datasets in bulk</td></tr>
+<tr><td>Registered model</td><td>Versioned model artifact</td></tr>
+<tr><td>Compute cluster</td><td>Scalable VMs for training</td></tr></table>
+
+<h2>Computer Vision capabilities (D3)</h2>
+<table><tr><th>Capability</th><th>Service</th></tr>
+<tr><td>Tag image</td><td>Azure AI Vision</td></tr>
+<tr><td>Caption / describe image</td><td>Azure AI Vision</td></tr>
+<tr><td>Detect objects + bounding boxes</td><td>Azure AI Vision</td></tr>
+<tr><td>Brand detection</td><td>Azure AI Vision</td></tr>
+<tr><td>OCR (Read API)</td><td>Azure AI Vision</td></tr>
+<tr><td>Face detection (bounding box, attributes)</td><td>Azure AI Vision — Face</td></tr>
+<tr><td>Face verification / identification</td><td>Azure AI Vision — Face (Limited Access)</td></tr>
+<tr><td>Custom image classification / object detection</td><td>Azure AI Custom Vision</td></tr>
+<tr><td>Extract key-value pairs from forms</td><td>Azure AI Document Intelligence</td></tr>
+<tr><td>Pre-built receipt / invoice / ID / business card</td><td>Document Intelligence pre-built models</td></tr></table>
+
+<h2>NLP features (D4)</h2>
+<table><tr><th>Feature</th><th>Service</th><th>Returns</th></tr>
+<tr><td>Language detection</td><td>AI Language</td><td>ISO code + confidence</td></tr>
+<tr><td>Sentiment analysis</td><td>AI Language</td><td>Positive/Neutral/Negative + scores</td></tr>
+<tr><td>Key phrase extraction</td><td>AI Language</td><td>List of main topics</td></tr>
+<tr><td>Named Entity Recognition</td><td>AI Language</td><td>Person, place, org, datetime, etc.</td></tr>
+<tr><td>PII detection</td><td>AI Language</td><td>Redacted text + entity list</td></tr>
+<tr><td>Summarization (extractive/abstractive)</td><td>AI Language</td><td>Short summary</td></tr>
+<tr><td>Translation (text)</td><td>AI Translator</td><td>Translated text</td></tr>
+<tr><td>Speech-to-text</td><td>AI Speech</td><td>Transcript</td></tr>
+<tr><td>Text-to-speech</td><td>AI Speech</td><td>Audio (WAV/MP3)</td></tr>
+<tr><td>Speech translation</td><td>AI Speech</td><td>Transcript in target language</td></tr>
+<tr><td>Conversational Language Understanding</td><td>AI Language</td><td>Intent + entities</td></tr>
+<tr><td>Question answering</td><td>AI Language</td><td>Top-K answers from KB</td></tr></table>
+
+<h2>Generative AI on Azure (D5) ⭐</h2>
+<table><tr><th>Concept / service</th><th>Where</th><th>Use case</th></tr>
+<tr><td>Azure OpenAI Service</td><td>Azure portal → resource</td><td>Host GPT-4o, DALL·E, Whisper, embeddings</td></tr>
+<tr><td>Azure AI Foundry portal</td><td>ai.azure.com</td><td>Build, evaluate, deploy gen-AI apps</td></tr>
+<tr><td>Model catalog</td><td>Foundry</td><td>Browse OpenAI, Llama, Mistral, Phi, etc.</td></tr>
+<tr><td>Playground</td><td>Foundry</td><td>Interactive prompt testing</td></tr>
+<tr><td>Prompt flow</td><td>Foundry</td><td>Orchestrate chains, evaluate, deploy</td></tr>
+<tr><td>RAG (Retrieval-Augmented Generation)</td><td>Foundry + Azure AI Search</td><td>Ground responses on your data</td></tr>
+<tr><td>Fine-tuning</td><td>Azure OpenAI</td><td>Specialize model on labeled examples</td></tr>
+<tr><td>Content filter</td><td>Azure OpenAI (default on)</td><td>Block hate/sexual/violence/self-harm</td></tr>
+<tr><td>System message</td><td>Chat completion request</td><td>Define model persona/behavior</td></tr>
+<tr><td>Few-shot prompting</td><td>Prompt body</td><td>Include examples to steer output</td></tr>
+<tr><td>Microsoft 365 Copilot</td><td>M365 apps</td><td>AI in Word/Excel/PPT/Outlook/Teams</td></tr>
+<tr><td>GitHub Copilot</td><td>VS Code / IDEs</td><td>Code completion + chat</td></tr></table>
+
+<h2>Common LLM concepts</h2>
+<table><tr><th>Term</th><th>Quick definition</th></tr>
+<tr><td>Token</td><td>~4 chars EN; billing + context-window unit</td></tr>
+<tr><td>Context window</td><td>Max tokens (prompt + completion) the model handles in one call</td></tr>
+<tr><td>Temperature</td><td>0 = deterministic, 1+ = creative</td></tr>
+<tr><td>Top-p</td><td>Nucleus sampling; alternative to temperature</td></tr>
+<tr><td>Max tokens</td><td>Cap on completion length</td></tr>
+<tr><td>Embedding</td><td>Numeric vector for semantic similarity / RAG</td></tr>
+<tr><td>System / user / assistant role</td><td>Chat completion message roles</td></tr></table>
+
+<h2>Exam logistics</h2>
+<table><tr><th>Item</th><th>Value</th></tr>
+<tr><td>Passing score</td><td>700 / 1000</td></tr>
+<tr><td>Cost</td><td>$99 USD</td></tr>
+<tr><td>Questions</td><td>~40–60 (not officially fixed)</td></tr>
+<tr><td>Duration</td><td>~45–60 min (Microsoft fundamentals exams)</td></tr>
+<tr><td>Languages</td><td>EN, JA, ZH, KO, DE, FR, ES, PT-BR, RU, ID, AR, IT</td></tr>
+<tr><td>Retirement</td><td><strong>June 30, 2026</strong> → replaced by AI-901</td></tr>
+<tr><td>Validity</td><td>Lifetime (no renewal)</td></tr></table>
+</main>
+<footer>← <a href="README.html">Back to index</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

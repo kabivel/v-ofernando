@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>D5: Generative AI — AI-900 Kit</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:900px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}h2{color:var(--accent);margin-top:1.5rem}h3{color:var(--fg)}
+a{color:var(--accent)}code{font-family:Consolas,Monaco,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .3rem}
+table{border-collapse:collapse;width:100%;margin:.8rem 0}th,td{border:1px solid var(--border);padding:.5rem;text-align:left;vertical-align:top}th{background:var(--card)}
+nav.toc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.8rem;margin:1rem 0}
+nav.toc a{margin-right:.8rem}
+.check{background:var(--card);border-left:4px solid var(--accent);padding:.6rem 1rem;border-radius:4px;margin:1rem 0}
+.star{color:#d29922}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style></head><body>
+<header><div><a href="../README.html">← Index</a><span style="color:var(--muted)">AI-900 · D5 — Generative AI (20–25%) <span class="star">⭐ heaviest</span></span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>Domain 5 — Generative AI on Azure ⭐</h1>
+<p><strong>Weight:</strong> 20–25% (heaviest domain) · <strong>Skill focus:</strong> describe generative AI capabilities, Azure OpenAI, Azure AI Foundry, prompt engineering, Copilot products.</p>
+<nav class="toc"><strong>Sections:</strong> <a href="#what">What is gen-AI</a> · <a href="#azoai">Azure OpenAI</a> · <a href="#foundry">Foundry</a> · <a href="#prompt">Prompts</a> · <a href="#rag">RAG vs fine-tuning</a> · <a href="#copilots">Copilots</a> · <a href="#responsible">Responsible gen-AI</a> · <a href="#check">Self-check</a></nav>
+
+<h2 id="what">1. What is generative AI?</h2>
+<p>Generative AI creates <strong>new content</strong> (not just predictions). Built on <strong>foundation models</strong> — large pre-trained models adaptable to many tasks.</p>
+<table>
+<tr><th>Modality</th><th>Example model</th><th>Output</th></tr>
+<tr><td>Text</td><td>GPT-4o, Llama, Phi</td><td>Articles, code, summaries, dialogue</td></tr>
+<tr><td>Image</td><td>DALL·E 3</td><td>Images from text prompt</td></tr>
+<tr><td>Speech (in)</td><td>Whisper</td><td>Transcribed text from audio</td></tr>
+<tr><td>Code</td><td>GPT-4 family (via GitHub Copilot)</td><td>Code completion, refactor, chat</td></tr>
+<tr><td>Multimodal</td><td>GPT-4o</td><td>Text + image + audio input/output</td></tr>
+</table>
+
+<h2 id="azoai">2. Azure OpenAI Service</h2>
+<p>Microsoft-hosted access to OpenAI models with enterprise controls.</p>
+<table>
+<tr><th>Capability</th><th>Detail</th></tr>
+<tr><td>Models available</td><td>GPT-4o / GPT-4 family, GPT-3.5, DALL·E 3, Whisper, text-embedding-3</td></tr>
+<tr><td>Auth</td><td>API key or Entra ID (preferred — managed identity)</td></tr>
+<tr><td>Network</td><td>Public endpoint + Private Endpoint option</td></tr>
+<tr><td>Content filter</td><td>On by default — hate / sexual / violence / self-harm (prompts + completions)</td></tr>
+<tr><td>Region availability</td><td>Limited Azure regions per model</td></tr>
+<tr><td>Data privacy</td><td>Your prompts/completions <strong>not used to train OpenAI models</strong></td></tr>
+<tr><td>Access</td><td>Application form required for some models (responsible AI review)</td></tr>
+</table>
+<p>vs OpenAI direct: same models, plus <em>enterprise security, regional hosting, RBAC, SLA, private networking, default content filters</em>.</p>
+<p>Reference: <a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/overview" target="_blank" rel="noopener">Azure OpenAI overview</a></p>
+
+<h2 id="foundry">3. Azure AI Foundry portal</h2>
+<p>Unified portal (formerly Azure AI Studio) at <a href="https://ai.azure.com" target="_blank" rel="noopener">ai.azure.com</a> — build, evaluate, and deploy generative AI apps.</p>
+<table>
+<tr><th>Feature</th><th>Purpose</th></tr>
+<tr><td>Model catalog</td><td>Browse OpenAI, Llama, Phi, Mistral, etc.</td></tr>
+<tr><td>Playground</td><td>Interactive prompt testing</td></tr>
+<tr><td>Prompt flow</td><td>Orchestrate chains, evaluate, deploy as endpoint</td></tr>
+<tr><td>Evaluations</td><td>Built-in metrics for groundedness, relevance, coherence</td></tr>
+<tr><td>Project + Hub</td><td>Organize resources, RBAC, shared connections</td></tr>
+<tr><td>Add your data</td><td>One-click RAG over your Azure AI Search index / blobs</td></tr>
+</table>
+<p>Reference: <a href="https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry" target="_blank" rel="noopener">What is Azure AI Foundry</a></p>
+
+<h2 id="prompt">4. Prompt engineering basics</h2>
+<table>
+<tr><th>Concept</th><th>Definition</th></tr>
+<tr><td>System message</td><td>First message defining the model's role / behavior</td></tr>
+<tr><td>User / assistant turns</td><td>Conversation history sent each call (no memory between calls)</td></tr>
+<tr><td>Zero-shot</td><td>Instructions only, no examples</td></tr>
+<tr><td>Few-shot</td><td>Include 2–5 examples in the prompt</td></tr>
+<tr><td>Chain-of-thought</td><td>"Let's think step by step" — encourages reasoning</td></tr>
+<tr><td>Temperature</td><td>0 = deterministic; 1+ = creative. Use low for factual answers.</td></tr>
+<tr><td>Max tokens</td><td>Cap on completion length</td></tr>
+<tr><td>Tokens</td><td>~4 chars EN; both billing and context-window unit</td></tr>
+</table>
+<p>Reference: <a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/prompt-engineering" target="_blank" rel="noopener">Prompt engineering guide</a></p>
+
+<h2 id="rag">5. RAG vs Fine-tuning — pick the right tool</h2>
+<table>
+<tr><th></th><th>RAG</th><th>Fine-tuning</th></tr>
+<tr><td>What changes</td><td>Prompt context (retrieved docs)</td><td>Model weights</td></tr>
+<tr><td>Best for</td><td>Up-to-date / private knowledge, citations</td><td>Format consistency, style, narrow task</td></tr>
+<tr><td>Setup cost</td><td>Low — index your data + query</td><td>High — labeled examples + training</td></tr>
+<tr><td>Latency / cost per call</td><td>Higher (extra retrieval call)</td><td>Standard</td></tr>
+<tr><td>Update frequency</td><td>Real-time (re-index)</td><td>Re-train</td></tr>
+<tr><td>Hallucination risk</td><td>Lower (grounded)</td><td>Same as base unless data covers cases</td></tr>
+<tr><td>Azure components</td><td>Azure AI Search + Foundry + OpenAI</td><td>Azure OpenAI fine-tuning</td></tr>
+</table>
+<p>Rule of thumb: <strong>start with RAG</strong>; fine-tune only when you need consistent formatting or behavior.</p>
+
+<h2 id="copilots">6. Microsoft Copilot family</h2>
+<table>
+<tr><th>Copilot</th><th>Where</th><th>Grounding</th></tr>
+<tr><td>Microsoft 365 Copilot</td><td>Word, Excel, PowerPoint, Outlook, Teams</td><td>Microsoft Graph (your tenant data)</td></tr>
+<tr><td>GitHub Copilot</td><td>VS Code, JetBrains, GitHub.com</td><td>Code context in your editor / repo</td></tr>
+<tr><td>Copilot for Security</td><td>Defender, Sentinel, Intune</td><td>Security signals</td></tr>
+<tr><td>Microsoft Copilot (free / Pro)</td><td>Web, Edge, Windows</td><td>Bing search + LLM</td></tr>
+<tr><td>Copilot Studio</td><td>Low-code copilot builder</td><td>Your data sources + plugins</td></tr>
+</table>
+
+<h2 id="responsible">7. Responsible generative AI</h2>
+<p>Microsoft uses a 4-stage model: <strong>Identify → Measure → Mitigate → Operate</strong>.</p>
+<ul>
+<li><strong>Identify</strong> potential harms (hate, manipulation, IP leak)</li>
+<li><strong>Measure</strong> harm frequency and severity (eval datasets)</li>
+<li><strong>Mitigate</strong> at 4 layers: model · safety system · metaprompt + grounding · UX</li>
+<li><strong>Operate</strong> with monitoring, incident response, transparency</li>
+</ul>
+<p>Reference: <a href="https://learn.microsoft.com/en-us/azure/ai-foundry/responsible-ai/openai/overview" target="_blank" rel="noopener">Responsible AI for Azure OpenAI</a></p>
+
+<h2 id="check">8. Self-check</h2>
+<div class="check">
+<ol>
+<li>You want your chatbot to answer using your company's policy documents. RAG or fine-tuning?</li>
+<li>What is the unit of LLM billing and context-window measurement?</li>
+<li>Which Azure portal hosts the model catalog and prompt flow?</li>
+<li>You want consistent JSON output formatting from an LLM — RAG or fine-tuning?</li>
+<li>Is the Azure OpenAI content filter enabled by default? Can it be removed easily?</li>
+<li>What grounds Microsoft 365 Copilot's answers?</li>
+</ol>
+<p><em>Answers:</em> 1. RAG · 2. Token (~4 chars EN) · 3. Azure AI Foundry portal (ai.azure.com) · 4. Fine-tuning · 5. Yes — on by default for prompts + completions; removal requires an application/approval · 6. Microsoft Graph (your tenant's emails, files, chats)</p>
+</div>
+<p>Related: <a href="../labs/03-azure-openai/README-guided.html">Lab 3 — Azure OpenAI</a> · <a href="../flashcards.html">Flashcards D5</a></p>
+</main>
+<footer>← <a href="../README.html">Back to index</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab 3 Speedrun — Azure OpenAI</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:900px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}h2{color:var(--accent);margin-top:1.2rem}
+a{color:var(--accent)}code{font-family:Consolas,Monaco,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .3rem}
+pre{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.8rem;overflow:auto}
+table{border-collapse:collapse;width:100%;margin:.8rem 0}th,td{border:1px solid var(--border);padding:.5rem;text-align:left}th{background:var(--card)}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style></head><body>
+<header><div><a href="../../README.html">← Index</a><span style="color:var(--muted)">Lab 3 · Speedrun (10–15 min)</span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>Lab 3 — Speedrun</h1>
+
+<pre><code>az login
+az group create -n rg-ai900-oai -l eastus
+az cognitiveservices account create -n ai900-oai-demo -g rg-ai900-oai --kind OpenAI --sku S0 -l eastus --yes
+az cognitiveservices account deployment create -n ai900-oai-demo -g rg-ai900-oai \
+  --deployment-name chat --model-name gpt-4o-mini --model-version "2024-07-18" \
+  --model-format OpenAI --sku-name Standard --sku-capacity 1
+
+ENDPOINT=$(az cognitiveservices account show -n ai900-oai-demo -g rg-ai900-oai --query properties.endpoint -o tsv)
+KEY=$(az cognitiveservices account keys list -n ai900-oai-demo -g rg-ai900-oai --query key1 -o tsv)
+
+cd labs/03-azure-openai
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+
+AZURE_OAI_ENDPOINT=$ENDPOINT AZURE_OAI_KEY=$KEY AZURE_OAI_DEPLOYMENT=chat \
+  python chat.py "Explain RAG in two sentences."
+
+az group delete -n rg-ai900-oai --yes --no-wait</code></pre>
+
+<h2>Troubleshooting</h2>
+<table>
+<tr><th>Error</th><th>Fix</th></tr>
+<tr><td>404 DeploymentNotFound</td><td>Pass deployment name (<code>chat</code>) not model name</td></tr>
+<tr><td>403</td><td>Subscription needs Azure OpenAI approval — use Foundry playground</td></tr>
+<tr><td>429</td><td>TPM cap — add capacity or wait</td></tr>
+</table>
+
+<h2>Challenge</h2>
+<p>Wrap the call in a 3-turn conversation: system + user + assistant + user. Verify the model remembers the earlier turn (proves "no memory between calls — you send full history every time").</p>
+</main>
+<footer>← <a href="../../README.html">Back to index</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

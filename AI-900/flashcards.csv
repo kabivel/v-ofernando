@@ -1,0 +1,54 @@
+front;back;tags
+"What are the 6 Microsoft Responsible AI principles?";"Fairness; Reliability & Safety; Privacy & Security; Inclusiveness; Transparency; Accountability";D1
+"Which Responsible AI principle covers ensuring a system works well for people with disabilities?";"Inclusiveness";D1
+"Which Responsible AI principle covers explaining model decisions to users?";"Transparency";D1
+"What AI workload identifies unusual data points in a dataset?";"Anomaly detection";D1
+"Which Azure service is used for knowledge mining over unstructured documents?";"Azure AI Search (formerly Azure Cognitive Search)";D1
+"What does 'document intelligence' workload do?";"Extracts text, key-value pairs, tables, structure from forms/invoices/receipts";D1
+"Define supervised learning";"Training a model on labeled examples (features + known target)";D2
+"Define unsupervised learning";"Finding patterns in unlabeled data — e.g., clustering, anomaly detection";D2
+"Which ML task predicts a continuous numeric value?";"Regression";D2
+"Which ML task predicts a category/class?";"Classification";D2
+"Which ML task groups similar items without labels?";"Clustering";D2
+"What is the typical train/validation/test split?";"70 / 15 / 15 (or 80/10/10)";D2
+"What metric measures regression error magnitude in original units?";"RMSE (or MAE)";D2
+"What metric is TP / (TP+FP)?";"Precision";D2
+"What metric is TP / (TP+FN)?";"Recall (sensitivity)";D2
+"What is the F1 score?";"Harmonic mean of precision and recall";D2
+"What is a confusion matrix?";"Table of TP / FP / FN / TN counts used to evaluate classification";D2
+"What is overfitting?";"Model memorizes training data; performs poorly on unseen data";D2
+"Which Azure service offers no-code AutoML, designer, and managed compute?";"Azure Machine Learning (Azure ML Studio at ml.azure.com)";D2
+"Which Azure ML feature automatically tries algorithms and hyperparameters?";"Automated ML (AutoML)";D2
+"Which Azure ML feature is a drag-and-drop pipeline builder?";"Designer";D2
+"What is the unified service for image analysis, OCR, and spatial analysis on Azure?";"Azure AI Vision";D3
+"Which service detects, recognizes, and analyzes human faces?";"Azure AI Face (Azure AI Vision Face)";D3
+"Which service extracts text, structure, and key-value pairs from forms?";"Azure AI Document Intelligence (formerly Form Recognizer)";D3
+"Which service indexes video for searchable insights (faces, keywords, sentiment)?";"Azure AI Video Indexer";D3
+"What is OCR?";"Optical Character Recognition — extracting printed/handwritten text from images";D3
+"Which Azure AI Vision feature describes an image with a sentence?";"Image captioning / description generation";D3
+"Which Azure service replaced Form Recognizer in name?";"Azure AI Document Intelligence";D3
+"What is the unified text-analytics service on Azure?";"Azure AI Language";D4
+"Which AI Language feature returns positive/negative/neutral scores?";"Sentiment analysis";D4
+"Which AI Language feature extracts people, places, organizations from text?";"Named Entity Recognition (NER) / Entity recognition";D4
+"Which AI Language feature pulls out main topics/phrases?";"Key phrase extraction";D4
+"Which Azure service handles speech-to-text, text-to-speech, and speech translation?";"Azure AI Speech";D4
+"Which Azure service translates text between 100+ languages?";"Azure AI Translator";D4
+"Which AI Language feature lets you build a knowledge base of Q&A pairs?";"Question answering (formerly QnA Maker)";D4
+"Which AI Language feature understands user intent and entities for chatbots?";"Conversational Language Understanding (CLU, replaces LUIS)";D4
+"Which Azure service hosts foundation models like GPT-4o and DALL·E?";"Azure OpenAI Service";D5
+"Which Azure portal is the central hub for building generative AI apps?";"Azure AI Foundry (formerly Azure AI Studio) at ai.azure.com";D5
+"What is a 'token' in LLM context?";"Unit of text (~4 characters EN) used for billing and context-window limits";D5
+"What is prompt engineering?";"Crafting input text to guide an LLM toward desired output";D5
+"What is RAG (Retrieval-Augmented Generation)?";"Pattern that retrieves relevant docs (via search/embeddings) then passes them as LLM context to ground responses";D5
+"What is the difference between Azure OpenAI and OpenAI direct?";"Azure OpenAI adds enterprise security, regional hosting, RBAC, private networking, SLA, content filters";D5
+"What is GitHub Copilot built on?";"OpenAI Codex (initially) / GPT-4 family models, served via Azure OpenAI infrastructure";D5
+"What is Microsoft 365 Copilot?";"Generative AI assistant integrated into Word, Excel, PowerPoint, Outlook, Teams (M365 apps)";D5
+"What is a 'system message' in chat completions?";"Initial instruction defining model persona/behavior, sent before user messages";D5
+"What is 'grounding' in generative AI?";"Connecting model responses to real data sources (e.g., RAG) to reduce hallucination";D5
+"What is a content filter in Azure OpenAI?";"Automatic moderation for hate, sexual, violence, self-harm — applied to prompts and completions";D5
+"Name a generative AI workload type besides text";"Image generation (DALL·E), code generation (Codex/Copilot), audio (Whisper for speech-to-text)";D5
+"Which generative AI principle relates to provenance / 'where did this content come from?'";"Transparency (and Accountability)";D1
+"What does NLP stand for?";"Natural Language Processing";D4
+"Which metric, between Accuracy and F1, is better for imbalanced datasets?";"F1 (because Accuracy can be misleadingly high when one class dominates)";D2
+"What does PII redaction in Azure AI Language do?";"Detects and masks Personally Identifiable Information in text (names, SSNs, etc.)";D4
+"What is fine-tuning in Azure OpenAI?";"Continuing training on a base model with your own labeled examples to specialize behavior";D5

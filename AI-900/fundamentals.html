@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fundamentals — AI-900 Kit</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:900px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}
+a{color:var(--accent)}code{font-family:Consolas,Monaco,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .3rem}
+table{border-collapse:collapse;width:100%;margin:1rem 0}th,td{border:1px solid var(--border);padding:.5rem;text-align:left}th{background:var(--card)}
+nav.toc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.8rem;margin:1rem 0}
+nav.toc a{margin-right:.8rem;display:inline-block}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style></head><body>
+<header><div><a href="README.html">← Index</a><span style="color:var(--muted)">AI-900 · Fundamentals</span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>Fundamentals — pre-requisite primer</h1>
+<p>AI-900 has no formal prerequisites, but candidates do better with awareness of cloud basics and a few math/ML concepts. If your diagnostic pre-requisite score is <strong>&lt; 30%</strong>, spend Day 1 on this primer before touching domains.</p>
+
+<nav class="toc"><strong>Sections:</strong> <a href="#cloud">Cloud basics</a> <a href="#ai">AI vocabulary</a> <a href="#stats">Stats primer</a> <a href="#azure">Azure portal</a> <a href="#checklist">Self-check</a></nav>
+
+<h2 id="cloud">1. Cloud basics</h2>
+<table>
+<tr><th>Concept</th><th>1-line definition</th><th>Official link</th></tr>
+<tr><td>IaaS / PaaS / SaaS</td><td>Infrastructure / Platform / Software as a Service — increasing levels of vendor management</td><td><a href="https://learn.microsoft.com/en-us/training/modules/intro-to-azure-fundamentals/" target="_blank" rel="noopener">Azure fundamentals</a></td></tr>
+<tr><td>Region / availability zone</td><td>Geographic location / isolated datacenter within a region</td><td><a href="https://learn.microsoft.com/en-us/azure/reliability/availability-zones-overview" target="_blank" rel="noopener">AZ overview</a></td></tr>
+<tr><td>Resource group</td><td>Logical container for Azure resources sharing lifecycle</td><td><a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal" target="_blank" rel="noopener">RG docs</a></td></tr>
+<tr><td>REST API + endpoint + key</td><td>HTTP request to a service URL, authenticated by header key</td><td><a href="https://learn.microsoft.com/en-us/rest/api/azure/" target="_blank" rel="noopener">Azure REST</a></td></tr>
+<tr><td>Managed identity</td><td>Azure-managed credential for service-to-service auth (no secrets)</td><td><a href="https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview" target="_blank" rel="noopener">Managed identity</a></td></tr>
+</table>
+
+<h2 id="ai">2. AI vocabulary (must know before Day 2)</h2>
+<table>
+<tr><th>Term</th><th>What it means</th></tr>
+<tr><td>AI vs ML</td><td>AI = systems that mimic intelligence; ML = subset of AI that learns from data without explicit rules</td></tr>
+<tr><td>Supervised learning</td><td>Train on labeled examples (input → known output). Used for regression, classification.</td></tr>
+<tr><td>Unsupervised learning</td><td>Find structure in unlabeled data. Used for clustering, anomaly detection.</td></tr>
+<tr><td>Features / labels</td><td>Inputs (features) and the target value you want to predict (label)</td></tr>
+<tr><td>Training / validation / test split</td><td>Typically 70 / 15 / 15 — never test on data the model saw during training</td></tr>
+<tr><td>Inference</td><td>Using a trained model to predict on new data (also called "scoring")</td></tr>
+<tr><td>Foundation model / LLM</td><td>Large pre-trained model adapted to many downstream tasks (e.g., GPT-4o)</td></tr>
+<tr><td>Prompt / completion / token</td><td>Input text → generated text; billed per token (~4 chars EN)</td></tr>
+</table>
+<p>Reference: <a href="https://learn.microsoft.com/en-us/training/paths/get-started-with-artificial-intelligence-on-azure/" target="_blank" rel="noopener">Get started with AI on Azure (learn path)</a></p>
+
+<h2 id="stats">3. Statistics primer (light)</h2>
+<table>
+<tr><th>Term</th><th>1-line definition</th></tr>
+<tr><td>Accuracy</td><td>(TP+TN) / total — how often the model is right</td></tr>
+<tr><td>Precision</td><td>TP / (TP+FP) — of items predicted positive, how many actually are</td></tr>
+<tr><td>Recall</td><td>TP / (TP+FN) — of actual positives, how many we caught</td></tr>
+<tr><td>F1 score</td><td>Harmonic mean of precision and recall</td></tr>
+<tr><td>Confusion matrix</td><td>Table of TP / FP / FN / TN counts for classification</td></tr>
+<tr><td>RMSE / MAE</td><td>Regression error metrics — lower is better</td></tr>
+<tr><td>Overfitting</td><td>Model memorizes training data, performs poorly on new data</td></tr>
+</table>
+<p>Reference: <a href="https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/" target="_blank" rel="noopener">ML fundamentals module</a></p>
+
+<h2 id="azure">4. Azure portal — minimum navigation</h2>
+<ul>
+<li>Create / delete a resource group · <a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal" target="_blank" rel="noopener">docs</a></li>
+<li>Find <strong>endpoint</strong> and <strong>key</strong> of an Azure AI service · <a href="https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource" target="_blank" rel="noopener">docs</a></li>
+<li>Open <strong>Azure AI Foundry portal</strong> (formerly Azure AI Studio) · <a href="https://ai.azure.com" target="_blank" rel="noopener">ai.azure.com</a></li>
+<li>Use <strong>Azure ML Studio</strong> at <a href="https://ml.azure.com" target="_blank" rel="noopener">ml.azure.com</a></li>
+</ul>
+
+<h2 id="checklist">5. "Do you know?" self-check</h2>
+<table>
+<tr><th>Question</th><th>If yes → skip · If no → 30 min read</th></tr>
+<tr><td>Can you create an Azure resource group from the portal?</td><td><a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal" target="_blank" rel="noopener">RG portal</a></td></tr>
+<tr><td>Do you know the difference between supervised and unsupervised learning?</td><td><a href="https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/" target="_blank" rel="noopener">ML module</a></td></tr>
+<tr><td>Can you describe what a confusion matrix shows?</td><td><a href="https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/8-classification" target="_blank" rel="noopener">Classification unit</a></td></tr>
+<tr><td>Do you know what an LLM token is?</td><td><a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/overview" target="_blank" rel="noopener">Azure OpenAI overview</a></td></tr>
+<tr><td>Have you opened the Azure AI Foundry portal at least once?</td><td><a href="https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry" target="_blank" rel="noopener">Foundry overview</a></td></tr>
+</table>
+<p><strong>Time budget:</strong> 1–3 hours total if all answers are "no". Skip entirely if all "yes" and diagnostic score &gt; 60%.</p>
+</main>
+<footer>← <a href="README.html">Back to index</a> · Sources: <a href="https://learn.microsoft.com" target="_blank" rel="noopener">learn.microsoft.com</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

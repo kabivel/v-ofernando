@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Exam Strategy — AI-900 Kit</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:900px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}h2{color:var(--accent);margin-top:1.5rem}
+a{color:var(--accent)}code{font-family:Consolas,Monaco,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .3rem}
+table{border-collapse:collapse;width:100%;margin:.8rem 0}th,td{border:1px solid var(--border);padding:.5rem;text-align:left;vertical-align:top}th{background:var(--card)}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style></head><body>
+<header><div><a href="README.html">← Index</a><span style="color:var(--muted)">AI-900 · Exam Strategy</span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>Exam-day strategy</h1>
+
+<h2>3-pass technique</h2>
+<table>
+<tr><th>Pass</th><th>Time per question</th><th>Action</th></tr>
+<tr><td><strong>Pass 1 — Fast</strong></td><td>30–45 s</td><td>Answer easy ones immediately. <strong>Flag</strong> anything that needs &gt;45s and move on.</td></tr>
+<tr><td><strong>Pass 2 — Medium</strong></td><td>60–90 s</td><td>Tackle flagged. Use elimination heuristics from <a href="pegadinhas.html">pegadinhas.html</a>.</td></tr>
+<tr><td><strong>Pass 3 — Review</strong></td><td>remaining time</td><td>Re-read still-flagged. <strong>Never leave blank</strong> — eliminate 2 and guess (25% → 50%).</td></tr>
+</table>
+
+<h2>Time budget (assuming 50 questions in 60 min)</h2>
+<ul>
+<li>Pass 1: 35 min (target: answer 35–40 questions)</li>
+<li>Pass 2: 20 min (target: clear ~10 flagged)</li>
+<li>Pass 3: 5 min (review what's left, sanity-check unsure ones)</li>
+</ul>
+
+<h2>When to flag</h2>
+<ul>
+<li>Two answers look equally plausible</li>
+<li>Service name you've never heard of (probably old name like "QnA Maker")</li>
+<li>Question has a long scenario you can't parse in 20 s</li>
+<li>You're tempted to second-guess — flag, move on, return with fresh eyes</li>
+</ul>
+
+<h2>Question-type tactics</h2>
+<table>
+<tr><th>Type</th><th>Tactic</th></tr>
+<tr><td>Single-choice</td><td>Read all 4 options before deciding. Often "obvious right" answer is a trap; check option 4.</td></tr>
+<tr><td>Multi-select ("choose 2")</td><td>Answer count is given — eliminate 2 wrong ones first.</td></tr>
+<tr><td>Drag-and-drop</td><td>Map service → use case. Use process of elimination if unsure of one mapping.</td></tr>
+<tr><td>Yes/No series</td><td>Each yes/no is independent — read each carefully; don't assume a pattern.</td></tr>
+<tr><td>Scenario / case study</td><td>Read the question <strong>before</strong> the scenario. Then scan scenario for the specific keyword you need.</td></tr>
+</table>
+
+<h2>Night before</h2>
+<ul>
+<li>Light review of <a href="cheatsheet.html">cheatsheet.html</a> + <a href="mistake-log.html">mistake-log.html</a> only. <strong>No new material.</strong></li>
+<li>Confirm exam scheduled time, ID, and proctoring environment.</li>
+<li>If online proctored: tidy your workspace, no second monitor, charger plugged in, water bottle clear/label removed.</li>
+<li>Sleep ≥ 7 hours.</li>
+</ul>
+
+<h2>Morning of</h2>
+<ul>
+<li>Eat normally. Avoid heavy caffeine if not your usual.</li>
+<li>Skim <a href="cheatsheet.html">cheatsheet.html</a> ONCE — Responsible AI principles + service → workload mapping.</li>
+<li>Arrive / log in 15 min early.</li>
+<li>Bathroom break before starting (timer doesn't pause).</li>
+</ul>
+
+<h2>During exam</h2>
+<ul>
+<li><strong>You can't return to previous questions in Microsoft fundamentals exams ONLY IF case-study sections</strong>. Verify on the intro screen.</li>
+<li>If allowed: flag liberally on first pass.</li>
+<li>Read every option before clicking — Microsoft loves "best answer" among multiple defensible ones.</li>
+<li>Watch for negatives: <em>"Which is NOT…"</em>, <em>"Which is the LEAST…"</em>.</li>
+<li>If completely lost: identify what the question is about (which domain), eliminate options that belong to other domains.</li>
+</ul>
+
+<h2>After submitting</h2>
+<ul>
+<li>Result is <strong>immediate</strong>. Score / 1000, pass at 700.</li>
+<li>Pass: download badge from Credly within 48h via Learn profile.</li>
+<li>Fail: free retake offered (depends on promo). Use <a href="mistake-log.html">mistake-log.html</a> to focus.</li>
+</ul>
+</main>
+<footer>← <a href="README.html">Back to index</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

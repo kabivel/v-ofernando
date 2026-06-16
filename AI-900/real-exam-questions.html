@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Real Exam Questions — Consolidated · AI-900 Kit</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e;--ok:#3fb950;--err:#f85149;--warn:#d29922}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76;--ok:#1a7f37;--err:#cf222e;--warn:#9a6700}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.5rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10;gap:.5rem;flex-wrap:wrap}
+header a{color:var(--accent);text-decoration:none;margin-right:.5rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:900px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem;margin-top:0}
+button{background:var(--accent);color:var(--bg);border:0;padding:.4rem .8rem;border-radius:6px;cursor:pointer;font:inherit;margin:.15rem}
+button.sec{background:var(--card);color:var(--fg);border:1px solid var(--border)}
+button.sm{padding:.25rem .55rem;font-size:.88em}
+select,input[type=checkbox]{vertical-align:middle}select{background:var(--card);color:var(--fg);border:1px solid var(--border);border-radius:4px;padding:.25rem .4rem}
+fieldset{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;margin:.7rem 0}
+legend{padding:0 .5rem;color:var(--accent);font-weight:600;font-size:.95em}
+.opt{display:block;padding:.3rem 0;cursor:pointer}
+.opt.correct{background:rgba(63,185,80,.15);border-radius:4px;padding:.3rem .5rem}
+.opt.wrong{background:rgba(248,81,73,.15);border-radius:4px;padding:.3rem .5rem}
+.tag{display:inline-block;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:.05rem .4rem;font-size:.78em;color:var(--muted);margin-left:.3rem}
+.tag.multi{color:var(--warn);border-color:var(--warn)}
+.feedback{margin-top:.5rem;padding:.5rem;border-left:3px solid var(--accent);background:var(--bg);border-radius:4px;font-size:.9em;display:none}
+.feedback.show{display:block}.feedback a{color:var(--accent)}
+.feedback .why{margin:.4rem 0 0;color:var(--fg)}
+.feedback .trap{margin:.4rem 0 0;color:var(--warn)}
+.feedback .tip{margin:.4rem 0 0;color:var(--ok)}
+#result{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;margin:1rem 0;display:none}
+#result.show{display:block}
+table{border-collapse:collapse;width:100%;margin:.5rem 0;font-size:.92em}th,td{border:1px solid var(--border);padding:.4rem .55rem;text-align:left}th{background:var(--bg)}
+.controls{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.6rem 1rem;margin:.8rem 0;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.intro{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;margin:.8rem 0}
+.intro ul{margin:.4rem 0;padding-left:1.2rem}
+.hidden{display:none!important}
+footer{text-align:center;color:var(--muted);padding:1rem;border-top:1px solid var(--border)}
+a{color:var(--accent)}
+</style></head><body>
+<header>
+<div><a href="README.html">← Index</a><span style="color:var(--muted)">AI-900 · Real Exam Q&amp;A (consolidated parts)</span></div>
+<div><span id="status" class="tag">Not started</span></div>
+<button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+</header>
+<main>
+<h1>Real exam questions — consolidated</h1>
+<p>Real-style questions sourced from the tech-blackboard AI-900 video series and other public exam dumps, each with the verified answer, Microsoft documentation link, justification and exam tips. Use the <strong>Part</strong> and <strong>Domain</strong> filters to focus your review. Distinct from <a href="simulado.html">simulado.html</a>, which is an independent 50-question mock exam.</p>
+
+<div class="intro" style="border-left:4px solid var(--warn)">
+<strong>⚠️ Outdated terminology you'll meet in these questions</strong> (still asked in dumps; product names changed):
+<ul>
+<li><strong>QnA Maker</strong> → <strong>retired 31 Mar 2025</strong>. Replacement: Azure AI Language → <em>Custom Question Answering</em></li>
+<li><strong>LUIS (Language Understanding)</strong> → <strong>retired 1 Oct 2025</strong>. Replacement: Azure AI Language → <em>Conversational Language Understanding (CLU)</em></li>
+<li><strong>Form Recognizer</strong> → renamed to <strong>Azure AI Document Intelligence</strong> (2023)</li>
+<li><strong>Computer Vision API / Computer Vision service</strong> → renamed to <strong>Azure AI Vision</strong> (May 2023)</li>
+<li><strong>Text Analytics</strong> → absorbed into <strong>Azure AI Language</strong></li>
+<li><strong>Cognitive Services</strong> → renamed to <strong>Azure AI Services</strong> (2023)</li>
+<li><strong>Azure AI Studio</strong> → renamed to <strong>Azure AI Foundry</strong> (Nov 2024)</li>
+<li><strong>Azure ML Designer "modules"</strong> → called <strong>"components"</strong> in v2 SDK/CLI (the v1 Designer UI still works, but maintenance mode)</li>
+<li><strong>Personalizer / Metrics Advisor / Anomaly Detector</strong> → announced for retirement on <strong>1 Oct 2026</strong></li>
+<li><strong>Face service identification / verification</strong> → <strong>Limited Access</strong> since Jun 2022 (requires Microsoft approval). Emotion / age / gender detection were <strong>retired</strong> in 2022.</li>
+<li><strong>AKS deploy</strong> for ML endpoints → superseded by <strong>Managed Online Endpoints (MOE)</strong> in AML v2. <strong>Azure Container Instances</strong> deploys are being deprecated.</li>
+<li><strong>"Cognitive Services" multi-service resource</strong> → renamed to <strong>"Azure AI services" multi-service resource</strong></li>
+<li><strong>Computer Vision v3 'Categories' / 'Landmark' / 'Celebrity' domains</strong> → legacy v3 API; new development uses <strong>Azure AI Vision Image Analysis 4.0</strong>. 'Celebrity' domain was removed for Responsible AI reasons (2020).</li>
+<li><strong>AI-900 exam</strong> retires <strong>30 Jun 2026</strong> — replaced by <strong>AI-901</strong></li>
+</ul>
+<small>Answers below remain valid for AI-900 exam scoring; flags exist so you recognize the modern equivalents.</small>
+</div>
+
+<div class="intro">
+<strong>Golden rules from this set:</strong>
+<ul>
+<li>Predict a <strong>numeric value</strong> → <strong>Regression</strong></li>
+<li>Predict a <strong>category</strong> → <strong>Classification</strong></li>
+<li><strong>Your own</strong> images → <strong>Custom Vision</strong>; ready-made tasks → <strong>Computer Vision</strong></li>
+<li>Create <strong>new</strong> features → <strong>Feature engineering</strong>; reduce/select → <strong>Feature selection</strong></li>
+<li>Bounding boxes = <strong>Object detection</strong>; label + % only = <strong>Image classification</strong></li>
+</ul>
+</div>
+
+<div class="controls">
+<button onclick="finish()">⏹️ Finish &amp; score</button>
+<button class="sec" onclick="revealAll()">💡 Reveal all</button>
+<button class="sec" onclick="reset()">🔄 Reset</button>
+<span>Part: <select id="partFilter" onchange="applyFilter()">
+<option value="">All parts</option>
+<option value="1">Part 1</option>
+<option value="2">Part 2 (Q1–Q15)</option>
+<option value="3">Part 3 (Q16–Q30)</option>
+<option value="4">Part 4 (Q31–Q45)</option>
+</select></span>
+<span>Domain: <select id="domainFilter" onchange="applyFilter()">
+<option value="">All domains</option>
+<option value="D1">D1 — AI workloads &amp; Responsible AI</option>
+<option value="D2">D2 — Machine Learning</option>
+<option value="D3">D3 — Computer Vision</option>
+<option value="D4">D4 — NLP</option>
+<option value="D5">D5 — Generative AI</option>
+</select></span>
+</div>
+
+<div id="quiz"></div>
+
+<div class="controls">
+<button onclick="finish()">⏹️ Finish &amp; score</button>
+<button class="sec" onclick="revealAll()">💡 Reveal all</button>
+<button class="sec" onclick="reset()">🔄 Reset</button>
+</div>
+
+<div id="result"></div>
+</main>
+<footer>← <a href="README.html">Back to index</a> · Sourced from <a href="https://learn.microsoft.com" target="_blank" rel="noopener">learn.microsoft.com</a></footer>
+
+<script>
+// ===== Question bank — Consolidated (Parts 1, 2, 3, …) =====
+// type: 's' = single (c is int), 'm' = multi (c is array)
+// p = part number (1, 2, 3, …); n = original exam question number; e = explanation; tip/trap optional
+// Append new parts at the end of this array — the UI auto-renders them in source order.
+var Q=[
+// ---------- Part 2 (Q1–Q15) — from tech-blackboard YouTube transcript ----------
+{p:2,n:1,d:"D4",t:"s",q:"Which AI service should you use to create a bot from a frequently-asked-questions (FAQ) document?",o:["QnA Maker","Language Understanding (LUIS)","Text Analytics","Speech-to-Text"],c:0,
+ e:"QnA Maker is a cloud NLP service designed to create a natural conversational layer over a knowledge base of Q&A pairs — exactly the FAQ-bot scenario.",
+ trap:"⚠️ DECOMMISSIONED: QnA Maker was retired on 31 March 2025. Modern replacement = Azure AI Language → Custom Question Answering. LUIS is also being retired (replaced by Conversational Language Understanding / CLU). Text Analytics is now a feature of Azure AI Language. 'Cognitive Services' was rebranded to 'Azure AI Services'.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/language-service/question-answering/overview","Question Answering (modern replacement)"]},
+{p:2,n:2,d:"D2",t:"s",q:"You build a machine-learning model using the automated machine-learning UI. You need to ensure the model meets the Microsoft TRANSPARENCY principle for Responsible AI. What should you do?",o:["Set validation type to Auto","Enable 'Explain best model'","Set primary metric to accuracy","Set max concurrent iterations to 0"],c:1,
+ e:"Model explainability ('Explain best model') exposes feature importance so humans can understand how the model reached its prediction — that is the essence of Transparency.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/how-to-machine-learning-interpretability-automl","Explainability in AutoML"]},
+{p:2,n:3,d:"D4",t:"s",q:"Which scenario is an example of a web chat bot?",o:["Determine whether reviews posted on a website are positive or negative","Translate web pages between English and Japanese in real time","Identify product brands in photos uploaded to a website","From a website interface, answer common questions about scheduled events and ticket purchases for a music festival"],c:3,
+ e:"A web chat bot interactively answers user questions on a website — the classic example is FAQ/customer-service chat (events, tickets, support).",
+ trap:"⚠️ Tooling rebrand: <em>Power Virtual Agents</em> was renamed to <strong>Microsoft Copilot Studio</strong> (Nov 2023). Azure Bot Service still exists for pro-code scenarios.",
+ ref:["https://learn.microsoft.com/en-us/azure/bot-service/bot-service-overview","Azure Bot Service"]},
+{p:2,n:4,d:"D2",t:"s",q:"For a machine-learning process, how should you split data for training and evaluation?",o:["Use features for training and labels for evaluation","Randomly split the data into rows for training and rows for evaluation","Use labels for training and features for evaluation","Randomly split the data into columns for training and columns for evaluation"],c:1,
+ e:"Use the Split Data module with 'split rows' (typically 70/30 or 80/20). Both training and evaluation sets must contain the same FEATURES (columns) plus their LABELS — what differs is the rows (observations).",
+ tip:"Always split by ROWS, never by columns — both sets need the same columns.",
+ trap:"⚠️ Outdated terminology: in v2 AML, the 'Split Data module' is a 'component'. Same concept, new name.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/component-reference/split-data","Split Data module"]},
+{p:2,n:5,d:"D3",t:"s",q:"Which value is the calculated probability of a correct image classification?",o:["Accuracy","Confidence","Root Mean Square Error (RMSE)","Sentiment"],c:1,
+ e:"Each prediction returned by an image classifier includes a confidence score (0–1) representing how probable that label is for the input image.",
+ tip:"Confidence ≠ Accuracy. Confidence is per-prediction; accuracy is an aggregate over the test set.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/custom-vision-service/getting-started-build-a-classifier","Image-classification confidence"]},
+{p:2,n:6,d:"D1",t:"s",q:"Ensuring an AI system does not provide a prediction when important fields contain unusual or missing values is ____ principle for Responsible AI.",o:["Inclusiveness","Privacy and Security","Reliability and Safety","Transparency"],c:2,
+ e:"Refusing to predict on bad/unusual input avoids unsafe behaviour in unfamiliar situations — that is the Reliability & Safety principle.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai","Responsible AI principles"]},
+{p:2,n:7,d:"D2",t:"s",q:"Ensuring that the numeric variables in training data are on a similar scale is an example of ____.",o:["Data ingestion","Feature engineering","Feature selection","Model training"],c:1,
+ e:"Scaling / normalising numeric variables is a data-transformation step that produces better-shaped features for the model → Feature engineering. Feature SELECTION is the different activity of choosing which features to KEEP.",
+ trap:"⚠️ The video answers 'Feature selection' (option C) — that is INCORRECT per Microsoft documentation. Rescaling/normalising existing variables is part of Feature engineering (option B). Feature selection = pick a subset of features to reduce dimensionality. See also Q25/Q27 in Part 3.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-automated-ml#featurization","Featurization / Feature engineering"]},
+{p:2,n:8,d:"D2",t:"s",q:"You want to create a model that predicts ice-cream sales based on historic daily totals and weather measurements. Which Azure service should you use?",o:["Azure Machine Learning","Azure Bot Service","Azure AI Language"],c:0,
+ e:"Predicting a numeric value from historical data = a regression problem → train it with Azure Machine Learning. Bot Service is for conversations; Language service is for text understanding.",
+ tip:"'Train a predictive model from existing data' = Azure Machine Learning.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/overview-what-is-azure-machine-learning","Azure Machine Learning"]},
+{p:2,n:9,d:"D4",t:"s",q:"The interactive answering of questions entered by a user as part of an application is an example of…",o:["Anomaly detection","Computer vision","Conversational AI","Forecasting"],c:2,
+ e:"Interactive Q&A between a user and a system = Conversational AI (chatbots, virtual assistants).",
+ ref:["https://learn.microsoft.com/en-us/azure/bot-service/bot-service-overview","Conversational AI"]},
+{p:2,n:10,d:"D3",t:"s",q:"You are designing an AI application that uses images to detect cracks in building window panes and warns when a pane should be repaired or replaced. What AI workload is described?",o:["Computer vision","Natural Language Processing","Anomaly detection"],c:0,
+ e:"Analysing images to classify/locate visual defects (cracks) is a Computer Vision workload. NLP is for text; anomaly detection is for time-series/numeric deviations.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview","Computer Vision"]},
+{p:2,n:"11a",d:"D4",t:"s",q:"True or false: You can use QnA Maker to query an Azure SQL Database.",o:["Yes","No"],c:1,
+ e:"QnA Maker sources answers only from its own knowledge base (FAQ pages, documents, manually authored pairs). It does NOT query relational databases.",
+ trap:"⚠️ QnA Maker was retired on 31 March 2025 — replaced by Azure AI Language → Custom Question Answering.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/language-service/question-answering/overview","Question Answering"]},
+{p:2,n:"11b",d:"D4",t:"s",q:"True or false: You should use QnA Maker when you want a knowledge base to provide the same answer to different users who submit similar questions.",o:["Yes","No"],c:0,
+ e:"QnA Maker matches similar phrasings to the same Q&A pair — perfect for FAQ-style consistent answers.",
+ trap:"⚠️ QnA Maker was retired on 31 March 2025 — replaced by Azure AI Language → Custom Question Answering.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/language-service/question-answering/overview","Question Answering"]},
+{p:2,n:"11c",d:"D4",t:"s",q:"True or false: The QnA Maker service can determine the intent of a user utterance.",o:["Yes","No"],c:1,
+ e:"QnA Maker only matches utterances to FAQ pairs. INTENT recognition is the job of LUIS / Conversational Language Understanding (CLU).",
+ trap:"⚠️ QnA Maker → retired (March 2025). LUIS is also being retired — replaced by CLU.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/language-service/conversational-language-understanding/overview","CLU (intent recognition)"]},
+{p:2,n:12,d:"D4",t:"s",q:"A company employs customer-service agents for phone and email support. It develops a web chat bot to provide automated answers to common queries. Which business benefit should the company expect?",o:["Increased sales","Reduced workload for the customer-service agents","Improved product reliability"],c:1,
+ e:"Automating answers to common queries frees agents from repetitive work — the direct benefit is workload reduction. Sales and product reliability are unrelated to a FAQ bot.",
+ ref:["https://learn.microsoft.com/en-us/azure/bot-service/bot-service-overview","Bot Service"]},
+{p:2,n:"13a",d:"D2",t:"s",q:"Which learning type best fits: 'Predict how many minutes late a flight will arrive based on the amount of snowfall at an airport.'",o:["Classification","Clustering","Regression"],c:2,
+ e:"Number of minutes = a numeric value → Regression.",
+ tip:"Numeric prediction → Regression.",
+ ref:["https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/3-regression","Regression"]},
+{p:2,n:"13b",d:"D2",t:"s",q:"Which learning type best fits: 'Segment customers into different groups to support a marketing department.'",o:["Classification","Clustering","Regression"],c:1,
+ e:"Grouping unlabeled data into similar segments = unsupervised Clustering.",
+ ref:["https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/","Clustering"]},
+{p:2,n:"13c",d:"D2",t:"s",q:"Which learning type best fits: 'Predict whether a student will complete a university course.'",o:["Classification","Clustering","Regression"],c:0,
+ e:"Predicting a yes/no outcome (will complete vs will not) = binary Classification.",
+ tip:"Predicting a category → Classification.",
+ ref:["https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/8-classification","Classification"]},
+{p:2,n:14,d:"D1",t:"s",q:"A predictive app provides audio output for visually-impaired users. Which principle of Responsible AI is reflected here?",o:["Transparency","Inclusiveness","Fairness"],c:1,
+ e:"Adapting the app so users with a disability (visual impairment) can use it = Inclusiveness — bring AI benefits to all parts of society regardless of physical ability.",
+ trap:"Inclusiveness vs Fairness: Inclusiveness = include all (esp. accessibility/disability). Fairness = avoid bias that gives undue advantage/disadvantage to specific groups.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai","Responsible AI"]},
+{p:2,n:"15a",d:"D2",t:"s",q:"In a binary confusion matrix, which cell counts the 'correctly predicted positives'?",o:["True Positive (TP)","True Negative (TN)","False Positive (FP)","False Negative (FN)"],c:0,
+ e:"Correctly predicted positives = the model predicted POSITIVE and the actual class was POSITIVE → True Positive (TP).",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/component-reference/evaluate-model","Confusion matrix"]},
+{p:2,n:"15b",d:"D2",t:"s",q:"In a binary confusion matrix, a 'False Negative' (FN) is the cell where…",o:["The model predicted positive and the actual class was positive","The model predicted negative and the actual class was negative","The model predicted positive but the actual class was negative","The model predicted negative but the actual class was positive"],c:3,
+ e:"False Negative = the model wrongly said NEGATIVE when the actual class was POSITIVE (it missed the positive case).",
+ tip:"Memorise: first word = correctness (True/False), second word = what the model PREDICTED.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/component-reference/evaluate-model","Confusion matrix"]},
+
+// ---------- Part 3 (Q16–Q30) — from tech-blackboard YouTube transcript ----------
+{p:3,n:16,d:"D3",t:"s",q:"You need to determine the location of cars in an image so you can estimate the distance between the cars. Which type of computer vision should you use?",o:["Optical character recognition (OCR)","Object detection","Image classification","Face detection"],c:1,
+ e:"Object detection returns a bounding box (coordinates) for each object found, so you can locate each car and estimate the distance between them.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/concept-object-detection","Detect objects in images"]},
+{p:3,n:17,d:"D2",t:"s",q:"Complete the sentence: Azure Machine Learning designer lets you create machine learning models by…",o:["adding and connecting modules on a visual canvas","automatically performing common data preparation tasks","automatically selecting an algorithm to build the most accurate model","using a code-first notebook experience"],c:0,
+ e:"The designer is a drag-and-drop interface — you add and connect modules/components on a visual canvas to build the pipeline.",
+ trap:"⚠️ Outdated terminology: AML Designer 'modules' are now called <em>components</em> in the v2 SDK/CLI. The classic Designer UI still works but is in maintenance mode; Microsoft now steers low-code users to Azure AI Foundry portal.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-designer","Azure ML designer"]},
+{p:3,n:18,d:"D1",t:"s",q:"Your company wants to identify barriers that might unintentionally leave out specific user groups from its voice-recognition smart-home devices. Which Responsible AI guiding principle is this?",o:["Accountability","Fairness","Inclusiveness","Privacy and Security"],c:2,
+ e:"Keyword: 'unintentionally leave out specific groups'. Inclusiveness is about addressing barriers so no group is excluded.",
+ tip:"Watch for 'exclude / leave out groups' → Inclusiveness.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai","Responsible AI"]},
+{p:3,n:19,d:"D2",t:"s",q:"A dealership wants to predict the price of a pre-owned apartment based on its location, size and age. Which kind of machine learning model should be used?",o:["Classification","Regression","Time series forecasting","Clustering"],c:1,
+ e:"Predicting a price = a numeric value → Regression.",
+ tip:"Predicting a numeric value → always Regression.",
+ ref:["https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/3-regression","Regression"]},
+{p:3,n:20,d:"D1",t:"m",q:"What are THREE Microsoft guiding principles for Responsible AI? (Each correct selection is worth one point.)",o:["Knowledgeability","Decisiveness","Inclusiveness","Fairness","Reliability and Safety"],c:[2,3,4],
+ e:"The six principles are Fairness, Reliability & Safety, Privacy & Security, Inclusiveness, Transparency and Accountability. From these options: Inclusiveness, Fairness, Reliability and Safety.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai","Responsible AI principles"]},
+{p:3,n:21,d:"D2",t:"s",q:"A bank wants to categorize credit-card applications as low risk or high risk based on credit amount, income and credit period. Which kind of machine learning model?",o:["Classification","Regression","Time series forecasting","Clustering"],c:0,
+ e:"Sorting into categories (low risk / high risk) → Classification.",
+ tip:"Predicting a category → always Classification.",
+ ref:["https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/8-classification","Classification"]},
+{p:3,n:22,d:"D3",t:"s",q:"Returning a bounding box that indicates the location of a vehicle in an image is an example of…",o:["Image classification","Object detection","Optical character recognition (OCR)","Semantic segmentation"],c:1,
+ e:"Bounding-box coordinates per object = Object detection.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/concept-object-detection","Object detection"]},
+{p:3,n:23,d:"D2",t:"s",q:"Predicting how many hours of overtime a delivery person will work based on the number of orders received is an example of…",o:["Classification","Clustering","Regression","Anomaly detection"],c:2,
+ e:"Number of hours = a numeric value → Regression.",
+ tip:"Numeric value → Regression.",
+ ref:["https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/3-regression","Regression"]},
+{p:3,n:24,d:"D3",t:"s",q:"Which service should you use to train an object-detection model by using your OWN images?",o:["Computer Vision","Custom Vision","Form Recognizer","Video Indexer"],c:1,
+ e:"Custom Vision lets you build, deploy and improve your own image-identifier model with your own images.",
+ tip:"'Your own images / train your own model' → Custom Vision.",
+ trap:"⚠️ Outdated options: <em>Form Recognizer</em> was renamed to <strong>Azure AI Document Intelligence</strong> (2023). <em>Computer Vision</em> was renamed to <strong>Azure AI Vision</strong>. Custom Vision keeps its name but is in maintenance mode — newer scenarios use Azure AI Vision Image Analysis 4.0 model customization via Azure AI Foundry.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/custom-vision-service/overview","Custom Vision"]},
+{p:3,n:25,d:"D2",t:"s",q:"In a regression training pipeline, you want to transform numeric columns so all values are on a similar scale, relative to the minimum and maximum of each column. Which module should you add?",o:["Select Columns in Dataset","Normalize Data","Clean Missing Data","Edit Metadata"],c:1,
+ e:"Scaling relative to min/max of each column is min-max normalization → Normalize Data module.",
+ trap:"⚠️ Outdated terminology: AML Designer 'modules' are now called <em>components</em> in v2. The Normalize Data block still exists under both names.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/component-reference/normalize-data","Normalize Data"]},
+{p:3,n:26,d:"D3",t:"m",q:"What are TWO tasks that can be performed by using the Computer Vision service? (Each correct selection is worth one point.)",o:["Train a custom image-classification model","Detect faces in an image","Recognize handwritten text","Translate text in an image between languages"],c:[1,2],
+ e:"Computer Vision's Image Analysis detects faces, and its OCR/Read reads handwritten text. Training a custom classifier is Custom Vision; cross-language translation is the Translator service.",
+ trap:"Q24 used Custom Vision (your own model); this question is the ready-made Computer Vision service — don't mix them up. ⚠️ Outdated name: <em>Computer Vision</em> was renamed to <strong>Azure AI Vision</strong> (May 2023). The Face detection capability is now also available as standalone <strong>Azure AI Face</strong> (Limited Access for identification scenarios).",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview","Computer Vision overview"]},
+{p:3,n:27,d:"D2",t:"s",q:"____ is used to generate additional features.",o:["Feature engineering","Feature selection","Model evaluation","Model training"],c:0,
+ e:"Feature engineering creates NEW features from raw data. Feature selection reduces dimensionality by selecting a key subset.",
+ tip:"Generate/create new features → Feature engineering. Reduce/select → Feature selection.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-automated-ml#featurization","Feature engineering"]},
+{p:3,n:28,d:"D2",t:"s",q:"You used Azure Machine Learning designer to create a training pipeline for a classification model. What must you do before deploying the model as a service?",o:["Create an inference pipeline from the training pipeline","Add an Evaluate Model module to the training pipeline","Clone the training pipeline with a different name","Add a Score Model module"],c:0,
+ e:"Before deployment you create an INFERENCE pipeline from the training pipeline. (The video narrator says 'interface' — the correct Microsoft term is 'inference'.)",
+ trap:"It's 'inference pipeline', not 'interface pipeline'. ⚠️ Outdated terminology: same module/component note from Q17/Q25 applies — v2 uses 'components' and managed online endpoints.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-designer#inference-pipeline","Inference pipeline"]},
+{p:3,n:29,d:"D2",t:"s",q:"You want to use automated machine learning to train a regression model with the best possible R² score. How should you configure the experiment?",o:["Set the primary metric to R² score","Block all algorithms other than gradient boosting","Enable featurization","Increase the number of cross-validations"],c:0,
+ e:"The primary metric determines how the best-performing model is chosen — set it to R² score. Algorithm choice and featurization do not determine the evaluation metric.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/how-to-configure-auto-train#primary-metric","AutoML primary metric"]},
+{p:3,n:30,d:"D3",t:"s",q:"You send an image to the Computer Vision API and get back an annotated image with a single probability score per item (banana 97.90%, orange 96.77%, apple 98.21%) and NO bounding boxes. Which type of computer vision was used?",o:["Object detection","Semantic segmentation","Optical character recognition (OCR)","Image classification"],c:3,
+ e:"Only a label + confidence for the whole image (no bounding boxes) = Image classification. Note: the video answers 'Object detection', but with bounding boxes you'd get coordinates per object — the described output (probability only) matches Image classification. In the real exam, decide by whether bounding boxes are shown.",
+ trap:"Bounding boxes shown → Object detection. Label + % only → Image classification. Read the exhibit carefully. ⚠️ Outdated name: <em>Computer Vision API</em> was renamed to <strong>Azure AI Vision</strong> (May 2023).",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/custom-vision-service/getting-started-build-a-classifier","Image classification"]},
+
+// ---------- Part 4 (Q31–Q45) — from tech-blackboard YouTube transcript ----------
+{p:4,n:31,d:"D3",t:"s",q:"You work for a travel & tourism company. You want to use the Computer Vision service to analyze images of locations and identify well-known monuments. What should you do?",o:["Retrieve the OBJECTS in the image","Retrieve the CATEGORIES of the image, specifying the 'celebrities' domain","Retrieve the CATEGORIES of the image, specifying the 'landmarks' domain"],c:2,
+ e:"The 'landmarks' domain-specific model recognises well-known monuments and natural landmarks around the world. Generic Object detection only labels the building as 'building/monument'; the 'celebrities' domain detects people, not places.",
+ trap:"⚠️ Legacy: 'Categories' and the domain-specific models ('landmarks', 'celebrities') are part of Computer Vision <strong>v3 API</strong>. New work should use <strong>Azure AI Vision Image Analysis 4.0</strong>. The 'celebrities' domain itself was removed for Responsible AI reasons in 2020.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/concept-detecting-domain-content","Domain-specific content (legacy v3)"]},
+{p:4,n:32,d:"D2",t:"s",q:"Why do you split data into training and validation sets?",o:["To create two models — one with the training set and a different one with the validation set","To compare the labels the model PREDICTS against the actual known labels in the original data set","Only when using Azure ML Designer; not for other ML scenarios"],c:1,
+ e:"You train on one subset and then evaluate on the held-out (validation) subset to see how well the model performs on data it has not seen. This compares predicted vs. actual labels and detects over-fitting.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/component-reference/split-data","Split Data"]},
+{p:4,n:33,d:"D2",t:"m",q:"What are TWO metrics you can use to evaluate a REGRESSION model? (Each correct selection is worth one point.)",o:["Coefficient of determination (R²)","F1 score","Root Mean Squared Error (RMSE)","Area Under Curve (AUC)","Balanced accuracy"],c:[0,2],
+ e:"R² and RMSE are regression metrics. F1, AUC and balanced accuracy are CLASSIFICATION metrics.",
+ tip:"Regression → R², RMSE, MAE, MSE. Classification → Accuracy, Precision, Recall, F1, AUC.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/component-reference/evaluate-model","Evaluate Model metrics"]},
+{p:4,n:34,d:"D3",t:"s",q:"You are processing photos of runners in a race. You need to read the NUMBERS on the runners' shirts to identify them. Which type of computer vision should you use?",o:["Facial recognition","Optical Character Recognition (OCR)","Semantic segmentation","Object detection"],c:1,
+ e:"Reading printed numbers/text from photos is exactly what OCR (Read API) does.",
+ tip:"Any time you need to extract text/numbers from an image → OCR.",
+ trap:"⚠️ Modern API: in Azure AI Vision, OCR is delivered via the <strong>Read</strong> operation (Read 3.x / Image Analysis 4.0).",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview-ocr","OCR / Read"]},
+{p:4,n:35,d:"D2",t:"s",q:"Which type of machine learning should you use to identify GROUPS of people who have similar purchasing habits?",o:["Classification","Regression","Clustering"],c:2,
+ e:"Grouping unlabeled data points by similarity = Clustering (unsupervised).",
+ tip:"'Group similar X' / 'segment' / 'no labels' → Clustering.",
+ ref:["https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/","Clustering"]},
+{p:4,n:"36a",d:"D3",t:"s",q:"True or false: The Custom Vision service can be used to DETECT objects in an image.",o:["Yes","No"],c:0,
+ e:"Custom Vision supports two project types: Image Classification AND Object Detection.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/custom-vision-service/overview","Custom Vision"]},
+{p:4,n:"36b",d:"D3",t:"s",q:"True or false: The Custom Vision service REQUIRES you to provide your OWN data to train the model.",o:["Yes","No"],c:0,
+ e:"By definition 'custom' = you bring and label your own training images. Use the prebuilt Computer Vision/Azure AI Vision instead if you don't have your own data.",
+ tip:"'Custom' anything → you supply the data.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/custom-vision-service/overview","Custom Vision"]},
+{p:4,n:"36c",d:"D3",t:"s",q:"True or false: The Custom Vision service can be used to analyze VIDEO files.",o:["Yes","No"],c:1,
+ e:"Custom Vision works on still images only. For video use Azure AI Video Indexer (or extract frames first).",
+ ref:["https://learn.microsoft.com/en-us/azure/azure-video-indexer/video-indexer-overview","Video Indexer"]},
+{p:4,n:37,d:"D2",t:"m",q:"You used Azure ML designer to publish an INFERENCE pipeline. Which TWO parameters do you need to consume the pipeline? (Each correct selection is worth one point.)",o:["The model name","The training endpoint","The authentication key","The REST endpoint"],c:[2,3],
+ e:"To call a deployed real-time endpoint you need the REST endpoint URL (where to POST) and the authentication key (who is calling). The model name and training endpoint are not used at inference time.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/tutorial-designer-automobile-price-deploy","Consume a deployed endpoint"]},
+{p:4,n:38,d:"D2",t:"s",q:"From Azure ML designer, to deploy a real-time inference pipeline as a service for OTHER services to consume, you must deploy the model to which of the following?",o:["A local web service","Azure Container Instances","Azure Kubernetes Service","Azure Machine Learning compute"],c:2,
+ e:"Per the (v1) Designer docs, real-time inference endpoints must be deployed to an AKS cluster.",
+ trap:"⚠️ OUTDATED: this is v1 Designer guidance. In Azure ML v2 the recommended hosting is <strong>Managed Online Endpoints (MOE)</strong> — Microsoft-managed compute, no AKS cluster to maintain. AKS endpoints still work but are legacy. <strong>Azure Container Instances</strong> deployment is being deprecated. ACI/AKS were historically used for test/prod respectively; today MOE replaces both for most scenarios.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/concept-endpoints-online","Managed Online Endpoints (modern)"]},
+{p:4,n:39,d:"D3",t:"s",q:"Which service should you use to extract text, key-value pairs and table data automatically from scanned documents?",o:["Form Recognizer","Text Analytics","Language Understanding","Custom Vision"],c:0,
+ e:"Form Recognizer (now Document Intelligence) is purpose-built for forms/invoices/receipts: text + key-value pairs + tables.",
+ trap:"⚠️ RENAMED: <strong>Form Recognizer</strong> → <strong>Azure AI Document Intelligence</strong> (2023). <em>Text Analytics</em> is now part of Azure AI Language. <em>Language Understanding (LUIS)</em> was retired 1-Oct-2025 (use CLU).",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/overview","Document Intelligence (modern)"]},
+{p:4,n:40,d:"D3",t:"s",q:"You want to use the Computer Vision service to identify the LOCATION of individual items in an image. Which feature should you retrieve?",o:["Objects","Tags","Categories"],c:0,
+ e:"'Objects' returns bounding boxes (locations) for each detected item. 'Tags' say WHAT is in the image but not WHERE. 'Categories' classifies the whole image, not items.",
+ tip:"Need LOCATION → Objects. Need LABEL → Tags. Need WHOLE-IMAGE category → Categories.",
+ trap:"⚠️ Outdated name: <em>Computer Vision</em> → <strong>Azure AI Vision</strong>.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/concept-object-detection","Object detection"]},
+{p:4,n:41,d:"D2",t:"s",q:"Predicting how many vehicles will travel across a bridge on a given day is an example of…",o:["Classification","Regression","Clustering"],c:1,
+ e:"Number of vehicles = numeric value → Regression.",
+ tip:"Numeric prediction → Regression.",
+ ref:["https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/3-regression","Regression"]},
+{p:4,n:42,d:"D1",t:"s",q:"You want to use Computer Vision to analyze images AND Language to analyze text. Developers must use a SINGLE key and endpoint for both. Which kind of resource should you create?",o:["Computer Vision","Cognitive Services","Custom Vision"],c:1,
+ e:"A multi-service Cognitive Services resource exposes one key + endpoint that authorises calls to multiple AI services (Vision + Language + Speech + …). Single-service resources (Computer Vision, Custom Vision) only expose their own service.",
+ tip:"'One key for many services' → multi-service Cognitive Services / Azure AI services resource.",
+ trap:"⚠️ RENAMED: <strong>'Cognitive Services' multi-service resource</strong> is now called <strong>'Azure AI services' multi-service resource</strong> (2023 rebrand). Same concept, new name in the portal.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource","Azure AI services multi-service resource"]},
+{p:4,n:"43a",d:"D3",t:"s",q:"True or false: The Face service can be used to perform facial RECOGNITION for employees.",o:["Yes","No"],c:0,
+ e:"Face supports detection, verification (1:1) and identification (1:N) — i.e. matching a detected face to a known person. That is facial recognition.",
+ trap:"⚠️ <strong>LIMITED ACCESS since Jun 2022</strong>: identification and verification require Microsoft approval (responsible-AI gating). Emotion / age / gender detection were RETIRED in 2022. Customers already enrolled keep access for now.",
+ ref:["https://learn.microsoft.com/en-us/legal/cognitive-services/face/limited-access","Face Limited Access"]},
+{p:4,n:"43b",d:"D3",t:"s",q:"True or false: The Face service will be MORE ACCURATE if you provide more sample photos of each employee from different angles.",o:["Yes","No"],c:0,
+ e:"More enrollment images covering different angles, lighting and expressions per person improves Face identification accuracy.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview-identity","Face identification best practices"]},
+{p:4,n:"43c",d:"D3",t:"s",q:"True or false: If an employee is wearing sunglasses, the Face service will ALWAYS fail to recognize the employee.",o:["Yes","No"],c:1,
+ e:"Sunglasses (and other partial occlusions) reduce accuracy but do not GUARANTEE failure. The word 'always' makes the statement false.",
+ tip:"Exam heuristic: statements with 'always' / 'never' / 'must' are usually false.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview-identity","Face"]},
+{p:4,n:44,d:"D3",t:"s",q:"You need to develop a mobile app for employees to SCAN and STORE their expenses while traveling. Which type of computer vision should you use?",o:["Semantic segmentation","Image classification","Object detection","Optical Character Recognition (OCR)"],c:3,
+ e:"You need to extract printed text (vendor, total, line items) from receipts/invoices → OCR.",
+ trap:"⚠️ For BETTER receipt scanning today, use the <strong>Azure AI Document Intelligence pre-built RECEIPT model</strong>, which returns structured fields (vendor, date, total, items) instead of raw OCR text. For exam purposes the answer is still 'OCR' because that is what's listed.",
+ ref:["https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/concept-receipt","Document Intelligence Receipt (modern)"]},
+{p:4,n:45,d:"D2",t:"m",q:"In Azure ML designer, the standard 'Automobile price prediction' pipeline uses THREE modules between the source dataset and 'Train Model'. Which THREE modules complete the flow (Automobile price data → ? → ? → ? → Train Model)?",o:["Select Columns in Dataset","Split Data","Linear Regression","Score Model","Web Service Input"],c:[0,1,2],
+ e:"The classic tutorial flow is: Automobile price data → Select Columns in Dataset → (Clean Missing Data) → Split Data → Linear Regression → Train Model → Score Model → Evaluate Model.",
+ trap:"⚠️ Outdated terminology: Designer 'modules' are 'components' in AML v2. The tutorial pipeline still works but the official quickstart now points to Azure AI Foundry / AutoML for new users.",
+ ref:["https://learn.microsoft.com/en-us/azure/machine-learning/tutorial-designer-automobile-price-train-score","Designer automobile-price tutorial"]}
+];
+
+// ====== State ======
+var state={answers:{},revealed:{}};
+
+// ====== Render ======
+var qDiv=document.getElementById('quiz');
+function render(){
+  qDiv.innerHTML='';
+  Q.forEach(function(q,idx){
+    var fs=document.createElement('fieldset');
+    fs.dataset.idx=idx;fs.dataset.domain=q.d;fs.dataset.part=String(q.p||'');
+    var legend='Q'+q.n+' <span class="tag">'+q.d+'</span>'+
+      (q.p?' <span class="tag">Part '+q.p+'</span>':'')+
+      (q.t==='m'?' <span class="tag multi">multi-select</span>':'');
+    var inner='<legend>'+legend+'</legend><p>'+escapeHtml(q.q)+'</p>';
+    q.o.forEach(function(opt,j){
+      var ipt=q.t==='m'?'checkbox':'radio';
+      var checked=isSelected(idx,j)?' checked':'';
+      inner+='<label class="opt"><input type="'+ipt+'" name="q'+idx+'" value="'+j+'"'+checked+'> '+escapeHtml(opt)+'</label>';
+    });
+    inner+='<button class="sec sm" type="button" onclick="reveal('+idx+')">💡 Reveal</button>'+
+           '<div class="feedback" id="fb'+idx+'"></div>';
+    fs.innerHTML=inner;
+    qDiv.appendChild(fs);
+  });
+  applyFilter();
+}
+function escapeHtml(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+// ====== Selection helpers ======
+function getAnswer(idx){
+  var a=state.answers[idx];
+  if(a===undefined||a===null)return Q[idx].t==='m'?[]:null;
+  if(Q[idx].t==='m'&&!Array.isArray(a))return [];
+  return a;
+}
+function isSelected(idx,j){
+  var a=getAnswer(idx);
+  if(Q[idx].t==='m')return Array.isArray(a)&&a.indexOf(j)>-1;
+  return a===j;
+}
+document.addEventListener('change',function(e){
+  var inp=e.target;
+  if(!inp.matches('input[type="radio"],input[type="checkbox"]'))return;
+  var name=inp.name;if(!name||name.indexOf('q')!==0)return;
+  var idx=parseInt(name.slice(1),10);
+  if(Q[idx].t==='m'){
+    var arr=[];
+    document.querySelectorAll('input[name="'+name+'"]:checked').forEach(function(x){arr.push(parseInt(x.value,10))});
+    state.answers[idx]=arr;
+  }else{
+    state.answers[idx]=parseInt(inp.value,10);
+  }
+});
+
+// ====== Reveal ======
+function reveal(idx){
+  var fs=document.querySelector('fieldset[data-idx="'+idx+'"]');
+  if(!fs)return;
+  var q=Q[idx];
+  var correct=q.t==='m'?q.c:[q.c];
+  var sel=getAnswer(idx);var selArr=q.t==='m'?(Array.isArray(sel)?sel:[]):(sel===null?[]:[sel]);
+  fs.querySelectorAll('label.opt').forEach(function(lbl,j){
+    lbl.classList.remove('correct','wrong');
+    if(correct.indexOf(j)>-1)lbl.classList.add('correct');
+    else if(selArr.indexOf(j)>-1)lbl.classList.add('wrong');
+  });
+  var lab=correct.map(function(i){return 'ABCDE'[i]}).join(' + ');
+  var fb=document.getElementById('fb'+idx);
+  var html='<strong>Correct:</strong> '+lab+' · <a href="'+q.ref[0]+'" target="_blank" rel="noopener">'+q.ref[1]+' →</a>';
+  if(q.e)html+='<p class="why">'+escapeHtml(q.e)+'</p>';
+  if(q.tip)html+='<p class="tip">💡 Tip: '+escapeHtml(q.tip)+'</p>';
+  if(q.trap)html+='<p class="trap">⚠️ Trap: '+escapeHtml(q.trap)+'</p>';
+  fb.innerHTML=html;
+  fb.classList.add('show');
+  state.revealed[idx]=true;
+}
+function revealAll(){Q.forEach(function(_,i){reveal(i)})}
+
+// ====== Score ======
+function answered(idx){
+  var a=state.answers[idx];
+  if(a===undefined||a===null)return false;
+  if(Array.isArray(a)&&a.length===0)return false;
+  return true;
+}
+function isCorrect(idx){
+  var q=Q[idx];var a=state.answers[idx];
+  if(!answered(idx))return false;
+  if(q.t==='m'){
+    if(!Array.isArray(a))return false;
+    if(a.length!==q.c.length)return false;
+    return a.slice().sort().join(',')===q.c.slice().sort().join(',');
+  }
+  return a===q.c;
+}
+function finish(){
+  document.getElementById('status').textContent='Finished';
+  var totalC=0;
+  Q.forEach(function(q,i){if(isCorrect(i))totalC++;reveal(i)});
+  var pct=Math.round(totalC/Q.length*100);
+  var verdict=pct>=70?'<strong style="color:var(--ok)">PASS ✅</strong>':'<strong style="color:var(--err)">Keep practicing ❌</strong>';
+  var res=document.getElementById('result');
+  res.innerHTML='<h2>'+totalC+' / '+Q.length+' = '+pct+'% · '+verdict+'</h2>'+
+    '<p>Passing reference: 70%. Review every revealed explanation and the golden rules at the top.</p>';
+  res.classList.add('show');res.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function reset(){
+  state={answers:{},revealed:{}};
+  document.getElementById('status').textContent='Not started';
+  document.getElementById('result').classList.remove('show');
+  render();
+}
+
+// ====== Filter ======
+function applyFilter(){
+  var v=document.getElementById('domainFilter').value;
+  var p=document.getElementById('partFilter')?document.getElementById('partFilter').value:'';
+  document.querySelectorAll('fieldset[data-idx]').forEach(function(fs){
+    var hide=(v && fs.dataset.domain!==v) || (p && fs.dataset.part!==p);
+    fs.classList.toggle('hidden', !!hide);
+  });
+}
+
+// ====== Theme ======
+document.getElementById('theme-toggle').addEventListener('click',function(){
+  var cur=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',cur);
+  try{localStorage.setItem('ckg-theme',cur)}catch(e){}
+});
+
+render();
+</script>
+</body></html>

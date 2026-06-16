@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>D4: NLP — AI-900 Kit</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:900px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}h2{color:var(--accent);margin-top:1.5rem}
+a{color:var(--accent)}code{font-family:Consolas,Monaco,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .3rem}
+table{border-collapse:collapse;width:100%;margin:.8rem 0}th,td{border:1px solid var(--border);padding:.5rem;text-align:left;vertical-align:top}th{background:var(--card)}
+nav.toc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.8rem;margin:1rem 0}
+nav.toc a{margin-right:.8rem}
+.check{background:var(--card);border-left:4px solid var(--accent);padding:.6rem 1rem;border-radius:4px;margin:1rem 0}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style></head><body>
+<header><div><a href="../README.html">← Index</a><span style="color:var(--muted)">AI-900 · D4 — NLP (15–20%)</span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>Domain 4 — Natural Language Processing on Azure</h1>
+<p><strong>Weight:</strong> 15–20% · <strong>Skill focus:</strong> identify Azure NLP services and match capabilities to use cases.</p>
+<nav class="toc"><strong>Sections:</strong> <a href="#language">AI Language</a> · <a href="#speech">AI Speech</a> · <a href="#translator">Translator</a> · <a href="#decision">Decision tree</a> · <a href="#check">Self-check</a></nav>
+
+<h2 id="language">1. Azure AI Language</h2>
+<p>Unified service combining text analytics + understanding. Portal access via <a href="https://language.cognitive.azure.com" target="_blank" rel="noopener">Language Studio</a>.</p>
+<table>
+<tr><th>Feature</th><th>Input</th><th>Output</th></tr>
+<tr><td>Language detection</td><td>Text</td><td>ISO language code + confidence</td></tr>
+<tr><td>Sentiment analysis</td><td>Text</td><td>Positive / Neutral / Negative + per-sentence scores</td></tr>
+<tr><td>Opinion mining</td><td>Text</td><td>Aspect + opinion + sentiment ("food was great, service slow")</td></tr>
+<tr><td>Key phrase extraction</td><td>Text</td><td>List of main topics</td></tr>
+<tr><td>Named Entity Recognition (NER)</td><td>Text</td><td>Persons, places, orgs, dates, quantities</td></tr>
+<tr><td>PII detection</td><td>Text</td><td>Redacted text + entity list</td></tr>
+<tr><td>Entity linking</td><td>Text</td><td>Entities linked to Wikipedia</td></tr>
+<tr><td>Summarization (extractive / abstractive)</td><td>Long text</td><td>Short summary</td></tr>
+<tr><td>Conversational Language Understanding (CLU)</td><td>User utterance</td><td>Intent + entities (chatbot brain)</td></tr>
+<tr><td>Question answering</td><td>Question + KB</td><td>Top-K answers from your knowledge base</td></tr>
+<tr><td>Custom text classification</td><td>Text + your taxonomy</td><td>Class label</td></tr>
+</table>
+<p>Reference: <a href="https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview" target="_blank" rel="noopener">Azure AI Language overview</a></p>
+
+<h2 id="speech">2. Azure AI Speech</h2>
+<table>
+<tr><th>Feature</th><th>What</th></tr>
+<tr><td>Speech-to-text (STT)</td><td>Audio → transcript (real-time or batch)</td></tr>
+<tr><td>Text-to-speech (TTS)</td><td>Text → audio (200+ neural voices)</td></tr>
+<tr><td>Speech translation</td><td>Speech in language A → transcript in language B</td></tr>
+<tr><td>Speaker recognition</td><td>Identify or verify a speaker by voice</td></tr>
+<tr><td>Custom speech</td><td>Adapt STT to your jargon/accent</td></tr>
+<tr><td>Custom neural voice</td><td>Create branded TTS voice (Limited Access)</td></tr>
+</table>
+<p>Reference: <a href="https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview" target="_blank" rel="noopener">Azure AI Speech overview</a></p>
+
+<h2 id="translator">3. Azure AI Translator</h2>
+<ul>
+<li>Text translation between 100+ languages (REST API + SDK)</li>
+<li>Document translation (preserve formatting in Word/PDF)</li>
+<li>Custom Translator: train domain-specific models</li>
+<li><strong>Audio translation belongs to AI Speech, NOT Translator</strong> — common exam trap</li>
+</ul>
+<p>Reference: <a href="https://learn.microsoft.com/en-us/azure/ai-services/translator/translator-overview" target="_blank" rel="noopener">Translator overview</a></p>
+
+<h2 id="decision">4. Decision tree — which NLP service?</h2>
+<ul>
+<li>"I need sentiment / key phrases / NER / PII / summarization" → <strong>Azure AI Language</strong></li>
+<li>"I'm building a chatbot's brain (intent + entity recognition)" → <strong>Azure AI Language — CLU</strong></li>
+<li>"I want a Q&A knowledge base over FAQs / docs" → <strong>Azure AI Language — Question answering</strong></li>
+<li>"I need to transcribe audio / synthesize speech" → <strong>Azure AI Speech</strong></li>
+<li>"I need to translate spoken language live" → <strong>Azure AI Speech — Speech translation</strong></li>
+<li>"I need to translate written text only" → <strong>Azure AI Translator</strong></li>
+</ul>
+
+<h2 id="renames">Service renames — exam trap ⚠️</h2>
+<table>
+<tr><th>Old name</th><th>Current name</th></tr>
+<tr><td>Text Analytics</td><td>Azure AI Language</td></tr>
+<tr><td>LUIS (Language Understanding)</td><td>Azure AI Language — Conversational Language Understanding (CLU)</td></tr>
+<tr><td>QnA Maker</td><td>Azure AI Language — Question answering</td></tr>
+<tr><td>Speech Services</td><td>Azure AI Speech</td></tr>
+</table>
+
+<h2 id="check">5. Self-check</h2>
+<div class="check">
+<ol>
+<li>Customer reviews — you need overall sentiment per review. Service + feature?</li>
+<li>You want a chatbot that understands "book me a flight to Lisbon tomorrow". Service + feature?</li>
+<li>You want a help-desk bot answering FAQs from your internal KB. Service + feature?</li>
+<li>You need to transcribe a 1-hour meeting recording. Service?</li>
+<li>You need to translate a contract from English to Portuguese. Service?</li>
+</ol>
+<p><em>Answers:</em> 1. Azure AI Language — sentiment analysis · 2. Azure AI Language — CLU (intent + entities) · 3. Azure AI Language — Question answering · 4. Azure AI Speech (batch transcription) · 5. Azure AI Translator (document translation)</p>
+</div>
+<p>Related: <a href="../labs/02-language-service/README-guided.html">Lab 2 — Language Service</a> · <a href="../flashcards.html">Flashcards D4</a></p>
+</main>
+<footer>← <a href="../README.html">Back to index</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

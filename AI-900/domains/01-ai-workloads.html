@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>D1: AI Workloads — AI-900 Kit</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:900px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}h2{color:var(--accent);margin-top:1.5rem}
+a{color:var(--accent)}code{font-family:Consolas,Monaco,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .3rem}
+table{border-collapse:collapse;width:100%;margin:.8rem 0}th,td{border:1px solid var(--border);padding:.5rem;text-align:left;vertical-align:top}th{background:var(--card)}
+nav.toc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.8rem;margin:1rem 0}
+nav.toc a{margin-right:.8rem}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+.check{background:var(--card);border-left:4px solid var(--accent);padding:.6rem 1rem;border-radius:4px;margin:1rem 0}
+</style></head><body>
+<header><div><a href="../README.html">← Index</a><span style="color:var(--muted)">AI-900 · D1 — AI workloads (15–20%)</span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>Domain 1 — AI workloads & considerations</h1>
+<p><strong>Weight:</strong> 15–20% · <strong>Skill focus:</strong> identify common AI workload categories and apply Responsible AI principles.</p>
+<nav class="toc"><strong>Sections:</strong> <a href="#workloads">Workload types</a> · <a href="#responsible">Responsible AI</a> · <a href="#considerations">Considerations</a> · <a href="#check">Self-check</a></nav>
+
+<h2 id="workloads">1. AI workload types</h2>
+<table>
+<tr><th>Workload</th><th>What it does</th><th>Example use case</th><th>Primary Azure service</th></tr>
+<tr><td><a href="../glossary.html#A">Anomaly detection</a></td><td>Flags outliers / unusual data points</td><td>Credit card fraud, equipment failure prediction</td><td>Azure AI Anomaly Detector / Metrics Advisor</td></tr>
+<tr><td><a href="../glossary.html#C">Computer vision</a></td><td>Understand images/video — tags, OCR, faces, objects</td><td>Receipt scanning, surveillance, retail shelf analysis</td><td>Azure AI Vision (+ Face, Custom Vision)</td></tr>
+<tr><td><a href="../glossary.html#N">Natural language processing (NLP)</a></td><td>Understand and generate human language</td><td>Sentiment of customer reviews, chatbots, translation</td><td>Azure AI Language / Speech / Translator</td></tr>
+<tr><td><a href="../glossary.html#K">Knowledge mining</a></td><td>Extract structure + insights from unstructured docs</td><td>Searchable enterprise knowledge base</td><td>Azure AI Search</td></tr>
+<tr><td><a href="../glossary.html#D">Document intelligence</a></td><td>Extract fields/tables from forms</td><td>Invoice processing, ID verification</td><td>Azure AI Document Intelligence</td></tr>
+<tr><td><a href="../glossary.html#G">Generative AI</a></td><td>Create new content (text/image/code/audio)</td><td>Writing assistance, image generation, code completion</td><td>Azure OpenAI / Azure AI Foundry</td></tr>
+</table>
+<p>Reference: <a href="https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/" target="_blank" rel="noopener">Get started with AI on Azure (Learn module)</a></p>
+
+<h2 id="responsible">2. Responsible AI — 6 principles ⭐</h2>
+<p>Microsoft's framework. Memorize all 6 — at least 2–3 questions on the exam test these.</p>
+<table>
+<tr><th>Principle</th><th>One-line definition</th><th>Trigger words in exam questions</th></tr>
+<tr><td><strong>Fairness</strong></td><td>System treats all people equitably</td><td>"bias", "across demographic groups", "equal accuracy"</td></tr>
+<tr><td><strong>Reliability & Safety</strong></td><td>System performs reliably under expected and unexpected conditions</td><td>"performs as expected", "fail-safe", "consistent results"</td></tr>
+<tr><td><strong>Privacy & Security</strong></td><td>System respects data privacy and protects against threats</td><td>"PII", "consent", "encrypted", "data residency"</td></tr>
+<tr><td><strong>Inclusiveness</strong></td><td>System empowers everyone, including people with disabilities</td><td>"accessibility", "all abilities", "diverse users"</td></tr>
+<tr><td><strong>Transparency</strong></td><td>People understand how the system makes decisions</td><td>"explainability", "interpretable", "model card"</td></tr>
+<tr><td><strong>Accountability</strong></td><td>Humans remain responsible for AI outcomes</td><td>"governance", "human oversight", "audit"</td></tr>
+</table>
+<p>Reference: <a href="https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai" target="_blank" rel="noopener">Responsible AI in Azure ML</a> · <a href="https://www.microsoft.com/en-us/ai/responsible-ai" target="_blank" rel="noopener">Microsoft Responsible AI</a></p>
+
+<h2 id="considerations">3. Key considerations</h2>
+<ul>
+<li><strong>Data quality</strong> drives model quality — biased / incomplete data = unfair model</li>
+<li><strong>Human oversight</strong> is required for high-impact decisions (hiring, lending, health)</li>
+<li><strong>Explainability</strong> trade-off: complex models (deep learning) are accurate but opaque; simpler models are interpretable</li>
+<li><strong>Content filters</strong> required for generative AI to prevent harmful output</li>
+<li><strong>Data residency</strong>: choose Azure region close to users for compliance (GDPR, LGPD)</li>
+</ul>
+
+<h2 id="check">4. Self-check</h2>
+<div class="check">
+<ol>
+<li>An HR system rejects more candidates from one demographic. Which Responsible AI principle is violated?</li>
+<li>A medical AI explains why it flagged a tumor. Which principle does this fulfill?</li>
+<li>Voice assistant supports dysarthria-affected speech. Which principle?</li>
+<li>An ML model classifies emails as spam — which workload type?</li>
+<li>System extracts vendor name and total from a scanned invoice — workload?</li>
+</ol>
+<p><em>Answers:</em> 1. Fairness · 2. Transparency · 3. Inclusiveness · 4. Classification (under Machine Learning) · 5. Document intelligence</p>
+</div>
+<p>Related: <a href="../labs/03-azure-openai/README-guided.html">Lab 3 (Azure OpenAI)</a> · <a href="../flashcards.html">Flashcards D1</a></p>
+</main>
+<footer>← <a href="../README.html">Back to index</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

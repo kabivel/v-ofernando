@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Okta, Active Directory, and Entra ID - Practical Guideline</title>
+<style>
+  :root {
+    --bg:#f4f6fa;
+    --panel:#ffffff;
+    --border:#d8dee9;
+    --primary:#0078d4;
+    --accent:#5C2D91;
+    --teal:#008272;
+    --green:#107C10;
+    --orange:#D83B01;
+    --text:#1f2937;
+    --muted:#5a6675;
+    --soft:#eef5ff;
+    --warn-bg:#fff8e1;
+    --warn-border:#f9a825;
+    --ok-bg:#e8f5e9;
+    --danger-bg:#fdecea;
+    --danger-border:#d32f2f;
+    --danger-text:#7f1d1d;
+    --shadow:0 2px 8px rgba(0,0,0,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;line-height:1.6;scroll-behavior:smooth}
+  a{color:var(--primary);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code{background:#eef2f7;border:1px solid #dbe3ee;border-radius:5px;padding:1px 5px;font-family:Consolas,"Courier New",monospace;font-size:.95em}
+
+  .app-header{background:linear-gradient(135deg,#0078d4,#5C2D91);color:#fff;padding:34px 24px;text-align:center}
+  .app-header .badge{display:inline-block;background:rgba(255,255,255,.18);padding:4px 14px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.1em;margin-bottom:12px;text-transform:uppercase}
+  .app-header h1{margin:0 0 8px;font-size:30px;font-weight:700;letter-spacing:-.2px}
+  .app-header p{margin:0 auto;max-width:890px;opacity:.92;font-size:14.5px}
+  .scope{display:inline-block;margin-top:12px;background:rgba(0,0,0,.18);padding:5px 12px;border-radius:6px;font-size:12px}
+
+  .container{max-width:1120px;margin:0 auto;padding:24px 20px 80px}
+  .tabs{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:26px;box-shadow:var(--shadow);position:sticky;top:0;z-index:10}
+  .tabs h2{margin:0 0 10px;font-size:16px;color:var(--primary)}
+  .tab-list{display:flex;gap:8px;flex-wrap:wrap}
+  .tab-button{border:1px solid var(--border);background:#fff;color:var(--text);border-radius:6px;padding:8px 11px;font:600 12.5px "Segoe UI",system-ui,sans-serif;cursor:pointer;transition:all .15s ease}
+  .tab-button:hover{border-color:var(--primary);color:var(--primary);background:#f8fbff}
+  .tab-button.active{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(0,120,212,.22)}
+
+  .section{margin-bottom:34px}
+  .tab-panel{display:none}
+  .tab-panel.active{display:block}
+  .section h2{font-size:22px;margin:0 0 16px;padding-bottom:8px;border-bottom:2px solid var(--primary);color:var(--primary)}
+  .section h3{font-size:17px;margin:20px 0 8px;color:var(--accent)}
+  .lead{font-size:15px;color:var(--muted);margin:0 0 18px}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:16px 0}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:16px 18px;box-shadow:var(--shadow)}
+  .card h3,.card h4{margin:0 0 8px;font-size:15px;color:var(--accent)}
+  .card p{margin:8px 0;color:var(--text);font-size:14px}
+  .card ul,.card ol{margin:8px 0;padding-left:22px;font-size:14px}
+  .card li{margin:5px 0}
+
+  .flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:18px 0}
+  .stage{background:var(--panel);border:1px solid var(--border);border-left:5px solid var(--primary);border-radius:8px;padding:14px;box-shadow:var(--shadow);position:relative}
+  .stage .num{position:absolute;top:-10px;left:-10px;background:var(--primary);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+  .stage h4{margin:2px 0 6px;font-size:14px;color:var(--accent)}
+  .stage p{margin:0;font-size:12.8px;color:var(--muted)}
+  .stage.s-ad{border-left-color:#5C2D91}
+  .stage.s-okta{border-left-color:#0078d4}
+  .stage.s-entra{border-left-color:#008272}
+  .stage.s-apps{border-left-color:#D83B01}
+  .stage.s-policy{border-left-color:#107C10}
+
+  .diagram{background:#0f172a;color:#e5eefc;border-radius:8px;padding:18px 20px;margin:14px 0;overflow:auto;box-shadow:var(--shadow)}
+  .diagram pre{margin:0;font-family:Consolas,"Courier New",monospace;font-size:13px;line-height:1.55}
+
+  .callout{border-left:4px solid var(--primary);background:var(--soft);padding:11px 14px;margin:12px 0;border-radius:6px;font-size:13.5px}
+  .callout.warn{background:var(--warn-bg);border-color:var(--warn-border)}
+  .callout.ok{background:var(--ok-bg);border-color:var(--green)}
+  .callout.danger{background:var(--danger-bg);border-color:var(--danger-border);color:var(--danger-text)}
+
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;background:var(--panel);box-shadow:var(--shadow);border-radius:8px;overflow:hidden}
+  th,td{border:1px solid var(--border);padding:9px 10px;text-align:left;vertical-align:top}
+  th{background:#f0f4fa;color:var(--primary);font-weight:600}
+  tr:nth-child(even) td{background:#fafbfd}
+
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.04em}
+  .pill.identity{background:#ede7f6;color:#4527a0}
+  .pill.auth{background:#e3f2fd;color:#0d47a1}
+  .pill.prov{background:#e8f5e9;color:#1b5e20}
+  .pill.risk{background:#fdecea;color:#b71c1c}
+  .pill.ops{background:#fff3e0;color:#e65100}
+  .pill.no{background:#fdecea;color:#b71c1c}
+  .pill.depends{background:#fff8e1;color:#6d4c00}
+  .pill.yes{background:#e8f5e9;color:#1b5e20}
+
+  .qa{background:var(--panel);border:1px solid var(--border);border-radius:8px;margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden}
+  .qa summary{cursor:pointer;padding:13px 18px;font-weight:600;font-size:14.5px;display:flex;align-items:center;gap:10px;list-style:none}
+  .qa summary::-webkit-details-marker{display:none}
+  .qa summary::before{content:'>';color:var(--primary);font-size:16px;transition:transform .2s;font-family:Consolas,"Courier New",monospace}
+  .qa[open] summary::before{transform:rotate(90deg)}
+  .qa summary:hover{background:rgba(0,120,212,.04)}
+  .qa .answer{padding:0 18px 15px;font-size:14px;border-top:1px solid var(--border)}
+  .qa .answer p{margin:10px 0}
+  .qa .answer ul{margin:8px 0;padding-left:22px}
+
+  .speech{margin:12px 0;padding:10px 12px;background:#f5f7fb;border:1px dashed #c5cdd9;border-radius:6px;font-size:13px;color:#3a4150;font-style:italic}
+  .speech strong{font-style:normal;color:var(--primary)}
+
+  footer{font-size:12px;color:var(--muted);text-align:center;margin-top:38px;padding-top:18px;border-top:1px solid var(--border)}
+
+  @media(max-width:820px){
+    .tabs{position:static}
+    .tab-list{display:grid;grid-template-columns:1fr 1fr}
+    .app-header h1{font-size:25px}
+  }
+  @media(max-width:520px){.tab-list{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <span class="badge">Identity Guideline</span>
+  <h1>Okta, Active Directory, and Microsoft Entra ID</h1>
+  <p>A practical discovery guide for understanding what Okta is doing today, whether AD still feeds Microsoft 365 identities, and whether Entra Connect or Cloud Sync is still required.</p>
+  <div class="scope">Scope: Okta role discovery, Entra Connect decision support, reference patterns, risks, and client conversation support</div>
+</header>
+
+<main class="container">
+  <nav class="tabs" aria-label="Section tabs">
+    <h2>Navigate by topic</h2>
+    <div class="tab-list" role="tablist" aria-label="Okta guide sections">
+      <button class="tab-button active" type="button" role="tab" aria-selected="true" aria-controls="executive-summary" data-tab="executive-summary">Executive Summary</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="core-concepts" data-tab="core-concepts">Core Concepts</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="okta-inner-workings" data-tab="okta-inner-workings">Okta Inner Workings</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="reference-architecture" data-tab="reference-architecture">Architecture</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="integration-patterns" data-tab="integration-patterns">Integration Patterns</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="replace-ad" data-tab="replace-ad">Replace AD?</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="okta-source-of-truth" data-tab="okta-source-of-truth">Okta Source of Truth?</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="still-need-entra-connect" data-tab="still-need-entra-connect">Still Need Entra Connect?</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="replace-entra-connect" data-tab="replace-entra-connect">Replace Entra Connect?</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="replace-cloud-sync" data-tab="replace-cloud-sync">Replace Cloud Sync?</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="replace-intune" data-tab="replace-intune">Replace Intune?</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="writeback" data-tab="writeback">Writeback</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="discovery-checklist" data-tab="discovery-checklist">Discovery Checklist</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="risks" data-tab="risks">Risks</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="client-questions" data-tab="client-questions">Client Questions</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="talk-track" data-tab="talk-track">Talk Track</button>
+    </div>
+  </nav>
+
+  <section class="section tab-panel active" id="executive-summary" role="tabpanel">
+    <h2>1. Executive Summary</h2>
+    <p class="lead">Use this section to align stakeholders quickly before going into technical details.</p>
+    <div class="cards">
+      <article class="card">
+        <h3>What Okta does</h3>
+        <p>Okta is an Identity and Access Management platform. It can provide single sign-on, adaptive MFA, sign-on policies, application assignments, lifecycle automation, and provisioning into downstream applications.</p>
+      </article>
+      <article class="card">
+        <h3>How it fits with AD</h3>
+        <p>In many enterprise environments, Active Directory remains the on-premises directory and source for users, groups, passwords, and domain access. Okta commonly integrates with AD through the Okta AD Agent.</p>
+      </article>
+      <article class="card">
+        <h3>How it fits with Entra ID</h3>
+        <p>Microsoft Entra ID remains required for Microsoft 365, Azure, Teams, Exchange Online, SharePoint, Intune, and Microsoft security workloads. Even if Okta handles sign-in, Entra ID still holds the Microsoft cloud identity.</p>
+      </article>
+    </div>
+    <div class="callout ok"><strong>Key idea:</strong> Because the customer already has Okta, the first question is not whether Okta exists. The first question is what Okta owns today: sign-in only, MFA only, app assignment, provisioning, lifecycle, or the full identity source model.</div>
+    <div class="callout warn"><strong>Decision guardrail:</strong> Do not remove Entra Connect just because Okta is present. If AD is still the authoritative source for Microsoft 365 identities, Entra Connect or Cloud Sync is usually still required.</div>
+  </section>
+
+  <section class="section tab-panel" id="core-concepts" role="tabpanel">
+    <h2>2. Core Concepts</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Concept</th>
+          <th>Definition</th>
+          <th>Why it matters</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill identity">Directory</span><br>Active Directory</td>
+          <td>Traditional on-premises directory used for users, groups, computers, Kerberos/NTLM, Group Policy, and domain-joined resources.</td>
+          <td>Often the source for employee identity data, group membership, and legacy application access.</td>
+        </tr>
+        <tr>
+          <td><span class="pill identity">Cloud ID</span><br>Microsoft Entra ID</td>
+          <td>Microsoft cloud identity platform for Microsoft 365, Azure, security, device management, and SaaS access.</td>
+          <td>Required for Microsoft cloud workloads even when another identity provider, such as Okta, is used for sign-in.</td>
+        </tr>
+        <tr>
+          <td><span class="pill auth">IdP</span><br>Okta</td>
+          <td>Identity provider that can authenticate users, enforce MFA, apply access policies, and provide SSO to applications.</td>
+          <td>May be the visible login experience for users, including for Microsoft 365 when federation is configured.</td>
+        </tr>
+        <tr>
+          <td><span class="pill prov">Provisioning</span><br>SCIM / API / Agent</td>
+          <td>Automated creation, update, assignment, and deactivation of accounts in downstream systems.</td>
+          <td>Critical for joiner, mover, and leaver processes. It determines whether access is granted and removed reliably.</td>
+        </tr>
+        <tr>
+          <td><span class="pill auth">Federation</span><br>SAML / OIDC / WS-Fed</td>
+          <td>Authentication trust where one system redirects sign-in to another identity provider.</td>
+          <td>Explains why a Microsoft 365 login may redirect to the Okta sign-in page.</td>
+        </tr>
+        <tr>
+          <td><span class="pill ops">Sync</span><br>Entra Connect / Cloud Sync</td>
+          <td>Microsoft directory synchronization that brings AD users and groups into Entra ID.</td>
+          <td>Often exists alongside Okta. The client may have both Okta AD integration and Microsoft directory sync running at the same time.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section tab-panel" id="okta-inner-workings" role="tabpanel">
+    <h2>3. Okta Integration Inner Workings</h2>
+    <p class="lead">Use this section as a preparation view. It explains how Okta integrations usually work internally, without going into implementation or troubleshooting steps.</p>
+
+    <h3>High-level mental model</h3>
+    <div class="diagram" aria-label="Okta inner workings model">
+<pre>Identity sources
+  HR system / Active Directory / LDAP / manual admin / API
+        |
+        | Import, profile mastering, attribute mapping
+        v
+Okta Universal Directory
+        |
+        | Groups, app assignments, lifecycle states, sign-on policies
+        v
+Applications and directories
+  Microsoft Entra ID / Microsoft 365 / SaaS apps / internal apps
+        |
+        | SSO, MFA, provisioning, deactivation, audit events
+        v
+User access experience</pre>
+    </div>
+    <div class="callout"><strong>Core idea:</strong> Okta is not just a login page. It is an identity control plane that can import identities, normalize profiles, evaluate policy, broker authentication, assign applications, provision accounts, and emit audit events.</div>
+
+    <h3>Main building blocks</h3>
+    <div class="cards">
+      <article class="card">
+        <h4>Okta org</h4>
+        <p>The tenant boundary for the customer. It contains users, groups, applications, policies, directories, integrations, logs, and administrative configuration.</p>
+      </article>
+      <article class="card">
+        <h4>Universal Directory</h4>
+        <p>Okta's user and group profile store. It holds normalized identity attributes and can map attributes between sources such as AD, HR, Entra ID, and SaaS applications.</p>
+      </article>
+      <article class="card">
+        <h4>Applications</h4>
+        <p>Application objects define how users access a target system. An app can have SSO settings, provisioning settings, group assignments, attribute mappings, and sign-on policy behavior.</p>
+      </article>
+      <article class="card">
+        <h4>Groups</h4>
+        <p>Groups are commonly used to assign apps, drive provisioning, apply policies, and organize entitlements. Groups can come from AD, Okta, HR, or other systems.</p>
+      </article>
+      <article class="card">
+        <h4>Policies</h4>
+        <p>Policies decide how access is evaluated. They can include password rules, sign-on rules, MFA requirements, device posture signals, network zones, risk, and application context.</p>
+      </article>
+      <article class="card">
+        <h4>System Log</h4>
+        <p>Okta records authentication, provisioning, lifecycle, admin, policy, and integration events. For discovery, logs help reveal what Okta is actually doing, not just what people think it is doing.</p>
+      </article>
+    </div>
+
+    <h3>Inbound identity flows</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Source</th>
+          <th>How it commonly connects</th>
+          <th>What Okta may receive</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Active Directory</td>
+          <td>Okta AD Agent installed on Windows servers in the customer network.</td>
+          <td>Users, groups, selected attributes, account status, and sometimes delegated password authentication or password operations.</td>
+        </tr>
+        <tr>
+          <td>LDAP directory</td>
+          <td>Okta LDAP Agent.</td>
+          <td>Users, groups, and attributes from a non-AD LDAP source.</td>
+        </tr>
+        <tr>
+          <td>HR system</td>
+          <td>Prebuilt connector, API integration, import, or lifecycle management workflow.</td>
+          <td>Worker status, start date, termination date, department, manager, title, location, and employee identifiers.</td>
+        </tr>
+        <tr>
+          <td>Admin or API</td>
+          <td>Manual creation, bulk import, Okta API, or automation platform.</td>
+          <td>Cloud-native Okta users, service identities, test users, contractors, or non-employee accounts.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Authentication and SSO flows</h3>
+    <div class="cards">
+      <article class="card">
+        <h4>SAML</h4>
+        <p>Common for enterprise SaaS. Okta authenticates the user and sends a signed SAML assertion to the application. The app trusts Okta as the Identity Provider.</p>
+      </article>
+      <article class="card">
+        <h4>OIDC / OAuth</h4>
+        <p>Common for modern web and mobile apps. Okta issues tokens through standards-based flows so the application can validate identity and access claims.</p>
+      </article>
+      <article class="card">
+        <h4>WS-Fed / federation to Microsoft</h4>
+        <p>In Microsoft 365 federation scenarios, Entra ID can redirect authentication to Okta for federated domains. Entra ID still remains the Microsoft cloud directory.</p>
+      </article>
+      <article class="card">
+        <h4>Delegated authentication</h4>
+        <p>When integrated with AD, Okta may validate passwords against AD instead of storing Okta-managed credentials. This keeps AD in the authentication path.</p>
+      </article>
+    </div>
+
+    <h3>Provisioning and lifecycle flows</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Flow</th>
+          <th>What happens</th>
+          <th>Why it matters</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Assignment</td>
+          <td>A user or group is assigned to an application in Okta.</td>
+          <td>This can trigger app visibility, SSO entitlement, provisioning, or license assignment depending on the integration.</td>
+        </tr>
+        <tr>
+          <td>Provisioning</td>
+          <td>Okta creates or updates an account in the target application through SCIM, API, or a connector.</td>
+          <td>This is how Okta can automate joiner and mover processes for many SaaS applications.</td>
+        </tr>
+        <tr>
+          <td>Attribute mapping</td>
+          <td>Okta maps source attributes to target app attributes.</td>
+          <td>Attribute ownership matters. A value may be mastered by HR, AD, Okta, or the application itself.</td>
+        </tr>
+        <tr>
+          <td>Deactivation</td>
+          <td>When a user is deactivated or unassigned, Okta may suspend, deactivate, or remove the downstream account.</td>
+          <td>This is one of the most important controls for leaver processes and security risk reduction.</td>
+        </tr>
+        <tr>
+          <td>Writeback</td>
+          <td>Okta writes a supported change back to a connected system, such as AD or an application.</td>
+          <td>Writeback is not universal. It depends on the target system, connector capability, and configured ownership model.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Microsoft-specific view</h3>
+    <div class="cards">
+      <article class="card">
+        <h4>Okta as IdP for Microsoft 365</h4>
+        <p>Okta may handle sign-in and MFA for Microsoft 365 through federation. This does not automatically mean Okta creates or updates Entra ID users.</p>
+      </article>
+      <article class="card">
+        <h4>Okta provisioning to Microsoft cloud</h4>
+        <p>Okta may provision users or attributes into Microsoft cloud services in some scenarios. This must be distinguished from AD-to-Entra synchronization by Entra Connect or Cloud Sync.</p>
+      </article>
+      <article class="card">
+        <h4>Entra ID remains the Microsoft authority</h4>
+        <p>For Microsoft 365 and Azure, Entra ID still stores the Microsoft cloud identity, licenses, groups, roles, Conditional Access scope, and audit context.</p>
+      </article>
+    </div>
+
+    <div class="callout warn"><strong>Preparation takeaway:</strong> In discovery, separate four questions: where the user is mastered, who authenticates the user, who provisions the user, and who removes access. Okta may own one, several, or all of these, depending on the customer's configuration.</div>
+  </section>
+
+  <section class="section tab-panel" id="reference-architecture" role="tabpanel">
+    <h2>4. Reference Architecture</h2>
+    <p class="lead">There is no single universal architecture. Start by identifying the authoritative source, synchronization paths, authentication flow, and provisioning ownership.</p>
+
+    <h3>Pattern A: AD as source, Okta as SSO/MFA, Entra ID for Microsoft cloud</h3>
+    <div class="diagram" aria-label="Architecture diagram pattern A">
+<pre>Active Directory on-premises
+        |
+        | Okta AD Agent imports users, groups, and selected attributes
+        v
+      Okta
+        |
+        | SSO / MFA / sign-on policies / app assignments
+        v
+SaaS applications
+
+Active Directory on-premises
+        |
+        | Entra Connect or Cloud Sync
+        v
+Microsoft Entra ID
+        |
+        | Microsoft 365, Azure, Teams, Exchange Online, SharePoint, Intune
+        v
+Microsoft cloud workloads</pre>
+    </div>
+    <div class="callout"><strong>How to read this:</strong> Okta and Entra ID may both receive identity data from AD. Okta may handle SSO and MFA, while Entra ID remains the cloud directory for Microsoft workloads.</div>
+
+    <h3>Pattern B: Microsoft 365 federated to Okta</h3>
+    <div class="diagram" aria-label="Architecture diagram pattern B">
+<pre>User opens Microsoft 365
+        |
+        v
+Microsoft Entra ID identifies federated domain
+        |
+        | Redirects authentication
+        v
+      Okta
+        |
+        | Password validation / MFA / sign-on policy
+        v
+Authentication token returned to Microsoft 365</pre>
+    </div>
+    <div class="callout warn"><strong>Important:</strong> In this model, users may depend on Okta availability to access Microsoft 365. Emergency access accounts in Entra ID should bypass normal federation dependency.</div>
+
+    <h3>Pattern C: HR system as source, Okta drives lifecycle</h3>
+    <div class="diagram" aria-label="Architecture diagram pattern C">
+<pre>HR system
+   |
+   | Joiner / mover / leaver events
+   v
+Okta Lifecycle Management
+   |
+   +---> Active Directory
+   +---> Microsoft Entra ID
+   +---> SaaS applications</pre>
+    </div>
+    <div class="callout"><strong>Discovery point:</strong> Validate whether Okta is only importing users, actively provisioning users, or orchestrating the full lifecycle from HR events.</div>
+
+    <div class="flow">
+      <div class="stage s-ad"><span class="num">1</span><h4>Source</h4><p>AD, HR, or another authoritative system provides the identity record and core attributes.</p></div>
+      <div class="stage s-okta"><span class="num">2</span><h4>Okta</h4><p>May import users, authenticate sign-ins, enforce MFA, manage app assignments, and provision accounts.</p></div>
+      <div class="stage s-entra"><span class="num">3</span><h4>Entra ID</h4><p>Hosts Microsoft cloud identity for Microsoft 365, Azure, Intune, and security workloads.</p></div>
+      <div class="stage s-policy"><span class="num">4</span><h4>Policy</h4><p>Access may be controlled by Okta policies, Entra Conditional Access, or both.</p></div>
+      <div class="stage s-apps"><span class="num">5</span><h4>Apps</h4><p>Users access Microsoft and non-Microsoft apps through SSO and assigned entitlements.</p></div>
+    </div>
+  </section>
+
+  <section class="section tab-panel" id="integration-patterns" role="tabpanel">
+    <h2>5. Integration Patterns to Identify</h2>
+    <details class="qa" open>
+      <summary>Who is the source of truth?</summary>
+      <div class="answer">
+        <p>The source of truth is the system considered authoritative for identity data. It may be Active Directory, Okta, an HR platform, or an identity governance system. Avoid assuming that the system used for login is also the source of identity data.</p>
+      </div>
+    </details>
+    <details class="qa">
+      <summary>Who authenticates Microsoft 365 users?</summary>
+      <div class="answer">
+        <p>Entra ID may authenticate users directly, or it may redirect authentication to Okta through federation. Confirm the domain authentication type, federation settings, and whether staged rollout or cloud authentication is in use.</p>
+      </div>
+    </details>
+    <details class="qa">
+      <summary>Who enforces MFA?</summary>
+      <div class="answer">
+        <p>MFA can be enforced in Okta, Microsoft Entra ID, or both. Duplicated controls can create repeated prompts, inconsistent access decisions, and complex incident troubleshooting.</p>
+      </div>
+    </details>
+    <details class="qa">
+      <summary>Who provisions and disables users?</summary>
+      <div class="answer">
+        <p>Provisioning determines how users are created, updated, assigned, suspended, and removed from target systems. The leaver process is especially important because it controls how quickly access is removed after termination.</p>
+      </div>
+    </details>
+    <details class="qa">
+      <summary>Where are groups mastered?</summary>
+      <div class="answer">
+        <p>Groups may originate in AD, Okta, Entra ID, or individual applications. Identify which groups are used for app assignment, licensing, Conditional Access, privileged access, and operational distribution lists.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="section tab-panel" id="replace-ad" role="tabpanel">
+    <h2>6. Can Okta Fully Replace On-Premises AD?</h2>
+    <p class="lead">Short answer: <strong>No, not fully</strong>, if the organization still depends on traditional Active Directory capabilities.</p>
+    <div class="cards">
+      <article class="card">
+        <h3><span class="pill depends">Can overlap</span> Identity and SaaS access</h3>
+        <p>Okta can reduce dependency on AD for SSO, MFA, application access, lifecycle management, provisioning, and user access to cloud or SaaS applications.</p>
+      </article>
+      <article class="card">
+        <h3><span class="pill no">Cannot fully replace</span> Windows domain services</h3>
+        <p>Okta does not fully replace classic AD functions such as domain join, Kerberos, NTLM, Group Policy, LDAP for legacy applications, file server ACLs, domain trusts, and domain-based server administration.</p>
+      </article>
+      <article class="card">
+        <h3>When replacement becomes realistic</h3>
+        <p>A full AD retirement usually requires a broader cloud-first program: modern device management, Entra ID, Intune, SaaS migration, application modernization, and removal of legacy LDAP/Kerberos dependencies.</p>
+      </article>
+    </div>
+    <div class="diagram"><pre>Okta can replace many SaaS identity use cases.
+Okta does not fully replace AD for Windows domain, Kerberos, NTLM, GPO, LDAP, and legacy infrastructure.</pre></div>
+  </section>
+
+  <section class="section tab-panel" id="okta-source-of-truth" role="tabpanel">
+    <h2>7. Can Okta Be the Source of Truth if AD Is No Longer Needed?</h2>
+    <p class="lead">Short answer: <strong>Yes, Okta can become the primary identity source and lifecycle orchestration layer</strong>, if the customer has removed on-premises AD dependencies and all required systems can be provisioned and governed from Okta or an upstream HR platform.</p>
+    <div class="cards">
+      <article class="card">
+        <h3><span class="pill yes">Possible</span> Okta as primary identity source</h3>
+        <p>If AD is no longer required, Okta can hold users, groups, app assignments, sign-on policies, MFA enrollment, and lifecycle rules. It can become the primary place where identity and access are orchestrated.</p>
+      </article>
+      <article class="card">
+        <h3><span class="pill depends">Better pattern</span> HR as employee source</h3>
+        <p>For employees, the HR system is often the best authoritative source for worker status, start date, department, manager, and termination events. Okta then orchestrates identity lifecycle and downstream access.</p>
+      </article>
+      <article class="card">
+        <h3><span class="pill ops">Microsoft still exists</span> Entra ID remains required</h3>
+        <p>Even without AD, Microsoft Entra ID still exists for Microsoft 365, Azure, Teams, Exchange Online, SharePoint, Intune, and Microsoft security workloads. Okta can feed or federate with Entra ID, but Entra ID does not disappear.</p>
+      </article>
+    </div>
+
+    <h3>Required conditions</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Condition</th>
+          <th>Why it matters</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>No AD-dependent workloads remain</td>
+          <td>There should be no remaining dependency on domain join, Kerberos, NTLM, GPO, LDAP, AD file permissions, or legacy line-of-business applications tied to AD.</td>
+        </tr>
+        <tr>
+          <td>Lifecycle ownership is clear</td>
+          <td>Joiner, mover, and leaver processes must clearly define whether HR, Okta, Entra ID, or another platform owns each action and attribute.</td>
+        </tr>
+        <tr>
+          <td>Downstream provisioning is complete</td>
+          <td>Microsoft 365, SaaS applications, security tools, and business systems must receive the right users, attributes, groups, roles, and deactivation events.</td>
+        </tr>
+        <tr>
+          <td>Administrative and emergency access is designed</td>
+          <td>Break-glass accounts, privileged roles, recovery procedures, and federation bypass scenarios must be documented and tested.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="diagram"><pre>Recommended mature model:
+
+HR system = source of truth for employee status
+Okta = identity lifecycle and access orchestration
+Entra ID = Microsoft cloud identity
+Intune = device and application management</pre></div>
+    <div class="callout ok"><strong>Client-ready wording:</strong> If the customer no longer needs on-premises AD, Okta can become the primary identity source and lifecycle orchestration layer, provided that all required downstream systems can be provisioned and governed from Okta. For employees, HR is often the best source of truth, with Okta orchestrating identity and access.</div>
+  </section>
+
+  <section class="section tab-panel" id="still-need-entra-connect" role="tabpanel">
+    <h2>8. Does This Customer Still Need Entra Connect?</h2>
+    <p class="lead">Short answer: <strong>it depends on what Okta is doing today</strong>. If Okta is only the Identity Provider for SSO/MFA and AD still creates Microsoft 365 identities, Entra Connect or Cloud Sync is usually still needed.</p>
+
+    <div class="cards">
+      <article class="card">
+        <h3><span class="pill ops">Unknown scenario</span> Start with role discovery</h3>
+        <p>The customer already has Okta, but that does not tell us whether Okta is only handling authentication or also owning provisioning and lifecycle into Entra ID.</p>
+      </article>
+      <article class="card">
+        <h3><span class="pill no">Do not assume</span> Okta replaces sync</h3>
+        <p>Okta and Entra Connect solve different problems. Okta commonly handles sign-in, MFA, SSO, and app access. Entra Connect synchronizes AD identities into Entra ID.</p>
+      </article>
+      <article class="card">
+        <h3><span class="pill yes">Possible removal</span> Only after source model changes</h3>
+        <p>Entra Connect may not be needed if users are cloud-only in Entra ID and Okta or HR-to-Okta provisioning fully owns user creation, updates, deactivation, and access lifecycle.</p>
+      </article>
+    </div>
+
+    <h3>Decision matrix</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Finding</th>
+          <th>Likely answer</th>
+          <th>What it means</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Okta is used only for SSO/MFA</td>
+          <td><span class="pill yes">Entra Connect likely still needed</span></td>
+          <td>Okta handles authentication, but another tool still needs to synchronize AD users into Entra ID.</td>
+        </tr>
+        <tr>
+          <td>AD is still the source of truth for users</td>
+          <td><span class="pill yes">Entra Connect or Cloud Sync likely still needed</span></td>
+          <td>Microsoft 365 identity still depends on the on-premises directory source.</td>
+        </tr>
+        <tr>
+          <td>Entra ID users show as synchronized from on-premises</td>
+          <td><span class="pill yes">Sync still exists in the identity model</span></td>
+          <td>Removing the sync engine without changing the identity model can break lifecycle management.</td>
+        </tr>
+        <tr>
+          <td>Exchange Hybrid, hybrid device join, password writeback, or group writeback exists</td>
+          <td><span class="pill depends">Validate carefully</span></td>
+          <td>These dependencies often require Microsoft sync capabilities or a planned replacement design.</td>
+        </tr>
+        <tr>
+          <td>HR or Okta provisions cloud-only users directly to Entra ID</td>
+          <td><span class="pill depends">Entra Connect may not be needed</span></td>
+          <td>This can work if all required attributes, licenses, groups, deactivation flows, and admin recovery paths are covered.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>If Okta is the LDAP master</h3>
+    <div class="callout warn"><strong>Important distinction:</strong> Okta being the LDAP master does not automatically remove the need for Entra Connect. Entra Connect is still relevant when Entra ID depends on AD DS-sourced users, attributes, passwords, groups, devices, Exchange objects, or writeback flows.</div>
+    <div class="diagram"><pre>Okta as LDAP master = Okta owns the directory/source side for some or all identities
+Entra Connect = Microsoft AD DS to Entra ID synchronization engine
+
+Key question:
+Does Microsoft 365 still need anything synchronized from AD DS into Entra ID?</pre></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Function or dependency</th>
+          <th>Why Entra Connect / Cloud Sync may still be necessary</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>AD DS-sourced users</td>
+          <td>If users in Entra ID are still synchronized from on-premises AD DS, the Microsoft identity lifecycle still depends on a Microsoft sync engine.</td>
+        </tr>
+        <tr>
+          <td>Exchange Hybrid and Exchange attributes</td>
+          <td>Hybrid environments may depend on AD-mastered mail attributes such as <code>proxyAddresses</code>, <code>mail</code>, <code>mailNickname</code>, <code>targetAddress</code>, and <code>msExch*</code> attributes.</td>
+        </tr>
+        <tr>
+          <td>Password Hash Sync</td>
+          <td>If Microsoft cloud authentication uses password hash sync from AD DS, Entra Connect is the component that synchronizes password hashes to Entra ID.</td>
+        </tr>
+        <tr>
+          <td>Pass-through Authentication</td>
+          <td>If pass-through authentication is used, Microsoft agents validate sign-ins against AD DS. This keeps AD DS in the Microsoft authentication path.</td>
+        </tr>
+        <tr>
+          <td>Password writeback / SSPR writeback</td>
+          <td>If users reset passwords in the cloud and those changes must be written back to AD DS, Microsoft sync/writeback capability may still be required.</td>
+        </tr>
+        <tr>
+          <td>Group writeback</td>
+          <td>If cloud groups need to be represented back in AD DS, this is a Microsoft sync/writeback scenario rather than a generic LDAP-master scenario.</td>
+        </tr>
+        <tr>
+          <td>Device writeback or hybrid device dependencies</td>
+          <td>Some hybrid device designs rely on AD DS and Microsoft sync behavior. Validate before removing Entra Connect or Cloud Sync.</td>
+        </tr>
+        <tr>
+          <td>Hybrid Microsoft Entra Join</td>
+          <td>If Windows devices are hybrid joined, there is usually an AD DS plus Entra ID relationship that must be understood before changing sync.</td>
+        </tr>
+        <tr>
+          <td>AD DS-sourced groups or application dependencies</td>
+          <td>Groups may still originate in AD DS and be used for Microsoft 365 licensing, access, mail distribution, or application authorization.</td>
+        </tr>
+        <tr>
+          <td>Microsoft-supported hybrid identity model</td>
+          <td>Some Microsoft hybrid scenarios expect Entra Connect or Cloud Sync as the supported AD DS to Entra ID synchronization path.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout ok"><strong>Client-ready wording:</strong> Even if Okta is the LDAP master, are Microsoft 365 users, attributes, passwords, groups, devices, or Exchange objects still synchronized into Entra ID from AD DS through Entra Connect or Cloud Sync? If yes, there is still a Microsoft sync dependency.</div>
+
+    <h3>Minimum evidence to collect</h3>
+    <div class="cards">
+      <article class="card">
+        <h4>From Entra ID</h4>
+        <ul>
+          <li>Are users cloud-only or synchronized from on-premises?</li>
+          <li>Is the domain federated to Okta or managed by Entra ID?</li>
+          <li>Are licenses assigned by groups, direct assignment, or another process?</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h4>From Okta</h4>
+        <ul>
+          <li>Is Okta importing users from AD?</li>
+          <li>Is Okta provisioning users into Entra ID or Microsoft 365?</li>
+          <li>Does Okta own joiner, mover, leaver, app assignment, and deactivation flows?</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h4>From AD / Microsoft hybrid</h4>
+        <ul>
+          <li>Does Entra Connect or Cloud Sync currently run?</li>
+          <li>Is Exchange Hybrid or on-premises Exchange attribute management still required?</li>
+          <li>Are hybrid joined devices, password writeback, or group writeback in use?</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="diagram"><pre>If Okta = SSO/MFA only -> Entra Connect likely still needed
+If AD = source of truth -> Entra Connect or Cloud Sync likely still needed
+If users = synchronized from on-premises -> sync still exists in the model
+If HR/Okta provisions cloud-only users to Entra ID -> Entra Connect may not be needed
+If Exchange Hybrid / Hybrid Join / writeback exists -> validate before removal</pre></div>
+    <div class="callout ok"><strong>Client-ready wording:</strong> Since you already have Okta, the key question is whether Okta is only acting as the Identity Provider for authentication, or whether it also owns provisioning and lifecycle into Entra ID. If Okta is only handling SSO and MFA, Entra Connect may still be required for directory synchronization from AD to Entra ID.</div>
+  </section>
+
+  <section class="section tab-panel" id="replace-entra-connect" role="tabpanel">
+    <h2>9. Can Okta Fully Replace Entra Connect?</h2>
+    <p class="lead">Short answer: <strong>Usually no as a direct replacement</strong>, especially in classic Microsoft hybrid identity.</p>
+    <div class="cards">
+      <article class="card">
+        <h3><span class="pill depends">Can overlap</span> Provisioning outcomes</h3>
+        <p>Okta can provision users into Microsoft 365 or Entra ID in some scenarios through supported integrations, APIs, and lifecycle workflows.</p>
+      </article>
+      <article class="card">
+        <h3><span class="pill no">Not equivalent</span> Hybrid identity engine</h3>
+        <p>Entra Connect is the Microsoft synchronization engine for AD-to-Entra hybrid identity. It handles many Microsoft-specific object, attribute, password, and hybrid workload scenarios.</p>
+      </article>
+      <article class="card">
+        <h3>Common reasons Entra Connect remains</h3>
+        <ul>
+          <li>AD remains the source of authority.</li>
+          <li>Users are synchronized or hybrid.</li>
+          <li>Exchange hybrid attributes are required.</li>
+          <li>Password hash sync or pass-through authentication is used.</li>
+          <li>Hybrid join, writeback, or Microsoft-supported hybrid state is required.</li>
+        </ul>
+      </article>
+    </div>
+    <div class="diagram"><pre>Okta can provision users into Entra ID in some models.
+Okta is not a full drop-in replacement for Entra Connect in classic Microsoft hybrid identity.
+The key discovery question is whether Okta is only IdP/SSO or also provisioning/lifecycle authority.</pre></div>
+  </section>
+
+  <section class="section tab-panel" id="replace-cloud-sync" role="tabpanel">
+    <h2>10. Can Okta Fully Replace Cloud Sync?</h2>
+    <p class="lead">Short answer: <strong>Not as a direct replacement</strong> for Microsoft's AD-to-Entra synchronization model.</p>
+    <div class="cards">
+      <article class="card">
+        <h3><span class="pill depends">Can overlap</span> Some provisioning flows</h3>
+        <p>Okta may import users from AD and provision accounts to downstream systems, including Microsoft cloud targets in supported scenarios.</p>
+      </article>
+      <article class="card">
+        <h3><span class="pill no">Different purpose</span> Microsoft sync service</h3>
+        <p>Microsoft Entra Cloud Sync is specifically designed to synchronize on-premises AD users and groups into Entra ID using lightweight Microsoft agents.</p>
+      </article>
+      <article class="card">
+        <h3>Decision point</h3>
+        <p>If the requirement is to keep AD objects synchronized and managed as Microsoft hybrid identities, Entra Connect or Cloud Sync remains the more natural Microsoft path.</p>
+      </article>
+    </div>
+    <div class="diagram"><pre>Okta can overlap with Cloud Sync for some provisioning outcomes.
+Okta does not fully replace Cloud Sync as Microsoft's AD-to-Entra synchronization engine.</pre></div>
+  </section>
+
+  <section class="section tab-panel" id="replace-intune" role="tabpanel">
+    <h2>11. Can Okta Fully Replace Intune?</h2>
+    <p class="lead">Short answer: <strong>No</strong>. Okta is an identity platform; Intune is endpoint and application management.</p>
+    <div class="cards">
+      <article class="card">
+        <h3><span class="pill depends">Okta role</span> Access decision support</h3>
+        <p>Okta can help with authentication, MFA, SSO, sign-on policies, and in some designs device context through integrations with device management or security tools.</p>
+      </article>
+      <article class="card">
+        <h3><span class="pill no">Intune role</span> Device management</h3>
+        <p>Intune provides MDM, MAM, enrollment, compliance policies, configuration profiles, app deployment, Windows Autopilot, update rings, BitLocker policy, security baselines, app protection policies, remote wipe, and cross-platform endpoint management.</p>
+      </article>
+      <article class="card">
+        <h3>Practical distinction</h3>
+        <p>Okta can help decide whether a user should access an app. Intune manages whether the device and applications are configured, compliant, protected, and recoverable.</p>
+      </article>
+    </div>
+    <div class="diagram"><pre>Okta can help decide access based on identity and device context.
+Intune manages and secures devices and applications.
+Okta does not fully replace Intune.</pre></div>
+  </section>
+
+  <section class="section tab-panel" id="writeback" role="tabpanel">
+    <h2>12. Can Okta Perform Writeback?</h2>
+    <p class="lead">Short answer: <strong>Yes, in supported scenarios</strong>. The important question is writeback of what, from where, and to which target.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Writeback scenario</th>
+          <th>Typical answer</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Okta to AD user updates</td>
+          <td><span class="pill yes">Supported in some designs</span></td>
+          <td>Okta can create or update users in AD when lifecycle management and AD integration are configured appropriately.</td>
+        </tr>
+        <tr>
+          <td>Okta to AD password reset or change</td>
+          <td><span class="pill yes">Supported with AD integration</span></td>
+          <td>Password reset or change can be written to AD depending on Okta AD Agent, delegated authentication, and password policy configuration.</td>
+        </tr>
+        <tr>
+          <td>Okta to SaaS applications</td>
+          <td><span class="pill yes">Common</span></td>
+          <td>Provisioning, profile updates, app assignment, and deactivation are commonly handled through SCIM or application APIs.</td>
+        </tr>
+        <tr>
+          <td>Okta to Entra ID / Microsoft 365</td>
+          <td><span class="pill depends">Depends</span></td>
+          <td>Okta can provision some user and attribute flows, but this does not equal every Microsoft hybrid writeback or synchronization capability.</td>
+        </tr>
+        <tr>
+          <td>Entra ID to AD writeback</td>
+          <td><span class="pill no">Usually Microsoft sync</span></td>
+          <td>This is normally handled by Entra Connect or Cloud Sync features, depending on the specific writeback requirement.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout warn"><strong>Discovery point:</strong> Never ask only whether Okta does writeback. Ask which object, which attribute, which direction, which source of authority, and which operational process owns the writeback.</div>
+    <div class="diagram"><pre>Yes, Okta can perform writeback in supported integrations, especially to AD and SaaS apps.
+No, Okta does not provide every Microsoft hybrid writeback capability that Entra Connect or Cloud Sync may provide.</pre></div>
+  </section>
+
+  <section class="section tab-panel" id="discovery-checklist" role="tabpanel">
+    <h2>13. Discovery Checklist</h2>
+    <p class="lead">Use this checklist during client workshops or technical discovery sessions.</p>
+    <div class="cards">
+      <article class="card">
+        <h4>Identity source</h4>
+        <ul>
+          <li>What system creates the employee identity first?</li>
+          <li>Is AD, Okta, Entra ID, HR, or IGA the authoritative source?</li>
+          <li>Which attributes are mastered where?</li>
+          <li>Which system owns username, email address, manager, department, title, and employee status?</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h4>Directory integration</h4>
+        <ul>
+          <li>Is the Okta AD Agent installed?</li>
+          <li>How many AD domains and forests are connected?</li>
+          <li>Are users and groups imported from AD into Okta?</li>
+          <li>Are AD passwords delegated to Okta or synchronized through another method?</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h4>Entra ID integration</h4>
+        <ul>
+          <li>Is Entra Connect or Cloud Sync in use?</li>
+          <li>Do Entra ID users show as cloud-only or synchronized from on-premises?</li>
+          <li>Is Microsoft 365 authentication federated to Okta?</li>
+          <li>Are users cloud-only, synced, or mixed?</li>
+          <li>Are group-based licensing and Conditional Access policies active?</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h4>Authentication</h4>
+        <ul>
+          <li>Where does the user enter credentials?</li>
+          <li>Does Entra ID redirect login to Okta?</li>
+          <li>Are password hash sync, pass-through authentication, or federation configured?</li>
+          <li>How are non-browser and legacy authentication scenarios handled?</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h4>MFA and access policy</h4>
+        <ul>
+          <li>Is MFA enforced by Okta, Microsoft, or both?</li>
+          <li>Are Entra Conditional Access policies active?</li>
+          <li>Are device compliance, location, risk, or network rules used?</li>
+          <li>Are there different policies for admins, contractors, and frontline users?</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h4>Lifecycle</h4>
+        <ul>
+          <li>How is a new user created?</li>
+          <li>How are role changes and department changes handled?</li>
+          <li>How quickly is access removed when a user leaves?</li>
+          <li>Which system is responsible for disabling accounts and revoking sessions?</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section tab-panel" id="risks" role="tabpanel">
+    <h2>14. Risks and Watch Points</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Risk</th>
+          <th>What to check</th>
+          <th>Client impact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill risk">Risk</span><br>Unclear ownership</td>
+          <td>Document which platform owns each identity attribute, each lifecycle step, and each access decision.</td>
+          <td>Conflicting updates, stale attributes, failed provisioning, and slow incident resolution.</td>
+        </tr>
+        <tr>
+          <td><span class="pill risk">Risk</span><br>Duplicated MFA</td>
+          <td>Compare Okta sign-on policies with Entra Conditional Access, security defaults, per-user MFA, and authentication method policies.</td>
+          <td>Users may receive multiple prompts or inconsistent access decisions.</td>
+        </tr>
+        <tr>
+          <td><span class="pill risk">Risk</span><br>Leaver gaps</td>
+          <td>Trace the offboarding process from HR or AD through Okta, Entra ID, Microsoft 365, and business applications.</td>
+          <td>Former users may retain access longer than expected, especially in applications not provisioned by Okta.</td>
+        </tr>
+        <tr>
+          <td><span class="pill risk">Risk</span><br>Group sprawl</td>
+          <td>Identify whether access is controlled by AD groups, Okta groups, Entra groups, dynamic groups, or app-specific roles.</td>
+          <td>Entitlements become hard to audit, automate, and explain to security stakeholders.</td>
+        </tr>
+        <tr>
+          <td><span class="pill risk">Risk</span><br>Federation dependency</td>
+          <td>Confirm break-glass accounts, emergency access procedures, federation certificate expiry, Okta availability dependencies, and rollback options.</td>
+          <td>Microsoft 365 access can be impacted if federation, certificates, network paths, or Okta services are unavailable.</td>
+        </tr>
+        <tr>
+          <td><span class="pill risk">Risk</span><br>Legacy authentication</td>
+          <td>Check whether basic authentication, legacy protocols, service accounts, or older clients bypass expected MFA and Conditional Access controls.</td>
+          <td>Security controls may be weaker than the apparent design suggests.</td>
+        </tr>
+        <tr>
+          <td><span class="pill risk">Risk</span><br>Premature Entra Connect removal</td>
+          <td>Confirm user source, synchronized object status, Exchange Hybrid, device join, password writeback, group writeback, and provisioning replacement before changing sync.</td>
+          <td>Removing sync without a replacement model can break user updates, licensing, Exchange attributes, offboarding, and Microsoft 365 access operations.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout danger"><strong>High priority:</strong> Always validate emergency access accounts in Entra ID. They should not depend on Okta federation, normal MFA flows, or a single administrative team.</div>
+  </section>
+
+  <section class="section tab-panel" id="client-questions" role="tabpanel">
+    <h2>15. Client Questions</h2>
+    <p class="lead">These questions are designed to reveal the actual operating model instead of only the intended architecture.</p>
+    <div class="cards">
+      <article class="card">
+        <h4>Identity ownership</h4>
+        <ol>
+          <li>What is the authoritative source for user identities?</li>
+          <li>Which attributes are mastered in AD, Okta, Entra ID, HR, or another platform?</li>
+          <li>Is Okta importing users from AD, provisioning users to AD, or both?</li>
+          <li>Is Okta only used for SSO/MFA, or does it provision users into Entra ID?</li>
+          <li>Are there cloud-only users in Entra ID or Okta-only users outside AD?</li>
+          <li>If AD is retired, will Okta or HR become the authoritative source for employee identity?</li>
+        </ol>
+      </article>
+      <article class="card">
+        <h4>Authentication and MFA</h4>
+        <ol>
+          <li>Is Microsoft 365 authentication federated to Okta?</li>
+          <li>Where is MFA enforced today: Okta, Entra ID, or both?</li>
+          <li>Are Entra Conditional Access policies active?</li>
+          <li>How are administrators, service accounts, and emergency accounts handled?</li>
+        </ol>
+      </article>
+      <article class="card">
+        <h4>Synchronization and provisioning</h4>
+        <ol>
+          <li>Do you use Entra Connect, Cloud Sync, or another synchronization tool?</li>
+          <li>Do Entra ID users show as synchronized from on-premises?</li>
+          <li>Which applications are provisioned by Okta?</li>
+          <li>If Entra Connect is removed, what system will create, update, disable, and license users in Entra ID?</li>
+          <li>Which applications still require manual access management?</li>
+          <li>How are licenses assigned in Microsoft 365?</li>
+        </ol>
+      </article>
+      <article class="card">
+        <h4>Operations and governance</h4>
+        <ol>
+          <li>Which groups control application access?</li>
+          <li>What happens when a user changes department or role?</li>
+          <li>What happens when a user leaves the company?</li>
+          <li>Which downstream systems must receive deactivation events from Okta?</li>
+          <li>Who owns identity operations: IAM, AD team, Microsoft 365 team, Security, or HR IT?</li>
+        </ol>
+      </article>
+    </div>
+  </section>
+
+  <section class="section tab-panel" id="talk-track" role="tabpanel">
+    <h2>16. Talk Track</h2>
+    <p class="lead">Use this short script when opening a discovery conversation with the client.</p>
+    <div class="speech"><strong>Opening:</strong> "Since you already have Okta, I want to understand whether Okta is only acting as the Identity Provider for sign-in and MFA, or whether it also owns provisioning and lifecycle into Microsoft Entra ID."</div>
+    <div class="speech"><strong>Follow-up:</strong> "Okta and Entra Connect solve different problems. If AD is still the source for Microsoft 365 identities, Entra Connect or Cloud Sync may still be required. If Okta or HR now provisions cloud-only users into Entra ID, we can evaluate whether Entra Connect is still needed."</div>
+    <div class="speech"><strong>Outcome:</strong> "The key outcome is an ownership map. Once we know which platform owns each step, we can identify overlaps, gaps, operational risks, and whether Entra Connect can be retained, replaced by Cloud Sync, or retired through a planned migration."</div>
+    <div class="callout ok"><strong>Recommended next artifact:</strong> Create a one-page identity flow diagram for the client showing source, sync, authentication, MFA, provisioning, licensing, and offboarding ownership.</div>
+  </section>
+
+  <footer>
+    Draft guideline generated on 28 May 2026. Intended as a working document for discovery and client review.
+  </footer>
+</main>
+
+<script>
+  const tabButtons = Array.from(document.querySelectorAll('.tab-button'));
+  const tabPanels = Array.from(document.querySelectorAll('.tab-panel'));
+
+  function activateTab(tabId) {
+    tabButtons.forEach((button) => {
+      const isActive = button.dataset.tab === tabId;
+      button.classList.toggle('active', isActive);
+      button.setAttribute('aria-selected', String(isActive));
+    });
+
+    tabPanels.forEach((panel) => {
+      panel.classList.toggle('active', panel.id === tabId);
+    });
+
+    if (history.replaceState) {
+      history.replaceState(null, '', '#' + tabId);
+    }
+  }
+
+  tabButtons.forEach((button) => {
+    button.addEventListener('click', () => activateTab(button.dataset.tab));
+  });
+
+  const initialTab = window.location.hash ? window.location.hash.slice(1) : 'executive-summary';
+  if (document.getElementById(initialTab)) {
+    activateTab(initialTab);
+  }
+</script>
+
+</body>
+</html>

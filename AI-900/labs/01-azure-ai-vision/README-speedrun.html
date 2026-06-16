@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab 1 Speedrun — Azure AI Vision</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:900px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}h2{color:var(--accent);margin-top:1.2rem}
+a{color:var(--accent)}code{font-family:Consolas,Monaco,monospace;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.1rem .3rem}
+pre{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.8rem;overflow:auto}
+table{border-collapse:collapse;width:100%;margin:.8rem 0}th,td{border:1px solid var(--border);padding:.5rem;text-align:left;vertical-align:top}th{background:var(--card)}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style></head><body>
+<header><div><a href="../../README.html">← Index</a><span style="color:var(--muted)">Lab 1 · Speedrun (10–15 min)</span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>Lab 1 — Speedrun</h1>
+<p><strong>Goal:</strong> analyze an image with Azure AI Vision. <strong>Prereq:</strong> Azure CLI + Python venv ready.</p>
+
+<pre><code>az login
+az group create -n rg-ai900-vision -l eastus
+az cognitiveservices account create -n ai900-vision-demo -g rg-ai900-vision --kind ComputerVision --sku F0 -l eastus --yes
+ENDPOINT=$(az cognitiveservices account show -n ai900-vision-demo -g rg-ai900-vision --query properties.endpoint -o tsv)
+KEY=$(az cognitiveservices account keys list -n ai900-vision-demo -g rg-ai900-vision --query key1 -o tsv)
+
+cd labs/01-azure-ai-vision
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+AZURE_AI_VISION_ENDPOINT=$ENDPOINT AZURE_AI_VISION_KEY=$KEY python analyze.py https://learn.microsoft.com/azure/ai-services/computer-vision/media/quickstarts/presentation.png
+
+# clean up
+az group delete -n rg-ai900-vision --yes --no-wait</code></pre>
+
+<h2>Troubleshooting</h2>
+<table>
+<tr><th>Error</th><th>Cause</th><th>Fix</th></tr>
+<tr><td>401</td><td>Wrong key</td><td>Re-copy <code>key1</code></td></tr>
+<tr><td>429</td><td>F0 rate cap</td><td>Wait 60s</td></tr>
+<tr><td>InvalidImageUrl</td><td>URL not public HTTPS</td><td>Use the sample URL</td></tr>
+</table>
+
+<h2>Challenge</h2>
+<p>Edit <code>analyze.py</code>: add <code>VisualFeatures.READ</code> to also extract printed text. Verify the response now contains a <code>read</code> block with lines + words + bounding boxes.</p>
+
+<p>Mastered = guided ✅ + speedrun in &lt; 50% of guided time.</p>
+</main>
+<footer>← <a href="../../README.html">Back to index</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

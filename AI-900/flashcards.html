@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flashcards — AI-900 Kit</title>
+<script>(function(){try{var t=localStorage.getItem('ckg-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--accent:#58a6ff;--card:#161b22;--border:#30363d;--muted:#8b949e}
+:root[data-theme="light"]{--bg:#fff;--fg:#1f2328;--accent:#0969da;--card:#f6f8fa;--border:#d0d7de;--muted:#656d76}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;z-index:10}
+header a{color:var(--accent);text-decoration:none;margin-right:1rem}
+#theme-toggle{background:transparent;color:var(--fg);font-size:1.2rem;border:0;cursor:pointer;padding:.2rem .5rem}
+main{max-width:900px;margin:0 auto;padding:1.5rem}
+h1{border-bottom:1px solid var(--border);padding-bottom:.3rem}h2{color:var(--accent);margin-top:1.2rem}
+a{color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;margin:.6rem 0;cursor:pointer}
+.card .a{margin-top:.6rem;color:var(--muted);display:none}
+.card.open .a{display:block;color:var(--fg)}
+.tag{display:inline-block;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:.05rem .4rem;font-size:.8em;margin-left:.5rem;color:var(--accent)}
+footer{text-align:center;color:var(--muted);padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style></head><body>
+<header><div><a href="README.html">← Index</a><span style="color:var(--muted)">AI-900 · Flashcards (top 50)</span></div><button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button></header>
+<main>
+<h1>Flashcards — click any card to reveal</h1>
+<p>For spaced repetition (recommended), import <a href="flashcards.csv">flashcards.csv</a> into <strong>Anki</strong>. Format: <code>front;back;tag</code>, semicolon-separated, UTF-8.</p>
+<p><strong>Daily rotation:</strong> 15 min/day = ~15 cards. Tag filter: D1 D2 D3 D4 D5.</p>
+
+<h2>D1 · AI workloads (8 cards)</h2>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Name the 6 Microsoft Responsible AI principles. <span class="tag">D1</span><div class="a"><strong>A:</strong> Fairness · Reliability &amp; Safety · Privacy &amp; Security · Inclusiveness · Transparency · Accountability</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Which principle covers accessibility for people with disabilities? <span class="tag">D1</span><div class="a"><strong>A:</strong> Inclusiveness</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Which principle covers explaining model decisions? <span class="tag">D1</span><div class="a"><strong>A:</strong> Transparency</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Workload that flags unusual data points? <span class="tag">D1</span><div class="a"><strong>A:</strong> Anomaly detection</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Azure service for knowledge mining over unstructured docs? <span class="tag">D1</span><div class="a"><strong>A:</strong> Azure AI Search</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> What does the document intelligence workload do? <span class="tag">D1</span><div class="a"><strong>A:</strong> Extracts text, key-value pairs, tables, structure from forms/invoices/receipts</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Which principle covers "humans remain responsible for AI outcomes"? <span class="tag">D1</span><div class="a"><strong>A:</strong> Accountability</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> What does NLP stand for? <span class="tag">D1</span><div class="a"><strong>A:</strong> Natural Language Processing</div></div>
+
+<h2>D2 · Machine learning (14 cards)</h2>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Supervised learning — definition. <span class="tag">D2</span><div class="a"><strong>A:</strong> Training on labeled examples (features + known target)</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Unsupervised learning — definition. <span class="tag">D2</span><div class="a"><strong>A:</strong> Finding patterns in unlabeled data — clustering, anomaly detection</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> ML task predicting a continuous number? <span class="tag">D2</span><div class="a"><strong>A:</strong> Regression</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> ML task predicting a category? <span class="tag">D2</span><div class="a"><strong>A:</strong> Classification</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> ML task grouping similar items without labels? <span class="tag">D2</span><div class="a"><strong>A:</strong> Clustering</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Typical train/validation/test split? <span class="tag">D2</span><div class="a"><strong>A:</strong> 70 / 15 / 15 (or 80/10/10)</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Regression error metric in original units? <span class="tag">D2</span><div class="a"><strong>A:</strong> RMSE (or MAE)</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Formula: TP / (TP+FP)? <span class="tag">D2</span><div class="a"><strong>A:</strong> Precision</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Formula: TP / (TP+FN)? <span class="tag">D2</span><div class="a"><strong>A:</strong> Recall</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> What is F1? <span class="tag">D2</span><div class="a"><strong>A:</strong> Harmonic mean of precision and recall</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> What is a confusion matrix? <span class="tag">D2</span><div class="a"><strong>A:</strong> Table of TP/FP/FN/TN for classification evaluation</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> What is overfitting? <span class="tag">D2</span><div class="a"><strong>A:</strong> Model memorizes training data, fails on new data</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Azure service for no-code AutoML + designer + endpoints? <span class="tag">D2</span><div class="a"><strong>A:</strong> Azure Machine Learning (ml.azure.com)</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Which Azure ML feature is drag-and-drop? <span class="tag">D2</span><div class="a"><strong>A:</strong> Designer</div></div>
+
+<h2>D3 · Computer vision (8 cards)</h2>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Unified Azure service for image tags, captions, OCR? <span class="tag">D3</span><div class="a"><strong>A:</strong> Azure AI Vision</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Service for face detection / recognition? <span class="tag">D3</span><div class="a"><strong>A:</strong> Azure AI Face (under Vision)</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Service for form/invoice/receipt extraction? <span class="tag">D3</span><div class="a"><strong>A:</strong> Azure AI Document Intelligence (was Form Recognizer)</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Service for video search / faces / topics? <span class="tag">D3</span><div class="a"><strong>A:</strong> Azure AI Video Indexer</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> What is OCR? <span class="tag">D3</span><div class="a"><strong>A:</strong> Optical Character Recognition — text from images</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Difference: image classification vs object detection? <span class="tag">D3</span><div class="a"><strong>A:</strong> Classification = one label per image; detection = multiple objects with bounding boxes</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Custom image model training service? <span class="tag">D3</span><div class="a"><strong>A:</strong> Azure AI Custom Vision</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Generic Computer Vision returns face... <span class="tag">D3</span><div class="a"><strong>A:</strong> ...bounding boxes only. Identification requires Face API (Limited Access).</div></div>
+
+<h2>D4 · NLP (8 cards)</h2>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Unified text-analytics service on Azure? <span class="tag">D4</span><div class="a"><strong>A:</strong> Azure AI Language</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Feature returning positive/negative/neutral? <span class="tag">D4</span><div class="a"><strong>A:</strong> Sentiment analysis</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Feature extracting people / places / orgs? <span class="tag">D4</span><div class="a"><strong>A:</strong> Named Entity Recognition (NER)</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Feature pulling main topics? <span class="tag">D4</span><div class="a"><strong>A:</strong> Key phrase extraction</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Service for speech-to-text and text-to-speech? <span class="tag">D4</span><div class="a"><strong>A:</strong> Azure AI Speech</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Service for text translation 100+ languages? <span class="tag">D4</span><div class="a"><strong>A:</strong> Azure AI Translator</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Modern replacement for LUIS? <span class="tag">D4</span><div class="a"><strong>A:</strong> Conversational Language Understanding (CLU) in Azure AI Language</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Modern replacement for QnA Maker? <span class="tag">D4</span><div class="a"><strong>A:</strong> Question answering feature in Azure AI Language</div></div>
+
+<h2>D5 · Generative AI ⭐ (12 cards)</h2>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Service hosting GPT-4o, DALL·E, Whisper? <span class="tag">D5</span><div class="a"><strong>A:</strong> Azure OpenAI Service</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Central portal for building generative AI apps? <span class="tag">D5</span><div class="a"><strong>A:</strong> Azure AI Foundry (ai.azure.com) — formerly Azure AI Studio</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> What is a token? <span class="tag">D5</span><div class="a"><strong>A:</strong> Unit of text (~4 chars EN); billing + context-window unit</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> What is prompt engineering? <span class="tag">D5</span><div class="a"><strong>A:</strong> Crafting input prompts to guide LLM toward desired output</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> What is RAG? <span class="tag">D5</span><div class="a"><strong>A:</strong> Retrieval-Augmented Generation — retrieve docs then pass as LLM context to ground responses</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Azure OpenAI vs OpenAI direct? <span class="tag">D5</span><div class="a"><strong>A:</strong> Azure adds enterprise security, regional hosting, RBAC, private networking, SLA, content filters</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> What is Microsoft 365 Copilot? <span class="tag">D5</span><div class="a"><strong>A:</strong> Generative AI in Word/Excel/PPT/Outlook/Teams, grounded on Microsoft Graph</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> What is a system message? <span class="tag">D5</span><div class="a"><strong>A:</strong> Initial instruction defining LLM persona/behavior in chat completion</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> What is grounding? <span class="tag">D5</span><div class="a"><strong>A:</strong> Connecting model responses to real data sources (e.g., RAG) to reduce hallucination</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> What does the content filter do? <span class="tag">D5</span><div class="a"><strong>A:</strong> Moderates prompts and completions for hate/sexual/violence/self-harm (on by default)</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> What is fine-tuning? <span class="tag">D5</span><div class="a"><strong>A:</strong> Continuing training of a base model on your labeled data to specialize behavior</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><strong>Q:</strong> Generative AI workloads besides text? <span class="tag">D5</span><div class="a"><strong>A:</strong> Image generation (DALL·E), code (Copilot/Codex), audio (Whisper for STT)</div></div>
+</main>
+<footer>← <a href="README.html">Back to index</a> · Full deck (50 cards): <a href="flashcards.csv">flashcards.csv</a></footer>
+<script>
+var btn=document.getElementById('theme-toggle');
+function upd(){btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙'}
+btn.onclick=function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ckg-theme',t)}catch(e){}upd()};upd();
+</script>
+</body></html>

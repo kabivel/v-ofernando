@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Identity Management — Guidelines</title>
+<style>
+  body{margin:0;font-family:"Segoe UI",system-ui,sans-serif;background:#f4f6fa;color:#1f2937;line-height:1.6}
+  header{background:linear-gradient(135deg,#0078d4,#5C2D91);color:#fff;padding:34px 24px;text-align:center}
+  header h1{margin:0 0 6px;font-size:28px}
+  header p{margin:0;opacity:.9;font-size:14px}
+  main{max-width:900px;margin:0 auto;padding:28px 20px 60px}
+  .card{background:#fff;border:1px solid #d8dee9;border-radius:8px;padding:18px 22px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .card h2{margin:0 0 6px;font-size:18px;color:#0078d4}
+  .card p{margin:6px 0;color:#5a6675;font-size:14px}
+  .card a{display:inline-block;margin-top:8px;color:#fff;background:#0078d4;padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600}
+  .card a:hover{background:#005a9e}
+</style>
+</head>
+<body>
+<header>
+  <h1>Identity Management — Guidelines</h1>
+  <p>Practical references for hybrid identity, privileged access, and admin tiering.</p>
+</header>
+<main>
+  <div class="card">
+    <h2>Okta, Active Directory &amp; Entra ID</h2>
+    <p>End-to-end practical guideline covering authentication, provisioning, federation, and migration considerations across the three platforms.</p>
+    <a href="okta-ad-entra-guideline.html">Open guideline →</a>
+  </div>
+  <div class="card">
+    <h2>PAW — Privileged Access Workstation</h2>
+    <p>Concept, Enterprise Access Model, Tier 0/1/2 deep dive, PAW vs PIM, technical controls, architectures, implementation plan, end-to-end flow, and direction-of-access rules.</p>
+    <a href="paw-privileged-access-workstation.html">Open guideline →</a>
+  </div>
+  <div class="card">
+    <h2>FIDO2 + Certificate (Intune) — Two-Factor Enforcement</h2>
+    <p>How to require a FIDO2 security key and an Intune-deployed certificate together in Entra ID: what authentication strengths actually allow, the device-trust + FIDO2 model, Conditional Access AND logic, and Microsoft Graph configuration.</p>
+    <a href="fido2-plus-certificate-intune.html">Open guideline →</a>
+  </div>
+</main>
+</body>
+</html>
