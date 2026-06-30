@@ -70,6 +70,17 @@ For each major recommendation:
 - Did the reviewer address it?
 - If not → **FLAG** the missing counter-argument
 
+## HTML Dossier Tab Review (iterative loop)
+
+When auditing a generated dossier HTML (e.g. `decks/*/dossier.html`):
+
+1. **Review each tab in order** — Overview, Manabase, Ramp, Draw, Removal, Synergies, Combos, Side/Maybe, Strategy, Sampler (and any others present). Open the file in the browser and inspect the rendered content of every tab, not just the source.
+2. **For each tab, verify**: numbers match the deck data (`archi.json` / `deck-detail.txt`), card classifications are correct, oracle claims in prose are accurate (verify via Scryfall/archi.json), and there are no rendering errors (broken layout, empty sections that should have data, mojibake/encoding, escaped HTML showing as text).
+3. **If an error is found**: STOP, fix the root cause (edit the generator or the source fragment, not the output by hand), **rebuild the dossier**, and **restart the review from the FIRST tab**. Do not continue past a found error — every fix invalidates earlier tabs that may share the same code path.
+4. **Only pass when a full sweep of all tabs finds zero errors** with no fix applied during that sweep.
+
+Report each restart and the error that triggered it.
+
 ## Output Format
 
 ### Section 1: Verdict

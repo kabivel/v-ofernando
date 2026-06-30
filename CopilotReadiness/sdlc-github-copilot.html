@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SDLC &amp; GitHub Copilot &mdash; Guia com fontes oficiais</title>
+<style>
+  :root{
+    --blue:#0078D4;--blue-deep:#004578;--purple:#5C2D91;--teal:#008272;
+    --green:#107C10;--orange:#D83B01;--pink:#E3008C;--gold:#F2C811;
+    --ink:#1B1A19;--ink-2:#3B3A39;--ink-3:#605E5C;--line:#EDEBE9;
+    --bg:#FAFAFC;--card:#FFFFFF;--shadow:0 6px 24px rgba(0,0,0,.06);
+    --shadow-hover:0 12px 36px rgba(0,120,212,.18);--radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;scroll-behavior:smooth}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  ::selection{background:#cfe6ff;color:var(--ink)}
+
+  /* ===== HERO ===== */
+  .hero{
+    background:linear-gradient(135deg,#004578 0%,#0078D4 45%,#5C2D91 100%);
+    color:#fff;padding:60px 26px 64px;position:relative;overflow:hidden;
+  }
+  .hero::after{
+    content:"";position:absolute;right:-120px;top:-120px;width:420px;height:420px;
+    background:radial-gradient(circle,rgba(255,255,255,.16),transparent 70%);border-radius:50%;
+  }
+  .hero .wrap{max-width:1100px;margin:0 auto;position:relative;z-index:1}
+  .hero .eyebrow{
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;
+    background:rgba(255,255,255,.16);display:inline-block;padding:6px 14px;border-radius:999px;margin-bottom:18px;
+  }
+  .hero h1{font-size:38px;margin:0 0 14px;letter-spacing:-.5px;line-height:1.12;font-weight:700}
+  .hero p{font-size:17px;max-width:760px;margin:0;color:rgba(255,255,255,.92)}
+  .hero .meta{margin-top:24px;display:flex;gap:10px;flex-wrap:wrap}
+  .hero .meta span{
+    font-size:12.5px;background:rgba(255,255,255,.14);padding:6px 13px;border-radius:8px;
+    display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.18);
+  }
+
+  /* ===== SECTIONS ===== */
+  section{padding:52px 26px 8px;scroll-margin-top:20px}
+  .wrap{max-width:1100px;margin:0 auto}
+  .section-head{margin:0 0 26px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .kicker{
+    font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);font-weight:700;
+    background:#EFF6FC;padding:4px 11px;border-radius:999px;display:inline-block;margin-bottom:12px;
+  }
+  h2.section-title{font-size:26px;margin:0 0 8px;letter-spacing:-.3px;font-weight:700;line-height:1.2}
+  .section-lead{font-size:15px;color:var(--ink-3);margin:0;max-width:820px}
+
+  /* ===== DEFINITION CALLOUT ===== */
+  .definition{
+    background:linear-gradient(160deg,#F3F8FE,#F8F2FB);border:1px solid #e6eefa;
+    border-left:5px solid var(--blue);border-radius:var(--radius);padding:24px 26px;margin:0 0 22px;
+  }
+  .definition p{margin:0;font-size:15.5px;color:var(--ink-2)}
+  .definition .q{font-size:19px;color:var(--ink);font-weight:600;margin:0 0 8px}
+
+  /* ===== CARD GRIDS ===== */
+  .grid{display:grid;gap:18px;margin:4px 0 6px}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;
+    box-shadow:var(--shadow);transition:all .2s ease;position:relative;overflow:hidden;
+  }
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover);border-color:#cfe6ff}
+  .card .icon{
+    width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:22px;color:#fff;margin-bottom:14px;
+    background:linear-gradient(135deg,var(--blue),var(--purple));
+  }
+  .card h3{margin:0 0 8px;font-size:17px}
+  .card p{margin:0;font-size:14px;color:var(--ink-3)}
+  .accent-blue .icon{background:linear-gradient(135deg,#0078D4,#50E6FF)}
+  .accent-purple .icon{background:linear-gradient(135deg,#5C2D91,#B4A3FF)}
+  .accent-green .icon{background:linear-gradient(135deg,#107C10,#7FBA00)}
+  .accent-orange .icon{background:linear-gradient(135deg,#D83B01,#F2C811)}
+  .accent-teal .icon{background:linear-gradient(135deg,#008272,#50E6FF)}
+  .accent-pink .icon{background:linear-gradient(135deg,#E3008C,#B4A3FF)}
+
+  /* ===== PHASE TIMELINE ===== */
+  .phase{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);margin:0 0 16px;overflow:hidden;
+  }
+  .phase-head{
+    display:flex;align-items:center;gap:16px;padding:18px 22px;cursor:default;
+    border-left:5px solid var(--blue);
+  }
+  .phase.p1 .phase-head{border-left-color:#0078D4}
+  .phase.p2 .phase-head{border-left-color:#5C2D91}
+  .phase.p3 .phase-head{border-left-color:#008272}
+  .phase.p4 .phase-head{border-left-color:#107C10}
+  .phase.p5 .phase-head{border-left-color:#D83B01}
+  .phase.p6 .phase-head{border-left-color:#E3008C}
+  .phase-num{
+    width:42px;height:42px;flex:0 0 42px;border-radius:11px;display:grid;place-items:center;
+    font-weight:700;font-size:18px;color:#fff;background:linear-gradient(135deg,#0078D4,#5C2D91);
+  }
+  .phase.p2 .phase-num{background:linear-gradient(135deg,#5C2D91,#B4A3FF)}
+  .phase.p3 .phase-num{background:linear-gradient(135deg,#008272,#50E6FF)}
+  .phase.p4 .phase-num{background:linear-gradient(135deg,#107C10,#7FBA00)}
+  .phase.p5 .phase-num{background:linear-gradient(135deg,#D83B01,#F2C811)}
+  .phase.p6 .phase-num{background:linear-gradient(135deg,#E3008C,#B4A3FF)}
+  .phase-title{flex:1}
+  .phase-title h3{margin:0;font-size:18px}
+  .phase-title p{margin:3px 0 0;font-size:13px;color:var(--ink-3)}
+  .phase-body{padding:6px 22px 20px 79px}
+  .phase-body .label{
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--purple);
+    margin:14px 0 8px;display:flex;align-items:center;gap:7px;
+  }
+  .phase-body .label.act{color:var(--ink-3)}
+  .phase-body ul{margin:0;padding-left:18px}
+  .phase-body li{margin:6px 0;font-size:14px;color:var(--ink-2)}
+  .phase-body li strong{color:var(--ink)}
+  .copilot-line{
+    background:linear-gradient(160deg,#F3F8FE,#F8F2FB);border:1px solid #e6eefa;border-radius:10px;
+    padding:12px 16px;margin-top:6px;
+  }
+  .tool-pill{
+    display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--blue-deep);
+    background:#EFF6FC;border:1px solid #d4e9fb;border-radius:999px;padding:4px 11px;margin:4px 6px 0 0;
+  }
+  .tool-pill::before{content:"✦";font-size:10px;color:var(--blue)}
+
+  /* ===== MATRIX TABLE ===== */
+  .matrix-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin:6px 0}
+  table{border-collapse:collapse;width:100%;min-width:760px;background:#fff;font-size:13.5px}
+  thead th{
+    background:linear-gradient(135deg,#004578,#0078D4);color:#fff;text-align:left;padding:13px 16px;
+    font-weight:600;font-size:13px;letter-spacing:.02em;
+  }
+  tbody td{padding:13px 16px;border-top:1px solid var(--line);vertical-align:top;color:var(--ink-2)}
+  tbody tr:nth-child(even){background:#FBFCFE}
+  tbody td:first-child{font-weight:600;color:var(--ink);white-space:nowrap}
+  .ref-sup{font-size:10px;color:var(--blue);font-weight:700;vertical-align:super;text-decoration:none}
+
+  /* ===== CATEGORY BANDS ===== */
+  .cat{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:22px 24px;margin:0 0 16px;
+  }
+  .cat h3{margin:0 0 4px;font-size:18px;display:flex;align-items:center;gap:10px}
+  .cat .badge{font-size:11px;font-weight:700;color:#fff;padding:3px 10px;border-radius:999px;letter-spacing:.04em}
+  .cat.assist .badge{background:var(--blue)}
+  .cat.agent .badge{background:var(--purple)}
+  .cat.custom .badge{background:var(--teal)}
+  .cat.admin .badge{background:var(--orange)}
+  .cat>p{margin:0 0 14px;font-size:14px;color:var(--ink-3)}
+  .feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+  .feat{border:1px solid var(--line);border-radius:11px;padding:13px 15px;background:#FBFCFE}
+  .feat h4{margin:0 0 5px;font-size:14px;color:var(--ink);display:flex;align-items:center;gap:7px}
+  .feat p{margin:0;font-size:12.5px;color:var(--ink-3);line-height:1.45}
+
+  /* ===== GOVERNANCE ===== */
+  .gov{
+    background:linear-gradient(160deg,#FFF8F3,#FDF3F8);border:1px solid #f6e3d6;
+    border-left:5px solid var(--orange);border-radius:var(--radius);padding:22px 26px;margin:6px 0;
+  }
+  .gov h3{margin:0 0 14px;font-size:18px;display:flex;align-items:center;gap:9px}
+  .gov ul{margin:0;padding-left:20px}
+  .gov li{margin:9px 0;font-size:14px;color:var(--ink-2)}
+  .gov li strong{color:var(--ink)}
+
+  /* ===== REFERENCES ===== */
+  .refs{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px 26px}
+  .refs ol{margin:0;padding-left:22px}
+  .refs li{margin:11px 0;font-size:13.5px;color:var(--ink-2);line-height:1.5}
+  .refs li a{font-weight:600}
+  .refs .src-tag{
+    font-size:10.5px;font-weight:700;color:#fff;background:var(--green);border-radius:5px;
+    padding:2px 7px;margin-right:8px;letter-spacing:.03em;text-transform:uppercase;
+  }
+  .refs .src-tag.docs{background:var(--blue)}
+  .refs .src-tag.res{background:var(--purple)}
+
+  /* ===== NOTE ===== */
+  .note{
+    display:flex;gap:13px;background:#EFF6FC;border:1px solid #d4e9fb;border-radius:12px;
+    padding:15px 18px;margin:14px 0;font-size:13.5px;color:var(--ink-2);
+  }
+  .note .ni{font-size:18px;line-height:1.3}
+
+  /* ===== FOOTER ===== */
+  footer{margin-top:40px;padding:30px 26px;background:#1B1A19;color:#C8C6C4;text-align:center;font-size:12.5px}
+  footer a{color:#7FBDEB}
+  footer .ft-top{font-size:13.5px;color:#fff;margin-bottom:6px;font-weight:600}
+
+  @media(max-width:680px){
+    .hero h1{font-size:29px}
+    .phase-body{padding-left:22px}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Engenharia de Software · IA Aplicada</span>
+    <h1>SDLC &amp; GitHub Copilot</h1>
+    <p>O que é o ciclo de vida de desenvolvimento de software e como o GitHub Copilot atua em cada uma das suas fases &mdash; consolidado exclusivamente a partir de documentação oficial do GitHub.</p>
+    <div class="meta">
+      <span>📚 Fontes 100% oficiais (GitHub Docs &amp; GitHub Resources)</span>
+      <span>🗓 Atualizado em 30/06/2026</span>
+      <span>🔗 Referências numeradas ao final</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ O QUE É SDLC ============ -->
+<section id="o-que-e">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Fundamento</span>
+      <h2 class="section-title">O que é SDLC?</h2>
+      <p class="section-lead">A definição abaixo é a adotada pela própria documentação do GitHub.</p>
+    </div>
+
+    <div class="definition">
+      <p class="q">SDLC significa <em>Software Development Life Cycle</em> &mdash; ciclo de vida de desenvolvimento de software.</p>
+      <p>É um “processo estruturado, passo a passo, que ajuda equipes de desenvolvimento a criar software de alta qualidade com eficiência e menor custo. As equipes usam o SDLC para <strong>planejar, analisar, projetar, testar, implantar e manter</strong> o software sistematicamente”, garantindo que ele atenda aos requisitos das partes interessadas e aos padrões de qualidade, segurança e conformidade da organização. <a class="ref-sup" href="#ref1">[1]</a></p>
+    </div>
+
+    <div class="note">
+      <span class="ni">💡</span>
+      <div>Existem várias <strong>metodologias</strong> para organizar o SDLC &mdash; Cascata (Waterfall), Ágil, Iterativo, Espiral, modelo&nbsp;V e Lean. O <strong>DevOps</strong> é descrito pelo GitHub como uma abordagem do SDLC que combina <em>Dev</em> e <em>Ops</em>, apoiada em automação, segurança e CI/CD. <a class="ref-sup" href="#ref1">[1]</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AS 6 FASES ============ -->
+<section id="fases">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">As 6 fases</span>
+      <h2 class="section-title">As fases do SDLC e como o Copilot atua em cada uma</h2>
+      <p class="section-lead">As fases e suas atividades seguem o artigo oficial do GitHub <a class="ref-sup" href="#ref1">[1]</a>. Os recursos do Copilot indicados em cada fase vêm da documentação oficial do produto <a class="ref-sup" href="#ref2">[2]</a><a class="ref-sup" href="#ref3">[3]</a><a class="ref-sup" href="#ref4">[4]</a>.</p>
+    </div>
+
+    <!-- Fase 1 -->
+    <div class="phase p1">
+      <div class="phase-head">
+        <div class="phase-num">1</div>
+        <div class="phase-title">
+          <h3>Coleta e análise de requisitos</h3>
+          <p>Levantar, avaliar e documentar requisitos precisos, completos e mensuráveis.</p>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="label act">📋 Atividades da fase <a class="ref-sup" href="#ref1">[1]</a></div>
+        <ul>
+          <li>Levantar requisitos via entrevistas, workshops e questionários; observar como as partes interessadas trabalham.</li>
+          <li>Avaliar a viabilidade do sistema e registrar em <strong>histórias de usuário</strong>, SRS ou documentos de caso de uso.</li>
+        </ul>
+        <div class="label">✦ Onde o GitHub Copilot ajuda</div>
+        <div class="copilot-line">
+          <p style="margin:0 0 8px;font-size:13.5px;color:var(--ink-2)">Conversar em linguagem natural para explorar requisitos e organizar contexto do problema antes de codificar.</p>
+          <span class="tool-pill">Copilot Chat <a class="ref-sup" href="#ref3">[3]</a></span>
+          <span class="tool-pill">Copilot Spaces <a class="ref-sup" href="#ref3">[3]</a></span>
+          <span class="tool-pill">Custom instructions <a class="ref-sup" href="#ref3">[3]</a></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 2 -->
+    <div class="phase p2">
+      <div class="phase-head">
+        <div class="phase-num">2</div>
+        <div class="phase-title">
+          <h3>Projeto do sistema (design)</h3>
+          <p>Traduzir requisitos em arquitetura, modelos e um desenho modular.</p>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="label act">📋 Atividades da fase <a class="ref-sup" href="#ref1">[1]</a></div>
+        <ul>
+          <li>Modelar comportamento e estrutura com <strong>UML</strong>, fluxogramas, árvores/tabelas de decisão e simulações.</li>
+          <li>Aplicar <strong>separação de preocupações</strong> para um projeto modular, mais fácil de testar e manter.</li>
+        </ul>
+        <div class="label">✦ Onde o GitHub Copilot ajuda</div>
+        <div class="copilot-line">
+          <p style="margin:0 0 8px;font-size:13.5px;color:var(--ink-2)">Gerar grandes seções a partir de uma ideia e iterar sobre elas; atribuir uma <em>persona</em> (ex.: “desenvolvedor sênior focado em qualidade”) para discutir trade-offs de design.</p>
+          <span class="tool-pill">Copilot Chat <a class="ref-sup" href="#ref4">[4]</a></span>
+          <span class="tool-pill">Custom instructions <a class="ref-sup" href="#ref3">[3]</a></span>
+          <span class="tool-pill">Prompt files <a class="ref-sup" href="#ref3">[3]</a></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 3 -->
+    <div class="phase p3">
+      <div class="phase-head">
+        <div class="phase-num">3</div>
+        <div class="phase-title">
+          <h3>Codificação</h3>
+          <p>Transformar as especificações de projeto em código limpo, legível e versionado.</p>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="label act">📋 Atividades da fase <a class="ref-sup" href="#ref1">[1]</a></div>
+        <ul>
+          <li>Escrever código fácil de ler, comentar o que ele faz e usar <strong>controle de versão</strong> para rastrear mudanças.</li>
+          <li>Refatorar quando necessário e realizar <strong>code review</strong> ao concluir.</li>
+        </ul>
+        <div class="label">✦ Onde o GitHub Copilot ajuda</div>
+        <div class="copilot-line">
+          <p style="margin:0 0 8px;font-size:13.5px;color:var(--ink-2)">É o coração do produto: sugestões de autocompletar enquanto você digita, geração de código a partir de comentários, e execução autônoma de tarefas dentro da IDE.</p>
+          <span class="tool-pill">Inline suggestions <a class="ref-sup" href="#ref2">[2]</a></span>
+          <span class="tool-pill">Next edit suggestions <a class="ref-sup" href="#ref2">[2]</a></span>
+          <span class="tool-pill">Agent mode na IDE <a class="ref-sup" href="#ref2">[2]</a></span>
+          <span class="tool-pill">Copilot CLI <a class="ref-sup" href="#ref2">[2]</a></span>
+          <span class="tool-pill">Explicar/comentar código <a class="ref-sup" href="#ref4">[4]</a></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 4 -->
+    <div class="phase p4">
+      <div class="phase-head">
+        <div class="phase-num">4</div>
+        <div class="phase-title">
+          <h3>Testes</h3>
+          <p>Validar exaustivamente o software antes de ir para produção.</p>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="label act">📋 Atividades da fase <a class="ref-sup" href="#ref1">[1]</a></div>
+        <ul>
+          <li>Definir plano e casos de teste; executar testes <strong>unitários</strong>, de <strong>integração</strong>, de <strong>sistema</strong> e de <strong>aceitação</strong>.</li>
+          <li>Usar ferramentas automatizadas para feedback rápido e comparação com os resultados esperados.</li>
+        </ul>
+        <div class="label">✦ Onde o GitHub Copilot ajuda</div>
+        <div class="copilot-line">
+          <p style="margin:0 0 8px;font-size:13.5px;color:var(--ink-2)">Escrever testes está entre as tarefas que o Copilot “faz melhor”; as sugestões inline são indicadas para gerar testes em <em>test-driven development</em>.</p>
+          <span class="tool-pill">Geração de testes <a class="ref-sup" href="#ref4">[4]</a></span>
+          <span class="tool-pill">Inline suggestions (TDD) <a class="ref-sup" href="#ref4">[4]</a></span>
+          <span class="tool-pill">Debug e correção de sintaxe <a class="ref-sup" href="#ref4">[4]</a></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 5 -->
+    <div class="phase p5">
+      <div class="phase-head">
+        <div class="phase-num">5</div>
+        <div class="phase-title">
+          <h3>Implantação (deploy)</h3>
+          <p>Levar o código ao ambiente de produção com automação e gestão de versão.</p>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="label act">📋 Atividades da fase <a class="ref-sup" href="#ref1">[1]</a></div>
+        <ul>
+          <li>Confirmar o código no repositório; a automação de implantação dispara uma série de testes.</li>
+          <li>Disponibilizar o software aos usuários com <strong>release management</strong> e controle de versão estáveis.</li>
+        </ul>
+        <div class="label">✦ Onde o GitHub Copilot ajuda</div>
+        <div class="copilot-line">
+          <p style="margin:0 0 8px;font-size:13.5px;color:var(--ink-2)">Agentes podem adicionar funcionalidades ou corrigir bugs e <strong>abrir um pull request</strong> ao final &mdash; conectando o trabalho à automação de entrega (o GitHub cita o GitHub Actions como ferramenta de automação do SDLC).</p>
+          <span class="tool-pill">Copilot CLI → cria PR <a class="ref-sup" href="#ref2">[2]</a></span>
+          <span class="tool-pill">Copilot cloud agent <a class="ref-sup" href="#ref2">[2]</a></span>
+          <span class="tool-pill">GitHub Actions (SDLC) <a class="ref-sup" href="#ref1">[1]</a></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 6 -->
+    <div class="phase p6">
+      <div class="phase-head">
+        <div class="phase-num">6</div>
+        <div class="phase-title">
+          <h3>Manutenção e suporte</h3>
+          <p>Monitorar, corrigir bugs, tratar segurança e evoluir o software já em produção.</p>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div class="label act">📋 Atividades da fase <a class="ref-sup" href="#ref1">[1]</a></div>
+        <ul>
+          <li>Emitir correções periódicas para bugs e <strong>problemas de segurança</strong>; monitorar o desempenho técnico e percebido.</li>
+          <li>Fornecer treinamento e documentação aos usuários.</li>
+        </ul>
+        <div class="label">✦ Onde o GitHub Copilot ajuda</div>
+        <div class="copilot-line">
+          <p style="margin:0 0 8px;font-size:13.5px;color:var(--ink-2)">Revisão de código assistida por IA, resumos de pull request para o revisor focar no que importa, e diagnóstico/correção de defeitos.</p>
+          <span class="tool-pill">Copilot code review <a class="ref-sup" href="#ref2">[2]</a></span>
+          <span class="tool-pill">PR summaries <a class="ref-sup" href="#ref2">[2]</a></span>
+          <span class="tool-pill">Debugging <a class="ref-sup" href="#ref4">[4]</a></span>
+          <span class="tool-pill">Copilot Memory <a class="ref-sup" href="#ref3">[3]</a></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ MATRIZ RESUMO ============ -->
+<section id="matriz">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Visão consolidada</span>
+      <h2 class="section-title">Matriz SDLC × GitHub Copilot</h2>
+      <p class="section-lead">Resumo de uma página para apresentações e adoção. Cada recurso remete à fonte oficial correspondente.</p>
+    </div>
+
+    <div class="matrix-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Fase do SDLC</th>
+            <th>Objetivo principal <a class="ref-sup" href="#ref1" style="color:#cfe6ff">[1]</a></th>
+            <th>Recursos do GitHub Copilot</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1 · Requisitos</td>
+            <td>Levantar e documentar requisitos mensuráveis</td>
+            <td>Copilot Chat · Copilot Spaces · Custom instructions <a class="ref-sup" href="#ref3">[3]</a></td>
+          </tr>
+          <tr>
+            <td>2 · Design</td>
+            <td>Arquitetura e desenho modular</td>
+            <td>Copilot Chat (gerar + iterar, persona) · Prompt files <a class="ref-sup" href="#ref4">[4]</a><a class="ref-sup" href="#ref3">[3]</a></td>
+          </tr>
+          <tr>
+            <td>3 · Codificação</td>
+            <td>Escrever código limpo e versionado</td>
+            <td>Inline &amp; next edit suggestions · Agent mode · Copilot CLI <a class="ref-sup" href="#ref2">[2]</a></td>
+          </tr>
+          <tr>
+            <td>4 · Testes</td>
+            <td>Validar com testes automatizados</td>
+            <td>Geração de testes · TDD · Debug e correção de sintaxe <a class="ref-sup" href="#ref4">[4]</a></td>
+          </tr>
+          <tr>
+            <td>5 · Implantação</td>
+            <td>Entregar em produção com automação</td>
+            <td>Copilot CLI / cloud agent (abrem PR) · GitHub Actions <a class="ref-sup" href="#ref2">[2]</a><a class="ref-sup" href="#ref1">[1]</a></td>
+          </tr>
+          <tr>
+            <td>6 · Manutenção</td>
+            <td>Corrigir, monitorar e proteger</td>
+            <td>Copilot code review · PR summaries · Debugging · Memory <a class="ref-sup" href="#ref2">[2]</a><a class="ref-sup" href="#ref4">[4]</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CATEGORIAS DE RECURSOS ============ -->
+<section id="recursos">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Catálogo oficial</span>
+      <h2 class="section-title">As 4 categorias de recursos do GitHub Copilot</h2>
+      <p class="section-lead">A documentação oficial organiza os recursos do Copilot nestas famílias. <a class="ref-sup" href="#ref2">[2]</a></p>
+    </div>
+
+    <div class="cat assist">
+      <h3>Recursos assistivos <span class="badge">ASSISTIVE</span></h3>
+      <p>Usados de forma síncrona, oferecendo conselhos ou sugestões enquanto a pessoa trabalha.</p>
+      <div class="feat-grid">
+        <div class="feat"><h4>💬 Copilot Chat</h4><p>Interface de chat para tirar dúvidas sobre código na IDE, no GitHub, no Mobile e no Windows Terminal.</p></div>
+        <div class="feat"><h4>⌨️ Inline suggestions</h4><p>Sugestões de autocompletar; em VS Code, Xcode e Eclipse há ainda <em>next edit suggestions</em>.</p></div>
+        <div class="feat"><h4>📝 PR summaries</h4><p>Resumos gerados por IA das mudanças de um pull request e do que o revisor deve observar.</p></div>
+        <div class="feat"><h4>🖥 Copilot no GitHub Desktop</h4><p>Geração automática de mensagens e descrições de commit a partir das alterações.</p></div>
+      </div>
+    </div>
+
+    <div class="cat agent">
+      <h3>Recursos agênticos <span class="badge">AGENTIC</span></h3>
+      <p>Trabalham de forma autônoma, em geral pedindo aprovação humana para ações sensíveis (rodar comandos, fazer merge).</p>
+      <div class="feat-grid">
+        <div class="feat"><h4>🤖 Agent mode na IDE</h4><p>O Copilot decide quais arquivos alterar, propõe mudanças e comandos para aprovação e itera até concluir.</p></div>
+        <div class="feat"><h4>☁️ Copilot cloud agent</h4><p>Agente autônomo que pesquisa o repositório, cria um plano, altera código em um branch e abre PR.</p></div>
+        <div class="feat"><h4>⌨️ Copilot CLI</h4><p>Adiciona features ou corrige bugs no terminal e cria pull requests.</p></div>
+        <div class="feat"><h4>🔍 Copilot code review</h4><p>Sugestões de revisão geradas por IA para escrever um código melhor.</p></div>
+      </div>
+    </div>
+
+    <div class="cat custom">
+      <h3>Recursos de personalização <span class="badge">CUSTOMIZATION</span></h3>
+      <p>Adicionam contexto e melhoram o desempenho do Copilot conforme as necessidades da equipe.</p>
+      <div class="feat-grid">
+        <div class="feat"><h4>📦 Copilot Spaces</h4><p>Centralizam código, docs e specs para ancorar as respostas no contexto certo.</p></div>
+        <div class="feat"><h4>📐 Custom instructions</h4><p>Detalham preferências, ferramentas e requisitos para respostas mais alinhadas.</p></div>
+        <div class="feat"><h4>📄 Prompt files &amp; Agent skills</h4><p>Instruções reutilizáveis e pacotes de scripts/recursos para tarefas especializadas.</p></div>
+        <div class="feat"><h4>🔌 MCP servers</h4><p>Conectam o Copilot a ferramentas e fontes de dados externas via Model Context Protocol.</p></div>
+      </div>
+    </div>
+
+    <div class="cat admin">
+      <h3>Recursos para administradores <span class="badge">ADMIN</span></h3>
+      <p>Disponíveis a donos de organização/enterprise com planos Copilot Business ou Enterprise.</p>
+      <div class="feat-grid">
+        <div class="feat"><h4>🛡 Policy &amp; Access management</h4><p>Gestão de políticas e de quem pode usar o Copilot na organização ou enterprise.</p></div>
+        <div class="feat"><h4>📊 Usage data</h4><p>Dados de uso para orientar gestão de acesso e impulsionar a adoção.</p></div>
+        <div class="feat"><h4>🧾 Audit logs</h4><p>Registros de auditoria para entender quais ações foram tomadas e por quem.</p></div>
+        <div class="feat"><h4>🚫 File exclusions</h4><p>Configuram arquivos que o Copilot deve ignorar.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GOVERNANÇA / BOAS PRÁTICAS ============ -->
+<section id="governanca">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Governança</span>
+      <h2 class="section-title">Boas práticas oficiais ao aplicar o Copilot no SDLC</h2>
+      <p class="section-lead">Diretrizes da página oficial de boas práticas do GitHub. <a class="ref-sup" href="#ref4">[4]</a></p>
+    </div>
+
+    <div class="gov">
+      <h3>🎯 Para extrair o máximo &mdash; com responsabilidade</h3>
+      <ul>
+        <li><strong>Entenda forças e limites.</strong> O Copilot brilha em escrever testes e código repetitivo, depurar e corrigir sintaxe, explicar/comentar código e gerar expressões regulares. Ele <em>não</em> substitui sua expertise &mdash; “você está no comando”.</li>
+        <li><strong>Escolha a ferramenta certa.</strong> Sugestões inline para completar trechos e gerar testes (TDD); Copilot Chat para perguntas em linguagem natural e geração de grandes blocos com iteração.</li>
+        <li><strong>Crie prompts cuidadosos.</strong> Quebre tarefas complexas, seja específico nos requisitos, dê exemplos de entrada/saída e siga boas práticas de código.</li>
+        <li><strong>Verifique o trabalho do Copilot.</strong> Entenda a sugestão antes de usar, revise funcionalidade, segurança, legibilidade e manutenibilidade, e use testes automatizados, <em>linting</em> e <em>code scanning</em> como camada extra de verificação.</li>
+        <li><strong>Conduza para boas saídas.</strong> Forneça contexto útil (abra arquivos relevantes, feche os irrelevantes), reescreva prompts que não ajudaram e dê feedback (aceitar/rejeitar, 👍/👎).</li>
+      </ul>
+    </div>
+
+    <div class="note">
+      <span class="ni">🔐</span>
+      <div>O artigo de SDLC do GitHub reforça que a plataforma <strong>verifica o código em busca de problemas de segurança à medida que ele é escrito</strong>, na fase de codificação &mdash; alinhando o uso de IA a um SDLC seguro. <a class="ref-sup" href="#ref1">[1]</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REFERÊNCIAS ============ -->
+<section id="referencias">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Fontes</span>
+      <h2 class="section-title">Referências oficiais</h2>
+      <p class="section-lead">Todo o conteúdo deste material deriva exclusivamente das fontes abaixo, publicadas pelo GitHub.</p>
+    </div>
+
+    <div class="refs">
+      <ol>
+        <li id="ref1">
+          <span class="src-tag res">GitHub Resources</span>
+          GitHub. <strong>“O que é SDLC?”</strong> (24/01/2025). Definição do SDLC, suas 6 fases, metodologias, segurança e integração com DevOps.
+          <br><a href="https://github.com/resources/articles/software-development/what-is-sdlc" target="_blank" rel="noopener">https://github.com/resources/articles/software-development/what-is-sdlc</a>
+        </li>
+        <li id="ref2">
+          <span class="src-tag docs">GitHub Docs</span>
+          GitHub. <strong>“GitHub Copilot features.”</strong> Catálogo oficial de recursos (assistivos, agênticos, personalização e administração).
+          <br><a href="https://docs.github.com/en/copilot/get-started/features" target="_blank" rel="noopener">https://docs.github.com/en/copilot/get-started/features</a>
+        </li>
+        <li id="ref3">
+          <span class="src-tag docs">GitHub Docs</span>
+          GitHub. <strong>“What is GitHub Copilot?”</strong> Visão geral do produto, onde é usado e recursos de contexto (Spaces, custom instructions, prompt files, MCP, Memory).
+          <br><a href="https://docs.github.com/en/copilot/get-started/what-is-github-copilot" target="_blank" rel="noopener">https://docs.github.com/en/copilot/get-started/what-is-github-copilot</a>
+        </li>
+        <li id="ref4">
+          <span class="src-tag docs">GitHub Docs</span>
+          GitHub. <strong>“Best practices for using GitHub Copilot.”</strong> Forças e limites, escolha da ferramenta, engenharia de prompts e verificação do trabalho gerado.
+          <br><a href="https://docs.github.com/en/copilot/get-started/best-practices-for-using-github-copilot" target="_blank" rel="noopener">https://docs.github.com/en/copilot/get-started/best-practices-for-using-github-copilot</a>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="ft-top">SDLC &amp; GitHub Copilot &mdash; guia referenciado em fontes oficiais</div>
+  <div>Conteúdo compilado a partir de GitHub Docs e GitHub Resources · 30/06/2026 · Para uso interno de capacitação e adoção.</div>
+</footer>
+
+</body>
+</html>
